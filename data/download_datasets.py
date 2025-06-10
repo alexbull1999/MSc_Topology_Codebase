@@ -19,4 +19,4 @@ pascal.save_to_disk("data/raw/pascal")
 # snli_ve = load_dataset('HuggingFaceM4/SNLI-VE')
 # snli_ve.save_to_disk("data/raw/snli-ve")
 
-# add SNLI VE when onto multimodal part of experiments
+# add SNLI VE when onto multimodal part of experiments -- later on
