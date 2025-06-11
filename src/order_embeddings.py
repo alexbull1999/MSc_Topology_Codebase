@@ -299,8 +299,8 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
             print(f"Early stopping at epoch {epoch + 1}")
             break
 
-        print("Training completed")
-        return model, trainer
+    print("Training completed")
+    return model, trainer
 
 
 def validate_energy_rankings(trainer: OrderEmbeddingTrainer) -> bool:
@@ -389,7 +389,7 @@ def test_order_embeddings():
 
     model, trainer = train_order_embeddings(
         processed_data_path=processed_data_path,
-        epochs=30,
+        epochs=5, #smaller for toy dataset
         batch_size=16,
         order_dim=20 #Smaller for toy dataset
     )
