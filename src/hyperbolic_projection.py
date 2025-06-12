@@ -37,7 +37,7 @@ class HyperbolicProjector(nn.Module):
         )
 
         # Scaling factor to ensure point stay inside unit ball
-        self.scale_factor = 0.5 # Conservative scaling to avoid boundary issues
+        self.scale_factor = 0.7 # Conservative scaling to avoid boundary issues
 
         # Initialize weights
         self._init_weights()
