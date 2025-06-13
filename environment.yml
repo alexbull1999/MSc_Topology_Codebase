@@ -171,7 +171,7 @@ dependencies:
   - typing-extensions=4.12.2
   - typing_extensions=4.12.2
   - tzdata=2025b
-  - umap-learn=0.5.3
+  - umap-learn=0.5.7
   - unicodedata2=15.1.0
   - urllib3=2.3.0
   - utf8proc=2.6.1
