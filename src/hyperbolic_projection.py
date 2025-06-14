@@ -50,7 +50,7 @@ class HyperbolicProjector(nn.Module):
         )
 
         # Scaling factor to ensure point stay inside unit ball
-        self.scale_factor = 0.5 # Conservative scaling to avoid boundary issues
+        self.scale_factor = 0.8 # Conservative scaling to avoid boundary issues
 
         # Initialize weights
         self._init_weights()
@@ -106,7 +106,7 @@ class HyperbolicOrderEmbeddingPipeline:
     """Complete pipeline: BERT -> Order Embeddings -> Hyperbolic Embeddings"""
 
     def __init__(self,
-                 order_model_path: str = "models/order_embeddings_small.pt",
+                 order_model_path: str = "models/order_embeddings_SNLI_1k.pt",
                  hyperbolic_dim: int = 30,
                  device: str = 'auto', random_seed: int=42):
         """Initialize the complete pipeline"""
@@ -217,8 +217,8 @@ def test_hyperbolic_projection():
 
     set_random_seed(42)
 
-    processed_data_path = "data/processed/toy_embeddings_large.pt"
-    model_path = "models/order_embeddings_large.pt"
+    processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
+    model_path = "models/order_embeddings_SNLI_1k.pt"
 
     if not os.path.exists(processed_data_path):
         print(f"Processed data not found at {processed_data_path}")
@@ -233,7 +233,7 @@ def test_hyperbolic_projection():
     #Initialize pipeline
     pipeline = HyperbolicOrderEmbeddingPipeline(
         order_model_path=model_path,
-        hyperbolic_dim=20, #Smaller for toy dataset
+        hyperbolic_dim=30, #20 for smaller toy datasets
         random_seed=42
     )
 

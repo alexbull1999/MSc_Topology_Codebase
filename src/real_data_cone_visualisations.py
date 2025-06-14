@@ -230,8 +230,8 @@ def create_improved_real_data_visualizations():
     Create improved visualizations using real data
     """
     try:
-        processed_data_path = "data/processed/toy_embeddings_large.pt"
-        model_path = "models/order_embeddings_large.pt"
+        processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
+        model_path = "models/order_embeddings_SNLI_1k.pt"
 
         print("\nCreating Improved Real Data Cone Visualizations")
         print("=" * 60)

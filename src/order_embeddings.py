@@ -124,9 +124,9 @@ class OrderEmbeddingTrainer:
         """
         self.model = model.to(device)
         self.device = device
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3, weight_decay=5e-4) #lr was 1e-5 for small
+        self.optimizer = optim.Adam(self.model.parameters(), lr=5e-4, weight_decay=1e-3)
         self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-            self.optimizer, mode='min', patience=15, factor=0.5
+            self.optimizer, mode='min', patience=15, factor=0.3
         ) #patience was 5 for small
 
         #Training history
@@ -399,17 +399,17 @@ def plot_training_progress(trainer: OrderEmbeddingTrainer, save_path: str = "plo
     print(f"Training plots saved to {save_path}")
 
 def test_order_embeddings():
-    """Test order embeddings on toy dataset"""
-    processed_data_path = "data/processed/toy_embeddings_large.pt"
+    """Test order embeddings"""
+    processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
     if not os.path.exists(processed_data_path):
         print(f"Processed data not found at {processed_data_path}")
         return
 
     model, trainer = train_order_embeddings(
         processed_data_path=processed_data_path,
-        epochs=10, #larger for large toy dataset
-        batch_size=16,
-        order_dim=20, #Smaller for toy dataset
+        epochs=50, #larger for large toy dataset
+        batch_size=32,
+        order_dim=50, #Smaller for toy dataset
         random_seed=42
     )
 

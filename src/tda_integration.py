@@ -70,7 +70,7 @@ class TDAIntegration:
         self.topological_features = {}
 
     def load_cone_validation_results(self) -> Dict:
-        tda_data_path = Path("validation_results/tda_ready_data_small_toy.pt")
+        tda_data_path = Path("validation_results/tda_ready_data_SNLI_1k.pt")
         if tda_data_path.exists():
             results = torch.load(tda_data_path)
             print("Loaded TDA-ready data")

@@ -6,7 +6,7 @@ from typing import List, Dict, Tuple
 import numpy as np
 
 class TextToEmbedding:
-    """Text to embedding pipeline using BERT. Converts premise-hypothesis pairs to contextualised emebeddings"""
+    """Text to embedding pipeline using BERT. Converts premise-hypothesis pairs to contextualised embeddings"""
 
     def __init__(self, model_name="bert-base-uncased", device='cuda' if torch.cuda.is_available() else 'cpu'):
         """Initialize text processing pipeline"""
@@ -158,14 +158,14 @@ def test_text_processing():
     premise_emb, hypothesis_emb = processor.process_single_pair(premise, hypothesis)
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
-    # Test toy dataset
-    toy_data_path = "data/toy/large_logical_pairs.json"
-    if os.path.exists(toy_data_path):
-        processed_data = processor.process_entailment_dataset(toy_data_path)
+    # Test dataset
+    data_path = "data/raw/snli/train/snli_1k_subset_balanced.json"
+    if os.path.exists(data_path):
+        processed_data = processor.process_entailment_dataset(data_path)
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/toy_embeddings_large.pt"
+        output_path = "data/processed/snli_1k_subset_balanced.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

@@ -1,0 +1,533 @@
+THIS IS WRONG ---- NEED TO FIX BY PROPER MATHCING!!!!!
+
+
+[
+  {
+    "premise": "A man in a black and white dress is playing guitar.",
+    "hypothesis": "cross-dresser playing guitar",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 905,
+      "cone_energy": 1.4599068634730241,
+      "cone_violations": [
+        0.0,
+        1.4412927627563477,
+        0.23238593339920044
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 2.9198137269460482
+    }
+  },
+  {
+    "premise": "Two men are outside behind a building getting drinks.",
+    "hypothesis": "Men getting drinks outside.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 866,
+      "cone_energy": 1.4487741304679254,
+      "cone_violations": [
+        0.20544463396072388,
+        1.412081003189087,
+        0.2505318820476532
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 2.8975482609358507
+    }
+  },
+  {
+    "premise": "A gentleman is sitting at a table looking at a box from MakerBot Industries.",
+    "hypothesis": "There is a box on the table.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 240,
+      "cone_energy": 1.242780191518745,
+      "cone_violations": [
+        0.16655826568603516,
+        1.2112476825714111,
+        0.2228003591299057
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 2.48556038303749
+    }
+  },
+  {
+    "premise": "A little boy presses his face a window.",
+    "hypothesis": "The boy pressed his face against the window.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 121,
+      "cone_energy": 1.1499195831296716,
+      "cone_violations": [
+        0.3435934782028198,
+        1.0832797288894653,
+        0.17539554834365845
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 2.299839166259343
+    }
+  },
+  {
+    "premise": "Two men operate a cement truck in the daytime, wearing white t-shirts and blue jeans, and one of them talking on a mobile phone.",
+    "hypothesis": "Two men are working outdoors during the daytime.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 761,
+      "cone_energy": 1.1426491146499196,
+      "cone_violations": [
+        1.1157593727111816,
+        0.22070170938968658,
+        0.10963018238544464
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 2.285298229299839
+    }
+  },
+  {
+    "premise": "The black dog in the field has something in its mouth.",
+    "hypothesis": "The dog is black.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 501,
+      "cone_energy": 1.11091386895001,
+      "cone_violations": [
+        0.08588683605194092,
+        1.0982195138931274,
+        0.14376012980937958
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 2.22182773790002
+    }
+  },
+  {
+    "premise": "A woman next to a subway entrance in a tan coat is asking a woman in a pink coat directions.",
+    "hypothesis": "The woman in tan questions the woman in pink",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 540,
+      "cone_energy": 0.9694186217574342,
+      "cone_violations": [
+        0.0,
+        0.9495739340782166,
+        0.1951456069946289
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.9388372435148684
+    }
+  },
+  {
+    "premise": "An elderly man stands on a ladder tending the leaves of a tree.",
+    "hypothesis": "An elderly man tends to a tree.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 290,
+      "cone_energy": 0.9030881261977841,
+      "cone_violations": [
+        0.7008802890777588,
+        0.553859531879425,
+        0.13256923854351044
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.8061762523955682
+    }
+  },
+  {
+    "premise": "A child is playing soccer with a blue and white soccer ball nearby onlookers.",
+    "hypothesis": "Little Billy was playing soccer with his soccer ball.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 366,
+      "cone_energy": 0.8972545459116666,
+      "cone_violations": [
+        0.8390966653823853,
+        0.3036046624183655,
+        0.09384410083293915
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.7945090918233333
+    }
+  },
+  {
+    "premise": "A street vegetable and fruit market is lit up at night, a shopper visible toward the back, hand shopping carts at the forefront, and at the bottom left a sign showing that artichokes are on sale for special price when you buy 3.",
+    "hypothesis": "A street vegetable and fruit market is lit up at night",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 970,
+      "cone_energy": 0.8381267340844009,
+      "cone_violations": [
+        0.0,
+        0.8241541385650635,
+        0.15240202844142914
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.6762534681688017
+    }
+  },
+  {
+    "premise": "Two women look at a series of purple screens",
+    "hypothesis": "A couple is watching something.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 679,
+      "cone_energy": 0.8335506121403917,
+      "cone_violations": [
+        0.020782113075256348,
+        0.8220241665840149,
+        0.13656865060329437
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.6671012242807834
+    }
+  },
+  {
+    "premise": "Three people, smiling while playing cards.",
+    "hypothesis": "Three people are grinning.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 116,
+      "cone_energy": 0.818137051416329,
+      "cone_violations": [
+        0.7426321506500244,
+        0.3316735327243805,
+        0.08853469043970108
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.636274102832658
+    }
+  },
+  {
+    "premise": "A woman looking in a telescope to look at something really small, most likely some sort of science lab.",
+    "hypothesis": "The woman is a scientist.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 376,
+      "cone_energy": 0.7921905743844129,
+      "cone_violations": [
+        0.4229065179824829,
+        0.6527841687202454,
+        0.15029574930667877
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.5843811487688257
+    }
+  },
+  {
+    "premise": "A red race car is driving on asphalt.",
+    "hypothesis": "Race car driving on pavement.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 384,
+      "cone_energy": 0.7796148471807907,
+      "cone_violations": [
+        0.0,
+        0.7482724785804749,
+        0.2188323736190796
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.5592296943615813
+    }
+  },
+  {
+    "premise": "Two men in life jackets, in a rubber raft powered by an engine, are traveling at high speed on the water with wind turbines on the distant shore.",
+    "hypothesis": "The people here have taken some safety precautions.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 943,
+      "cone_energy": 0.751041555581547,
+      "cone_violations": [
+        0.020630449056625366,
+        0.6604456901550293,
+        0.3570004105567932
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.502083111163094
+    }
+  },
+  {
+    "premise": "A surfer with a large white surfboard and tether line is standing on the beach on an overcast day.",
+    "hypothesis": "A surfer stands on the beach with clouds overhead.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 372,
+      "cone_energy": 0.7221448896052096,
+      "cone_violations": [
+        0.4459247589111328,
+        0.5333846807479858,
+        0.19530779123306274
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.4442897792104192
+    }
+  },
+  {
+    "premise": "three men examine a tree.",
+    "hypothesis": "Some men are looking at a tree.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 359,
+      "cone_energy": 0.7152730260134981,
+      "cone_violations": [
+        0.6864493489265442,
+        0.17457133531570435,
+        0.09963755309581757
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.4305460520269961
+    }
+  },
+  {
+    "premise": "Two men writing in the sand on a rocky beach.",
+    "hypothesis": "There are two men on a rocky beach writing notes in the sand.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 152,
+      "cone_energy": 0.7127636694578998,
+      "cone_violations": [
+        0.6563427448272705,
+        0.24516800045967102,
+        0.13091562688350677
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.4255273389157996
+    }
+  },
+  {
+    "premise": "Group of teen males picking up garbage.",
+    "hypothesis": "A group of teen male workers taking garbage outside.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 0,
+      "cone_energy": 0.707097414031514,
+      "cone_violations": [
+        0.06134951114654541,
+        0.695813000202179,
+        0.10985107719898224
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.414194828063028
+    }
+  },
+  {
+    "premise": "The girl eating spaghetti is wearing a red jacket.",
+    "hypothesis": "The girl in red is having dinner",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 660,
+      "cone_energy": 0.7052242146416973,
+      "cone_violations": [
+        0.3159064054489136,
+        0.6120006442070007,
+        0.15165601670742035
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.4104484292833945
+    }
+  },
+  {
+    "premise": "A white dog is in the water.",
+    "hypothesis": "A white dog swims in the water.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 710,
+      "cone_energy": 0.7042635452998485,
+      "cone_violations": [
+        0.6993625164031982,
+        0.0636640414595604,
+        0.05316109210252762
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.408527090599697
+    }
+  },
+  {
+    "premise": "People protesting immigration.",
+    "hypothesis": "People are upset.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 474,
+      "cone_energy": 0.6782054629369912,
+      "cone_violations": [
+        0.0,
+        0.6631799936294556,
+        0.14196811616420746
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.3564109258739825
+    }
+  },
+  {
+    "premise": "This has to be one of the best restaurant's on the east side!",
+    "hypothesis": "The restaurant is on the east side.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 748,
+      "cone_energy": 0.6775420185710702,
+      "cone_violations": [
+        0.029134809970855713,
+        0.6484705209732056,
+        0.19416573643684387
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.3550840371421404
+    }
+  },
+  {
+    "premise": "A kid with a green bucket over his or her head.",
+    "hypothesis": "A kid is with a bucket",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 795,
+      "cone_energy": 0.6300674884044731,
+      "cone_violations": [
+        0.0,
+        0.5934188961982727,
+        0.21175234019756317
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.2601349768089463
+    }
+  },
+  {
+    "premise": "A street musician playing.",
+    "hypothesis": "A street musician is outside.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 949,
+      "cone_energy": 0.6224142356521982,
+      "cone_violations": [
+        0.5088851451873779,
+        0.345238596200943,
+        0.09615457057952881
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.2448284713043964
+    }
+  },
+  {
+    "premise": "A young girl whips her hair over her head in a public pool",
+    "hypothesis": "A girl is in a public pool.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 752,
+      "cone_energy": 0.6058608128706497,
+      "cone_violations": [
+        0.0,
+        0.5767701864242554,
+        0.1854817420244217
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.2117216257412995
+    }
+  },
+  {
+    "premise": "five girls dressed alike",
+    "hypothesis": "There are five kids with the same clothes",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 382,
+      "cone_energy": 0.5720348158719485,
+      "cone_violations": [
+        0.0,
+        0.555338978767395,
+        0.1371949315071106
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.144069631743897
+    }
+  },
+  {
+    "premise": "A person wearing a white t-shirt and blue ball-cap sitting on a skateboard on a sidewalk in the mingling of shadows and sunlight.",
+    "hypothesis": "A person in a white t shirt is sitting on a skatebaord",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 902,
+      "cone_energy": 0.5636851385283369,
+      "cone_violations": [
+        0.0,
+        0.5455189943313599,
+        0.1419505625963211
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.1273702770566738
+    }
+  },
+  {
+    "premise": "A person at a table, dressed in a black costume.",
+    "hypothesis": "The person is dressed in black",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 448,
+      "cone_energy": 0.5317392047732848,
+      "cone_violations": [
+        0.43354833126068115,
+        0.29636386036872864,
+        0.08337198942899704
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.0634784095465697
+    }
+  },
+  {
+    "premise": "A happy couple enjoying their open air wedding.",
+    "hypothesis": "the marriage was outdoors",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 636,
+      "cone_energy": 0.5301265779624691,
+      "cone_violations": [
+        0.3216050863265991,
+        0.3741210997104645,
+        0.19400453567504883
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.0602531559249382
+    }
+  },
+  {
+    "premise": "The man and woman are drinking out of canning jars.",
+    "hypothesis": "Man and woman drinking",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 241,
+      "cone_energy": 0.5258772999201194,
+      "cone_violations": [
+        0.0,
+        0.4268987774848938,
+        0.307090163230896
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.051754599840239
+    }
+  },
+  {
+    "premise": "A group of people are on a stone street and waving up at the camera.",
+    "hypothesis": "A crowd of people are in the street, waving.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 453,
+      "cone_energy": 0.5107235876238847,
+      "cone_violations": [
+        0.4618319272994995,
+        0.20007336139678955,
+        0.08672083914279938
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.0214471752477694
+    }
+  },
+  {
+    "premise": "A construction worker is driving heavy equipment at a work site.",
+    "hypothesis": "The worker drove heavy equipment.",
+    "label": "entailment",
+    "metadata": {
+      "tda_index": 833,
+      "cone_energy": 0.5084633422554056,
+      "cone_violations": [
+        0.0,
+        0.47819221019744873,
+        0.17282123863697052
+      ],
+      "anomaly_threshold": 0.5,
+      "anomaly_ratio": 1.0169266845108111
+    }
+  }
+]

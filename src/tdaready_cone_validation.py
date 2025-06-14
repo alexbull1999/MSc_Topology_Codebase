@@ -42,7 +42,7 @@ class ConeValidationFramework:
         """
         Validate that cone energies follow expected hierarchy
         """
-        processed_data_path = "data/processed/toy_embeddings_large.pt"
+        processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
         processed_data = torch.load(processed_data_path)
         dataset_obj = EntailmentDataset(processed_data)
         dataloader = DataLoader(dataset_obj, batch_size=len(dataset_obj), shuffle=False)
@@ -151,7 +151,7 @@ class ConeValidationFramework:
         """
         print("Validating correlation with order energies")
 
-        processed_data_path = "data/processed/toy_embeddings_large.pt"
+        processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
         processed_data = torch.load(processed_data_path)
         dataset_obj = EntailmentDataset(processed_data)
         dataloader = DataLoader(dataset_obj, batch_size=len(dataset_obj), shuffle=False)
