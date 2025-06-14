@@ -159,13 +159,13 @@ def test_text_processing():
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
     # Test toy dataset
-    toy_data_path = "data/toy/small_logical_pairs.json"
+    toy_data_path = "data/toy/large_logical_pairs.json"
     if os.path.exists(toy_data_path):
         processed_data = processor.process_entailment_dataset(toy_data_path)
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/toy_embeddings_small.pt"
+        output_path = "data/processed/toy_embeddings_large.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

@@ -16,6 +16,9 @@ import pandas as pd
 from scipy.stats import pearsonr, spearmanr
 import warnings
 import os
+
+from hyperbolic_projection import set_random_seed
+
 warnings.filterwarnings("ignore")
 from order_embeddings import EntailmentDataset
 from torch.utils.data import DataLoader
@@ -39,7 +42,7 @@ class ConeValidationFramework:
         """
         Validate that cone energies follow expected hierarchy
         """
-        processed_data_path = "data/processed/toy_embeddings_small.pt"
+        processed_data_path = "data/processed/toy_embeddings_large.pt"
         processed_data = torch.load(processed_data_path)
         dataset_obj = EntailmentDataset(processed_data)
         dataloader = DataLoader(dataset_obj, batch_size=len(dataset_obj), shuffle=False)
@@ -148,7 +151,7 @@ class ConeValidationFramework:
         """
         print("Validating correlation with order energies")
 
-        processed_data_path = "data/processed/toy_embeddings_small.pt"
+        processed_data_path = "data/processed/toy_embeddings_large.pt"
         processed_data = torch.load(processed_data_path)
         dataset_obj = EntailmentDataset(processed_data)
         dataloader = DataLoader(dataset_obj, batch_size=len(dataset_obj), shuffle=False)
@@ -352,6 +355,7 @@ class ConeValidationFramework:
 
 
 def main():
+    set_random_seed(42)
     print("Hyperbolic Entailment Cones Validation")
     print("="*60)
     pipeline = HyperbolicConeEmbeddingPipeline()

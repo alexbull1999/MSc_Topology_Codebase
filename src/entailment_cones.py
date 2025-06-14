@@ -14,7 +14,9 @@ import os
 from sympy.codegen.ast import RuntimeError_
 from hyperbolic_projection import HyperbolicOrderEmbeddingPipeline, safe_tensor_to_float
 from order_embeddings import OrderEmbeddingModel, EntailmentDataset
+from hyperbolic_projection import set_random_seed
 from text_processing import TextToEmbedding
+
 
 class HyperbolicEntailmentCones:
     """
@@ -143,7 +145,7 @@ class HyperbolicEntailmentCones:
 
 
 class HyperbolicConeEmbeddingPipeline:
-    def __init__(self, model_path: str = "models/order_embeddings_small.pt",
+    def __init__(self, model_path: str = "models/order_embeddings_large.pt",
                  K: float=0.1, epsilon: float=0.1):
         """
         Initialize the complete pipeline
@@ -229,10 +231,11 @@ class HyperbolicConeEmbeddingPipeline:
         return results
 
 def test_cone_implementation():
+    set_random_seed(42)
     print("Testing hyperbolic cone implementation")
     pipeline = HyperbolicConeEmbeddingPipeline()
 
-    processed_data_path = "data/processed/toy_embeddings_small.pt"
+    processed_data_path = "data/processed/toy_embeddings_large.pt"
     if not os.path.exists(processed_data_path):
         return RuntimeError("Processed data not found! Error")
 
@@ -240,7 +243,7 @@ def test_cone_implementation():
 
     processed_data = torch.load(processed_data_path)
     dataset = EntailmentDataset(processed_data)
-    dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=False)
+    dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=False) #Change this for real datasets that are too large to do in one batch
 
     batch = next(iter(dataloader))
     premise_embs = batch['premise_emb'].to(pipeline.hyperbolic_pipeline.device)
@@ -291,13 +294,13 @@ if __name__ == "__main__":
     # Run basic tests
     test_results = test_cone_implementation()
 
-    # Try to test with real pipeline if available
-    try:
-        pipeline = HyperbolicConeEmbeddingPipeline()
-        print("\nSuccessfully created complete cone embedding pipeline!")
-    except Exception as e:
-        print(f"\nCould not create full pipeline: {e}")
-        print("Basic cone mathematics implementation is working correctly.")
+    # # Try to test with real pipeline if available
+    # try:
+    #     pipeline = HyperbolicConeEmbeddingPipeline()
+    #     print("\nSuccessfully created complete cone embedding pipeline!")
+    # except Exception as e:
+    #     print(f"\nCould not create full pipeline: {e}")
+    #     print("Basic cone mathematics implementation is working correctly.")
 
 
 

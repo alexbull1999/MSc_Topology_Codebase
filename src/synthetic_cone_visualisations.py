@@ -102,7 +102,6 @@ class ConeVisualiser:
 
         cone_axis = premise_2d / premise_norm
 
-        # CORRECTED: The cone should be centered on the axis direction
         # Calculate the angle of the cone axis
         axis_angle = np.arctan2(cone_axis[1], cone_axis[0])
 
@@ -415,8 +414,8 @@ def visualize_real_data_cones():
         from order_embeddings import EntailmentDataset
         from torch.utils.data import DataLoader
 
-        processed_data_path = "data/processed/toy_embeddings_small.pt"
-        model_path = "models/order_embeddings_small.pt"
+        processed_data_path = "data/processed/toy_embeddings_large.pt"
+        model_path = "models/order_embeddings_large.pt"
 
         print("\nCreating Energy-Based Real Data Cone Visualizations")
         print("=" * 60)

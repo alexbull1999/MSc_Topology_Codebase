@@ -6,9 +6,22 @@ import matplotlib.pyplot as plt
 import os
 from typing import Dict, List, Tuple, Optional
 import json
+import random
 
 #Import existing order embedding classes
 from order_embeddings import OrderEmbeddingModel, EntailmentDataset
+
+def set_random_seed(seed: int = 42):
+    """Set random seed for reproducibility across all libraries"""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)  # for multi-GPU
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    return torch.Generator().manual_seed(seed)
+
 
 class HyperbolicProjector(nn.Module):
     """
@@ -37,7 +50,7 @@ class HyperbolicProjector(nn.Module):
         )
 
         # Scaling factor to ensure point stay inside unit ball
-        self.scale_factor = 0.7 # Conservative scaling to avoid boundary issues
+        self.scale_factor = 0.5 # Conservative scaling to avoid boundary issues
 
         # Initialize weights
         self._init_weights()
@@ -95,8 +108,10 @@ class HyperbolicOrderEmbeddingPipeline:
     def __init__(self,
                  order_model_path: str = "models/order_embeddings_small.pt",
                  hyperbolic_dim: int = 30,
-                 device: str = 'auto'):
+                 device: str = 'auto', random_seed: int=42):
         """Initialize the complete pipeline"""
+
+        set_random_seed(random_seed)
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.hyperbolic_dim = hyperbolic_dim
@@ -199,8 +214,11 @@ def safe_tensor_to_float(tensor_or_float):
 
 def test_hyperbolic_projection():
     """Test hyperbolic projection on toy dataset"""
-    processed_data_path = "data/processed/toy_embeddings_small.pt"
-    model_path = "models/order_embeddings_small.pt"
+
+    set_random_seed(42)
+
+    processed_data_path = "data/processed/toy_embeddings_large.pt"
+    model_path = "models/order_embeddings_large.pt"
 
     if not os.path.exists(processed_data_path):
         print(f"Processed data not found at {processed_data_path}")
@@ -215,7 +233,8 @@ def test_hyperbolic_projection():
     #Initialize pipeline
     pipeline = HyperbolicOrderEmbeddingPipeline(
         order_model_path=model_path,
-        hyperbolic_dim=20 #Smaller for toy dataset
+        hyperbolic_dim=20, #Smaller for toy dataset
+        random_seed=42
     )
 
     processed_data = torch.load(processed_data_path)
@@ -234,6 +253,28 @@ def test_hyperbolic_projection():
     print(f"Testing on batch: {len(premise_embs)} examples")
 
     results = pipeline.compute_hyperbolic_energies(premise_embs, hypothesis_embs)
+
+    # DEBUG: Print first few examples to see what's happening
+    print("\nDEBUG: First 5 examples:")
+    for i in range(min(5, len(label_strs))):
+        label = label_strs[i]
+        print(f"Example {i} ({label}):")
+        print(f"  Premise norm: {safe_tensor_to_float(results['premise_norms'][i]):.4f}")
+        print(f"  Hypothesis norm: {safe_tensor_to_float(results['hypothesis_norms'][i]):.4f}")
+        print(f"  Order energy: {safe_tensor_to_float(results['order_energies'][i]):.4f}")
+        print()
+
+    # # DEBUG: Check if there's a systematic pattern (The flip in large toy, was actually due to nature of synthetic toy dataset and how premise/hypothesis pairs are flipped)
+    # print("DEBUG: Checking for systematic swapping...")
+    # entail_indices = [i for i, label in enumerate(label_strs) if label == 'entailment']
+    # neutral_indices = [i for i, label in enumerate(label_strs) if label == 'neutral']
+    #
+    # if entail_indices and neutral_indices:
+    #     print(
+    #         f"Entailment example 0 - Premise: {safe_tensor_to_float(results['premise_norms'][entail_indices[0]]):.4f}, Hypothesis: {safe_tensor_to_float(results['hypothesis_norms'][entail_indices[0]]):.4f}")
+    #     print(
+    #         f"Neutral example 0 - Premise: {safe_tensor_to_float(results['premise_norms'][neutral_indices[0]]):.4f}, Hypothesis: {safe_tensor_to_float(results['hypothesis_norms'][neutral_indices[0]]):.4f}")
+
 
     #Analyze results by label
     hyperbolic_stats = {}
@@ -377,7 +418,7 @@ def visualise_hyperbolic_embeddings(pipeline, results, hyperbolic_stats, save_pa
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(save_path, 'hyperbolic_projection_analysis_small.png'),
+    plt.savefig(os.path.join(save_path, 'hyperbolic_projection_analysis.png'),
                 dpi=300, bbox_inches='tight')
     plt.close()
 

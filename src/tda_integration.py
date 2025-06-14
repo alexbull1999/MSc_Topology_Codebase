@@ -46,6 +46,7 @@ class TopologicalFeatures:
     max_persistence: float
     n_significant_features: int
 
+
 class TDAIntegration:
     """
     Apply TDA to validated hyperbolic entailment cone violations, building on cone_validation.py where we showed on
@@ -69,7 +70,7 @@ class TDAIntegration:
         self.topological_features = {}
 
     def load_cone_validation_results(self) -> Dict:
-        tda_data_path = Path("validation_results/tda_ready_data_small_toy.pt")
+        tda_data_path = Path("validation_results/tda_ready_data_large_toy.pt")
         if tda_data_path.exists():
             results = torch.load(tda_data_path)
             print("Loaded TDA-ready data")

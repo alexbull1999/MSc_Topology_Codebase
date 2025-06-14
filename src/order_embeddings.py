@@ -7,6 +7,20 @@ import matplotlib.pyplot as plt
 import os
 from typing import Dict, List, Tuple
 import json
+import random
+
+def set_random_seed(seed: int = 42):
+    """Set random seed for reproducibility across all libraries"""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)  # for multi-GPU
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    # Set generator for random_split to be reproducible
+    return torch.Generator().manual_seed(seed)
+
 
 class OrderEmbeddingModel(nn.Module):
     """Order embedding model, following Vendrov et al. (2015) methodology
@@ -110,10 +124,10 @@ class OrderEmbeddingTrainer:
         """
         self.model = model.to(device)
         self.device = device
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3, weight_decay=1e-5)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3, weight_decay=5e-4) #lr was 1e-5 for small
         self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-            self.optimizer, mode='min', patience=5, factor=0.5
-        )
+            self.optimizer, mode='min', patience=15, factor=0.5
+        ) #patience was 5 for small
 
         #Training history
         self.train_losses = []
@@ -222,8 +236,12 @@ class OrderEmbeddingTrainer:
         return avg_loss, energy_stats
 
 def train_order_embeddings(processed_data_path: str, output_dir: str = "models/",
-                           epochs: int = 50, batch_size: int = 32, order_dim: int = 50):
+                           epochs: int = 50, batch_size: int = 32, order_dim: int = 50,
+                           random_seed: int=42):
     """Train order embedding model on processed dataset"""
+
+    generator = set_random_seed(random_seed)
+
     print(f"Loading data from {processed_data_path}")
     processed_data = torch.load(processed_data_path)
 
@@ -233,7 +251,7 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
     #Split into train/val
     train_size = int(0.8 * len(dataset))
     val_size = len(dataset) - train_size
-    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
+    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size], generator=generator)
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
@@ -382,16 +400,17 @@ def plot_training_progress(trainer: OrderEmbeddingTrainer, save_path: str = "plo
 
 def test_order_embeddings():
     """Test order embeddings on toy dataset"""
-    processed_data_path = "data/processed/toy_embeddings_small.pt"
+    processed_data_path = "data/processed/toy_embeddings_large.pt"
     if not os.path.exists(processed_data_path):
         print(f"Processed data not found at {processed_data_path}")
         return
 
     model, trainer = train_order_embeddings(
         processed_data_path=processed_data_path,
-        epochs=5, #smaller for toy dataset
+        epochs=10, #larger for large toy dataset
         batch_size=16,
-        order_dim=20 #Smaller for toy dataset
+        order_dim=20, #Smaller for toy dataset
+        random_seed=42
     )
 
     #Validate rankings
