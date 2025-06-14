@@ -70,7 +70,7 @@ class TDAIntegration:
         self.topological_features = {}
 
     def load_cone_validation_results(self) -> Dict:
-        tda_data_path = Path("validation_results/tda_ready_data_large_toy.pt")
+        tda_data_path = Path("validation_results/tda_ready_data_small_toy.pt")
         if tda_data_path.exists():
             results = torch.load(tda_data_path)
             print("Loaded TDA-ready data")
@@ -197,36 +197,36 @@ class TDAIntegration:
                 betti_numbers.append(0)
                 print(f"     H{dim}: No features")
 
-            # Convert to arrays
-            finite_births = np.array(finite_births)
-            finite_deaths = np.array(finite_deaths)
-            finite_lifespans = np.array(finite_lifespans)
+        # Convert to arrays
+        finite_births = np.array(finite_births)
+        finite_deaths = np.array(finite_deaths)
+        finite_lifespans = np.array(finite_lifespans)
 
-            # Compute meaningful features
-            if len(finite_lifespans) > 0:
-                total_persistence = np.sum(finite_lifespans)
-                max_persistence = np.max(finite_lifespans)
-                mean_lifespan = np.mean(finite_lifespans)
-                n_significant = np.sum(finite_lifespans > mean_lifespan)
+        # Compute meaningful features
+        if len(finite_lifespans) > 0:
+            total_persistence = np.sum(finite_lifespans)
+            max_persistence = np.max(finite_lifespans)
+            mean_lifespan = np.mean(finite_lifespans)
+            n_significant = np.sum(finite_lifespans > mean_lifespan)
 
-                print(f"   Features: total={total_persistence:.4f}, max={max_persistence:.4f}, significant={n_significant}")
-            else:
-                total_persistence = 0.0
-                max_persistence = 0.0
-                n_significant = 0
-                print(f"   Features: No finite lifespans - using zeros")
+            print(f"   Features: total={total_persistence:.4f}, max={max_persistence:.4f}, significant={n_significant}")
+        else:
+            total_persistence = 0.0
+            max_persistence = 0.0
+            n_significant = 0
+            print(f"   Features: No finite lifespans - using zeros")
 
-            return TopologicalFeatures(
-                birth_death_pairs=np.column_stack([finite_births, finite_deaths]) if len(
-                    finite_births) > 0 else np.array([]).reshape(0, 2),
-                persistence_landscape=finite_lifespans,
-                bottleneck_distance=0.0,
-                wasserstein_distance=0.0,
-                betti_numbers=betti_numbers,
-                total_persistence=total_persistence,
-                max_persistence=max_persistence,
-                n_significant_features=int(n_significant)
-            )
+        return TopologicalFeatures(
+            birth_death_pairs=np.column_stack([finite_births, finite_deaths]) if len(
+                finite_births) > 0 else np.array([]).reshape(0, 2),
+            persistence_landscape=finite_lifespans,
+            bottleneck_distance=0.0,
+            wasserstein_distance=0.0,
+            betti_numbers=betti_numbers,
+            total_persistence=total_persistence,
+            max_persistence=max_persistence,
+            n_significant_features=int(n_significant)
+        )
 
     def analyse_topological_signatures(self) -> Dict:
         """
