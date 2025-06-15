@@ -24,248 +24,209 @@ class SafeAnomalyExtractor:
         print("Loading data files...")
 
         # Load TDA-ready data with cone violations
-        tda_data_path = self.data_dir / "tda_ready_data_SNLI_1k.pt"
+        tda_data_path = self.data_dir / "tda_ready_data_SNLI_k=0.01.pt"
         if not tda_data_path.exists():
             raise FileNotFoundError(f"TDA data not found at {tda_data_path}")
 
         self.tda_data = torch.load(tda_data_path, map_location='cpu')
         print(f"Loaded TDA data: {len(self.tda_data['cone_violations'])} samples")
+        # Verify we have all required data
+        required_keys = ['cone_violations', 'labels', 'premise_texts', 'hypothesis_texts', 'sample_metadata']
+        missing_keys = [key for key in required_keys if key not in self.tda_data]
 
-        # Load original SNLI subset with text from JSON
-        self.data_dir = Path("data")
-        snli_json_path = self.data_dir / "raw/snli/train/snli_1k_subset_balanced.json"
-        if not snli_json_path.exists():
-            raise FileNotFoundError(f"SNLI JSON not found at {snli_json_path}")
+        if missing_keys:
+            raise KeyError(f"Missing required keys in TDA data: {missing_keys}")
 
-        with open(snli_json_path, 'r', encoding='utf-8') as f:
-            self.snli_data = json.load(f)
-        print(f"Loaded SNLI text data: {len(self.snli_data)} samples")
+        print(f"✓ Loaded TDA data: {len(self.tda_data['labels'])} samples with texts")
 
-        # Verify we can match the data safely
-        self._verify_data_matching()
+        # Extract cone violation energies from sample metadata for easier access
+        self.sample_metadata = self.tda_data['sample_metadata']
+        print(f"✓ Sample metadata contains {len(self.sample_metadata)} detailed records")
 
-    def _verify_data_matching(self):
+    def find_anomalous_entailments(self,
+                                   cone_energy_threshold: float = 1,
+                                   order_energy_threshold: float = 1,
+                                   top_k: int = 20) -> List[Dict[str, Any]]:
         """
-        Verify that we can safely match TDA data with SNLI text data
-        """
-        print("Verifying data matching...")
-
-        # Check if we have text data in TDA results for direct matching
-        if 'texts' in self.tda_data:
-            print("✓ TDA data contains text - can match directly")
-            self.matching_method = 'direct'
-        else:
-            print("⚠ TDA data doesn't contain text - will attempt index matching")
-            print("  WARNING: This assumes consistent ordering between files!")
-
-            # Check if lengths match as a basic sanity check
-            if len(self.tda_data['cone_violations']) == len(self.snli_data):
-                print(f"✓ Data lengths match ({len(self.snli_data)} samples)")
-                self.matching_method = 'index'
-            else:
-                raise ValueError(
-                    f"Data length mismatch: TDA={len(self.tda_data['cone_violations'])}, SNLI={len(self.snli_data)}")
-
-    def _get_text_for_sample(self, tda_index: int) -> Tuple[str, str, str]:
-        """
-        Safely get premise, hypothesis, label for a TDA sample
+        Find entailment examples with anomalously high cone violation energies
 
         Args:
-            tda_index: Index in the TDA data
+            cone_energy_threshold: Minimum cone energy to be considered anomalous
+            order_energy_threshold: Optional order energy threshold
+            top_k: Maximum number of examples to return
 
         Returns:
-            (premise, hypothesis, label)
+            List of anomalous entailment examples with texts
         """
-        if self.matching_method == 'direct':
-            # Use text directly from TDA data if available
-            texts = self.tda_data['texts'][tda_index]
-            return texts['premise'], texts['hypothesis'], texts['label']
-        else:
-            # Use index matching with JSON data
-            # Debug: Check the structure of the JSON data
-            if tda_index == 0:  # Only print once for debugging
-                print(f"JSON data type: {type(self.snli_data)}")
-                if isinstance(self.snli_data, list) and len(self.snli_data) > 0:
-                    print(f"First sample type: {type(self.snli_data[0])}")
-                    print(f"First sample: {self.snli_data[0]}")
-                elif isinstance(self.snli_data, dict):
-                    print(f"JSON keys: {list(self.snli_data.keys())}")
-
-            # Handle different JSON structures
-            if isinstance(self.snli_data, list):
-                # If it's a list of samples
-                sample = self.snli_data[tda_index]
-                if isinstance(sample, dict):
-                    return sample['premise'], sample['hypothesis'], sample['label']
-                elif isinstance(sample, list) and len(sample) >= 3:
-                    return sample[0], sample[1], sample[2]  # [premise, hypothesis, label]
-                else:
-                    raise ValueError(f"Unexpected sample format: {type(sample)}")
-            elif isinstance(self.snli_data, dict):
-                # If it's a dict with keys containing lists
-                # Try common structures
-                if 'data' in self.snli_data:
-                    sample = self.snli_data['data'][tda_index]
-                elif 'samples' in self.snli_data:
-                    sample = self.snli_data['samples'][tda_index]
-                else:
-                    # Try to find the actual data
-                    for key, value in self.snli_data.items():
-                        if isinstance(value, list) and len(value) == 990:
-                            sample = value[tda_index]
-                            break
-                    else:
-                        raise ValueError(f"Could not find sample data in JSON structure")
-
-                if isinstance(sample, dict):
-                    return sample['premise'], sample['hypothesis'], sample['label']
-                elif isinstance(sample, list) and len(sample) >= 3:
-                    return sample[0], sample[1], sample[2]
-                else:
-                    raise ValueError(f"Unexpected sample format: {type(sample)}")
-            else:
-                raise ValueError(f"Unexpected JSON data type: {type(self.snli_data)}")
-
-    def identify_anomalous_entailment_pairs(self, cone_energy_threshold: float = 0.2) -> List[Dict[str, Any]]:
-        """
-        Identify entailment pairs with high cone violation energy
-
-        Args:
-            cone_energy_threshold: Threshold for anomalous cone energy
-
-        Returns:
-            List of anomalous examples in original data format
-        """
-        print(f"\nIdentifying anomalous entailment pairs...")
+        print(f"\nFinding anomalous entailment examples...")
         print(f"Cone energy threshold: {cone_energy_threshold}")
+        if order_energy_threshold:
+            print(f"Order energy threshold: {order_energy_threshold}")
 
         anomalous_examples = []
 
-        # Debug: Check the structure of TDA data
-        print("Debugging TDA data structure:")
-        print(f"TDA data keys: {list(self.tda_data.keys())}")
-        if 'labels' in self.tda_data:
-            labels = self.tda_data['labels']
-            print(f"Labels type: {type(labels)}")
-            print(f"First few labels: {labels[:5] if hasattr(labels, '__getitem__') else 'Cannot slice'}")
-
-        # Handle different label formats
-        if 'labels' in self.tda_data:
-            labels = self.tda_data['labels']
-            # Convert tensor to list if needed
-            if hasattr(labels, 'tolist'):
-                labels = labels.tolist()
-        else:
-            print("No 'labels' key found in TDA data")
-            return []
-
-        # Find entailment indices
-        entailment_indices = []
-        for i, label in enumerate(labels):
-            if str(label).lower() == 'entailment' or label == 0:  # Handle both string and numeric labels
-                entailment_indices.append(i)
-
-        print(f"Found {len(entailment_indices)} entailment pairs out of {len(labels)} total")
-
-        for tda_idx in entailment_indices:
-            try:
-                # Calculate cone violation energy
-                cone_violations = self.tda_data['cone_violations'][tda_idx]
-                cone_energy = float(torch.norm(cone_violations))
-
-                # Check if anomalous
-                if cone_energy > cone_energy_threshold:
-                    # Get original text data
-                    premise, hypothesis, label = self._get_text_for_sample(tda_idx)
-
-                    # Create example in original format
-                    example = {
-                        'premise': premise,
-                        'hypothesis': hypothesis,
-                        'label': label,
-                        'metadata': {
-                            'tda_index': tda_idx,
-                            'cone_energy': cone_energy,
-                            'cone_violations': cone_violations.tolist(),
-                            'anomaly_threshold': cone_energy_threshold,
-                            'anomaly_ratio': cone_energy / cone_energy_threshold
-                        }
-                    }
-
-                    anomalous_examples.append(example)
-
-            except Exception as e:
-                print(f"Warning: Could not process sample {tda_idx}: {e}")
-                # Debug: Print more info about the failing sample
-                print(
-                    f"  Label at index {tda_idx}: {labels[tda_idx] if tda_idx < len(labels) else 'INDEX OUT OF RANGE'}")
+        for sample in self.sample_metadata:
+            # Only look at entailment examples
+            if sample['label'] != 'entailment':
                 continue
 
-        print(f"Found {len(anomalous_examples)} anomalous entailment pairs")
+            cone_energy = sample['cone_energy']
+            order_energy = sample['order_energy']
+
+            # Check if anomalous based on thresholds
+            is_anomalous = cone_energy > cone_energy_threshold
+            if order_energy_threshold is not None:
+                is_anomalous = is_anomalous and (order_energy > order_energy_threshold)
+
+            if is_anomalous:
+                example = {
+                    'sample_id': sample['sample_id'],
+                    'premise': sample['premise_text'],
+                    'hypothesis': sample['hypothesis_text'],
+                    'label': sample['label'],
+                    'cone_energy': cone_energy,
+                    'order_energy': order_energy,
+                    'hyperbolic_distance': sample['hyperbolic_distance'],
+                    'anomaly_score': cone_energy / cone_energy_threshold,
+                    'potential_issue': 'High cone energy for entailment - possible mislabel'
+                }
+                anomalous_examples.append(example)
 
         # Sort by cone energy (highest first)
-        anomalous_examples.sort(key=lambda x: x['metadata']['cone_energy'], reverse=True)
+        anomalous_examples.sort(key=lambda x: x['cone_energy'], reverse=True)
 
+        # Limit to top_k
+        anomalous_examples = anomalous_examples[:top_k]
+
+        print(f"Found {len(anomalous_examples)} anomalous entailment examples")
         return anomalous_examples
 
-    def run_analysis(self, cone_energy_threshold: float = 0.2):
+    def find_low_energy_non_entailments(self,
+                                        cone_energy_threshold: float = 1,
+                                        order_energy_threshold: float = 1,
+                                        top_k: int = 10) -> List[Dict[str, Any]]:
         """
-        Run complete analysis and export results
+        Find neutral/contradiction examples with suspiciously low energies
+        These might be mislabeled entailments
 
         Args:
-            cone_energy_threshold: Threshold for identifying anomalies
+            cone_energy_threshold: Maximum cone energy to be considered suspicious
+            order_energy_threshold: Optional order energy threshold
+            top_k: Maximum number of examples to return
 
         Returns:
-            Path to exported JSON file
+            List of potentially mislabeled examples
         """
-        print("=" * 60)
-        print("SNLI ENTAILMENT ANOMALY EXTRACTION")
-        print("=" * 60)
+        print(f"\nFinding low-energy non-entailment examples...")
+        print(f"Cone energy threshold: {cone_energy_threshold}")
+        if order_energy_threshold:
+            print(f"Order energy threshold: {order_energy_threshold}")
 
-        # Identify anomalous pairs
-        anomalous_examples = self.identify_anomalous_entailment_pairs(cone_energy_threshold)
+        suspicious_examples = []
 
+        for sample in self.sample_metadata:
+            # Only look at neutral/contradiction examples
+            if sample['label'] == 'entailment':
+                continue
 
-        output_path = self.output_dir / "anomalous_entailment_pairs.json"
-        with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(anomalous_examples, f, indent=2, ensure_ascii=False)
+            cone_energy = sample['cone_energy']
+            order_energy = sample['order_energy']
 
-        # Print summary
-        print("\n" + "=" * 40)
-        print("ANALYSIS SUMMARY")
-        print("=" * 40)
-        print(f"Total entailment pairs: 330")
-        print(f"Anomalous pairs found: {len(anomalous_examples)}")
-        print(f"Potential mislabeling rate: {len(anomalous_examples) / 330 * 100:.1f}%")
-        print(f"Highest cone energy: {max(ex['metadata']['cone_energy'] for ex in anomalous_examples):.4f}")
-        print(f"Lowest anomalous cone energy: {min(ex['metadata']['cone_energy'] for ex in anomalous_examples):.4f}")
+            # Check if suspiciously low energy
+            is_suspicious = cone_energy < cone_energy_threshold
+            if order_energy_threshold is not None:
+                is_suspicious = is_suspicious and (order_energy < order_energy_threshold)
 
-        print(f"\nExample of most anomalous pair:")
-        top_example = anomalous_examples[0]
-        print(f"  Premise: \"{top_example['premise'][:100]}...\"")
-        print(f"  Hypothesis: \"{top_example['hypothesis'][:100]}...\"")
-        print(f"  Cone Energy: {top_example['metadata']['cone_energy']:.4f}")
+            if is_suspicious:
+                example = {
+                    'sample_id': sample['sample_id'],
+                    'premise': sample['premise_text'],
+                    'hypothesis': sample['hypothesis_text'],
+                    'label': sample['label'],
+                    'cone_energy': cone_energy,
+                    'order_energy': order_energy,
+                    'hyperbolic_distance': sample['hyperbolic_distance'],
+                    'suspicion_score': cone_energy_threshold / max(cone_energy, 1e-6),
+                    'potential_issue': f'Low cone energy for {sample["label"]} - possible entailment mislabel'
+                }
+                suspicious_examples.append(example)
 
+        # Sort by cone energy (lowest first)
+        suspicious_examples.sort(key=lambda x: x['cone_energy'])
+
+        # Limit to top_k
+        suspicious_examples = suspicious_examples[:top_k]
+
+        print(f"Found {len(suspicious_examples)} potentially mislabeled non-entailment examples")
+        return suspicious_examples
+
+    def generate_anomaly_report(self,
+                                anomalous_entailments: List[Dict],
+                                suspicious_non_entailments: List[Dict]) -> str:
+        """
+        Generate a comprehensive anomaly analysis report
+
+        Returns:
+            Path to saved report
+        """
+        report = {
+            'analysis_summary': {
+                'total_samples': len(self.sample_metadata),
+                'anomalous_entailments_found': len(anomalous_entailments),
+                'suspicious_non_entailments_found': len(suspicious_non_entailments),
+                'potential_mislabeling_rate': (len(anomalous_entailments) + len(suspicious_non_entailments)) / len(
+                    self.sample_metadata) * 100
+            },
+            'anomalous_entailments': anomalous_entailments,
+            'suspicious_non_entailments': suspicious_non_entailments,
+            'methodology': {
+                'description': 'Uses cone violation energies from hyperbolic entailment cones to identify potential annotation errors',
+                'high_energy_entailments': 'Entailment pairs with high cone violations may be mislabeled',
+                'low_energy_non_entailments': 'Neutral/contradiction pairs with low cone violations may be true entailments'
+            }
+        }
+
+        # Save comprehensive report
+        report_path = self.output_dir / "anomaly_analysis_report.json"
+        with open(report_path, 'w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2, ensure_ascii=False)
+
+        # Save human-readable summary
+        summary_path = self.output_dir / "anomaly_summary.txt"
+        with open(summary_path, 'w', encoding='utf-8') as f:
+            f.write("SNLI ENTAILMENT ANOMALY ANALYSIS REPORT\n")
+            f.write("=" * 50 + "\n\n")
+
+            f.write(f"Dataset: {report['analysis_summary']['total_samples']} samples\n")
+            f.write(f"Anomalous entailments: {report['analysis_summary']['anomalous_entailments_found']}\n")
+            f.write(f"Suspicious non-entailments: {report['analysis_summary']['suspicious_non_entailments_found']}\n")
+            f.write(f"Potential mislabeling rate: {report['analysis_summary']['potential_mislabeling_rate']:.1f}%\n\n")
+
+            f.write("TOP ANOMALOUS ENTAILMENTS (High cone energy - likely mislabeled):\n")
+            f.write("-" * 70 + "\n")
+            for i, example in enumerate(anomalous_entailments[:5], 1):
+                f.write(f"{i}. Cone Energy: {example['cone_energy']:.4f}\n")
+                f.write(f"   Premise: {example['premise']}\n")
+                f.write(f"   Hypothesis: {example['hypothesis']}\n")
+                f.write(f"   Label: {example['label']}\n\n")
+
+            f.write("\nSUSPICIOUS NON-ENTAILMENTS (Low cone energy - might be entailments):\n")
+            f.write("-" * 70 + "\n")
+            for i, example in enumerate(suspicious_non_entailments[:5], 1):
+                f.write(f"{i}. Cone Energy: {example['cone_energy']:.4f}\n")
+                f.write(f"   Premise: {example['premise']}\n")
+                f.write(f"   Hypothesis: {example['hypothesis']}\n")
+                f.write(f"   Label: {example['label']}\n\n")
+
+        return str(report_path)
 
 
 def main():
-    """
-    Main function to run the anomaly extraction
-    """
-    # Initialize extractor
-    extractor = SafeAnomalyExtractor()
 
-    # Run analysis with adjustable threshold
-    # Start with a lower threshold to catch more potential anomalies
-    extractor.run_analysis(cone_energy_threshold=0.5)
-
-    print(f"\nAnalysis complete!")
-    print("\nNext steps:")
-    print("1. Review the JSON file to examine anomalous pairs")
-    print("2. Manually inspect premise-hypothesis pairs for mislabeling")
-    print("3. Adjust threshold if needed and re-run")
-
-
+    analyzer = SafeAnomalyExtractor()
+    anomalous_entailments = analyzer.find_anomalous_entailments()
+    suspicious_non_entailment = analyzer.find_low_energy_non_entailments()
+    analyzer.generate_anomaly_report(anomalous_entailments, suspicious_non_entailment)
 
 if __name__ == "__main__":
     main()

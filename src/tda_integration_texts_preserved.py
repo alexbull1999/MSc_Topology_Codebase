@@ -68,9 +68,10 @@ class TDAIntegration:
         }
 
         self.topological_features = {}
+        self.original_indices = {}
 
     def load_cone_validation_results(self) -> Dict:
-        tda_data_path = Path("validation_results/tda_ready_data_SNLI_1k.pt")
+        tda_data_path = Path("validation_results/tda_ready_data_SNLI_k=0.01.pt")
         if tda_data_path.exists():
             results = torch.load(tda_data_path)
             print("Loaded TDA-ready data")
@@ -94,15 +95,20 @@ class TDAIntegration:
 
         #Organize by label
         patterns = defaultdict(list)
+        original_indices = defaultdict(list)
         for i, label in enumerate(labels):
             patterns[label].append(cone_violations[i])
+            original_indices[label].append(i) # preserve original index
 
         # Convert to arrays
         pattern_arrays = {}
+        index_arrays = {}
         for label, violations in patterns.items():
             pattern_arrays[label] = np.array(violations)
+            index_arrays[label] = np.array(original_indices[label])
             print(f"{label}: {len(violations)} samples, shape {pattern_arrays[label].shape}")
 
+        self.original_indices = index_arrays
         return pattern_arrays
 
     def compute_persistent_homology(self, point_cloud: np.ndarray, label: str) -> Dict:
@@ -595,9 +601,9 @@ class TDAIntegration:
         except Exception as e:
             print(f"   Error creating 2D projections: {e}")
 
-    def extract_tda_features_for_classification(self, analysis_results: Dict) -> Tuple[np.ndarray, np.ndarray]:
+    def extract_tda_features_for_classification(self, analysis_results: Dict) -> Tuple[np.ndarray, np.ndarray, Dict]:
         """
-        Extract TDA-derived features that can be used for entailment classification
+        Extract TDA-derived features that can be used for entailment classification and preserve original texts
 
         This creates a feature vector for each sample based on its topological properties,
         which can later be used to train classifiers or as regularization features.
@@ -606,8 +612,19 @@ class TDAIntegration:
 
         feature_vectors = []
         labels = []
+        sample_texts = []
+        sample_metadata = []
+
+        # Get original texts from cone validation results
+        premise_texts = self.cone_validation_results.get('premise_texts', [])
+        hypothesis_texts = self.cone_validation_results.get('hypothesis_texts', [])
+        original_labels = self.cone_validation_results.get('labels', [])
+
+        label_index = 0
 
         for label, result in tda_results.items():
+            original_indices_for_label = self.original_indices[label]
+
             features = result['features']
             n_samples = result['n_points']
 
@@ -625,11 +642,72 @@ class TDAIntegration:
                 feature_vectors.append(feature_vector)
                 labels.append(label)
 
+                # Find corresponding sample in original data by matching label
+                # This assumes samples are in the same order as the original validation results
+                original_idx = original_indices_for_label[i]
+
+                if original_idx < len(premise_texts):
+                    sample_texts.append({
+                        'premise': premise_texts[original_idx],
+                        'hypothesis': hypothesis_texts[original_idx],
+                        'label': label,
+                        'original_index': original_idx
+                    })
+
+                    sample_metadata.append({
+                        'sample_id': original_idx,
+                        'tda_label': label,
+                        'original_label': original_labels[original_idx] if original_idx < len(
+                            original_labels) else label,
+                        'topological_features': {
+                            'total_persistence': features.total_persistence,
+                            'max_persistence': features.max_persistence,
+                            'n_significant_features': features.n_significant_features,
+                            'betti_sum': np.sum(features.betti_numbers),
+                            'betti_numbers': features.betti_numbers
+                        }
+                    })
+                else:
+                    # Fallback if index mapping fails
+                    sample_texts.append({
+                        'premise': 'TEXT_NOT_FOUND',
+                        'hypothesis': 'TEXT_NOT_FOUND',
+                        'label': label,
+                        'original_index': -1
+                    })
+                    sample_metadata.append({
+                        'sample_id': -1,
+                        'tda_label': label,
+                        'original_label': label,
+                        'topological_features': {
+                            'total_persistence': features.total_persistence,
+                            'max_persistence': features.max_persistence,
+                            'n_significant_features': features.n_significant_features,
+                            'betti_sum': np.sum(features.betti_numbers),
+                            'betti_numbers': features.betti_numbers
+                        }
+                    })
+
         X = np.array(feature_vectors)
         y = np.array(labels)
 
+        # Create comprehensive text data dictionary
+        text_data = {
+            'sample_texts': sample_texts,
+            'sample_metadata': sample_metadata,
+            'feature_names': [
+                'total_persistence',
+                'max_persistence',
+                'n_significant_features',
+                'n_betti_dimensions',
+                'betti_sum',
+                'persistence_std'
+            ]
+        }
+
         print(f"\nExtracted TDA features: {X.shape[0]} samples × {X.shape[1]} features")
-        return X, y
+
+        return X, y, text_data
 
 
 def run_tda_analysis():
@@ -643,9 +721,32 @@ def run_tda_analysis():
     analyser.visualise_topological_analysis(analysis_results)
 
     # Extract features for downstream tasks
-    X, y = analyser.extract_tda_features_for_classification(analysis_results)
+    X, y, text_data = analyser.extract_tda_features_for_classification(analysis_results)
 
-    np.savez(analyser.results_dir / 'tda_features.npz', X=X, y=y)
+    np.savez(analyser.results_dir / 'tda_features_with_texts.npz', X=X, y=y,
+             sample_texts=text_data['sample_texts'],
+             sample_metadata=text_data['sample_metadata'],
+             feature_names=text_data['feature_names'])
+
+    with open(analyser.results_dir / 'tda_analysis_with_texts.json', 'w') as f:
+        json.dump({
+            'analysis_results': {
+                # Convert numpy arrays to lists for JSON serialization
+                'feature_matrix_shape': X.shape,
+                'labels_unique': list(set(y)),
+                'n_samples_per_label': {label: int(np.sum(y == label)) for label in set(y)}
+            },
+            'text_data': text_data,
+            'methodology': {
+                'description': 'TDA features extracted from cone violation patterns with preserved texts',
+                'feature_interpretation': {
+                    'total_persistence': 'Sum of all finite persistence values - higher values indicate more complex topology',
+                    'max_persistence': 'Maximum persistence value - indicates most significant topological feature',
+                    'n_significant_features': 'Number of features above mean persistence',
+                    'betti_sum': 'Total topological complexity across all dimensions'
+                }
+            }
+        }, f, indent=2, default=str)
 
     print("\n" + "=" * 80)
     print("TDA ANALYSIS COMPLETED")
