@@ -112,10 +112,10 @@ class HyperbolicEntailmentCones:
         #Compute cone aperture for premise
         aperture = self.cone_aperture(premise)
 
-        #DEBUG
-        print(f"DEBUG: Xi angle range: [{xi_angle.min():.4f}, {xi_angle.max():.4f}]")
-        print(f"DEBUG: Aperture range: [{aperture.min():.4f}, {aperture.max():.4f}]")
-        print(f"DEBUG: Premise norm range: [{torch.norm(premise, dim=-1).min():.4f}, {torch.norm(premise, dim=-1).max():.4f}]")
+        # #DEBUG
+        # print(f"DEBUG: Xi angle range: [{xi_angle.min():.4f}, {xi_angle.max():.4f}]")
+        # print(f"DEBUG: Aperture range: [{aperture.min():.4f}, {aperture.max():.4f}]")
+        # print(f"DEBUG: Premise norm range: [{torch.norm(premise, dim=-1).min():.4f}, {torch.norm(premise, dim=-1).max():.4f}]")
 
         #Cone violation energy: max(0, angle-aperture)
         violation_energy = torch.relu(xi_angle - aperture)
