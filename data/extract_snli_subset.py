@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 
 
-def extract_snli_balanced_subset(arrow_file_path, output_path, samples_per_class=330, seed=42):
+def extract_snli_balanced_subset(arrow_file_path, output_path, samples_per_class=3330, seed=42):
     """
     Extract a balanced subset with equal samples from each class
     Total samples = samples_per_class * 3 ≈ 5K
@@ -65,6 +65,6 @@ def extract_snli_balanced_subset(arrow_file_path, output_path, samples_per_class
 
 if __name__=="__main__":
     arrow_file = 'data/raw/snli/train/data-00000-of-00001.arrow'
-    output_path = 'data/raw/snli/train/snli_1k_subset_balanced.json'
+    output_path = 'data/raw/snli/train/snli_10k_subset_balanced.json'
 
     df = extract_snli_balanced_subset(arrow_file, output_path)
