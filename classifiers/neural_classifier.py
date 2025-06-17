@@ -2,10 +2,10 @@
 TDA Neural Network Classifier for Semantic Entailment Detection - CORRECTED VERSION
 
 This module implements a neural network classifier that uses geometric features
-combined with REAL TDA perturbation analysis to classify entailment relationships.
+combined with UMAP-derived TDA features to classify entailment relationships.
 
-Architecture: 16 input features → 128 → 64 → 32 → 16 → 3 output classes (with softmax)
-Features: Per-example geometric + REAL TDA perturbation changes + spatial context
+Architecture: 9 input features → 128 → 64 → 32 → 16 → 3 output classes
+Features: Per-example geometric + spatial context + UMAP TDA coordinates
 """
 
 import logging
@@ -20,9 +20,25 @@ from sklearn.neighbors import NearestNeighbors
 from scipy.stats import wasserstein_distance
 import ripser
 from typing import Dict, List, Tuple, Optional
+from dataclasses import dataclass
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class TopologicalFeatures:
+    """Container for extracted topological features"""
+    birth_death_pairs: np.ndarray
+    persistence_landscape: np.ndarray
+    bottleneck_distance: float
+    wasserstein_distance: float
+    betti_numbers: List[int]
+    total_persistence: float
+    max_persistence: float
+    n_significant_features: int
+
+
 
 class TDAFeatureExtractor:
     """
@@ -31,7 +47,7 @@ class TDAFeatureExtractor:
         Features extracted (15 total):
         1-3: Per-example geometric (cone energy, order energy, hyperbolic distance)
         4-7: Spatial context (local density + distances to 3 class centroids)
-        8-16: REAL TDA perturbation features (persistence/betti/significant changes × 3 classes)
+        8-9: UMAP coordinates (TDA-derived topological features)
     """
 
     def __init__(self, k_neighbors: int = 5):
@@ -53,6 +69,10 @@ class TDAFeatureExtractor:
         self.training_geometric_features = None
         self.training_labels = None
 
+        # NEW: UMAP data for TDA features
+        self.umap_reducer = None
+        self.embedding_coordinates = {}
+
         # Feature names for reference
         self.feature_names = [
             # Core geometric features (3)
@@ -64,16 +84,9 @@ class TDAFeatureExtractor:
             'dist_to_entailment_centroid',
             'dist_to_neutral_centroid',
             'dist_to_contradiction_centroid',
-            # REAL TDA perturbation features (9)
-            'persistence_change_entailment',
-            'persistence_change_neutral',
-            'persistence_change_contradiction',
-            'betti_change_entailment',
-            'betti_change_neutral',
-            'betti_change_contradiction',
-            'significant_change_entailment',
-            'significant_change_neutral',
-            'significant_change_contradiction'
+            # UMAP TDA features (2)
+            'umap_x',
+            'umap_y'
         ]
 
     def fit(self, training_data: Dict):
@@ -85,9 +98,8 @@ class TDAFeatureExtractor:
             'cone_violations': tensor of shape [n_samples, 3] containing
                               [cone_energy, order_energy, hyperbolic_distance] per sample
             'labels': list of string labels ['entailment', 'neutral', 'contradiction']
-            'point_clouds': dict with clean point clouds for each class
-            'class_statistics': dict with per-example statistics for each class
-            'tda_params': TDA parameters (maxdim, thresh, coeff)
+            'embedding_coordinates': dict with UMAP coordinates and fitted reducer
+
         }
         """
         logger.info("Fitting TDA feature extractor with REAL perturbation analysis...")
@@ -100,10 +112,9 @@ class TDAFeatureExtractor:
 
         self.training_labels = training_data['labels']
 
-        # Load TDA data for perturbation analysis
-        self.point_clouds = training_data['point_clouds']
-        self.class_statistics = training_data['class_statistics']
-        self.tda_params = training_data['tda_params']
+        # Load UMAP data for TDA features
+        self.embedding_coordinates = training_data['embedding_coordinates']
+        self.umap_reducer = self.embedding_coordinates['umap_reducer']
 
         # Compute class centroids in geometric space
         self._compute_class_centroids()
@@ -113,11 +124,12 @@ class TDAFeatureExtractor:
         training_features = []
 
         for i in range(len(training_data['labels'])):
-            if i % 100 == 0:
+            if i % 200 == 0:  # Less frequent logging since this is much faster
                 logger.info(f"Processing training sample {i}/{len(training_data['labels'])}")
 
             sample_data = {
-                'geometric_features': self.training_geometric_features[i]  # [cone, order, hyperbolic]
+                'geometric_features': self.training_geometric_features[i],  # [cone, order, hyperbolic]
+                'sample_index': i  # For looking up UMAP coordinates
             }
             features = self._extract_single_sample_features(sample_data)
             training_features.append(features)
@@ -130,7 +142,7 @@ class TDAFeatureExtractor:
 
         logger.info(f"Feature extractor fitted. Feature dimension: {training_features.shape[1]}")
         logger.info(f"Class centroids computed for: {list(self.class_centroids.keys())}")
-        logger.info(f"Point clouds available for: {list(self.point_clouds.keys())}")
+        logger.info(f"UMAP reducer loaded for TDA features")
 
     def transform(self, sample_data: Dict) -> np.ndarray:
         """
@@ -168,11 +180,12 @@ class TDAFeatureExtractor:
         logger.info("Transforming all training samples...")
         features_matrix = []
         for i in range(len(training_data['labels'])):
-            if i % 100 == 0:
+            if i % 200 == 0:
                 logger.info(f"Transforming sample {i}/{len(training_data['labels'])}")
 
             sample_data = {
-                'geometric_features': self.training_geometric_features[i]
+                'geometric_features': self.training_geometric_features[i],
+                'sample_index': i  # For looking up UMAP coordinates
             }
             features = self.transform(sample_data)
             features_matrix.append(features)
@@ -212,44 +225,13 @@ class TDAFeatureExtractor:
             else:
                 features.append(0.0)  # Fallback
 
-        # Features 8-16: REAL TDA perturbation features
-        tda_perturbation_features = self._compute_real_tda_perturbation_features(geometric_features)
-        features.extend(tda_perturbation_features)
+        # Features 8-9: UMAP coordinates (TDA-derived features)
+        umap_coords = self._compute_umap_coordinates(sample_data)
+        features.extend(umap_coords)
 
         return np.array(features)
 
 
-
-
-
-
-    def _extract_single_sample_features(self, sample_data: Dict) -> np.ndarray:
-        """Extract all features for a single sample."""
-        features = []
-
-        # Features 1-2: Core geometric features
-        features.append(float(sample_data['cone_energy']))
-        features.append(float(sample_data['order_energy']))
-
-        # Feature 3: Local density (distance-weighted k-NN)
-        local_density = self._compute_local_density(sample_data['cone_violations'])
-        features.append(local_density)
-
-        # Features 4-6: Distances to class centroids
-        for class_name in ['entailment', 'neutral', 'contradiction']:
-            if class_name in self.class_centroids:
-                distance = np.linalg.norm(
-                    sample_data['cone_violations'] - self.class_centroids[class_name]
-                )
-                features.append(distance)
-            else:
-                features.append(0.0)  # Fallback if centroid not available
-
-        # Features 7-12: TDA fit scores
-        tda_fit_scores = self._compute_tda_fit_scores(sample_data['cone_violations'])
-        features.extend(tda_fit_scores)
-
-        return np.array(features)
 
     def _compute_local_density(self, geometric_features: np.ndarray) -> float:
         """Compute distance-weighted k-NN density in geometric space."""
@@ -269,102 +251,39 @@ class TDAFeatureExtractor:
 
         return density
 
-
-    def _compute_real_tda_perturbation_features(self, geometric_features: np.ndarray) -> List[float]:
+    def _compute_umap_coordinates(self, sample_data: Dict) -> List[float]:
         """
-        Compute REAL TDA perturbation features using actual ripser computation.
+        Compute UMAP coordinates for a sample.
 
-        This is the core of our approach:
-        1. Add test sample to each class point cloud
-        2. Recompute TDA using ripser
-        3. Measure actual changes in per-example statistics
-
-        Returns 9 features: [persistence_change×3, betti_change×3, significant_change×3]
+        For training samples: Look up pre-computed coordinates
+        For test samples: Transform using fitted UMAP reducer
         """
-        perturbation_features = []
+        # Check if this is a training sample with pre-computed coordinates
+        if 'sample_index' in sample_data:
+            sample_idx = sample_data['sample_index']
 
-        for class_name in ['entailment', 'neutral', 'contradiction']:
-            if class_name not in self.point_clouds or class_name not in self.class_statistics:
-                # Fallback if data not available
-                perturbation_features.extend([0.0, 0.0, 0.0])  # persistence, betti, significant
-                continue
+            # Find this sample in the embedding coordinates
+            embedding_coords = self.embedding_coordinates
+            if sample_idx < len(embedding_coords['umap_coordinates']):
+                umap_coords = embedding_coords['umap_coordinates'][sample_idx]
+                return umap_coords.tolist()
 
-            # Get original point cloud and statistics
-            original_cloud = self.point_clouds[class_name]
-            original_stats = self.class_statistics[class_name]
+        # For test samples or if lookup fails: transform using fitted reducer
+        geometric_features = sample_data['geometric_features']
 
+        if self.umap_reducer is not None:
             try:
-                # Add test sample to point cloud
-                augmented_cloud = np.vstack([original_cloud, geometric_features.reshape(1, -1)])
-
-                # Compute TDA for augmented cloud using ripser
-                result = ripser.ripser(augmented_cloud, **self.tda_params)
-                diagrams = result['dgms']
-
-                # Extract features from augmented cloud (reuse extraction logic)
-                augmented_features = self._extract_tda_features_from_diagrams(diagrams)
-
-                # Compute new per-example statistics
-                new_n_points = len(augmented_cloud)
-                new_total_persistence_per_example = augmented_features['total_persistence'] / new_n_points
-                new_betti_sum_per_example = augmented_features['betti_sum'] / new_n_points
-                new_significant_features_per_example = augmented_features['n_significant_features'] / new_n_points
-
-                # Compute changes (absolute differences)
-                persistence_change = abs(
-                    new_total_persistence_per_example - original_stats['total_persistence_per_example']
-                )
-                betti_change = abs(
-                    new_betti_sum_per_example - original_stats['betti_sum_per_example']
-                )
-                significant_change = abs(
-                    new_significant_features_per_example - original_stats['significant_features_per_example']
-                )
-
-                perturbation_features.extend([persistence_change, betti_change, significant_change])
-
+                # Transform single sample using fitted UMAP
+                test_sample = geometric_features.reshape(1, -1)
+                umap_coords = self.umap_reducer.transform(test_sample)
+                return umap_coords.flatten().tolist()
             except Exception as e:
-                logger.warning(f"TDA computation failed for {class_name}: {e}")
-                # Use zero changes as fallback
-                perturbation_features.extend([0.0, 0.0, 0.0])
-
-        return perturbation_features
-
-    def _extract_tda_features_from_diagrams(self, diagrams: List[np.ndarray]) -> Dict:
-        """Extract TDA features from persistence diagrams (simplified version)."""
-        total_persistence = 0.0
-        betti_numbers = []
-        all_lifespans = []
-
-        for dim, diagram in enumerate(diagrams):
-            betti_numbers.append(len(diagram))
-
-            if len(diagram) > 0:
-                # Extract finite features only
-                finite_mask = np.isfinite(diagram[:, 1])
-                finite_diagram = diagram[finite_mask]
-
-                if len(finite_diagram) > 0:
-                    lifespans = finite_diagram[:, 1] - finite_diagram[:, 0]
-                    valid_lifespans = lifespans[lifespans > 0]
-
-                    if len(valid_lifespans) > 0:
-                        total_persistence += np.sum(valid_lifespans)
-                        all_lifespans.extend(valid_lifespans)
-
-        # Compute significant features
-        if len(all_lifespans) > 0:
-            mean_lifespan = np.mean(all_lifespans)
-            n_significant_features = np.sum(np.array(all_lifespans) > mean_lifespan)
+                logger.warning(f"UMAP transform failed: {e}")
+                raise
         else:
-            n_significant_features = 0
+            logger.warning("UMAP reducer not available")
+            raise
 
-        return {
-            'total_persistence': total_persistence,
-            'betti_sum': sum(betti_numbers),
-            'n_significant_features': int(n_significant_features),
-            'betti_numbers': betti_numbers
-        }
 
 
 class TDANeuralClassifier(nn.Module):
@@ -483,19 +402,19 @@ def load_neural_network_data(data_path: str) -> Dict:
         data = torch.load(data_path, map_location='cpu')
 
         # Validate required fields
-        required_fields = ['cone_violations', 'labels', 'point_clouds', 'class_statistics', 'tda_params']
+        required_fields = ['cone_violations', 'labels', 'embedding_coordinates']
         for field in required_fields:
             if field not in data:
                 raise ValueError(f"Missing required field: {field}")
 
         logger.info(f"Successfully loaded neural network data")
         logger.info(f"Samples: {len(data['labels'])}")
-        logger.info(f"Point clouds: {list(data['point_clouds'].keys())}")
-        logger.info(f"Class statistics: {list(data['class_statistics'].keys())}")
 
-        # Print point cloud sizes
-        for class_name, cloud in data['point_clouds'].items():
-            logger.info(f"  {class_name} point cloud: {cloud.shape}")
+        # Print embedding info
+        if 'embedding_coordinates' in data:
+            coords = data['embedding_coordinates']
+            logger.info(f"UMAP coordinates available: {coords['umap_coordinates'].shape}")
+            logger.info(f"UMAP reducer loaded for transforming new samples")
 
         return data
 
@@ -507,7 +426,7 @@ def load_neural_network_data(data_path: str) -> Dict:
 
 
 def create_classifier_from_neural_data(
-        data_path: str = "results/tda_integration/neural_network_data.pt") -> Tuple[TDANeuralClassifier, TDAFeatureExtractor]:
+        data_path: str = "results/tda_integration/neural_network_data_SNLI_1k.pt") -> Tuple[TDANeuralClassifier, TDAFeatureExtractor]:
     """
     Create and initialize classifier from neural network data.
 
@@ -572,7 +491,7 @@ if __name__ == "__main__":
     logger.info("Testing TDA Neural Classifier with REAL perturbation analysis...")
 
     # Test with neural network data
-    neural_data_path = "results/tda_integration/neural_network_data.pt"
+    neural_data_path = "results/tda_integration/neural_network_data_SNLI_1k.pt"
 
     try:
         classifier, feature_extractor = create_classifier_from_neural_data(neural_data_path)
@@ -610,6 +529,10 @@ if __name__ == "__main__":
             features = feature_extractor.transform(test_sample_data)
             logger.info(f"✓ Single sample features extracted: {len(features)} features")
             logger.info(f"Feature range: [{features.min():.4f}, {features.max():.4f}]")
+
+            # Test UMAP transform specifically
+            umap_coords = feature_extractor._compute_umap_coordinates(test_sample_data)
+            logger.info(f"✓ UMAP coordinates computed: {umap_coords}")
 
     except FileNotFoundError:
         logger.warning(f"Neural network data file not found at {neural_data_path}")

@@ -71,6 +71,7 @@ class TDAIntegration:
         self.original_indices = {}
         self.point_clouds = {}
         self.class_statistics = {}
+        self.embedding_coordinates = {}
 
     def load_cone_validation_results(self) -> Dict:
         tda_data_path = Path("validation_results/tda_ready_data_SNLI_k=0.01.pt")
@@ -283,7 +284,9 @@ class TDAIntegration:
         analysis_results = {
             'tda_results': tda_results,
             'signature_comparison': signature_comparison,
-            'validation_status': self.validate_tda_hypotheses(tda_results)
+            'validation_status': self.validate_tda_hypotheses(tda_results),
+            'point_clouds': self.point_clouds,
+            'class_statistics': self.class_statistics
         }
 
         return analysis_results
@@ -574,12 +577,18 @@ class TDAIntegration:
             # Combine all point clouds
             all_points = []
             all_labels = []
+            all_indices = []
             colours = {'entailment': 'green', 'neutral': 'blue', 'contradiction': 'red'}
 
+            current_idx = 0
             for label, result in tda_results.items():
                 points = result['point_cloud']
                 all_points.append(points)
                 all_labels.extend([label] * len(points))
+
+                original_indices_for_label = self.original_indices[label]
+                all_indices.extend(original_indices_for_label)
+                current_idx += len(points)
 
             if not all_points:
                 print("   No point clouds available for 2D projection")
@@ -591,6 +600,7 @@ class TDAIntegration:
             finite_mask = np.isfinite(all_points).all(axis=1)
             all_points = all_points[finite_mask]
             all_labels = [all_labels[i] for i in range(len(all_labels)) if finite_mask[i]]
+            all_indices = [all_indices[i] for i in range(len(all_indices)) if finite_mask[i]]
 
             if len(all_points) < 5:
                 print("   Not enough valid points for 2D projection")
@@ -601,12 +611,12 @@ class TDAIntegration:
             # UMAP projection
             n_neighbors = min(15, len(all_points) - 1)
             reducer = umap.UMAP(n_neighbors=n_neighbors, min_dist=0.1, metric='euclidean', random_state=42)
-            embedding = reducer.fit_transform(all_points)
+            umap_embedding = reducer.fit_transform(all_points)
 
             for label in set(all_labels):
                 if label in colours:
                     mask = np.array(all_labels) == label
-                    ax1.scatter(embedding[mask, 0], embedding[mask, 1],
+                    ax1.scatter(umap_embedding[mask, 0], umap_embedding[mask, 1],
                                 c=colours[label], label=label, alpha=0.6, s=30)
 
             ax1.set_title('UMAP: Cone Violation Patterns')
@@ -636,6 +646,19 @@ class TDAIntegration:
             plt.savefig(self.results_dir / 'cone_patterns_2d.png', dpi=300, bbox_inches='tight')
             plt.close()
             print("    2D projections saved")
+
+            #Store embedding coordinates for neural network features
+            self.embedding_coordinates = {
+                'umap_coordinates': umap_embedding,
+                'tsne_coordinates': tsne_embedding,
+                'sample_labels': all_labels,
+                'sample_indices': all_indices,
+                'umap_reducer': reducer,
+                'tsne_fitted_data': all_points
+            }
+
+            print(f"    Embedding coordinates saved: {len(all_indices)} samples")
+            print(f"    UMAP shape: {umap_embedding.shape}, t-SNE shape: {tsne_embedding.shape}")
 
         except Exception as e:
             print(f"   Error creating 2D projections: {e}")
@@ -767,6 +790,8 @@ class TDAIntegration:
             'class_statistics': self.class_statistics,
             'tda_params': self.tda_params,
 
+            'embedding_coordinates': self.embedding_coordinates,
+
             # Individual sample data (from validation results)
             'cone_violations': self.cone_validation_results['cone_violations'],
             'labels': self.cone_validation_results['labels'],
@@ -783,22 +808,8 @@ class TDAIntegration:
         nn_data_path = self.results_dir / 'neural_network_data.pt'
         torch.save(nn_data, nn_data_path)
 
-        # Also save as .npz for compatibility
-        np_data = {
-            'cone_violations': self.cone_validation_results['cone_violations'].numpy(),
-            'labels': np.array(self.cone_validation_results['labels']),
-            'point_cloud_entailment': self.point_clouds.get('entailment', np.array([])),
-            'point_cloud_neutral': self.point_clouds.get('neutral', np.array([])),
-            'point_cloud_contradiction': self.point_clouds.get('contradiction', np.array([])),
-            'class_statistics': self.class_statistics
-        }
-
-        np_data_path = self.results_dir / 'neural_network_data.npz'
-        np.savez(np_data_path, **np_data)
-
         print(f"Neural network data saved to:")
         print(f"  {nn_data_path} (complete PyTorch format)")
-        print(f"  {np_data_path} (NumPy format)")
 
         # Print summary
         print(f"\nData summary for neural network:")
