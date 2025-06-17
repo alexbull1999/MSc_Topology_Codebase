@@ -199,6 +199,55 @@ class HyperbolicOrderEmbeddingPipeline:
             'hypothesis_hyperbolic': hypothesis_hyp,
         }
 
+    def compute_hyperbolic_energies_batch(self, premise_bert: torch.Tensor,
+                                          hypothesis_bert: torch.Tensor,
+                                          batch_size: int = 1000) -> Dict[str, torch.Tensor]:
+        """
+        Batch version of compute_hyperbolic_energies for large datasets
+        """
+        n_samples = premise_bert.shape[0]
+
+        if n_samples <= batch_size:
+            # Small enough to process all at once
+            return self.compute_hyperbolic_energies(premise_bert, hypothesis_bert)
+
+        # Process in batches
+        print(f"Processing {n_samples} samples in batches of {batch_size} on {self.device}")
+
+        all_results = {
+            'hyperbolic_distances': [],
+            'order_energies': [],
+            'premise_norms': [],
+            'hypothesis_norms': [],
+            'premise_hyperbolic': [],
+            'hypothesis_hyperbolic': []
+        }
+
+        for i in range(0, n_samples, batch_size):
+            end_idx = min(i + batch_size, n_samples)
+
+            premise_batch = premise_bert[i:end_idx].to(self.device)
+            hypothesis_batch = hypothesis_bert[i:end_idx].to(self.device)
+
+            with torch.no_grad():
+                batch_results = self.compute_hyperbolic_energies(premise_batch, hypothesis_batch)
+
+                # Collect results (move to CPU to save GPU memory)
+                for key in all_results.keys():
+                    all_results[key].append(batch_results[key].cpu())
+
+            if (i // batch_size + 1) % 10 == 0:
+                print(f"  Processed batch {i // batch_size + 1}/{(n_samples - 1) // batch_size + 1}")
+
+        # Concatenate all results
+        final_results = {}
+        for key in all_results.keys():
+            final_results[key] = torch.cat(all_results[key], dim=0)
+
+        return final_results
+
+
+
 def safe_tensor_to_float(tensor_or_float):
     """Safely convert tensor or float to Python float"""
     if hasattr(tensor_or_float, 'item'):

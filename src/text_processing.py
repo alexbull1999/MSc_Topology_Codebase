@@ -159,13 +159,13 @@ def test_text_processing():
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
     # Test dataset
-    data_path = "data/raw/snli/train/snli_1k_subset_balanced.json"
+    data_path = "data/raw/snli/train/snli_10k_subset_balanced.json"
     if os.path.exists(data_path):
         processed_data = processor.process_entailment_dataset(data_path)
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/snli_1k_subset_balanced.pt"
+        output_path = "data/processed/snli_10k_subset_balanced.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

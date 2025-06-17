@@ -34,6 +34,7 @@ from sklearn.metrics import silhouette_score
 from scipy.spatial.distance import pdist, squareform
 from scipy.stats import wasserstein_distance
 
+
 @dataclass
 class TopologicalFeatures:
     """Container for extracted topological features"""
@@ -58,6 +59,7 @@ class TDAIntegration:
     def __init__(self, results_dir: str = "results/tda_integration"):
         self.results_dir = Path(results_dir)
         self.results_dir.mkdir(parents=True, exist_ok=True)
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.cone_validation_results = self.load_cone_validation_results()
 

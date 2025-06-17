@@ -18,6 +18,10 @@ from hyperbolic_projection import set_random_seed
 from text_processing import TextToEmbedding
 
 
+def get_device():
+    return torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
 class HyperbolicEntailmentCones:
     """
     Implementation of hyperbolic entailment cones following Ganea et al.
@@ -33,6 +37,8 @@ class HyperbolicEntailmentCones:
         self.K = K
         self.epsilon = epsilon
         self.ball = geoopt.PoincareBall()
+        self.device = get_device()
+        print(f"Hyperbolic Entailment Cones using device: {self.device}")
 
     def cone_aperture(self, premise_embedding: torch.Tensor) -> torch.Tensor:
         """Compute cone aperture using Ganea et al. equation 26
@@ -122,6 +128,47 @@ class HyperbolicEntailmentCones:
 
         return violation_energy
 
+    def cone_violation_energy_batch(self, premises, hypotheses, batch_size=1000):
+        """
+        Compute cone violation energies in batches with automatic GPU/CPU handling
+        Args:
+            premises: Premise embeddings [n_samples, dim]
+            hypotheses: Hypothesis embeddings [n_samples, dim]
+            batch_size: Batch size for processing
+        Returns:
+            Cone violation energies [n_samples]
+        """
+        # Convert to tensors and move to device
+        if not isinstance(premises, torch.Tensor):
+            premises = torch.tensor(premises, dtype=torch.float32)
+        if not isinstance(hypotheses, torch.Tensor):
+            hypotheses = torch.tensor(hypotheses, dtype=torch.float32)
+
+        premises = premises.to(self.device)
+        hypotheses = hypotheses.to(self.device)
+
+        n_samples = premises.shape[0]
+        all_violations = []
+
+        print(f"Computing cone violations for {n_samples} samples on {self.device}")
+
+        for i in range(0, n_samples, batch_size):
+            end_idx = min(i + batch_size, n_samples)
+
+            # Get batch
+            premise_batch = premises[i:end_idx]
+            hypothesis_batch = hypotheses[i:end_idx]
+
+            # Use your existing cone_membership_energy method
+            with torch.no_grad():
+                batch_violations = self.cone_membership_energy(premise_batch, hypothesis_batch)
+                all_violations.append(batch_violations.cpu())
+
+            if (i // batch_size + 1) % 10 == 0:
+                print(f"  Processed batch {i // batch_size + 1}/{(n_samples - 1) // batch_size + 1}")
+
+        return torch.cat(all_violations, dim=0)
+
     def create_entailment_cone(self, premise_embedding: torch.Tensor) -> Dict[str, torch.Tensor]:
         """Create entailment cone structure for a premise embedding
         Args:
@@ -188,13 +235,23 @@ class HyperbolicConeEmbeddingPipeline:
         if self.hyperbolic_pipeline is None:
             raise RuntimeError("Hyperbolic pipeline not loaded. Cannot compute cone energies")
 
-        results = self.hyperbolic_pipeline.compute_hyperbolic_energies(premise_bert, hypothesis_bert)
+        if self.hyperbolic_pipeline.device.type == 'cuda':
+            print("Using GPU batch processing for hyperbolic energies")
+            results = self.hyperbolic_pipeline.compute_hyperbolic_energies_batch(premise_bert, hypothesis_bert)
+        else:
+            print("Using CPU single-pass processing for hyperbolic energies")
+            results = self.hyperbolic_pipeline.compute_hyperbolic_energies(premise_bert, hypothesis_bert)
 
         premises_hyp = results['premise_hyperbolic']
         hypotheses_hyp = results['hypothesis_hyperbolic']
 
-        #Compute cone violation energies
-        cone_energies = self.cone_computer.cone_membership_energy(premises_hyp, hypotheses_hyp)
+        if self.cone_computer.device.type == 'cuda':
+            print("Using GPU batch processing for cone energies")
+            #Compute cone violation energies
+            cone_energies = self.cone_computer.cone_violation_energy_batch(premises_hyp, hypotheses_hyp)
+        else:
+            print("Using CPU single-pass processing for cone energies")
+            cone_energies = self.cone_computer.cone_membership_energy(premises_hyp, hypotheses_hyp)
 
         #Return results
         return {
