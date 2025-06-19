@@ -31,9 +31,6 @@ data/processed/
 *.pkl
 *.h5
 
-# Logs
-*.log
-logs/
 
 # Temporary files
 *.tmp

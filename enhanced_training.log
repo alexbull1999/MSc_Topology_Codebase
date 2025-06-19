@@ -1,0 +1,7 @@
+2025-06-18 20:54:18,963 - INFO - Using default configuration
+2025-06-18 20:54:18,965 - INFO - Saved config to results/mini_search_landmark_asymmetry/training_config.json
+2025-06-18 20:54:18,966 - INFO - 
+Loading data from results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k.pt
+2025-06-18 20:54:18,966 - INFO - Loading classifier data from results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k.pt...
+2025-06-18 20:54:18,967 - ERROR - Failed to load data from results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k.pt: [Errno 2] No such file or directory: 'results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k.pt'
+2025-06-18 20:54:18,967 - ERROR - Training failed with error: [Errno 2] No such file or directory: 'results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k.pt'

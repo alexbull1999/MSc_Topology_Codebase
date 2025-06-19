@@ -2,11 +2,11 @@
 #SBATCH --job-name=tda_normal_hyperparam_search
 #SBATCH --output=logs/normal_hyperparam_search%j.out
 #SBATCH --error=logs/normal_hyperparam_search%j.err
-#SBATCH --time=12:00:00                    # 12 hours should be enough for 50 combinations
+#SBATCH --time=6:00:00                    # 12 hours should be enough for 50 combinations
 #SBATCH --partition=gpgpuC
 #SBATCH --gres=gpu:1                       # Request 1 GPU
 #SBATCH --cpus-per-task=4                  # 4 CPUs should be sufficient
-#SBATCH --mem=32G                          # 32GB RAM
+#SBATCH --mem=4G                          # 32GB RAM
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -50,7 +50,7 @@ echo "Starting enhanced hyperparameter search with 50 combinations..."
 echo "Expected runtime: 8-12 hours"
 echo "Data path: results/tda_integration/landmark_tda_features/neural_network_features_snli_10k.pt"
 
-python classifiers/train_classifier_landmark_asymmetry.py \
+python classifiers/train_classifier_landmark.py \
     --hyperparameter_search \
     --max_combinations 50 \
     --use_random_search \
