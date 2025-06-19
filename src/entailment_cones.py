@@ -197,7 +197,7 @@ class HyperbolicEntailmentCones:
 
 
 class HyperbolicConeEmbeddingPipeline:
-    def __init__(self, model_path: str = "models/order_embeddings_SNLI_1k.pt",
+    def __init__(self, model_path: str = "models/order_embeddings_snli_10k.pt",
                  K: float=0.01, epsilon: float=0.1): #changed k from 0.1 (with toy data) to 0.01 with SNLI
         """
         Initialize the complete pipeline
@@ -297,7 +297,7 @@ def test_cone_implementation():
     print("Testing hyperbolic cone implementation")
     pipeline = HyperbolicConeEmbeddingPipeline()
 
-    processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
+    processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
     if not os.path.exists(processed_data_path):
         return RuntimeError("Processed data not found! Error")
 

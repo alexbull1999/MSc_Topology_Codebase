@@ -230,8 +230,8 @@ def create_improved_real_data_visualizations():
     Create improved visualizations using real data
     """
     try:
-        processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
-        model_path = "models/order_embeddings_SNLI_1k.pt"
+        processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
+        model_path = "models/order_embeddings_snli_10k.pt"
 
         print("\nCreating Improved Real Data Cone Visualizations")
         print("=" * 60)
@@ -254,14 +254,14 @@ def create_improved_real_data_visualizations():
         print("Creating PCA projection visualization...")
         visualizer.create_pca_projection_visualization(
             examples,
-            "plots/real_data_cone_visualizations/pca_projection_comparison.png"
+            "plots/real_data_cone_visualizations/pca_projection_comparison_snli_10k.png"
         )
 
         # 3. Create energy distribution plot
         print("Creating energy distribution analysis...")
         visualizer.create_energy_distribution_plot(
             dataset,
-            "plots/real_data_cone_visualizations/energy_distribution_analysis.png"
+            "plots/real_data_cone_visualizations/energy_distribution_analysis_snli_10k.png"
         )
 
         print("Improved real data visualizations completed!")

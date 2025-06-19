@@ -41,7 +41,7 @@ class OrderEmbeddingModel(nn.Module):
         self.to_order_space = nn.Sequential(
             nn.Linear(bert_dim, order_dim * 2),
             nn.ReLU(),
-            nn.Dropout(0.1),
+            nn.Dropout(0.3), #was 0.1
             nn.Linear(order_dim * 2, order_dim),
             nn.ReLU() # Ensures non-negative coordinates for reversed product order
         )
@@ -135,7 +135,7 @@ class OrderEmbeddingTrainer:
         self.energy_rankings = []
 
     def compute_loss(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, labels: torch.Tensor,
-                     margin: float = 1.0):
+                     margin: float = 1.0): #was 1
         """Compute max-margin loss following Vendrov et al. 2015
         For entailment pairs: minimize E(premise, hypothesis)
         For non-entailment pairs: ensure E(premise, hypothesis) > margin
@@ -267,7 +267,7 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
 
     #Training loop
     best_val_loss = float('inf')
-    patience = 10
+    patience = 15
     patience_counter = 0
 
     for epoch in range(epochs):
@@ -309,7 +309,7 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
                 'best_val_loss': best_val_loss,
                 'epoch': epoch,
 
-            }, os.path.join(output_dir, "order_embeddings.pt"))
+            }, os.path.join(output_dir, "order_embeddings_snli_10k_tests.pt"))
         else:
             patience_counter += 1
 
@@ -394,22 +394,22 @@ def plot_training_progress(trainer: OrderEmbeddingTrainer, save_path: str = "plo
         ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(save_path, 'order_embedding_training.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(save_path, 'order_embedding_training_snli_10k_tests.png'), dpi=300, bbox_inches='tight')
     plt.close()
     print(f"Training plots saved to {save_path}")
 
 def test_order_embeddings():
     """Test order embeddings"""
-    processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
+    processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
     if not os.path.exists(processed_data_path):
         print(f"Processed data not found at {processed_data_path}")
         return
 
     model, trainer = train_order_embeddings(
         processed_data_path=processed_data_path,
-        epochs=50, #larger for large toy dataset
+        epochs=80, #larger for large toy dataset
         batch_size=32,
-        order_dim=50, #Smaller for toy dataset
+        order_dim=50, #Smaller for toy dataset (was 50)
         random_seed=42
     )
 

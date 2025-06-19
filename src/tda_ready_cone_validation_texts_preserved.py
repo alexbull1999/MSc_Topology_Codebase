@@ -44,7 +44,7 @@ class ConeValidationFramework:
         """
         Validate that cone energies follow expected hierarchy
         """
-        processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
+        processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
         processed_data = torch.load(processed_data_path)
 
         original_texts = processed_data["texts"]
@@ -164,7 +164,7 @@ class ConeValidationFramework:
         """
         print("Validating correlation with order energies")
 
-        processed_data_path = "data/processed/snli_1k_subset_balanced.pt"
+        processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
         processed_data = torch.load(processed_data_path)
         dataset_obj = EntailmentDataset(processed_data)
         dataloader = DataLoader(dataset_obj, batch_size=len(dataset_obj), shuffle=False)
@@ -401,7 +401,7 @@ def main():
     results_dir = Path("validation_results")
     results_dir.mkdir(exist_ok=True)
 
-    torch.save(final_report, results_dir / "cone_validation_results.pt")
+    torch.save(final_report, results_dir / "cone_validation_results_snli_10k.pt")
 
     tda_data = {
         'cone_violations': final_report['cone_violations'],
@@ -412,7 +412,7 @@ def main():
         'hypothesis_texts': final_report['hypothesis_texts'],
         'sample_metadata': final_report['sample_metadata']
     }
-    torch.save(tda_data, results_dir / "tda_ready_data.pt")
+    torch.save(tda_data, results_dir / "tda_ready_data_snli_10k.pt")
 
     print(f"\nResults saved to:")
     print(f"   {results_dir / 'cone_validation_results.pt'} (enhanced validation)")

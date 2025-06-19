@@ -71,14 +71,12 @@ class TDAIntegration:
 
         self.topological_features = {}
         self.original_indices = {}
-        self.point_clouds = {}
-        self.class_statistics = {}
         self.embedding_coordinates = {}
 
     def load_cone_validation_results(self) -> Dict:
-        tda_data_path = Path("validation_results/tda_ready_data_SNLI_k=0.01.pt")
+        tda_data_path = Path("validation_results/tda_ready_data_snli_10k.pt")
         if tda_data_path.exists():
-            results = torch.load(tda_data_path)
+            results = torch.load(tda_data_path, weights_only=False)
             print("Loaded TDA-ready data")
             print(f"{len(results['labels'])} samples with cone violations")
             print(f"Validation status: {'PASSED' if results.get('validation_passed', False) else 'FAILED'}")
@@ -169,7 +167,6 @@ class TDAIntegration:
             return {
                 'diagrams': diagrams,
                 'features': features,
-                'point_cloud': point_cloud,
                 'n_points': point_cloud.shape[0]
             }
 
@@ -283,12 +280,13 @@ class TDAIntegration:
 
         self._compute_per_example_statistics(tda_results)
 
+        del pattern_arrays
+        gc.collect()
+
         analysis_results = {
             'tda_results': tda_results,
             'signature_comparison': signature_comparison,
             'validation_status': self.validate_tda_hypotheses(tda_results),
-            'point_clouds': self.point_clouds,
-            'class_statistics': self.class_statistics
         }
 
         return analysis_results
@@ -516,7 +514,7 @@ class TDAIntegration:
             ax.grid(True, alpha=0.3)
 
         plt.tight_layout()
-        plt.savefig(self.results_dir / 'persistence_diagrams.png', dpi=300, bbox_inches='tight')
+        plt.savefig(self.results_dir / 'persistence_diagrams_snli_10k.png', dpi=300, bbox_inches='tight')
         plt.close()
         print("   Persistence diagrams saved")
 
@@ -569,7 +567,7 @@ class TDAIntegration:
                                 ha='center', va='bottom')
 
             plt.tight_layout()
-            plt.savefig(self.results_dir / 'feature_comparison_fixed.png', dpi=300, bbox_inches='tight')
+            plt.savefig(self.results_dir / 'feature_comparison_fixed_snli_10k.png', dpi=300, bbox_inches='tight')
             plt.close()
             print("Fixed feature comparison saved")
 
@@ -645,7 +643,7 @@ class TDAIntegration:
             ax2.grid(True, alpha=0.3)
 
             plt.tight_layout()
-            plt.savefig(self.results_dir / 'cone_patterns_2d.png', dpi=300, bbox_inches='tight')
+            plt.savefig(self.results_dir / 'cone_patterns_2d_snli_10k.png', dpi=300, bbox_inches='tight')
             plt.close()
             print("    2D projections saved")
 
@@ -658,6 +656,9 @@ class TDAIntegration:
                 'umap_reducer': reducer,
                 'tsne_fitted_data': all_points
             }
+
+            del all_points
+            gc.collect()
 
             print(f"    Embedding coordinates saved: {len(all_indices)} samples")
             print(f"    UMAP shape: {umap_embedding.shape}, t-SNE shape: {tsne_embedding.shape}")
@@ -788,8 +789,6 @@ class TDAIntegration:
         # Prepare neural network data package
         nn_data = {
             # Core data for perturbation analysis
-            'point_clouds': self.point_clouds,
-            'class_statistics': self.class_statistics,
             'tda_params': self.tda_params,
 
             'embedding_coordinates': self.embedding_coordinates,
@@ -807,7 +806,7 @@ class TDAIntegration:
         }
 
         # Save comprehensive data for neural network
-        nn_data_path = self.results_dir / 'neural_network_data.pt'
+        nn_data_path = self.results_dir / 'neural_network_data_snli_10k.pt'
         torch.save(nn_data, nn_data_path)
 
         print(f"Neural network data saved to:")

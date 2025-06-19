@@ -10,11 +10,11 @@ class TextToEmbedding:
 
     def __init__(self, model_name="bert-base-uncased", device='cuda' if torch.cuda.is_available() else 'cpu'):
         """Initialize text processing pipeline"""
-        self.device = device
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
         print(f"Loading {model_name} on {device}...")
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModel.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.model.eval() # Set to eval mode
         print("Text processing pipeline ready")
 
@@ -38,7 +38,10 @@ class TextToEmbedding:
                 padding=True,
                 truncation=True,
                 max_length=128
-            ).to(self.device)
+            )
+
+            # Move each tensor in the inputs dictionary to GPU
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
 
             #Get embeddings
@@ -95,7 +98,7 @@ class TextToEmbedding:
         print("Dataset processing complete")
         return result
 
-    def _analyze_labels(selfself, labels: List[str]) -> Dict:
+    def _analyze_labels(self, labels: List[str]) -> Dict:
         """Analyze label distribution in dataset"""
         label_counts = {}
         for label in labels:
