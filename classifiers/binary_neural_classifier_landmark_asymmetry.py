@@ -247,7 +247,7 @@ if __name__ == "__main__":
 
     # Define the path to the enhanced data file
     enhanced_data_paths = [
-        "results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k.pt",
+        "results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k_roberta.pt",
     ]
 
     data_path = None

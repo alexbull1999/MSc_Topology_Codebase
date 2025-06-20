@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --output=logs/slurm_order_embeddings_test2%j.out
-#SBATCH --error=logs/slurm_order_embeddings_test2%j.err
+#SBATCH --output=logs/slurm_order_embeddings_roberta_%j.out
+#SBATCH --error=logs/slurm_order_embeddings_roberta_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

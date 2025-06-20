@@ -5,7 +5,7 @@ Simple adaptation of the original training script to handle 14D asymmetric featu
 Minimal changes from the original - just updated to work with enhanced features.
 
 Usage:
-    python lean_enhanced_train_classifier.py --data_path results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k.pt
+    python lean_enhanced_train_classifier.py --data_path results/tda_integration/enhanced_landmark_tda_features/enhanced_neural_network_features_snli_10k_roberta.pt
 """
 
 import argparse
@@ -678,10 +678,10 @@ def summarize_cv_results(results: List[TrainingResults]) -> Dict:
 def main():
     parser = argparse.ArgumentParser(description="Train Enhanced TDA Neural Classifier (Lean Version)")
     parser.add_argument('--data_path', type=str,
-                        default='results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k.pt',
+                        default='results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k_roberta.pt',
                         help='Path to enhanced neural network data file')
     parser.add_argument('--results_dir', type=str,
-                        default='results/enhanced_classifier_training_asymmetry',
+                        default='results/enhanced_classifier_training_asymmetry_roberta',
                         help='Directory to save training results')
     parser.add_argument('--config_file', type=str,
                         default=None,

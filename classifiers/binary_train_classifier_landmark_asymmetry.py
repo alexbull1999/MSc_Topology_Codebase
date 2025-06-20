@@ -695,10 +695,10 @@ def summarize_cv_results(results: List[TrainingResults]) -> Dict:
 def main():
     parser = argparse.ArgumentParser(description="Train Binary TDA Neural Classifier")
     parser.add_argument('--data_path', type=str,
-                        default='results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k.pt',
+                        default='results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k_roberta.pt',
                         help='Path to enhanced neural network data file')
     parser.add_argument('--results_dir', type=str,
-                        default='results/binary_classifier_training',
+                        default='results/binary_classifier_training_roberta',
                         help='Directory to save binary training results')
     parser.add_argument('--config_file', type=str,
                         default=None,

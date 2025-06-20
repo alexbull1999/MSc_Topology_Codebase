@@ -106,7 +106,7 @@ class HyperbolicOrderEmbeddingPipeline:
     """Complete pipeline: BERT -> Order Embeddings -> Hyperbolic Embeddings"""
 
     def __init__(self,
-                 order_model_path: str = "models/enhanced_order_embeddings_snli_10k_asymmetry.pt",  # Updated default path
+                 order_model_path: str = "models/enhanced_order_embeddings_snli_10k_tests_roberta.pt",  # Updated default path
                  hyperbolic_dim: int = 30,
                  device: str = 'auto', random_seed: int=42):
         """Initialize the complete pipeline"""
@@ -289,11 +289,11 @@ def test_enhanced_hyperbolic_projection():
 
     set_random_seed(42)
 
-    processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
+    processed_data_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
     
     # Try different possible model filenames
     possible_model_paths = [
-        "models/enhanced_order_embeddings_snli_10k_asymmetry.pt"
+        "models/enhanced_order_embeddings_snli_10k_tests_roberta.pt"
     ]
     
     model_path = None
@@ -532,7 +532,7 @@ def visualise_enhanced_hyperbolic_embeddings(pipeline, results, hyperbolic_stats
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(save_path, 'enhanced_hyperbolic_projection_analysis_snli_10k_asymmetry.png'),
+    plt.savefig(os.path.join(save_path, 'enhanced_hyperbolic_projection_analysis_snli_10k_roberta.png'),
                 dpi=300, bbox_inches='tight')
     plt.close()
 

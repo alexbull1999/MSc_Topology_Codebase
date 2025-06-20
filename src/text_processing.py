@@ -168,7 +168,7 @@ def test_text_processing():
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/snli_10k_subset_balanced.pt"
+        output_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")
