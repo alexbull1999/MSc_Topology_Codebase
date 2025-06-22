@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=compute_phd
-#SBATCH --partition=gpgpuB
-#SBATCH --time=04:00:00
+#SBATCH --job-name=embedding_test
+#SBATCH --partition=gpgpuC
+#SBATCH --time=02:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=phd_logs/slurm_compute_phd_%j.out
-#SBATCH --error=phd_logs/slurm_compute_phd_%j.err
+#SBATCH --mem=32G
+#SBATCH --output=../phd_logs/slurm_embedding_test_%j.out
+#SBATCH --error=../phd_logs/slurm_embedding_test_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -37,20 +37,11 @@ echo "Testing required packages..."
 python -c "
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics.pairwise import pairwise_distances
-from pathlib import Path
-import time
-import tqdm
-from gph.python import ripser_parallel
-from loguru import logger"
+import os"
 
-
-echo ""
-echo "Checking for required input files..."
 
 # Change to your project directory
-cd $SLURM_SUBMIT_DIR/..
+cd $SLURM_SUBMIT_DIR/../..
 
 # Check if required files exist
 missing_files=()
@@ -72,10 +63,10 @@ fi
 echo "All required files found!"
 
 echo ""
-echo "Starting PHD computation..."
-
+echo "Starting embedding tests..."
+ 
 # Run PHD computation
-python phd_method/src_phd/phd_computation.py
+python phd_method/src_phd/test_embedding_assumptions.py
 
 # Capture exit code
 EXIT_CODE=$?
@@ -83,7 +74,7 @@ EXIT_CODE=$?
 # Show analysis results if successful
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
-    echo "=== PHD Comptutation SUCCESSFUL ==="
+    echo "=== TESTS RAN SUCCESSFULLY ==="
 fi
 
 echo ""

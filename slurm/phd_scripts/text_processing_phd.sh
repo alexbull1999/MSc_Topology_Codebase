@@ -40,7 +40,7 @@ echo ""
 echo "Running text_processing.py..."
 
 # Change to your project directory
-cd $SLURM_SUBMIT_DIR/..
+cd $SLURM_SUBMIT_DIR/../..
 
 # Run text processing
 python phd_method/src_phd/text_processing_phd.py
