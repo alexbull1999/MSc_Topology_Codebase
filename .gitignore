@@ -23,6 +23,7 @@ Thumbs.db
 # Large datasets (keep toy datasets)
 data/raw/
 data/processed/
+phd_method/phd_data/
 
 # Model checkpoints (usually large)
 *.pt

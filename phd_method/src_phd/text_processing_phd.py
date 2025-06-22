@@ -6,9 +6,9 @@ from typing import List, Dict, Tuple
 import numpy as np
 
 class TextToEmbedding:
-    """Text to embedding pipeline using BERT. Converts premise-hypothesis pairs to contextualised embeddings"""
+    """Text to embedding pipeline using roBERTa. Converts premise-hypothesis pairs to contextualised embeddings"""
 
-    def __init__(self, model_name="bert-base-uncased", device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model_name="roberta-base", device='cuda' if torch.cuda.is_available() else 'cpu'):
         """Initialize text processing pipeline"""
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
@@ -79,7 +79,7 @@ class TextToEmbedding:
 
         unique_labels = list(set(labels))
         for label in unique_labels:
-            mask = torch.tensor(labels[i] == label for i in range(len(labels)))
+            mask = torch.tensor([labels[i] == label for i in range(len(labels))], dtype=torch.bool)
 
             #Extract embeddings for this class
             class_embs = concatenated_embeddings[mask]
@@ -237,7 +237,7 @@ def test_text_processing():
                 print(f"  {label}: {embeddings.shape[0]} samples with {embeddings.shape[1]}D embeddings")
 
         # Save processed data
-        output_path = "phd_method/phd_data/processed/snli_10k_subset_balanced_bert.pt"
+        output_path = "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

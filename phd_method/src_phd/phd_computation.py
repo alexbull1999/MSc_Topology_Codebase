@@ -79,7 +79,7 @@ class PHDClassComputation:
                                              point_jump=self.point_jump,
                                              h_dim=self.h_dim,
                                              print_error=True,
-                                             metric="None",
+                                             metric="euclidean",
                                              alpha=self.alpha,
                                              seed=self.seed
                                              )
@@ -147,7 +147,7 @@ class PHDClassComputation:
 
 def test_phd_computation():
     #Load processed data from text_processing_phd.py
-    data_path = "data/processed/snli_10k_subset_balanced_phd.pt"
+    data_path = "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt"
     if not os.path.exists(data_path):
         print(f"Processed data not found at {data_path}")
         print("Please run text_processing_phd.py first!")
