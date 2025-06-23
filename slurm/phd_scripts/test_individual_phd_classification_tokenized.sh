@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=compute_phd
+#SBATCH --job-name=enhanced_individual_phd_classification
 #SBATCH --partition=gpgpuC
-#SBATCH --time=04:00:00
+#SBATCH --time=02:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=12G
-#SBATCH --output=../phd_logs/slurm_compute_phd_hdim0_%j.out
-#SBATCH --error=../phd_logs/slurm_compute_phd_hdim0_%j.err
+#SBATCH --output=../phd_logs/enhanced_individual_phd_classification_%j.out
+#SBATCH --error=../phd_logs/enhanced_individual_phd_classification_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -37,17 +37,8 @@ echo "Testing required packages..."
 python -c "
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics.pairwise import pairwise_distances
-from pathlib import Path
-import time
-import tqdm
-from gph.python import ripser_parallel
-from loguru import logger"
+from transformers import AutoTokenizer, AutoModel"
 
-
-echo ""
-echo "Checking for required input files..."
 
 # Change to your project directory
 cd $SLURM_SUBMIT_DIR/../..
@@ -55,27 +46,12 @@ cd $SLURM_SUBMIT_DIR/../..
 # Check if required files exist
 missing_files=()
 
-# Check for TDA-ready data from cone validation
-if [ ! -f "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt" ]; then
-    missing_files+=("snli_10k_subset_balanced_phd_roberta.pt")
-fi
-
-if [ ${#missing_files[@]} -ne 0 ]; then
-    echo "ERROR: Missing required files:"
-    for file in "${missing_files[@]}"; do
-        echo "  - $file"
-    done
-    echo ""
-    exit 1
-fi
-
-echo "All required files found!"
 
 echo ""
-echo "Starting PHD computation..."
-
+echo "Starting embedding tests..."
+ 
 # Run PHD computation
-python phd_method/src_phd/phd_computation.py
+python phd_method/src_phd/subtoken_classification_test.py
 
 # Capture exit code
 EXIT_CODE=$?
@@ -83,7 +59,7 @@ EXIT_CODE=$?
 # Show analysis results if successful
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
-    echo "=== PHD Comptutation SUCCESSFUL ==="
+    echo "=== TESTS RAN SUCCESSFULLY ==="
 fi
 
 echo ""

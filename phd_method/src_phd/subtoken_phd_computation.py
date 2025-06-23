@@ -37,6 +37,28 @@ class PHDClassComputation:
         print(f"Homology dimension: {self.h_dim}")
         print(f"Alpha: {self.alpha}, Seed: {self.seed}")
 
+
+    def combine_class_pointclouds(self, class_pointclouds: List[torch.Tensor]) -> torch.Tensor:
+        """
+        Combine all point clouds from a class into one large tensor for PHD computation
+        
+        Args:
+            class_pointclouds: List of point cloud tensors for one class
+            
+        Returns:
+            Combined tensor containing all points from the class
+        """
+        print(f"    Combining {len(class_pointclouds)} point clouds...")
+        
+        # Concatenate all point clouds for this class
+        combined_pointcloud = torch.cat(class_pointclouds, dim=0)
+        
+        print(f"    Combined shape: {combined_pointcloud.shape}")
+        print(f"    Total points: {combined_pointcloud.shape[0]:,}")
+        
+        return combined_pointcloud
+
+
     def compute_class_phd(self, class_embeddings: torch.Tensor, class_name: str, use_fast_ripser: bool = False) -> float:
         """Compute PHD for a single class of embeddings:
         Args:
@@ -56,6 +78,13 @@ class PHDClassComputation:
         if n_samples < self.min_points:
             print(f"WARNING: Only {n_samples} samples but need minimum {self.min_points}")
             exit(1)
+
+        # Limit to max_points if necessary (for computational efficiency)
+        # if n_samples > self.max_points:
+        #     print(f"Subsampling from {n_samples:,} to {self.max_points:,} points for efficiency")
+        #     np.random.seed(self.seed)
+        #     indices = np.random.choice(n_samples, self.max_points, replace=False)
+        #     embeddings_np = embeddings_np[indices]
 
         try:
             if use_fast_ripser:
@@ -97,15 +126,18 @@ class PHDClassComputation:
         Returns:
             Dict mapping class names to their PHD values
         """
-        if "class_embeddings" not in processed_data:
-            raise ValueError("processed_data must contain 'class_embeddings' - run text_processing_phd.py first")
+        if "class_pointclouds" not in processed_data:
+            raise ValueError("processed_data must contain 'class_pointclouds' - run subtoken_text_processing_phd.py first")
 
-        class_embeddings = processed_data["class_embeddings"]
+        class_pointclouds = processed_data["class_pointclouds"]
         class_phds = {}
 
         #Compute PHD for each class
-        for class_name, embeddings in class_embeddings.items():
-            phd_value = self.compute_class_phd(class_embeddings=embeddings, class_name=class_name)
+        for class_name, pointclouds in class_pointclouds.items():
+            print(f"Processing class: {class_name}")
+            combined_embeddings = self.combine_class_pointclouds(pointclouds)
+
+            phd_value = self.compute_class_phd(class_embeddings=combined_embeddings, class_name=class_name)
             if phd_value is not None:
                 class_phds[class_name] = phd_value
             else:
@@ -147,7 +179,7 @@ class PHDClassComputation:
 
 def test_phd_computation():
     #Load processed data from text_processing_phd.py
-    data_path = "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt"
+    data_path = "phd_method/phd_data/processed/snli_10k_enhanced_multilayer.pt"
     if not os.path.exists(data_path):
         print(f"Processed data not found at {data_path}")
         print("Please run text_processing_phd.py first!")
@@ -157,7 +189,7 @@ def test_phd_computation():
     phd_compute = PHDClassComputation()
     class_phds = phd_compute.compute_all_class_phds(processed_data=processed_data)
     phd_compute.analyze_phd_patterns(class_phds=class_phds)
-    output_path = "phd_method/class_phd_results/snli_10k_subset_balanced_phd_results.pt"
+    output_path = "phd_method/class_phd_results/snli_10k_subset_enhanced_multilayer_hdim0.pt"
     phd_compute.save_phd_results(class_phds=class_phds, output_path=output_path)
 
 if __name__ == "__main__":
