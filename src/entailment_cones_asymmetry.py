@@ -243,7 +243,7 @@ class EnhancedHyperbolicConeEmbeddingPipeline:
         # Auto-detect enhanced model if not specified
         if model_path is None:
             possible_paths = [
-                "models/enhanced_order_embeddings_snli_10k_tests_roberta.pt"
+                "models/enhanced_order_embeddings_snli_10k_tests.pt"
             ]
             
             for path in possible_paths:
@@ -387,7 +387,7 @@ def test_enhanced_cone_implementation():
         print(f"Failed to create enhanced pipeline: {e}")
         return None
 
-    processed_data_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
+    processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
     if not os.path.exists(processed_data_path):
         print("Processed data not found!")
         return None

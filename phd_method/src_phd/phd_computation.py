@@ -13,7 +13,7 @@ class PHDClassComputation:
                  min_points: int=200,
                  max_points: int=1000,
                  point_jump: int=50,
-                 h_dim: int=0,
+                 h_dim: int=2,
                  alpha: float=1.0,
                  seed: int=42):
         """Initialize PHD computation parameters

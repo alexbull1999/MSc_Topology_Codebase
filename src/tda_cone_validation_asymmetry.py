@@ -47,7 +47,7 @@ class EnhancedConeValidationFramework:
         """
         Validate that enhanced cone energies follow expected hierarchy with asymmetric analysis
         """
-        processed_data_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
+        processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
         processed_data = torch.load(processed_data_path)
 
         original_texts = processed_data["texts"]
@@ -266,7 +266,7 @@ class EnhancedConeValidationFramework:
         """
         print("\nValidating enhanced correlation with order energies")
 
-        processed_data_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
+        processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
         processed_data = torch.load(processed_data_path)
         dataset_obj = EntailmentDataset(processed_data)
         dataloader = DataLoader(dataset_obj, batch_size=len(dataset_obj), shuffle=False)
@@ -549,7 +549,7 @@ def main():
     results_dir = Path("validation_results")
     results_dir.mkdir(exist_ok=True)
 
-    torch.save(final_report, results_dir / "enhanced_cone_validation_results_snli_10k_roberta.pt")
+    torch.save(final_report, results_dir / "enhanced_cone_validation_results_snli_10k.pt")
 
     # Enhanced TDA data with asymmetric features
     enhanced_tda_data = {
@@ -572,7 +572,7 @@ def main():
         'asymmetric_patterns_validated': final_report.get('asymmetric_patterns_passed', False)
     }
     
-    torch.save(enhanced_tda_data, results_dir / "enhanced_tda_ready_data_snli_10k_roberta.pt")
+    torch.save(enhanced_tda_data, results_dir / "enhanced_tda_ready_data_snli_10k.pt")
 
     print(f"\nEnhanced results saved to:")
     print(f"   {results_dir / 'enhanced_cone_validation_results_snli_10k_asymmetry.pt'} (comprehensive validation)")

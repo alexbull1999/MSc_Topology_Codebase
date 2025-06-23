@@ -466,7 +466,7 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
                 },
                 'best_val_loss': best_val_loss,
                 'epoch': epoch,
-            }, os.path.join(output_dir, "enhanced_order_embeddings_snli_10k_tests_roberta.pt"))
+            }, os.path.join(output_dir, "enhanced_order_embeddings_snli_10k_tests.pt"))
         else:
             patience_counter += 1
 
@@ -624,13 +624,13 @@ def plot_training_progress(trainer: OrderEmbeddingTrainer, save_path: str = "plo
             ax4.text(0.5, 0.5, f"Energy comparison plot error: {str(e)}", transform=ax4.transAxes, ha='center')
 
     plt.tight_layout()
-    plt.savefig(os.path.join(save_path, 'enhanced_order_embedding_training_snli_10k_tests_roberta.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(save_path, 'enhanced_order_embedding_training_snli_10k_tests.png'), dpi=300, bbox_inches='tight')
     plt.close()
     print(f"Enhanced training plots saved to {save_path}")
 
 def test_order_embeddings():
     """Test enhanced order embeddings"""
-    processed_data_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
+    processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
     if not os.path.exists(processed_data_path):
         print(f"Processed data not found at {processed_data_path}")
         return
