@@ -20,6 +20,7 @@ class ImprovedConeVisualizer:
     def __init__(self, cone_pipeline: 'HyperbolicConeEmbeddingPipeline'):
         self.cone_pipeline = cone_pipeline
         self.cone_computer = cone_pipeline.cone_computer
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     def select_representative_examples(self, dataset, n_examples=5):
         """
@@ -231,7 +232,7 @@ def create_improved_real_data_visualizations():
     """
     try:
         processed_data_path = "data/processed/snli_10k_subset_balanced.pt"
-        model_path = "models/order_embeddings_snli_10k.pt"
+        model_path = "models/enhanced_order_embeddings_snli_10k_asymmetry.pt"
 
         print("\nCreating Improved Real Data Cone Visualizations")
         print("=" * 60)
@@ -254,14 +255,14 @@ def create_improved_real_data_visualizations():
         print("Creating PCA projection visualization...")
         visualizer.create_pca_projection_visualization(
             examples,
-            "plots/real_data_cone_visualizations/pca_projection_comparison_snli_10k.png"
+            "plots/real_data_cone_visualizations/pca_projection_comparison_snli_10k_asymmetry.png"
         )
 
         # 3. Create energy distribution plot
         print("Creating energy distribution analysis...")
         visualizer.create_energy_distribution_plot(
             dataset,
-            "plots/real_data_cone_visualizations/energy_distribution_analysis_snli_10k.png"
+            "plots/real_data_cone_visualizations/energy_distribution_analysis_snli_10k_asymmetry.png"
         )
 
         print("Improved real data visualizations completed!")
