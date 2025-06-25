@@ -42,7 +42,7 @@ class BlindTestProcessor:
         # Initialize cone pipeline with pre-trained models (label-blind)
         logger.info("Loading pre-trained order embeddings and hyperbolic pipeline...")
         try:
-            self.cone_pipeline = EnhancedHyperbolicConeEmbeddingPipeline()
+            self.cone_pipeline = EnhancedHyperbolicConeEmbeddingPipeline(model_path="models/enhanced_order_embeddings_snli_10k_asymmetry.pt")
             logger.info("Pre-trained models loaded successfully")
         except Exception as e:
             logger.error(f"Failed to load pre-trained models: {e}")
@@ -304,6 +304,25 @@ class BlindTestProcessor:
 
         return final_features, all_feature_names
 
+    def _convert_to_binary_labels(self, labels: List[str]) -> List[int]:
+        """
+        Convert string labels to binary integers for easy evaluation
+        
+        Args:
+            labels: List of string labels
+            
+        Returns:
+            List of binary integer labels (0=entailment, 1=non-entailment)
+        """
+        binary_labels = []
+        for label in labels:
+            if label == 'entailment':
+                binary_labels.append(0)  # entailment
+            else:  # neutral or contradiction
+                binary_labels.append(1)  # non-entailment
+        return binary_labels
+    
+
     def process_test_data(self, test_data_path: str, output_path: str,
                           landmark_model_path: Optional[str] = None,
                           include_tda: bool = True) -> Dict:
@@ -366,6 +385,7 @@ class BlindTestProcessor:
         processed_data = {
             'features': torch.from_numpy(final_features).float(),
             'labels': test_data['labels'],  # Available for evaluation but not used in processing
+            'binary_labels': self._convert_to_binary_labels(test_data['labels']),
             'feature_names': final_feature_names,
             'n_samples': test_data['n_samples'],
             'n_features': final_features.shape[1],
@@ -424,7 +444,7 @@ def main():
 
         # Process test data
         processed_data = processor.process_test_data(
-            test_data_path=args.test_data_path,
+            test_data_path="data/raw/snli/test/TEST_snli_10k_subset_balanced.json",
             output_path="blind_tests/snli_10k_test_asymmetry_input.pt",
             landmark_model_path="results/tda_integration/landmark_tda_features/asymmetry_landmark_tda_model_blind_tests.pt",
             include_tda=True

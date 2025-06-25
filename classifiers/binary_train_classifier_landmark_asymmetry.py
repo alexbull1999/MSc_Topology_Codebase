@@ -462,6 +462,7 @@ def run_cross_validation(
             model_path = results_dir / f"binary_model_fold_{fold + 1}.pt"
             torch.save({
                 'model_state_dict': model.state_dict(),
+                'normalizer': normalizer,
                 'config': asdict(config),
                 'fold_results': asdict(result)
             }, model_path)
@@ -695,7 +696,7 @@ def summarize_cv_results(results: List[TrainingResults]) -> Dict:
 def main():
     parser = argparse.ArgumentParser(description="Train Binary TDA Neural Classifier")
     parser.add_argument('--data_path', type=str,
-                        default='results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k_roberta.pt',
+                        default='results/tda_integration/landmark_tda_features/enhanced_neural_network_features_snli_10k.pt',
                         help='Path to enhanced neural network data file')
     parser.add_argument('--results_dir', type=str,
                         default='results/binary_classifier_training_roberta',

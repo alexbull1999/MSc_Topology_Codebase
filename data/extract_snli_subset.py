@@ -64,7 +64,7 @@ def extract_snli_balanced_subset(arrow_file_path, output_path, samples_per_class
 
 
 if __name__=="__main__":
-    arrow_file = 'data/raw/snli/train/data-00000-of-00001.arrow'
-    output_path = 'data/raw/snli/train/snli_10k_subset_balanced.json'
+    arrow_file = 'data/raw/snli/test/data-00000-of-00001.arrow'
+    output_path = 'data/raw/snli/test/TEST_snli_10k_subset_balanced.json'
 
     df = extract_snli_balanced_subset(arrow_file, output_path)

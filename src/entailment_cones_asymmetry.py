@@ -243,7 +243,7 @@ class EnhancedHyperbolicConeEmbeddingPipeline:
         # Auto-detect enhanced model if not specified
         if model_path is None:
             possible_paths = [
-                "models/enhanced_order_embeddings_snli_10k_tests.pt"
+                "models/enhanced_order_embeddings_snli_10k_asymmetry.pt"
             ]
             
             for path in possible_paths:

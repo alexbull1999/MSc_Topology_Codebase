@@ -311,7 +311,7 @@ def main():
     # --- Configuration ---
     # Try to load enhanced data first, fall back to standard if not available
     INPUT_PATHS = [
-        Path("validation_results/enhanced_tda_ready_data_snli_10k.pt"),  # Enhanced 10D features
+        Path("validation_results/enhanced_tda_ready_data_snli_10k_asymmetry.pt"),  # Enhanced 10D features
     ]
     
     OUTPUT_DIR = Path("results/tda_integration/landmark_tda_features")
@@ -412,7 +412,7 @@ def main():
     logging.info("="*60 + "\n")
 
     # --- Save Enhanced Data for Neural Classifier ---
-    classifier_data_path = OUTPUT_DIR / f"enhanced_neural_network_features_snli_10k.pt"
+    classifier_data_path = OUTPUT_DIR / f"enhanced_neural_network_features_snli_10k_2(delete).pt"
     
     enhanced_classifier_data = {
         'features': torch.from_numpy(final_features).float(),

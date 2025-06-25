@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=tda_binary_hyperparam_search_normalizer
-#SBATCH --output=logs/binary_hyperparam_search_normalizer_%j.out
-#SBATCH --error=logs/binary_hyperparam_search_normalizer_%j.err
+#SBATCH --job-name=blind_test_binary_classifier
+#SBATCH --output=logs/blind_test_binary_classifier_%j.out
+#SBATCH --error=logs/blind_test_binary_classifier_%j.err
 #SBATCH --time=6:00:00                    # 12 hours should be enough for 50 combinations
 #SBATCH --partition=gpgpuC
 #SBATCH --gres=gpu:1                       # Request 1 GPU
@@ -42,7 +42,7 @@ echo ""
 cd $SLURM_SUBMIT_DIR/..
 
 
-mkdir -p results/overnight_binary_hyperparam_search_normalizer
+mkdir -p results/overnight_binary_hyperparam_search_normalizer/blind_evaluation
 
 
 # Run the enhanced hyperparameter search with 50 combinations
@@ -50,20 +50,15 @@ echo "Starting enhanced hyperparameter search with 50 combinations..."
 echo "Expected runtime: 8-12 hours"
 echo "Data path: results/tda_integration/landmark_tda_features/neural_network_features_snli_10k.pt"
 
-python classifiers/binary_train_classifier_landmark_asymmetry.py \
-    --hyperparameter_search \
-    --max_combinations 50 \
-    --use_random_search \
-    --final_training \
-    --results_dir results/overnight_binary_hyperparam_search_normalizer
+python classifiers/evaluate_blind_test.py
 
 # Check if the job completed successfully
 if [ $? -eq 0 ]; then
-    echo "Hyperparameter search completed successfully at: $(date)"
+    echo "Blind test completed successfully at: $(date)"
     
 else
-    echo "Hyperparameter search failed or was interrupted at: $(date)"
-    echo "Check the error log: logs/binary_hyperparameter_search_normalizer_${SLURM_JOB_ID}.err"
+    echo "Blind test failed or was interrupted at: $(date)"
+    echo "Check the error log"
     exit 1
 fi
 
