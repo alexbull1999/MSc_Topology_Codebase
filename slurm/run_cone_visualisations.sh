@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=20G
-#SBATCH --output=logs/slurm_cone_vis_%j.out
-#SBATCH --error=logs/slurm_cone_vis_%j.err
+#SBATCH --output=logs/slurm_cone_vis_asymmetry_%j.out
+#SBATCH --error=logs/slurm_cone_vis_asymmetry_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -95,19 +95,8 @@ fi
 
 echo "All required files found!"
 
-
-echo ""
-echo "Starting real data cone visualizations..."
-echo "Visualization parameters:"
-echo "  - Input: SNLI 10k subset"
-echo "  - Representative examples: 5 per label"
-echo "  - PCA projection: 2D visualization"
-echo "  - Energy distribution analysis"
-echo "  - Cone violation energy computation"
-echo ""
-
 # Run cone visualizations
-python src/real_data_cone_visualisations.py
+python src/cone_visualisations_asymmetry.py
 
 # Capture exit code
 EXIT_CODE=$?
