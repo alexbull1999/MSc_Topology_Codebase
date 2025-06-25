@@ -258,6 +258,51 @@ class EnhancedLandmarkTDAExtractor:
         self.propagated_features = np.array(propagated_features)
         logging.info(f"Propagated enhanced features to all points. Final TDA shape: {self.propagated_features.shape}")
 
+    def save_landmark_model(self, output_path: Path):
+        """
+        Save the trained landmark model for later application to test data
+
+        Args:
+            output_path: Path to save the landmark model
+        """
+        if self.landmark_indices is None or self.landmark_signatures is None:
+            raise ValueError("Model must be fitted before saving. Call fit_transform() first.")
+
+        # Extract landmark points (their positions in feature space)
+        landmark_points = self.all_points[self.landmark_indices]
+
+        # Prepare model data
+        landmark_model_data = {
+            'landmark_points': landmark_points,  # [n_landmarks, feature_dim]
+            'landmark_signatures': self.landmark_signatures,  # [n_landmarks, 4]
+            'landmark_indices': self.landmark_indices,  # Original indices in training data
+            'n_landmarks': len(self.landmark_indices),
+            'n_neighbors_for_signature': self.k,
+            'n_neighbors_for_propagation': self.m,
+            'use_enhanced_features': self.use_enhanced_features,
+            'feature_names': [
+                'cone_energy', 'order_energy', 'hyperbolic_distance',
+                'forward_cone', 'backward_cone', 'cone_asymmetry',
+                'forward_energy', 'backward_energy', 'asymmetric_energy', 'asymmetry_measure'
+            ],
+            'tda_feature_names': [
+                'tda_h0_total_persistence',
+                'tda_h1_total_persistence',
+                'tda_h1_max_persistence',
+                'tda_h1_feature_count'
+            ],
+            'training_metadata': {
+                'n_training_samples': len(self.all_labels),
+                'feature_dim': self.all_points.shape[1],
+                'landmark_selection_method': 'stratified_clustering'
+            }
+        }
+
+        # Save the model
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(landmark_model_data, output_path)
+
 
 def main():
     """
@@ -309,6 +354,9 @@ def main():
     )
     
     topological_features = extractor.fit_transform(geometric_features, labels)
+
+    landmark_model_path = OUTPUT_DIR / "asymmetry_landmark_tda_model_blind_tests.pt"
+    extractor.save_landmark_model(landmark_model_path)
 
     # --- Combine Enhanced Features ---
     logging.info("Combining enhanced geometric features with new topological features...")
