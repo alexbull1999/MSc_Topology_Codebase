@@ -13,9 +13,16 @@ class TextToEmbedding:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
         print(f"Loading {model_name} on {device}...")
+
+        os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.model.eval() # Set to eval mode
+
+        if hasattr(self.model, 'gradient_checkpointing_enable'):
+            self.model.gradient_checkpointing_enable
+
         print("Text processing pipeline ready")
 
     def encode_text(self, texts: List[str], batch_size: int = 32) -> torch.Tensor:
@@ -27,6 +34,9 @@ class TextToEmbedding:
             torch.Tensor: BERT embeddings (of shape (n_texts, hidden_size))
         """
         embeddings = []
+
+        if self.device.type == 'cuda':
+            torch.cuda.empty_cache()
 
         for i in range(0, len(texts), batch_size):
             batch = texts[i: i + batch_size]
@@ -50,6 +60,16 @@ class TextToEmbedding:
                 # Use [CLS] token embeddings (first token)
                 batch_embeddings = outputs.last_hidden_state[:, 0, :]
                 embeddings.append(batch_embeddings)
+
+                del outputs
+                del inputs
+
+            if (i // batch_size + 1) % 5 == 0:
+                if self.device.type == 'cuda':
+                    torch.cuda.empty_cache()
+
+        if self.device.type == 'cuda':
+            torch.cuda.empty_cache()
 
         return torch.cat(embeddings, dim=0)
 
@@ -103,6 +123,13 @@ class TextToEmbedding:
         with open(dataset_path, "r") as file:
             data = json.load(file)
 
+        # For large datasets, automatically use chunked processing
+        if len(data) > 5000:
+            print(f"Large dataset detected ({len(data)} samples). Using chunked processing...")
+            return self.process_entailment_dataset_chunked(
+                dataset_path, chunk_size=2000, include_class_separation=include_class_separation
+            )
+
         #Extract premises, hypotheses, labels
         premises = [item[0] for item in data]
         hypotheses = [item[1] for item in data]
@@ -139,6 +166,97 @@ class TextToEmbedding:
             class_embeddings = self.organize_embeddings_by_class(concatenated_embeddings, labels)
             result["class_embeddings"] = class_embeddings
 
+            result["metadata"]["class_embedding_shapes"] = {
+                label: embs.shape for label, embs in class_embeddings.items()
+            }
+
+        print("Dataset processing complete")
+        return result
+
+    def process_entailment_dataset_chunked(self, dataset_path: str, chunk_size: int = 1000, 
+                                         include_class_separation: bool = True) -> Dict:
+        """Process large datasets in chunks to handle memory constraints
+        
+        Args:
+            dataset_path: Path to JSON file with entailment pairs
+            chunk_size: Number of samples to process at once
+            include_class_separation: Whether to organize by class
+        """
+        print(f"Processing dataset in chunks: {dataset_path}...")
+
+        # Load dataset
+        with open(dataset_path, "r") as file:
+            data = json.load(file)
+        
+        total_samples = len(data)
+        print(f"Dataset contains {total_samples} premise-hypothesis pairs")
+        print(f"Processing in chunks of {chunk_size} samples...")
+
+        # Process in chunks
+        all_premise_embeddings = []
+        all_hypothesis_embeddings = []
+        all_labels = []
+        all_premises = []
+        all_hypotheses = []
+
+        for chunk_idx in range(0, total_samples, chunk_size):
+            end_idx = min(chunk_idx + chunk_size, total_samples)
+            chunk_data = data[chunk_idx:end_idx]
+            
+            print(f"\nProcessing chunk {chunk_idx//chunk_size + 1}/{(total_samples-1)//chunk_size + 1}")
+            
+            # Extract chunk data
+            premises = [item[0] for item in chunk_data]
+            hypotheses = [item[1] for item in chunk_data]
+            labels = [item[2] for item in chunk_data]
+
+            # Process chunk
+            print("  Generating premise embeddings...")
+            premise_embeddings = self.encode_text(premises, batch_size=8)  # Even smaller batches
+            
+            print("  Generating hypothesis embeddings...")
+            hypothesis_embeddings = self.encode_text(hypotheses, batch_size=8)
+
+            # Store results
+            all_premise_embeddings.append(premise_embeddings)
+            all_hypothesis_embeddings.append(hypothesis_embeddings)
+            all_labels.extend(labels)
+            all_premises.extend(premises)
+            all_hypotheses.extend(hypotheses)
+
+        # Combine all chunks
+        print("\nCombining all chunks...")
+        final_premise_embeddings = torch.cat(all_premise_embeddings, dim=0)
+        final_hypothesis_embeddings = torch.cat(all_hypothesis_embeddings, dim=0)
+
+        print("Concatenating premise and hypothesis embeddings...")
+        concatenated_embeddings = self.concatenate_premise_hypothesis_embeddings(
+            final_premise_embeddings, final_hypothesis_embeddings
+        )
+
+        # Prepare final result
+        result = {
+            "premise_embeddings": final_premise_embeddings,
+            "hypothesis_embeddings": final_hypothesis_embeddings,
+            "concatenated_embeddings": concatenated_embeddings,
+            "labels": all_labels,
+            "texts": {
+                "premises": all_premises,
+                "hypotheses": all_hypotheses
+            },
+            "metadata": {
+                "model_name": self.model_name,
+                "concatenated_embedding_dim": concatenated_embeddings.shape[1],
+                "n_samples": len(all_labels),
+                "label_counts": self._analyze_labels(all_labels),
+                "processed_in_chunks": True,
+                "chunk_size": chunk_size
+            }
+        }
+
+        if include_class_separation:
+            class_embeddings = self.organize_embeddings_by_class(concatenated_embeddings, all_labels)
+            result["class_embeddings"] = class_embeddings
             result["metadata"]["class_embedding_shapes"] = {
                 label: embs.shape for label, embs in class_embeddings.items()
             }
@@ -225,7 +343,14 @@ def test_text_processing():
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
     # Test dataset
-    data_path = "data/raw/snli/train/snli_10k_subset_balanced.json"
+    data_path = "data/raw/snli/train/snli_full_train.json"
+    output_path = "/vol/bitbucket/ahb24/phd_processed_data"
+    if not os.path.exists(output_path):
+        print(f"ERROR: Output directory not found at {output_path}")
+        return None
+    else:
+        print(f"Output directory found: {output_path}")
+
     if os.path.exists(data_path):
         processed_data = processor.process_entailment_dataset(data_path, include_class_separation=True)
         processor.validate_embeddings(processed_data)
@@ -237,8 +362,8 @@ def test_text_processing():
                 print(f"  {label}: {embeddings.shape[0]} samples with {embeddings.shape[1]}D embeddings")
 
         # Save processed data
-        output_path = "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt"
-        processor.save_processed_data(processed_data, output_path)
+        full_output_path = "/vol/bitbucket/ahb24/phd_processed_data/snli_full_phd_roberta.pt"
+        processor.save_processed_data(processed_data, full_output_path)
 
         print("Text processing pipeline test completed successfully")
         return processed_data

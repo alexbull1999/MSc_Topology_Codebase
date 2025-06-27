@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=12G
-#SBATCH --output=../phd_logs/slurm_compute_phd_hdim0_%j.out
-#SBATCH --error=../phd_logs/slurm_compute_phd_hdim0_%j.err
+#SBATCH --output=../phd_logs/snli_full_phd_hdim2_%j.out
+#SBATCH --error=../phd_logs/snli_full_phd_hdim2_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -56,8 +56,8 @@ cd $SLURM_SUBMIT_DIR/../..
 missing_files=()
 
 # Check for TDA-ready data from cone validation
-if [ ! -f "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt" ]; then
-    missing_files+=("snli_10k_subset_balanced_phd_roberta.pt")
+if [ ! -f "/vol/bitbucket/ahb24/phd_processed_data/snli_full_phd_roberta.pt" ]; then
+    missing_files+=("snli_full_phd_roberta.pt")
 fi
 
 if [ ${#missing_files[@]} -ne 0 ]; then

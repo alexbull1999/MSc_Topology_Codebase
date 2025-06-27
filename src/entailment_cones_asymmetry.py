@@ -12,10 +12,9 @@ from typing import Dict, Tuple, Optional
 import matplotlib.pyplot as plt
 from pathlib import Path
 import os
-from hyperbolic_projection_asymmetry import HyperbolicOrderEmbeddingPipeline, safe_tensor_to_float
-from order_embeddings_asymmetry import OrderEmbeddingModel, EntailmentDataset
-from hyperbolic_projection import set_random_seed
-from text_processing import TextToEmbedding
+from .hyperbolic_projection_asymmetry import HyperbolicOrderEmbeddingPipeline, safe_tensor_to_float, set_random_seed
+from .order_embeddings_asymmetry import OrderEmbeddingModel, EntailmentDataset
+from .text_processing import TextToEmbedding
 
 
 def get_device():

@@ -4,8 +4,8 @@
 #SBATCH --time=02:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
-#SBATCH --output=phd_logs/slurm_text_processing_roberta_PHD_%j.out
-#SBATCH --error=phd_logs/slurm_text_processing_roberta_PHD_%j.err
+#SBATCH --output=../phd_logs/full_text_processing_roberta_PHD_%j.out
+#SBATCH --error=../phd_logs/full_text_processing_roberta_PHD_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

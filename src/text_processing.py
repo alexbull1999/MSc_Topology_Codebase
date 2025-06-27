@@ -13,9 +13,18 @@ class TextToEmbedding:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
         print(f"Loading {model_name} on {device}...")
+
+        # Set environment variable for memory management
+        os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'  #Added for mem_mgmt
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.model.eval() # Set to eval mode
+
+        # Enable gradient checkpointing to save memory
+        if hasattr(self.model, 'gradient_checkpointing_enable'):
+            self.model.gradient_checkpointing_enable() #added for mem_mgmt
+
         print("Text processing pipeline ready")
 
     def encode_text(self, texts: List[str], batch_size: int = 32) -> torch.Tensor:
@@ -47,9 +56,29 @@ class TextToEmbedding:
             #Get embeddings
             with torch.no_grad():
                 outputs = self.model(**inputs)
-                # Use [CLS] token embeddings (first token)
-                batch_embeddings = outputs.last_hidden_state[:, 0, :]
+                
+                # Use [CLS] token embeddings (first token) (added for mem_mgmt)
+                batch_embeddings = outputs.last_hidden_state[:, 0, :].clone()
+                
+                # Move to CPU immediately to free GPU memory
+                batch_embeddings = batch_embeddings.cpu()
                 embeddings.append(batch_embeddings)
+                
+                # Clear intermediate results from GPU
+                del outputs
+                del inputs
+
+             # Clear cache every few batches
+            if (i // batch_size + 1) % 5 == 0:
+                if self.device.type == 'cuda':
+                    torch.cuda.empty_cache()
+                
+                # batch_embeddings = outputs.last_hidden_state[:, 0, :] (PREVIOUS)
+                # embeddings.append(batch_embeddings)
+            
+        # Final cleanup
+        if self.device.type == 'cuda':
+            torch.cuda.empty_cache()
 
         return torch.cat(embeddings, dim=0)
 
@@ -162,13 +191,13 @@ def test_text_processing():
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
     # Test dataset
-    data_path = "data/raw/snli/train/snli_10k_subset_balanced.json"
+    data_path = "data/raw/snli/train/snli_full_train.json"
     if os.path.exists(data_path):
         processed_data = processor.process_entailment_dataset(data_path)
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/snli_10k_subset_balanced_roberta.pt"
+        output_path = "data/processed/snli_full_standard_BERT.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

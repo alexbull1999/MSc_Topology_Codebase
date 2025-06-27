@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=enhanced_text_subtoken_processing
-#SBATCH --partition=gpgpuC
-#SBATCH --time=02:00:00
+#SBATCH --partition=gpgpuB
+#SBATCH --time=04:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
-#SBATCH --output=../phd_logs/enhanced_text__subtoken_processing_roberta_PHD_%j.out
-#SBATCH --error=../phd_logs/enhanced_text_subtoken_processing_roberta_PHD_%j.err
+#SBATCH --output=../phd_logs/full_enhanced_text__subtoken_processing_roberta_PHD_%j.out
+#SBATCH --error=../phd_logs/full_enhanced_text_subtoken_processing_roberta_PHD_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

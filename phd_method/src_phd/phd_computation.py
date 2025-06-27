@@ -13,7 +13,7 @@ class PHDClassComputation:
                  min_points: int=200,
                  max_points: int=1000,
                  point_jump: int=50,
-                 h_dim: int=0,
+                 h_dim: int=2,
                  alpha: float=1.0,
                  seed: int=42):
         """Initialize PHD computation parameters
@@ -147,7 +147,7 @@ class PHDClassComputation:
 
 def test_phd_computation():
     #Load processed data from text_processing_phd.py
-    data_path = "phd_method/phd_data/processed/snli_10k_subset_balanced_phd_roberta.pt"
+    data_path = "/vol/bitbucket/ahb24/phd_processed_data/snli_full_phd_roberta.pt"
     if not os.path.exists(data_path):
         print(f"Processed data not found at {data_path}")
         print("Please run text_processing_phd.py first!")
@@ -157,7 +157,7 @@ def test_phd_computation():
     phd_compute = PHDClassComputation()
     class_phds = phd_compute.compute_all_class_phds(processed_data=processed_data)
     phd_compute.analyze_phd_patterns(class_phds=class_phds)
-    output_path = "phd_method/class_phd_results/snli_10k_subset_balanced_phd_results.pt"
+    output_path = "phd_method/class_phd_results/snli_full_phd_roberta_results.pt"
     phd_compute.save_phd_results(class_phds=class_phds, output_path=output_path)
 
 if __name__ == "__main__":

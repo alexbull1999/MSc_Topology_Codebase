@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --output=logs/slurm_order_embeddings_roberta_%j.out
-#SBATCH --error=logs/slurm_order_embeddings_roberta_%j.err
+#SBATCH --output=logs/full_order_embeddings_%j.out
+#SBATCH --error=logs/full_order_embeddings_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -51,13 +51,13 @@ echo "Checking for required input data..."
 cd $SLURM_SUBMIT_DIR/..
 
 # Check if processed data exists
-if [ ! -f "data/processed/snli_10k_subset_balanced.pt" ]; then
-    echo "ERROR: Required processed data file not found: data/processed/snli_10k_subset_balanced.pt"
+if [ ! -f "data/processed/snli_full_standard_BERT.pt" ]; then
+    echo "ERROR: Required processed data file not found: data/processed/snli_full_standard_BERT.pt"
     echo "Please ensure text_processing.py has been run successfully first."
     exit 1
 fi
 
-echo "Required data file found: data/processed/snli_10k_subset_balanced.pt"
+echo "Required data file found: data/processed/snli_full_standard_BERT.pt"
 
 
 echo ""

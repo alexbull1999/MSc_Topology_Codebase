@@ -16,14 +16,26 @@ class EnhancedSubtokenTextToEmbedding:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
         print(f"Loading {model_name} on {self.device}...")
+
+        os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
+        os.environ['TMPDIR'] = '/vol/bitbucket/ahb24/temp'
+        os.environ['TEMP'] = '/vol/bitbucket/ahb24/temp'
+        os.environ['TMP'] = '/vol/bitbucket/ahb24/temp'
+        os.makedirs('/vol/bitbucket/ahb24/temp', exist_ok=True)
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
+
+        # Enable gradient checkpointing to save memory
+        if hasattr(self.model, 'gradient_checkpointing_enable'):
+            self.model.gradient_checkpointing_enable()
+
         print("Enhanced subtoken-level text processing pipeline ready")
 
     def encode_text_multilayer(self, texts: List[str], 
                               batch_size: int = 8,  # Reduced due to memory requirements
-                              max_length: int = 512,  # Increased from 128
+                              max_length: int = 256,  # Increased from 128
                               layers_to_use: List[int] = None,
                               include_special_tokens: bool = True) -> List[torch.Tensor]:
         """
@@ -32,7 +44,7 @@ class EnhancedSubtokenTextToEmbedding:
         Args:
             texts: List of texts to encode
             batch_size: Batch size (reduced due to longer sequences + multiple layers)
-            max_length: Maximum sequence length (increased to 512)
+            max_length: Maximum sequence length (increased to 256)
             layers_to_use: Which transformer layers to include (default: last 4 layers)
             include_special_tokens: Whether to include [CLS], [SEP] tokens
             
@@ -45,10 +57,11 @@ class EnhancedSubtokenTextToEmbedding:
             # Use last 4 layers by default (layers 9, 10, 11, 12 for RoBERTa-base)
             layers_to_use = [9, 10, 11, 12]
         
-        print(f"Using layers: {layers_to_use}")
-        print(f"Max sequence length: {max_length}")
-        
         all_multilayer_embeddings = []
+
+        # Clear GPU cache before starting
+        if self.device.type == 'cuda':
+            torch.cuda.empty_cache()
 
         for i in range(0, len(texts), batch_size):
             batch = texts[i: i + batch_size]
@@ -93,18 +106,33 @@ class EnhancedSubtokenTextToEmbedding:
                         if not include_special_tokens and valid_embeddings.shape[0] > 2:
                             valid_embeddings = valid_embeddings[1:-1]  # Remove [CLS] and [SEP]
                         
+                        # Move to CPU immediately to save GPU memory
+                        valid_embeddings = valid_embeddings.cpu().clone()
                         sample_multilayer_embeddings.append(valid_embeddings)
-                    
+
                     # Stack all layers for this sample
                     # Shape: [n_tokens * n_layers, hidden_size]
                     combined_embeddings = torch.cat(sample_multilayer_embeddings, dim=0)
                     all_multilayer_embeddings.append(combined_embeddings)
 
+                 # Clear intermediate results from GPU
+                del outputs
+                del hidden_states
+                del inputs
+
+            # Clear cache every batch for memory efficiency
+            if self.device.type == 'cuda':
+                torch.cuda.empty_cache()
+
+        # Final cleanup
+        if self.device.type == 'cuda':
+            torch.cuda.empty_cache()
+
         return all_multilayer_embeddings
 
     def encode_text_sliding_window(self, texts: List[str],
-                                  window_size: int = 64,
-                                  stride: int = 32,
+                                  window_size: int = 32,
+                                  stride: int = 16,
                                   batch_size: int = 8) -> List[torch.Tensor]:
         """
         Create sliding window embeddings to capture different contextual views
@@ -153,7 +181,9 @@ class EnhancedSubtokenTextToEmbedding:
                     truncation=True,
                     max_length=window_size,
                     return_attention_mask=True
-                ).to(self.device)
+                )
+
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 
                 with torch.no_grad():
                     outputs = self.model(**inputs)
@@ -166,7 +196,18 @@ class EnhancedSubtokenTextToEmbedding:
                         # Remove special tokens
                         if valid_tokens.shape[0] > 2:
                             valid_tokens = valid_tokens[1:-1]
+
+                        # Move to CPU immediately
+                        valid_tokens = valid_tokens.cpu().clone()
                         window_embeddings_list.append(valid_tokens)
+                        
+                    # Clear GPU memory
+                    del outputs
+                    del inputs
+
+                # Clear cache periodically
+                if window_batch_start % (batch_size * 3) == 0 and self.device.type == 'cuda':
+                    torch.cuda.empty_cache()
             
             # Combine all window embeddings for this text
             if window_embeddings_list:
@@ -230,8 +271,6 @@ class EnhancedSubtokenTextToEmbedding:
         
         return enhanced_pointcloud
 
-
-
     def process_enhanced_dataset(self, dataset_path: str,
                                method: str = "multilayer",
                                include_class_separation: bool = True,
@@ -256,6 +295,14 @@ class EnhancedSubtokenTextToEmbedding:
         with open(dataset_path, "r") as file:
             data = json.load(file)
 
+        # For large datasets, automatically use chunked processing
+        if len(data) > 1000:  # Lower threshold for enhanced processing
+            print(f"Large dataset detected ({len(data)} samples). Using chunked processing...")
+            return self.process_enhanced_dataset_chunked(
+                dataset_path, chunk_size=200, method=method,
+                include_class_separation=include_class_separation, **method_kwargs
+            )
+
         premises = [item[0] for item in data]
         hypotheses = [item[1] for item in data]
         labels = [item[2] for item in data]
@@ -265,6 +312,7 @@ class EnhancedSubtokenTextToEmbedding:
         # Create enhanced point clouds
         enhanced_pointclouds = []
         pointcloud_sizes = []
+        failed_samples = []
         
         for i in range(len(premises)):
             if i % 100 == 0:
@@ -283,6 +331,8 @@ class EnhancedSubtokenTextToEmbedding:
                 
             except Exception as e:
                 print(f"Error processing sample {i}: {e}")
+                failed_samples.append(i)
+                raise
 
         print(f"Enhanced point cloud statistics:")
         print(f"  Average points per sample: {np.mean(pointcloud_sizes):.1f}")
@@ -318,6 +368,109 @@ class EnhancedSubtokenTextToEmbedding:
         print("Enhanced dataset processing complete")
         return result
 
+    def process_enhanced_dataset_chunked(self, dataset_path: str, chunk_size: int = 200,
+                                       method: str = "multilayer",
+                                       include_class_separation: bool = True,
+                                       **method_kwargs) -> Dict:
+        """
+        Process large datasets in chunks for enhanced subtoken processing
+        """
+        print(f"Processing dataset with enhanced method in chunks: {method}")
+        print(f"Method parameters: {method_kwargs}")
+        
+        # Load dataset
+        with open(dataset_path, "r") as file:
+            data = json.load(file)
+        
+        total_samples = len(data)
+        print(f"Dataset contains {total_samples} premise-hypothesis pairs")
+        print(f"Processing in chunks of {chunk_size} samples...")
+
+        # Process in chunks
+        all_enhanced_pointclouds = []
+        all_pointcloud_sizes = []
+        all_labels = []
+        all_premises = []
+        all_hypotheses = []
+
+        for chunk_idx in range(0, total_samples, chunk_size):
+            end_idx = min(chunk_idx + chunk_size, total_samples)
+            chunk_data = data[chunk_idx:end_idx]
+                        
+            # Extract chunk data
+            premises = [item[0] for item in chunk_data]
+            hypotheses = [item[1] for item in chunk_data]
+            labels = [item[2] for item in chunk_data]
+
+            # Process chunk - create enhanced point clouds
+            chunk_pointclouds = []
+            chunk_pointcloud_sizes = []
+            
+            for i in range(len(premises)):
+                if i % 25 == 0:
+                    print(f"  Processing sample {i}/{len(chunk_data)} in current chunk")
+
+                try:
+                    current_premise = premises[i]
+                    current_hypothesis = hypotheses[i]
+                    
+                    enhanced_pointcloud = self.create_enhanced_premise_hypothesis_pointcloud(
+                        current_premise, current_hypothesis, method=method, **method_kwargs
+                    )
+                    
+                    chunk_pointclouds.append(enhanced_pointcloud)
+                    chunk_pointcloud_sizes.append(enhanced_pointcloud.shape[0])
+                    
+                except Exception as e:
+                    print(f"  Error processing sample {i} in chunk: {e}")
+                    raise
+                
+                # Clear cache every 10 samples
+                if i % 10 == 0 and self.device.type == 'cuda':
+                    torch.cuda.empty_cache()
+
+            # Store results
+            all_enhanced_pointclouds.extend(chunk_pointclouds)
+            all_pointcloud_sizes.extend(chunk_pointcloud_sizes)
+            all_labels.extend(labels)
+            all_premises.extend(premises)
+            all_hypotheses.extend(hypotheses)
+
+        print(f"\nEnhanced point cloud statistics:")
+        print(f"  Average points per sample: {np.mean(all_pointcloud_sizes):.1f}")
+        print(f"  Min points: {np.min(all_pointcloud_sizes)}")
+        print(f"  Max points: {np.max(all_pointcloud_sizes)}")
+        print(f"  Embedding dimension: {all_enhanced_pointclouds[0].shape[1]}")
+
+        # Prepare final result
+        result = {
+            "pointclouds": all_enhanced_pointclouds,
+            "pointcloud_sizes": all_pointcloud_sizes,
+            "labels": all_labels,
+            "texts": {
+                "premises": all_premises,
+                "hypotheses": all_hypotheses
+            },
+            "metadata": {
+                "model_name": self.model_name,
+                "enhancement_method": method,
+                "method_parameters": method_kwargs,
+                "embedding_dim": all_enhanced_pointclouds[0].shape[1],
+                "n_samples": len(all_labels),
+                "avg_points_per_sample": float(np.mean(all_pointcloud_sizes)),
+                "min_points": int(np.min(all_pointcloud_sizes)),
+                "max_points": int(np.max(all_pointcloud_sizes)),
+                "processed_in_chunks": True,
+                "chunk_size": chunk_size
+            }
+        }
+
+        if include_class_separation:
+            class_pointclouds = self.organize_pointclouds_by_class(all_enhanced_pointclouds, all_labels)
+            result["class_pointclouds"] = class_pointclouds
+
+        print("Enhanced dataset processing complete")
+        return result
 
     def organize_pointclouds_by_class(self, pointclouds: List[torch.Tensor], 
                                     labels: List[str]) -> Dict[str, List[torch.Tensor]]:
@@ -337,7 +490,6 @@ class EnhancedSubtokenTextToEmbedding:
 
         return class_pointclouds
 
-    
     def save_processed_data(self, processed_data: Dict, output_path: str):
         """Save enhanced processed data"""
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -348,11 +500,22 @@ class EnhancedSubtokenTextToEmbedding:
 def main():
     """Process dataset with best enhancement method"""
     
+    # Set working directory to avoid home directory issues
+    original_cwd = os.getcwd()
+    work_dir = "/vol/bitbucket/ahb24/temp_processing"
+    os.makedirs(work_dir, exist_ok=True)
+    os.chdir(work_dir)
+    
     # Process full dataset with the most promising method
     processor = EnhancedSubtokenTextToEmbedding()
     
-    dataset_path = "data/raw/snli/train/snli_10k_subset_balanced.json"
-    output_path = "phd_method/phd_data/processed/snli_10k_enhanced_multilayer.pt"
+    dataset_path = "/homes/ahb24/MSc_Topology_Codebase/data/raw/snli/train/snli_full_train.json"
+    output_path = "/vol/bitbucket/ahb24/phd_processed_data"
+    if not os.path.exists(output_path):
+        print(f"ERROR: Output directory not found at {output_path}")
+        return None
+    else:
+        print(f"Output directory found: {output_path}")
     
     try:
         # Use multi-layer method as it should give most semantic density
@@ -360,12 +523,13 @@ def main():
             dataset_path=dataset_path,
             method="multilayer",
             layers_to_use=[9, 10, 11, 12],  # Last 4 layers
-            max_length=512,  # Longer sequences
+            max_length=256,  # Longer sequences
             include_class_separation=True
         )
         
         # Save the enhanced data
-        processor.save_processed_data(enhanced_data, output_path)
+        full_output_path = "/vol/bitbucket/ahb24/phd_processed_data/snli_full_phd_roberta_enhanced_multilayer.pt"
+        processor.save_processed_data(enhanced_data, full_output_path)
         
         print(f"\SUCCESS: Enhanced processing complete!")
         print(f"Average points per sample: {enhanced_data['metadata']['avg_points_per_sample']:.1f}")
@@ -373,6 +537,9 @@ def main():
     except Exception as e:
         print(f"ERROR: {e}")
         raise
+    
+    # Return to original directory
+    os.chdir(original_cwd)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ import json
 import random
 
 # Import existing order embedding classes - Updated import
-from order_embeddings_asymmetry import OrderEmbeddingModel, EntailmentDataset
+from .order_embeddings_asymmetry import OrderEmbeddingModel, EntailmentDataset
 
 def set_random_seed(seed: int = 42):
     """Set random seed for reproducibility across all libraries"""
