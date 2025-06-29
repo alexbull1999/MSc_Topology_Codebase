@@ -1,13 +1,13 @@
 Starting Surface Distance Metric Analysis job...
-Job ID: 178168
-Node: gpuvm12
-Time: Sat 28 Jun 19:53:30 BST 2025
+Job ID: 178298
+Node: gpuvm10
+Time: Sun 29 Jun 17:13:04 BST 2025
 Loading CUDA...
 Activating conda environment...
 Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
 Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
 Checking GPU availability...
-Sat Jun 28 19:53:32 2025       
+Sun Jun 29 17:13:05 2025       
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 550.120                Driver Version: 550.120        CUDA Version: 12.4     |
 |-----------------------------------------+------------------------+----------------------+
@@ -15,8 +15,8 @@ Sat Jun 28 19:53:32 2025
 | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
 |                                         |                        |               MIG M. |
 |=========================================+========================+======================|
-|   0  NVIDIA A30                     Off |   00000000:01:00.0 Off |                    0 |
-| N/A   32C    P0             29W /  165W |       1MiB /  24576MiB |      0%      Default |
+|   0  NVIDIA A30                     Off |   00000000:02:00.0 Off |                    0 |
+| N/A   38C    P0             29W /  165W |       1MiB /  24576MiB |      0%      Default |
 |                                         |                        |             Disabled |
 +-----------------------------------------+------------------------+----------------------+
                                                                                          
@@ -4490,12 +4490,12 @@ Testing hyperbolic_embeddings...
   entailment: 183416 samples
   neutral: 182764 samples
   contradiction: 183187 samples
-Results saved to entailment_surfaces/results/class_lattice/lattice_subsumption_metrics_results_20250628_195446.json
+Results saved to entailment_surfaces/results/class_lattice/lattice_subsumption_metrics_results_20250629_171559.json
 
-Analysis complete! Results saved to entailment_surfaces/results/class_lattice/lattice_subsumption_metrics_results_20250628_195446.json
+Analysis complete! Results saved to entailment_surfaces/results/class_lattice/lattice_subsumption_metrics_results_20250629_171559.json
 
 Analysis completed with exit code: 0
-Time: Sat 28 Jun 19:54:47 BST 2025
+Time: Sun 29 Jun 17:16:00 BST 2025
 
 === ANALYSIS SUCCESSFUL ===
 

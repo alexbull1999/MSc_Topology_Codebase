@@ -35,6 +35,16 @@ class ClassTestResult:
     asymmetric_energy_score: float
     lattice_height_score: float
     subsumption_distance_score: float
+    #Std deviation for the 4 metrics
+    containment_proxy_std: float
+    asymmetric_energy_std: float
+    lattice_height_std: float
+    subsumption_distance_std: float
+    #Signal to noise ratios
+    containment_proxy_snr: float
+    asymmetric_energy_snr: float
+    lattice_height_snr: float
+    subsumption_distance_snr: float
     num_tests: int
 
 
@@ -151,14 +161,46 @@ class LatticeClassTester:
         if not subsumption_scores:
             raise ValueError("No subsumption score")
 
+        #Calculate means and std_deviations
+        containment_mean = np.mean(containment_scores)
+        containment_std = np.std(containment_scores)
+
+        energy_mean = np.mean(energy_scores)
+        energy_std = np.std(energy_scores)
+
+        height_mean = np.mean(height_scores)
+        height_std = np.std(height_scores)
+        
+        subsumption_mean = np.mean(subsumption_scores)
+        subsumption_std = np.std(subsumption_scores)
+
+        # Calculate signal-to-noise ratios (mean / std)
+        # Higher SNR = more consistent metric within class
+        containment_snr = containment_mean / containment_std if containment_std > 0 else float('inf')
+        energy_snr = energy_mean / energy_std if energy_std > 0 else float('inf')
+        height_snr = height_mean / height_std if height_std > 0 else float('inf')
+        subsumption_snr = subsumption_mean / subsumption_std if subsumption_std > 0 else float('inf')
+
+
+
         # Return average scores for this class
         return ClassTestResult(
             space_name="",  # Will be filled by caller
             class_name=class_name,
-            containment_proxy_score=np.mean(containment_scores),
-            asymmetric_energy_score=np.mean(energy_scores),
-            lattice_height_score=np.mean(height_scores),
-            subsumption_distance_score=np.mean(subsumption_scores),
+            containment_proxy_score=containment_mean,
+            asymmetric_energy_score=energy_mean,
+            lattice_height_score=height_mean,
+            subsumption_distance_score=subsumption_mean,
+            #Std devs
+            containment_proxy_std=containment_std,
+            asymmetric_energy_std=energy_std,
+            lattice_height_std=height_std,
+            subsumption_distance_std=subsumption_std,
+            #SNRs
+            containment_proxy_snr=containment_snr,
+            asymmetric_energy_snr=energy_snr,
+            lattice_height_snr=height_snr,
+            subsumption_distance_snr=subsumption_snr,
             num_tests=len(sample_indices)
         )
 
@@ -219,10 +261,21 @@ class LatticeDiscoveryAnalyzer:
             serializable_results[space_name] = {}
             for class_name, result in space_results.items():
                 serializable_results[space_name][class_name] = {
+                    # Means
                     'containment_proxy_score': result.containment_proxy_score,
                     'asymmetric_energy_score': result.asymmetric_energy_score,
                     'lattice_height_score': result.lattice_height_score,
                     'subsumption_distance_score': result.subsumption_distance_score,
+                    # Standard deviations
+                    'containment_proxy_std': result.containment_proxy_std,
+                    'asymmetric_energy_std': result.asymmetric_energy_std,
+                    'lattice_height_std': result.lattice_height_std,
+                    'subsumption_distance_std': result.subsumption_distance_std,
+                    # Signal-to-noise ratios
+                    'containment_proxy_snr': result.containment_proxy_snr,
+                    'asymmetric_energy_snr': result.asymmetric_energy_snr,
+                    'lattice_height_snr': result.lattice_height_snr,
+                    'subsumption_distance_snr': result.subsumption_distance_snr,
                     'num_tests': result.num_tests
                 }
     
