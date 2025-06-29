@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=surface_distance_analysis
+#SBATCH --job-name=lattice_discovery
 #SBATCH --partition=gpgpuB
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --output=../logs/surface_analysis_full_data_%j.out
-#SBATCH --error=../logs/surface_analysis_full_data_%j.err
+#SBATCH --output=../logs/lattice_discovery_fulldata_%j.out
+#SBATCH --error=../logs/lattice_discovery_fulldata_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -71,18 +71,10 @@ else
 fi
 
 echo ""
-echo "Starting Surface Distance Metric Analysis..."
-echo "Analysis parameters:"
-echo "  - Embedding spaces: 17 total"
-echo "  - Distance metrics: 12 total" 
-echo "  - Total combinations: 204"
-echo "  - Max samples per class: 20000 (for initial run)"
-echo "  - Random seed: 42"
+echo "Starting Lattice Metric Analysis..."
 echo ""
 
-# Run surface distance analysis
-# Start with 20k samples for faster initial analysis
-python entailment_surfaces/phdim_distance_metric_optimized.py 
+python entailment_surfaces/lattice_metric_discovery.py 
 
 
 # Capture exit code
@@ -92,45 +84,16 @@ echo ""
 echo "Analysis completed with exit code: $EXIT_CODE"
 echo "Time: $(date)"
 
-# Show what files were created
-echo ""
-echo "Results created in results/step_1_1_analysis/:"
-ls -la results/step_1_1_analysis/ 2>/dev/null || echo "No results directory found"
 
-# Show disk usage
-echo ""
-echo "Disk usage:"
-du -sh results/step_1_1_analysis/ 2>/dev/null || echo "No results to measure"
 
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
     echo "=== ANALYSIS SUCCESSFUL ==="
-    echo "Surface distance metric analysis completed successfully!"
     echo ""
-    echo "Key outputs:"
-    echo "  - JSON results: results/step_1_1_analysis/comprehensive_surface_analysis_*.json"
-    echo "  - Plain report: results/step_1_1_analysis/simple_analysis_report_*.txt"
-    echo "  - Individual space results: results/step_1_1_analysis/surface_analysis_*_*.json"
-    echo ""
-    echo "Next steps:"
-    echo "  1. Review the simple_analysis_report_*.txt for plain results"
-    echo "  2. Identify top-performing space+metric combinations"
-    echo "  3. Consider re-running with --max_samples 167000 for full analysis"
-    echo ""
-    echo "To run full analysis on promising combinations:"
-    echo "  python step_1_1_surface_analysis_corrected.py \\"
-    echo "    --bert_data 'data/processed/snli_full_standard_BERT.pt' \\"
-    echo "    --order_model '$ORDER_MODEL' \\"
-    echo "    --max_samples 167000"
 else
     echo ""
     echo "=== ANALYSIS FAILED ==="
-    echo "Please check the error output above for debugging information."
     echo ""
-    echo "Common issues to check:"
-    echo "  - Missing dependencies (topology.py, order_embeddings_asymmetry.py)"
-    echo "  - Memory issues (try reducing --max_samples)"
-    echo "  - CUDA out of memory (check GPU usage with nvidia-smi)"
 fi
 
 echo ""

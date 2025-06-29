@@ -95,7 +95,6 @@ class SurfaceDistanceMetricAnalyzer:
             'order_violations',     # Order violation energies (inherently relational)
             'hyperbolic_concat',    # Concatenated hyperbolic embeddings
             'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
-            'cone_energies',        # Entailment cone violation energies (inherently relational)
             'cone_features',        # Multiple cone-related features
         ]
 
@@ -276,6 +275,7 @@ class SurfaceDistanceMetricAnalyzer:
                             enhanced_results = {}
                             for key, value_list in all_results.items():
                                 enhanced_results[key] = torch.cat(value_list, dim=0)
+
                         
                         # Store ALL hyperbolic features from enhanced cone pipeline
                         data_by_class[label].update({
@@ -378,14 +378,6 @@ class SurfaceDistanceMetricAnalyzer:
                         space_embeddings[label] = data_by_class[label]['hyperbolic_distances'].unsqueeze(1)
                     else:
                         print(f"    Hyperbolic distances not available for {space}")
-                        continue
-                        
-                elif space == 'cone_energies':
-                    if 'cone_energies' in data_by_class[label] and data_by_class[label]['cone_energies'] is not None:
-                        # Standard cone violation energies
-                        space_embeddings[label] = data_by_class[label]['cone_energies'].unsqueeze(1)
-                    else:
-                        print(f"    Cone energies not available for {space}")
                         continue
                         
                 elif space == 'cone_features':
@@ -848,7 +840,7 @@ class SurfaceDistanceMetricAnalyzer:
 
     
 
-    def run_comprehensive_analysis(self, max_samples_per_class: int = 20000):
+    def run_comprehensive_analysis(self):
         """Run comprehensive surface distance metric analysis with GPU optimizations"""
         print("="*80)
         print("COMPREHENSIVE SURFACE DISTANCE METRIC ANALYSIS (GPU-OPTIMIZED)")
@@ -859,7 +851,7 @@ class SurfaceDistanceMetricAnalyzer:
         print("="*80)
         
         # Extract all embedding spaces
-        all_embeddings = self.extract_all_embedding_spaces(max_samples_per_class)
+        all_embeddings = self.extract_all_embedding_spaces()
         
         # Results storage
         all_results = {}
