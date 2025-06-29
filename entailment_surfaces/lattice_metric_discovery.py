@@ -253,7 +253,7 @@ class LatticeDiscoveryAnalyzer:
     
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"lattice_subsumption_metrics_results_{timestamp}.json"
+            filename = f"lattice_subsumption_metrics_results_{timestamp}_SBERT.json"
     
         # Convert to serializable format
         serializable_results = {}
@@ -453,7 +453,7 @@ if __name__ == "__main__":
     
     # Run the actual analysis
     results, filename = run_integrated_class_discovery(
-        bert_data_path="data/processed/snli_full_standard_BERT.pt",
+        bert_data_path="data/processed/snli_full_standard_SBERT.pt",
         order_model_path="models/enhanced_order_embeddings_snli_full.pt",
     )
     
