@@ -8,12 +8,12 @@ import sys
 from pathlib import Path
 import logging
 
-from lattice_metric_discovery import SubsumptionMetrics, LatticeClassTester
+from lattice_metric_discovery import SubsumptionMetrics, LatticeClassTester, LatticeDiscoveryAnalyzer
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from order_embeddings_asymmetry import train_order_embeddings, OrderEmbeddingModel, EntailmentDataset
+from src.order_embeddings_asymmetry import train_order_embeddings, OrderEmbeddingModel, EntailmentDataset
 from torch.utils.data import DataLoader
 
 
@@ -27,8 +27,9 @@ class ComprehensiveLatticeEvaluator:
     
     def __init__(self, device='cuda' if torch.cuda.is_available() else 'cpu'):
         self.device = device
+        self.lattice_analyzer = LatticeDiscoveryAnalyzer()
     
-    def _create_order_embedding_data(self, model, processed_data_path, sample_size=None):
+    def _create_order_embedding_data(self, model, processed_data_path, sample_size=10000):
         """
         Create order embeddings from SBERT data for lattice metric evaluation
         """
@@ -37,7 +38,7 @@ class ComprehensiveLatticeEvaluator:
         dataset = EntailmentDataset(processed_data)
         
         # Sample for efficiency
-        if sample_size is not None and len(dataset) > sample_size:
+        if len(dataset) > sample_size:
             indices = torch.randperm(len(dataset))[:sample_size]
             sampled_premise = processed_data['premise_embeddings'][indices]
             sampled_hypothesis = processed_data['hypothesis_embeddings'][indices]
@@ -64,7 +65,7 @@ class ComprehensiveLatticeEvaluator:
         premise_order, hypothesis_order, labels = self._create_order_embedding_data(model, processed_data_path)
         
         # Use existing LatticeClassTester for all metrics
-        results = self.lattice_tester.test_embedding_space(
+        results = self.lattice_analyzer.test_embedding_space(
             premise_embeddings=premise_order,
             hypothesis_embeddings=hypothesis_order, 
             labels=labels,
@@ -79,14 +80,17 @@ def comprehensive_hyperparameter_search():
     
     # Expanded search space
     search_params = {
-        'order_dim': [50, 75, 100, 150],
-        'asymmetry_weight': [0.3, 0.5, 0.7, 0.9],
-        'margin': [1.0, 1.5, 2.0, 2.5],
-        'lr': [1e-3, 5e-4, 2e-4]
+        'order_dim': [50, 100, 150],
+        'asymmetry_weight': [0.3, 0.6, 0.9],
+        'margin': [1.0, 1.5, 2.0],
+        'lr': [1e-3, 5e-4]
     }
     
     # Your SBERT processed data
     processed_data_path = "data/processed/snli_full_standard_SBERT.pt"
+
+    train_data_path, eval_data_path = create_train_eval_split(processed_data_path)
+
 
     evaluator = ComprehensiveLatticeEvaluator()
     results = []
@@ -102,7 +106,7 @@ def comprehensive_hyperparameter_search():
         
 
         model, trainer = train_order_embeddings(
-                processed_data_path=processed_data_path,
+                processed_data_path=train_data_path,
                 epochs=30,  # Reasonable for comparison
                 batch_size=32,
                 order_dim=order_dim,
@@ -112,7 +116,7 @@ def comprehensive_hyperparameter_search():
 
 
         evaluator = ComprehensiveLatticeEvaluator()
-        comprehensive_stats = evaluator.evaluate_model_comprehensive(model, processed_data_path)
+        comprehensive_stats = evaluator.evaluate_model_comprehensive(model, eval_data_path)
 
         # Training performance
         final_val_loss = trainer.val_losses[-1] if trainer.val_losses else float('inf')
@@ -175,17 +179,19 @@ def calculate_overall_performance_score(comprehensive_stats):
         'subsumption_distance_score': 0.2
     }
     
-    # Extract the class results from the lattice tester format
-    for metric_base_name, weight in weights.items():
+    # Extract the class results from ClassTestResult objects
+    for metric_name, weight in weights.items():
         try:
-            # Get values for each class
-            ent_mean = comprehensive_stats.get(f'{metric_base_name}_entailment_mean', 0)
-            neu_mean = comprehensive_stats.get(f'{metric_base_name}_neutral_mean', 0)
-            con_mean = comprehensive_stats.get(f'{metric_base_name}_contradiction_mean', 0)
+            # Access the attributes directly from ClassTestResult objects
+            ent_mean = getattr(comprehensive_stats['entailment'], metric_name)
+            neu_mean = getattr(comprehensive_stats['neutral'], metric_name)
+            con_mean = getattr(comprehensive_stats['contradiction'], metric_name)
             
-            ent_std = comprehensive_stats.get(f'{metric_base_name}_entailment_std', 1)
-            neu_std = comprehensive_stats.get(f'{metric_base_name}_neutral_std', 1)
-            con_std = comprehensive_stats.get(f'{metric_base_name}_contradiction_std', 1)
+            # Get standard deviations (replace '_score' with '_std')
+            std_attr_name = metric_name.replace('_score', '_std')
+            ent_std = getattr(comprehensive_stats['entailment'], std_attr_name)
+            neu_std = getattr(comprehensive_stats['neutral'], std_attr_name)
+            con_std = getattr(comprehensive_stats['contradiction'], std_attr_name)
             
             # Calculate separation metrics
             total_range = max(ent_mean, neu_mean, con_mean) - min(ent_mean, neu_mean, con_mean)
@@ -213,14 +219,21 @@ def calculate_overall_performance_score(comprehensive_stats):
             
             score += metric_score * weight
             
+            print(f"  {metric_name}:")
+            print(f"    Means: {ent_mean:.4f} → {neu_mean:.4f} → {con_mean:.4f}")
+            print(f"    Range: {total_range:.4f}, Avg Std: {avg_std:.4f}")
+            print(f"    Gap/Std Ratio: {gap_to_std_ratio:.4f}")
+            print(f"    Monotonic: {is_monotonic}")
+            print(f"    Metric Score: {metric_score:.4f}")
+            
         except Exception as e:
-            print(f"Warning: Could not calculate score for {metric_base_name}: {e}")
+            print(f"Warning: Could not calculate score for {metric_name}: {e}")
             continue
     
     return score
 
 
-def create_train_eval_split(processed_data_path, train_ratio=0.8, seed=42):
+def create_train_eval_split(processed_data_path, train_ratio=0.8, seed=42, max_samples=10000):
     """
     Create proper train/eval split to avoid data contamination
     
@@ -235,6 +248,22 @@ def create_train_eval_split(processed_data_path, train_ratio=0.8, seed=42):
     np.random.seed(seed)
     
     total_samples = len(processed_data['labels'])
+    # Sample if dataset is too large
+    if total_samples > max_samples:
+        print(f"Sampling {max_samples} from {total_samples} for efficiency")
+        sample_indices = torch.randperm(total_samples)[:max_samples]
+        processed_data = {
+            'premise_embeddings': processed_data['premise_embeddings'][sample_indices],
+            'hypothesis_embeddings': processed_data['hypothesis_embeddings'][sample_indices],
+            'labels': [processed_data['labels'][i] for i in sample_indices],
+            'texts': {
+                'premises': [processed_data['texts']['premises'][i] for i in sample_indices],
+                'hypotheses': [processed_data['texts']['hypotheses'][i] for i in sample_indices]
+            } if 'texts' in processed_data else None
+        }
+        total_samples = max_samples
+
+
     indices = torch.randperm(total_samples)
     
     train_size = int(train_ratio * total_samples)
@@ -333,7 +362,6 @@ def analyze_comprehensive_results(results):
     return best, {
         'total_tested': len(results),
         'top_5': sorted_results[:5],
-        'parameter_analysis': analyze_parameter_trends(results)
     }
 
 def save_best_checkpoint_and_model(best_result, model, trainer, prefix):
