@@ -8,12 +8,12 @@ import sys
 from pathlib import Path
 import logging
 
-from lattice_metric_discovery import SubsumptionMetrics, LatticeClassTester, LatticeDiscoveryAnalyzer
+from lattice_metric_discovery import SubsumptionMetrics, LatticeClassTester, LatticeDiscoveryAnalyzer, ClassTestResult
 
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.order_embeddings_asymmetry import train_order_embeddings, OrderEmbeddingModel, EntailmentDataset
+from src.order_embeddings_asymmetry_3classloss import train_order_embeddings, OrderEmbeddingModel, EntailmentDataset
 from torch.utils.data import DataLoader
 
 
@@ -36,7 +36,7 @@ class ComprehensiveLatticeEvaluator:
         # Load original SBERT data
         processed_data = torch.load(processed_data_path)
         dataset = EntailmentDataset(processed_data)
-        
+    
         # Sample for efficiency
         if len(dataset) > sample_size:
             indices = torch.randperm(len(dataset))[:sample_size]
@@ -47,13 +47,18 @@ class ComprehensiveLatticeEvaluator:
             sampled_premise = processed_data['premise_embeddings']
             sampled_hypothesis = processed_data['hypothesis_embeddings']
             sampled_labels = processed_data['labels']
-        
+    
+        # Convert string labels to integers if needed
+        if isinstance(sampled_labels[0], str):
+            label_to_int = {'entailment': 0, 'neutral': 1, 'contradiction': 2}
+            sampled_labels = [label_to_int[label] for label in sampled_labels]
+    
         # Generate order embeddings using the trained model
         model.eval()
         with torch.no_grad():
             premise_order = model(sampled_premise.to(self.device)).cpu().numpy()
             hypothesis_order = model(sampled_hypothesis.to(self.device)).cpu().numpy()
-        
+    
         return premise_order, hypothesis_order, np.array(sampled_labels)
 
 
@@ -80,10 +85,10 @@ def comprehensive_hyperparameter_search():
     
     # Expanded search space
     search_params = {
-        'order_dim': [50, 100, 150],
-        'asymmetry_weight': [0.3, 0.6, 0.9],
+        'order_dim': [75, 100, 125],
+        'asymmetry_weight': [1.0, 1.5, 1.9],
         'margin': [1.0, 1.5, 2.0],
-        'lr': [1e-3, 5e-4]
+        'lr': [1e-3, 1e-4, 1e-5]
     }
     
     # Your SBERT processed data
@@ -107,11 +112,11 @@ def comprehensive_hyperparameter_search():
 
         model, trainer = train_order_embeddings(
                 processed_data_path=train_data_path,
-                epochs=30,  # Reasonable for comparison
+                epochs=100,  # Reasonable for comparison
                 batch_size=32,
                 order_dim=order_dim,
                 asymmetry_weight=asymmetry_weight,
-                random_seed=42
+                random_seed=42+i
             )
 
 

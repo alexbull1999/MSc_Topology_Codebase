@@ -1,0 +1,20 @@
+{
+  "hyperparameters": {
+    "order_dim": 75,
+    "asymmetry_weight": 1.9,
+    "margin": 1.5,
+    "lr": 0.001
+  },
+  "training_performance": {
+    "final_val_loss": 3.5510271644592284,
+    "final_train_loss": 1.3517110335826874,
+    "converged": true
+  },
+  "lattice_metrics": {
+    "entailment": "ClassTestResult(space_name='order_embeddings', class_name='entailment', containment_proxy_score=0.05247653253942902, asymmetric_energy_score=0.23056361, lattice_height_score=0.028871548628946492, subsumption_distance_score=0.2441863405425646, containment_proxy_std=0.029881081682588306, asymmetric_energy_std=0.1729972, lattice_height_std=0.07706486879218173, subsumption_distance_std=0.056790190768530584, containment_proxy_snr=1.7561791469552817, asymmetric_energy_snr=1.3327591, lattice_height_snr=0.37463956120918646, subsumption_distance_snr=4.299797856602319, num_tests=684)",
+    "neutral": "ClassTestResult(space_name='order_embeddings', class_name='neutral', containment_proxy_score=0.07267648175516576, asymmetric_energy_score=0.53366333, lattice_height_score=0.10296329319386908, subsumption_distance_score=0.2911012582988133, containment_proxy_std=0.034074200412575945, asymmetric_energy_std=0.33245477, lattice_height_std=0.14168159093666097, subsumption_distance_std=0.062151827134222216, containment_proxy_snr=2.1328888389217395, asymmetric_energy_snr=1.6052209, lattice_height_snr=0.7267231579852814, subsumption_distance_snr=4.683711995628947, num_tests=661)",
+    "contradiction": "ClassTestResult(space_name='order_embeddings', class_name='contradiction', containment_proxy_score=0.12291000997292176, asymmetric_energy_score=1.2176487, lattice_height_score=0.23341163314935814, subsumption_distance_score=0.3504302149510566, containment_proxy_std=0.046452574814976486, asymmetric_energy_std=0.79880565, lattice_height_std=0.2717110339477096, subsumption_distance_std=0.07270974703952758, containment_proxy_snr=2.6459245900249884, asymmetric_energy_snr=1.5243367, lattice_height_snr=0.8590436308680709, subsumption_distance_snr=4.819576868566884, num_tests=655)"
+  },
+  "overall_score": 0.9520537944397838,
+  "timestamp": "2025-07-01T01:50:11.235666"
+}

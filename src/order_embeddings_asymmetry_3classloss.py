@@ -251,15 +251,16 @@ class OrderEmbeddingTrainer:
         
         return asymmetric_loss / batch_size
 
+
     def compute_enhanced_loss(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, 
-                            labels: torch.Tensor, label_strs: List[str], margin: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor, Dict]: #margin was 1.0
-        """Compute enhanced loss with asymmetric components
+                        labels: torch.Tensor, label_strs: List[str], margin: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
+        """Compute enhanced loss with proper 3-class distinction (FIXED - no nested loops)
         Args:
             premise_embs: Premise BERT embeddings
             hypothesis_embs: Hypothesis BERT embeddings
             labels: Label indices (0=entailment, 1=neutral, 2=contradiction)
             label_strs: String labels
-            margin: Margin for non-entailment pairs
+            margin: Base margin for class separation
         Returns:
             Total loss, standard energies, and energy statistics
         """
@@ -270,24 +271,65 @@ class OrderEmbeddingTrainer:
         # Compute standard violation energies (forward direction)
         energies = self.model.order_violation_energy(premise_order, hypothesis_order)
 
-        # Standard max-margin loss
+        # Create masks for each class
         entailment_mask = (labels == 0)
-        non_entailment_mask = (labels > 0)
+        neutral_mask = (labels == 1)
+        contradiction_mask = (labels == 2)
 
-        # Loss for entailment pairs - minimize energy
-        entailment_loss = energies[entailment_mask].mean() if entailment_mask.any() else 0
-
-        # Loss for non-entailment pairs - ensure energy > margin
-        if non_entailment_mask.any():
-            non_entailment_energies = energies[non_entailment_mask]
-            non_entailment_loss = torch.clamp(margin - non_entailment_energies, min=0).mean()
-        else:
-            non_entailment_loss = 0
-
-        # Standard loss
-        standard_loss = entailment_loss + non_entailment_loss
-
-        # Asymmetric loss
+        # 3-class max-margin loss with different energy targets
+        total_loss = 0.0
+    
+        # Entailment pairs: minimize energy (target ~0)
+        if entailment_mask.any():
+            entailment_energies = energies[entailment_mask]
+            entailment_loss = entailment_energies.mean()
+            total_loss += entailment_loss
+    
+        # Neutral pairs: medium energy (target ~margin)
+        if neutral_mask.any():
+            neutral_energies = energies[neutral_mask]
+            target_neutral = margin
+            # Loss if energy is too low (< margin/2) or too high (> 2*margin)
+            neutral_loss = (
+                torch.clamp(margin/2 - neutral_energies, min=0).mean() +  # Push up if too low
+                torch.clamp(neutral_energies - 2*margin, min=0).mean()    # Push down if too high
+            )
+            total_loss += neutral_loss
+    
+        # Contradiction pairs: high energy (target ~2*margin)
+        if contradiction_mask.any():
+            contradiction_energies = energies[contradiction_mask]
+            target_contradiction = 2 * margin
+            # Loss if energy is too low (should be > 1.5*margin)
+            contradiction_loss = torch.clamp(1.5*margin - contradiction_energies, min=0).mean()
+            total_loss += contradiction_loss
+    
+        # FIXED: Vectorized ranking losses instead of nested loops
+        ranking_loss = 0.0
+        small_margin = 0.5
+    
+        # Entailment should have lower energy than neutral (vectorized)
+        if entailment_mask.any() and neutral_mask.any():
+            ent_mean = energies[entailment_mask].mean()
+            neut_mean = energies[neutral_mask].mean()
+            ranking_loss += torch.clamp(ent_mean - neut_mean + small_margin, min=0)
+    
+        # Neutral should have lower energy than contradiction (vectorized)
+        if neutral_mask.any() and contradiction_mask.any():
+            neut_mean = energies[neutral_mask].mean()
+            cont_mean = energies[contradiction_mask].mean()
+            ranking_loss += torch.clamp(neut_mean - cont_mean + small_margin, min=0)
+    
+        # Entailment should have lower energy than contradiction (vectorized)
+        if entailment_mask.any() and contradiction_mask.any():
+            ent_mean = energies[entailment_mask].mean()
+            cont_mean = energies[contradiction_mask].mean()
+            ranking_loss += torch.clamp(ent_mean - cont_mean + small_margin, min=0)
+    
+        # Combine losses
+        standard_loss = total_loss + 0.5 * ranking_loss
+    
+        # Asymmetric loss (keep your existing implementation)
         asymmetric_loss = self.compute_asymmetric_loss(premise_embs, hypothesis_embs, labels, label_strs)
 
         # Combined loss

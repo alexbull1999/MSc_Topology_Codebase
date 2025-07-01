@@ -23,6 +23,10 @@ from pathlib import Path
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+def flush_output():
+    """Force output to appear immediately in SLURM"""
+    sys.stdout.flush()
+    sys.stderr.flush()
 
 
 @dataclass
@@ -78,7 +82,8 @@ class SubsumptionMetrics:
     @staticmethod
     def asymmetric_energy_distance(p_emb: np.ndarray, h_emb: np.ndarray) -> float:
         """
-        Uses order violation energies for asymmetric distance
+        Uses order violation energies for distance (SHOULD RENAME THIS TO ORDER VIOLATION ENERGY DISTANCE)
+        Asymmetry energy is used elsewhere for forward vs backward energy difference which this does not measure
         """
         # Compute element-wise max(0, h - p) for order violation
         violation = np.maximum(0, h_emb - p_emb)
@@ -216,6 +221,7 @@ class LatticeDiscoveryAnalyzer:
         """Test embedding space - return results by class"""
         
         print(f"Testing {space_name}...")
+        flush_output()
         
         # Split data by class
         class_data = {}
@@ -229,6 +235,7 @@ class LatticeDiscoveryAnalyzer:
                     'hypothesis_embeddings': hypothesis_embeddings[mask]
                 }
                 print(f"  {class_name}: {np.sum(mask)} samples")
+                flush_output()
         
         # Test each class with all 4 subsumption metrics
         results = {}
@@ -244,6 +251,7 @@ class LatticeDiscoveryAnalyzer:
                 
             except Exception as e:
                 print(f"    Error testing {class_name}: {e}")
+                flush_output()
         
         return results
 
@@ -307,6 +315,7 @@ def run_class_lattice_discovery(embedding_spaces_dict: Dict[str, Dict[str, np.nd
     analyzer = LatticeDiscoveryAnalyzer()
     
     print("Testing 4 subsumption metrics on each entailment class...")
+    flush_output()
     
     all_results = {}
     for space_name, space_data in embedding_spaces_dict.items():
@@ -367,6 +376,7 @@ class ClassLatticeAnalyzer(SurfaceDistanceMetricAnalyzer):
         
         # Generate order embeddings
         print("Computing order embeddings...")
+        flush_output()
         with torch.no_grad():
             premise_tensor = torch.from_numpy(combined_premise).to(self.device)
             hypothesis_tensor = torch.from_numpy(combined_hypothesis).to(self.device)
@@ -388,6 +398,7 @@ class ClassLatticeAnalyzer(SurfaceDistanceMetricAnalyzer):
 
         # Generate hyperbolic embeddings using cone pipeline
         print("Computing hyperbolic embeddings...")
+        flush_output()
         with torch.no_grad():
             # Process in batches to avoid memory issues
             batch_size = 500
@@ -453,8 +464,8 @@ if __name__ == "__main__":
     
     # Run the actual analysis
     results, filename = run_integrated_class_discovery(
-        bert_data_path="data/processed/snli_full_standard_SBERT.pt",
-        order_model_path="models/enhanced_order_embeddings_snli_full.pt",
+        bert_data_path="data/processed/snli_full_standard_SBERT_test.pt",
+        order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
     )
     
     print(f"\nAnalysis complete! Results saved to {filename}")

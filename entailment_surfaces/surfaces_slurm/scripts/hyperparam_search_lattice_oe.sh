@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=hyperparam_search_lattice_oe
-#SBATCH --partition=gpgpuB
-#SBATCH --time=12:00:00
+#SBATCH --partition=a16gpu
+#SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --output=../logs/hyperparam_lattice_oe_%j.out
-#SBATCH --error=../logs/hyperparam_lattice_oe_%j.err
+#SBATCH --output=../logs/3way_marginloss_hyperparam_lattice_oe_%j.out
+#SBATCH --error=../logs/3way_marginloss_hyperparam_lattice_oe_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

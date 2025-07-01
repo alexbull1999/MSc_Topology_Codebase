@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=lattice_discovery
-#SBATCH --partition=gpgpuB
-#SBATCH --time=12:00:00
+#SBATCH --partition=a16gpu
+#SBATCH --time=1:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/lattice_discovery_fulldata_%j.out
-#SBATCH --error=../logs/lattice_discovery_fulldata_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/lattice_discovery_snlitestdata_%j.out
+#SBATCH --error=../logs/lattice_discovery_snlitestdata_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

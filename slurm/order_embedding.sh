@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --output=logs/full_order_embeddings_%j.out
-#SBATCH --error=logs/full_order_embeddings_%j.err
+#SBATCH --output=logs/full_order_embeddings_SBERT_%j.out
+#SBATCH --error=logs/full_order_embeddings_SBERT_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
