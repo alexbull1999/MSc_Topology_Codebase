@@ -40,18 +40,21 @@ class OrderEmbeddingModel(nn.Module):
         self.order_dim = order_dim
         self.asymmetry_weight = asymmetry_weight
 
-        # Project BERT embeddings to order space
+        # Enhanced projection with batch normalization and dropout for reduced variance
         self.to_order_space = nn.Sequential(
             nn.Linear(bert_dim, order_dim * 2),
+            nn.BatchNorm1d(order_dim * 2),  # Added for standardization
             nn.ReLU(),
-            nn.Dropout(0.3),
+            nn.Dropout(0.3),               # Increased from 0.3 to reduce overfitting
             nn.Linear(order_dim * 2, order_dim),
+            nn.BatchNorm1d(order_dim),     # Final batch norm for consistent outputs
             nn.ReLU()  # Ensures non-negative coordinates for reversed product order
         )
 
         # Additional layer for asymmetric relationship modeling
         self.asymmetric_projection = nn.Sequential(
             nn.Linear(order_dim, order_dim),
+            nn.BatchNorm1d(order_dim),     # Added batch norm
             nn.Tanh(),  # Allow negative values for directional encoding
             nn.Dropout(0.2)
         )
@@ -175,7 +178,8 @@ class EntailmentDataset(Dataset):
 class OrderEmbeddingTrainer:
     """Enhanced trainer for Order Embedding Model with asymmetric loss"""
 
-    def __init__(self, model: OrderEmbeddingModel, device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model: OrderEmbeddingModel, device='cuda' if torch.cuda.is_available() else 'cpu', lr: float = 1e-3,
+                l1_lambda: float = 1e-4, consistency_weight: float = 0.1, separation_weight: float=0.2):
         """
         Initialize the trainer.
         Args:
@@ -184,7 +188,10 @@ class OrderEmbeddingTrainer:
         """
         self.model = model.to(device)
         self.device = device
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-4, weight_decay=1e-3)
+        self.l1_lambda = l1_lambda
+        self.consistency_weight = consistency_weight
+        self.separation_weight = separation_weight
+        self.optimizer = optim.Adam(self.model.parameters(), lr=lr, weight_decay=5e-3) #was 1e-3 for weight decay
         self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
             self.optimizer, mode='min', patience=15, factor=0.3
         )
@@ -194,6 +201,36 @@ class OrderEmbeddingTrainer:
         self.val_losses = []
         self.energy_rankings = []
         self.asymmetry_stats = []
+
+    def compute_l1_regularization(self) -> torch.Tensor:
+        """Compute L1 regularization term for all model parameters"""
+        l1_loss = 0
+        for param in self.model.parameters():
+            l1_loss += torch.sum(torch.abs(param))
+        return l1_loss
+
+    def compute_consistency_loss(self, embeddings: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+        """Penalize high variance within classes to reduce standard deviations
+        
+        Args:
+            embeddings: Order embeddings [batch_size, order_dim]
+            labels: Class labels [batch_size]
+        Returns:
+            Consistency loss that penalizes within-class variance
+        """
+        consistency_loss = 0
+        num_classes = 0
+        
+        for label_idx in [0, 1, 2]:  # entailment, neutral, contradiction
+            mask = (labels == label_idx)
+            if mask.sum() > 1:  # Need at least 2 samples to compute variance
+                class_embs = embeddings[mask]
+                # Compute variance across samples for each dimension, then average
+                class_var = torch.var(class_embs, dim=0, unbiased=False).mean()
+                consistency_loss += class_var
+                num_classes += 1
+        
+        return consistency_loss / max(num_classes, 1)
 
     def compute_asymmetric_loss(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, 
                                labels: torch.Tensor, label_strs: List[str]) -> torch.Tensor:
@@ -252,8 +289,49 @@ class OrderEmbeddingTrainer:
         return asymmetric_loss / batch_size
 
 
+    def compute_enhanced_3way_loss_with_separation(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, 
+                                                  labels: torch.Tensor, margin: float = 1.5) -> torch.Tensor:
+        """Enhanced 3-way loss with explicit separation penalties between all class pairs
+        
+        Args:
+            premise_embs: Premise BERT embeddings
+            hypothesis_embs: Hypothesis BERT embeddings  
+            labels: Class labels
+            margin: Base margin for separation
+        Returns:
+            Enhanced loss with separation penalties
+        """
+        premise_order = self.model(premise_embs)
+        hypothesis_order = self.model(hypothesis_embs)
+        energies = self.model.order_violation_energy(premise_order, hypothesis_order)
+        
+        # Standard 3-way loss
+        loss = 0
+        for target_label in [0, 1, 2]:
+            target_mask = (labels == target_label)
+            if target_mask.sum() == 0:
+                continue
+                
+            target_energies = energies[target_mask]
+            
+            # Minimize energy for this class
+            loss += target_energies.mean()
+            
+            # Maximize separation from other classes with stronger penalties
+            for other_label in [0, 1, 2]:
+                if other_label != target_label:
+                    other_mask = (labels == other_label)
+                    if other_mask.sum() > 0:
+                        other_energies = energies[other_mask]
+                        # Enhanced separation penalty - stronger than original
+                        separation = other_energies.mean() - target_energies.mean()
+                        loss += 2.0 * torch.clamp(margin - separation, min=0)  # Increased weight from 1.0 to 2.0
+        
+        return loss
+
+
     def compute_enhanced_loss(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, 
-                        labels: torch.Tensor, label_strs: List[str], margin: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
+                        labels: torch.Tensor, label_strs: List[str], margin: float = 1.5) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
         """Compute enhanced loss with proper 3-class distinction (FIXED - no nested loops)
         Args:
             premise_embs: Premise BERT embeddings
@@ -276,7 +354,7 @@ class OrderEmbeddingTrainer:
         neutral_mask = (labels == 1)
         contradiction_mask = (labels == 2)
 
-        # 3-class max-margin loss with different energy targets
+        # Base 3-class max-margin loss with different energy targets
         total_loss = 0.0
     
         # Entailment pairs: minimize energy (target ~0)
@@ -304,36 +382,50 @@ class OrderEmbeddingTrainer:
             contradiction_loss = torch.clamp(1.5*margin - contradiction_energies, min=0).mean()
             total_loss += contradiction_loss
     
-        # FIXED: Vectorized ranking losses instead of nested loops
+        # Enhanced ranking losses with stronger separation penalties
         ranking_loss = 0.0
-        small_margin = 0.5
+        separation_margin = 0.8  # Increased from 0.5
     
         # Entailment should have lower energy than neutral (vectorized)
         if entailment_mask.any() and neutral_mask.any():
             ent_mean = energies[entailment_mask].mean()
             neut_mean = energies[neutral_mask].mean()
-            ranking_loss += torch.clamp(ent_mean - neut_mean + small_margin, min=0)
+            ranking_loss += torch.clamp(ent_mean - neut_mean + separation_margin, min=0)
     
         # Neutral should have lower energy than contradiction (vectorized)
         if neutral_mask.any() and contradiction_mask.any():
             neut_mean = energies[neutral_mask].mean()
             cont_mean = energies[contradiction_mask].mean()
-            ranking_loss += torch.clamp(neut_mean - cont_mean + small_margin, min=0)
+            ranking_loss += torch.clamp(neut_mean - cont_mean + separation_margin, min=0)
     
         # Entailment should have lower energy than contradiction (vectorized)
         if entailment_mask.any() and contradiction_mask.any():
             ent_mean = energies[entailment_mask].mean()
             cont_mean = energies[contradiction_mask].mean()
-            ranking_loss += torch.clamp(ent_mean - cont_mean + small_margin, min=0)
+            ranking_loss += torch.clamp(ent_mean - cont_mean + separation_margin, min=0)
     
-        # Combine losses
+        # Combine base losses
         standard_loss = total_loss + 0.5 * ranking_loss
     
-        # Asymmetric loss (keep your existing implementation)
+        # NEW: Enhanced 3-way loss with separation penalty
+        separation_loss = self.compute_enhanced_3way_loss_with_separation(premise_embs, hypothesis_embs, labels, margin)
+    
+        # NEW: Consistency loss (reduces within-class variance)
+        consistency_loss = self.compute_consistency_loss(premise_order, labels) + \
+                          self.compute_consistency_loss(hypothesis_order, labels)
+        
+        # Asymmetric loss (existing)
         asymmetric_loss = self.compute_asymmetric_loss(premise_embs, hypothesis_embs, labels, label_strs)
+        
+        # NEW: L1 regularization
+        l1_loss = self.compute_l1_regularization()
 
-        # Combined loss
-        total_loss = standard_loss + self.model.asymmetry_weight * asymmetric_loss
+        # Combined loss with all components
+        total_loss = (standard_loss + 
+                     self.separation_weight * separation_loss +
+                     self.consistency_weight * consistency_loss +
+                     self.model.asymmetry_weight * asymmetric_loss +
+                     self.l1_lambda * l1_loss)
 
         # Compute energy statistics for monitoring
         energy_stats = self._compute_energy_statistics(premise_order, hypothesis_order, label_strs)
@@ -358,7 +450,7 @@ class OrderEmbeddingTrainer:
         
         return stats
 
-    def train_epoch(self, dataloader: DataLoader, margin: float = 1.0) -> float:
+    def train_epoch(self, dataloader: DataLoader, margin: float = 1.5) -> float:
         """Train for one epoch with enhanced loss"""
         self.model.train()
         total_loss = 0
@@ -387,7 +479,7 @@ class OrderEmbeddingTrainer:
         self.train_losses.append(avg_loss)
         return avg_loss
 
-    def evaluate(self, dataloader: DataLoader) -> Tuple[float, Dict]:
+    def evaluate(self, dataloader: DataLoader, margin=1.5) -> Tuple[float, Dict]:
         """Evaluate model and compute enhanced energy rankings"""
         self.model.eval()
         total_loss = 0
@@ -401,7 +493,7 @@ class OrderEmbeddingTrainer:
                 labels = batch['label'].to(self.device)
                 label_strs = batch['label_str']
 
-                loss, energies, energy_stats = self.compute_enhanced_loss(premise_embs, hypothesis_embs, labels, label_strs)
+                loss, energies, energy_stats = self.compute_enhanced_loss(premise_embs, hypothesis_embs, labels, label_strs, margin)
                 total_loss += loss.item()
 
                 # Collect energies by label
@@ -435,7 +527,9 @@ class OrderEmbeddingTrainer:
 
 def train_order_embeddings(processed_data_path: str, output_dir: str = "models/",
                            epochs: int = 50, batch_size: int = 32, order_dim: int = 50,
-                           asymmetry_weight: float = 0.2, random_seed: int = 42):
+                           asymmetry_weight: float = 0.2, lr: float = 1e-3, margin: float = 1.5, 
+                           l1_lambda: float = 1e-4, consistency_weight: float = 0.1, 
+                           separation_weight: float = 0.2, random_seed: int = 42):
     """Train enhanced order embedding model with asymmetric loss"""
 
     generator = set_random_seed(random_seed)
@@ -459,21 +553,27 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
     # Initialize enhanced model and trainer
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = OrderEmbeddingModel(bert_dim=768, order_dim=order_dim, asymmetry_weight=asymmetry_weight)
-    trainer = OrderEmbeddingTrainer(model, device)
+    trainer = OrderEmbeddingTrainer(model, device, lr=lr)
 
     print(f"Training on {device} with asymmetry_weight={asymmetry_weight}")
+    print(f"  - Order dim: {order_dim}")
+    print(f"  - Asymmetry weight: {asymmetry_weight}")
+    print(f"  - L1 lambda: {l1_lambda}")
+    print(f"  - Consistency weight: {consistency_weight}")
+    print(f"  - Separation weight: {separation_weight}")
+
 
     # Training loop
     best_val_loss = float('inf')
-    patience = 10
+    patience = 15
     patience_counter = 0
 
     for epoch in range(epochs):
         # Train
-        train_loss = trainer.train_epoch(train_loader)
+        train_loss = trainer.train_epoch(train_loader, margin=margin)
 
         # Validate
-        val_loss, energy_stats = trainer.evaluate(val_loader)
+        val_loss, energy_stats = trainer.evaluate(val_loader, margin=margin)
         trainer.scheduler.step(val_loss)
 
         # Print progress
@@ -499,6 +599,8 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
                     'bert_dim': 768,
                     'order_dim': order_dim,
                     'asymmetry_weight': asymmetry_weight,
+                    'l1_lambda': l1_lambda,
+                    'consistency_weight': consistency_weight,
                 },
                 'training_stats': {
                     'train_losses': trainer.train_losses,
@@ -508,7 +610,7 @@ def train_order_embeddings(processed_data_path: str, output_dir: str = "models/"
                 },
                 'best_val_loss': best_val_loss,
                 'epoch': epoch,
-            }, os.path.join(output_dir, "enhanced_order_embeddings_snli_SBERT_full.pt"))
+            }, os.path.join(output_dir, "enhanced_order_embeddings_snli_SBERT_full_3way.pt"))
         else:
             patience_counter += 1
 
@@ -545,9 +647,27 @@ def validate_energy_rankings(trainer: OrderEmbeddingTrainer) -> bool:
     print(f"Neutral vs Contradiction gap: {abs(neutral_mean - contra_mean):.4f}")
 
     if ranking_correct and binary_separation:
-        print("✓ Energy rankings show good entailment separation!")
+        print("Energy rankings show good entailment separation!")
     else:
-        print("⚠ Energy rankings may need adjustment")
+        print("Energy rankings may need adjustment")
+
+    # NEW: Calculate gap-to-std ratio for assessment
+    entail_std = final_rankings.get('entailment', {}).get('std', 1.0)
+    neutral_std = final_rankings.get('neutral', {}).get('std', 1.0)
+    contra_std = final_rankings.get('contradiction', {}).get('std', 1.0)
+    
+    # Calculate average gap / average std
+    gap1 = neutral_mean - entail_mean
+    gap2 = contra_mean - neutral_mean
+    avg_gap = (gap1 + gap2) / 2
+    avg_std = (entail_std + neutral_std + contra_std) / 3
+    gap_to_std_ratio = avg_gap / avg_std if avg_std > 0 else 0
+    
+    print(f"\nGap-to-Std Analysis:")
+    print(f"  Average gap: {avg_gap:.4f}")
+    print(f"  Average std: {avg_std:.4f}")
+    print(f"  Gap-to-std ratio: {gap_to_std_ratio:.3f}")
+    print(f"  Target ratio for Phase 2: ≥2.2")
 
     # Print asymmetry statistics if available
     if trainer.asymmetry_stats:
@@ -666,7 +786,7 @@ def plot_training_progress(trainer: OrderEmbeddingTrainer, save_path: str = "plo
             ax4.text(0.5, 0.5, f"Energy comparison plot error: {str(e)}", transform=ax4.transAxes, ha='center')
 
     plt.tight_layout()
-    plt.savefig(os.path.join(save_path, 'enhanced_order_embedding_snli_SBERT_full.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(save_path, 'enhanced_order_embedding_snli_SBERT_full_3way.png'), dpi=300, bbox_inches='tight')
     plt.close()
     print(f"Enhanced training plots saved to {save_path}")
 
@@ -681,8 +801,8 @@ def test_order_embeddings():
         processed_data_path=processed_data_path,
         epochs=100,
         batch_size=32,
-        order_dim=100,
-        asymmetry_weight=1.7,  # Adjust this parameter (was 0.2)
+        order_dim=75,
+        asymmetry_weight=1.9,  # Adjust this parameter (was 0.2)
         random_seed=42
     )
 

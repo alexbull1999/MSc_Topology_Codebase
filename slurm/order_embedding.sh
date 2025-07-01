@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=train_order_embeddings
+#SBATCH --job-name=train_order_embeddings_3way
 #SBATCH --partition=gpgpuB
 #SBATCH --time=04:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=16G
-#SBATCH --output=logs/full_order_embeddings_SBERT_%j.out
-#SBATCH --error=logs/full_order_embeddings_SBERT_%j.err
+#SBATCH --mem=32G
+#SBATCH --output=logs/full_order_embeddings_SBERT_3way_%j.out
+#SBATCH --error=logs/full_order_embeddings_SBERT_3way_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -70,7 +70,7 @@ echo "  - Random seed: 42"
 echo ""
 
 # Run order embeddings training
-python src/order_embeddings_asymmetry.py
+python src/order_embeddings_asymmetry_3classloss.py
 
 # Capture exit code
 EXIT_CODE=$?

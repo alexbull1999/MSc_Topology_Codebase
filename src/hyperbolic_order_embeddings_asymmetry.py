@@ -13,6 +13,8 @@ import json
 if 3-way margin loss performs better; add that to this file 
 """
 
+from .order_embeddings_asymmetry import EntailmentDataset
+
 
 def set_random_seed(seed: int = 42):
     """Set random seed for reproducibility"""
@@ -673,28 +675,340 @@ class PureHyperbolicOrderEmbeddingTrainer:
         return avg_loss, summary_stats
 
 
-    
-if __name__ == "__main__":
 
-    model = PureHyperbolicLearnableOrderEmbeddingModel()
+def train_pure_hyperbolic_order_embeddings(processed_data_path: str, output_dir: str = "models/",
+                                         epochs: int = 50, batch_size: int = 32, order_dim: int = 50,
+                                         asymmetry_weight: float = 0.2, random_seed: int = 42):
+    """
+    Train pure hyperbolic order embedding model with learnable energy parameters
     
-    # Show initial learned parameters
-    initial_params = model.get_learned_parameters_summary()
-    print(f"Initial learned parameters: {initial_params}")
+    Args:
+        processed_data_path: Path to processed BERT embeddings
+        output_dir: Directory to save model
+        epochs: Number of training epochs
+        batch_size: Training batch size
+        order_dim: Hyperbolic embedding dimension
+        asymmetry_weight: Weight for asymmetric loss component
+        random_seed: Random seed for reproducibility
+        
+    Returns:
+        Tuple of (trained_model, trainer)
+    """
     
-    # Test forward pass
-    bert_embs = torch.randn(5, 768)
-    hyp_embs = model(bert_embs)
-    print(f"Input shape: {bert_embs.shape}")
-    print(f"Output shape: {hyp_embs.shape}")
-    print(f"Output in unit ball: {torch.all(torch.norm(hyp_embs, dim=-1) < 1.0)}")
+    generator = set_random_seed(random_seed)
     
-    # Test energy computation
-    premise = hyp_embs[:2]
-    hypothesis = hyp_embs[2:4]
+    print(f"Loading data from {processed_data_path}")
+    processed_data = torch.load(processed_data_path)
     
-    energies = model.compute_bidirectional_energies(premise, hypothesis)
-    print(f"Forward energies: {energies['forward_energy']}")
-    print(f"Learned parameters: {energies['learned_params']}")
+    # Create dataset and dataloaders
+    dataset = EntailmentDataset(processed_data)
     
-    print(f"\n✅ Pure hyperbolic model ready for training!")
+    # Split into train/val
+    train_size = int(0.8 * len(dataset))
+    val_size = len(dataset) - train_size
+    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size], generator=generator)
+    
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    
+    print(f"Training on {train_size} samples, validating on {val_size} samples")
+    
+    # Initialize pure hyperbolic model and trainer
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model = PureHyperbolicLearnableOrderEmbeddingModel(
+        bert_dim=768, 
+        order_dim=order_dim, 
+        asymmetry_weight=asymmetry_weight
+    )
+    trainer = PureHyperbolicOrderEmbeddingTrainer(model, device)
+    
+    print(f"Training pure hyperbolic model on {device}")
+    print(f"Initial learned parameters: {model.get_learned_parameters_summary()}")
+    
+    # Training loop
+    best_val_loss = float('inf')
+    patience = 15
+    patience_counter = 0
+    
+    for epoch in range(epochs):
+        # Train
+        train_loss = trainer.train_epoch(train_loader)
+        
+        # Validate
+        val_loss, energy_stats = trainer.evaluate(val_loader)
+        trainer.scheduler.step(val_loss)
+        
+        # Print progress
+        if (epoch + 1) % 5 == 0:
+            print(f"Epoch {epoch + 1}/{epochs}")
+            print(f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
+            
+            # Print current learned parameters
+            current_params = model.get_learned_parameters_summary()
+            print(f"Learned parameters: {current_params}")
+            
+            if energy_stats:
+                print("  Energy Rankings:")
+                for label, stats in energy_stats.items():
+                    if 'forward_energy' in stats:
+                        print(f"    {label}: Forward={stats['forward_energy']['mean']:.4f}±{stats['forward_energy']['std']:.4f}")
+        
+        # Early stopping
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            patience_counter = 0
+            
+            # Save best model
+            os.makedirs(output_dir, exist_ok=True)
+            model_path = os.path.join(output_dir, f"best_pure_hyperbolic_order_embedding_model.pt")
+            
+            torch.save({
+                'model_state_dict': model.state_dict(),
+                'model_config': {
+                    'bert_dim': 768,
+                    'order_dim': order_dim,
+                    'asymmetry_weight': asymmetry_weight
+                },
+                'best_val_loss': best_val_loss,
+                'epoch': epoch,
+                'learned_parameters': model.get_learned_parameters_summary(),
+                'training_history': {
+                    'train_losses': trainer.train_losses,
+                    'val_losses': trainer.val_losses,
+                    'parameter_history': trainer.parameter_history
+                }
+            }, model_path)
+            
+            print(f"Saved best model to {model_path}")
+        else:
+            patience_counter += 1
+            
+        if patience_counter >= patience:
+            print(f"Early stopping after {epoch + 1} epochs")
+            break
+    
+    print(f"Training completed! Best validation loss: {best_val_loss:.4f}")
+    print(f"Final learned parameters: {model.get_learned_parameters_summary()}")
+    
+    return model, trainer
+
+def validate_hyperbolic_energy_rankings(trainer: PureHyperbolicOrderEmbeddingTrainer) -> bool:
+    """
+    Validate that hyperbolic energy rankings follow expected hierarchy
+    
+    Args:
+        trainer: Trained pure hyperbolic trainer
+        
+    Returns:
+        bool: True if energy rankings are correct (entailment < neutral < contradiction)
+    """
+    
+    if not trainer.energy_rankings:
+        print("No energy rankings available for validation")
+        return False
+    
+    # Get final energy rankings
+    final_rankings = trainer.energy_rankings[-1]
+    
+    print("\n=== HYPERBOLIC ENERGY RANKING VALIDATION ===")
+    
+    # Check if all labels are present
+    required_labels = ['entailment', 'neutral', 'contradiction']
+    missing_labels = [label for label in required_labels if label not in final_rankings]
+    
+    if missing_labels:
+        print(f"Missing labels in final rankings: {missing_labels}")
+        return False
+    
+    # Extract mean forward energies for comparison
+    try:
+        entailment_energy = final_rankings['entailment']['forward_energy']['mean']
+        neutral_energy = final_rankings['neutral']['forward_energy']['mean']
+        contradiction_energy = final_rankings['contradiction']['forward_energy']['mean']
+        
+        print(f"Pure Hyperbolic Energy Rankings:")
+        print(f"   Entailment:    {entailment_energy:.4f}")
+        print(f"   Neutral:       {neutral_energy:.4f}")
+        print(f"   Contradiction: {contradiction_energy:.4f}")
+        
+        # Check expected hierarchy: entailment < neutral < contradiction
+        ranking_correct = (entailment_energy < neutral_energy < contradiction_energy)
+        
+        if ranking_correct:
+            print("SUCCESS: Hyperbolic energy hierarchy is CORRECT!")
+            print("Core hypothesis validated: entailment < neutral < contradiction")
+            
+            # Additional analysis of learned parameters
+            if hasattr(trainer.model, 'get_learned_parameters_summary'):
+                learned_params = trainer.model.get_learned_parameters_summary()
+                print(f"\n📋 Final Learned Parameters:")
+                for param_name, value in learned_params.items():
+                    print(f"   {param_name}: {value:.4f}")
+        else:
+            print("Energy rankings are INCORRECT")
+            print("Expected: entailment < neutral < contradiction")
+            print("This suggests the pure hyperbolic approach may need parameter tuning")
+            
+            # Show what went wrong
+            if entailment_energy >= neutral_energy:
+                print(f"   Problem: Entailment energy ({entailment_energy:.4f}) >= Neutral energy ({neutral_energy:.4f})")
+            if neutral_energy >= contradiction_energy:
+                print(f"   Problem: Neutral energy ({neutral_energy:.4f}) >= Contradiction energy ({contradiction_energy:.4f})")
+        
+        return ranking_correct
+        
+    except KeyError as e:
+        print(f"Error accessing energy rankings: {e}")
+        print("Available keys in final rankings:")
+        for label, stats in final_rankings.items():
+            print(f"  {label}: {list(stats.keys())}")
+        return False
+
+def plot_pure_hyperbolic_training_progress(trainer: PureHyperbolicOrderEmbeddingTrainer, save_path: str = "plots/"):
+    """
+    Plot training progress for pure hyperbolic order embeddings including learned parameters
+    
+    Args:
+        trainer: Trained pure hyperbolic trainer
+        save_path: Directory to save plots
+    """
+    
+    os.makedirs(save_path, exist_ok=True)
+    
+    # Create comprehensive figure with multiple subplots
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(20, 12))
+    
+    # Plot 1: Training/Validation Loss
+    epochs = range(1, len(trainer.train_losses) + 1)
+    ax1.plot(epochs, trainer.train_losses, 'b-', label='Training Loss', linewidth=2)
+    if trainer.val_losses:
+        ax1.plot(epochs, trainer.val_losses, 'r-', label='Validation Loss', linewidth=2)
+    ax1.set_xlabel('Epoch')
+    ax1.set_ylabel('Loss')
+    ax1.set_title('Pure Hyperbolic Training Progress')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # Plot 2: Energy Rankings Over Time
+    if trainer.energy_rankings:
+        entail_means = []
+        neutral_means = []
+        contra_means = []
+        
+        for ranking in trainer.energy_rankings:
+            entail_means.append(ranking.get('entailment', {}).get('forward_energy', {}).get('mean', 0))
+            neutral_means.append(ranking.get('neutral', {}).get('forward_energy', {}).get('mean', 0))
+            contra_means.append(ranking.get('contradiction', {}).get('forward_energy', {}).get('mean', 0))
+        
+        epochs_val = range(1, len(entail_means) + 1)
+        ax2.plot(epochs_val, entail_means, 'g-', label='Entailment', linewidth=3)
+        ax2.plot(epochs_val, neutral_means, 'b-', label='Neutral', linewidth=3)
+        ax2.plot(epochs_val, contra_means, 'r-', label='Contradiction', linewidth=3)
+        
+        ax2.set_xlabel('Epoch')
+        ax2.set_ylabel('Mean Hyperbolic Order Energy')
+        ax2.set_title('Hyperbolic Energy Rankings Evolution')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+    
+    # Plot 3: Learned Parameters Evolution
+    if trainer.parameter_history:
+        param_names = list(trainer.parameter_history[0].keys())
+        colors = ['red', 'blue', 'green', 'orange', 'purple']
+        
+        for i, param_name in enumerate(param_names):
+            param_values = [epoch_params[param_name] for epoch_params in trainer.parameter_history]
+            epochs_params = range(1, len(param_values) + 1)
+            ax3.plot(epochs_params, param_values, color=colors[i % len(colors)], 
+                    label=param_name.replace('_', ' ').title(), linewidth=2)
+        
+        ax3.set_xlabel('Epoch')
+        ax3.set_ylabel('Parameter Value')
+        ax3.set_title('Learned Energy Function Parameters')
+        ax3.legend()
+        ax3.grid(True, alpha=0.3)
+    
+    # Plot 4: Final Energy Distribution Comparison
+    if trainer.energy_rankings:
+        final_rankings = trainer.energy_rankings[-1]
+        labels = []
+        forward_energies = []
+        asymmetries = []
+        
+        for label, stats in final_rankings.items():
+            if 'forward_energy' in stats:
+                labels.append(label.capitalize())
+                forward_energies.append(stats['forward_energy']['mean'])
+                asymmetries.append(stats.get('asymmetry_measure', {}).get('mean', 0))
+        
+        x = np.arange(len(labels))
+        width = 0.35
+        
+        ax4.bar(x - width/2, forward_energies, width, label='Forward Energy', alpha=0.8, color='skyblue')
+        ax4.bar(x + width/2, asymmetries, width, label='Asymmetry Measure', alpha=0.8, color='lightcoral')
+        
+        ax4.set_xlabel('Relationship Type')
+        ax4.set_ylabel('Energy')
+        ax4.set_title('Final Pure Hyperbolic Energy Comparison')
+        ax4.set_xticks(x)
+        ax4.set_xticklabels(labels)
+        ax4.legend()
+        ax4.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_path, 'pure_hyperbolic_order_embedding_training.png'), 
+                dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print(f"Pure hyperbolic training plots saved to {save_path}")
+
+
+def test_pure_hyperbolic_order_embeddings():
+    """
+    Test pure hyperbolic order embeddings with learnable parameters
+    """
+    print("Testing Pure Hyperbolic Order Embeddings...")
+    
+    # Check if processed data exists
+    processed_data_path = "data/processed/snli_full_standard_BERT.pt"
+    if not os.path.exists(processed_data_path):
+        print(f"Processed data not found at {processed_data_path}")
+        print("Please run text_processing.py first!")
+        return
+    
+    # Train model with optimized hyperparameters
+    model, trainer = train_pure_hyperbolic_order_embeddings(
+        processed_data_path=processed_data_path,
+        epochs=80,
+        batch_size=32,
+        order_dim=50,  # Keep same as original for comparison
+        asymmetry_weight=0.3,  # Slightly higher for better asymmetry learning
+        random_seed=42
+    )
+    
+    # Validate rankings
+    ranking_correct = validate_hyperbolic_energy_rankings(trainer)
+    
+    # Plot progress
+    plot_pure_hyperbolic_training_progress(trainer)
+    
+    # Final summary
+    if ranking_correct:
+        print("\nSUCCESS: Pure hyperbolic order embeddings working correctly!")
+        print("Ready for advanced hyperbolic entailment analysis!")
+        
+        # Show final learned parameters
+        final_params = model.get_learned_parameters_summary()
+        print(f"\nFinal Optimized Parameters:")
+        for param_name, value in final_params.items():
+            print(f"   {param_name}: {value:.4f}")
+    else:
+        print("\nWARNING: Pure hyperbolic energy rankings need adjustment")
+        print("Consider tuning hyperparameters or increasing training epochs")
+    
+    return model, trainer
+
+
+
+if __name__ == "__main__":
+    test_pure_hyperbolic_order_embeddings()

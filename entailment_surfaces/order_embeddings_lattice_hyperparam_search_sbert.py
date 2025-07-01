@@ -116,7 +116,9 @@ def comprehensive_hyperparameter_search():
                 batch_size=32,
                 order_dim=order_dim,
                 asymmetry_weight=asymmetry_weight,
-                random_seed=42+i
+                margin=margin,
+                lr=lr,
+                random_seed=42
             )
 
 
@@ -198,10 +200,14 @@ def calculate_overall_performance_score(comprehensive_stats):
             neu_std = getattr(comprehensive_stats['neutral'], std_attr_name)
             con_std = getattr(comprehensive_stats['contradiction'], std_attr_name)
             
-            # Calculate separation metrics
-            total_range = max(ent_mean, neu_mean, con_mean) - min(ent_mean, neu_mean, con_mean)
-            avg_std = np.mean([ent_std, neu_std, con_std])
-            gap_to_std_ratio = total_range / (avg_std + 1e-8)
+            # CORRECT GAP-TO-STD CALCULATION: Average Gap / Average Std
+            gap1 = neu_mean - ent_mean  # entailment -> neutral gap
+            gap2 = con_mean - neu_mean  # neutral -> contradiction gap
+            avg_gap = (gap1 + gap2) / 2
+            avg_std = (ent_std + neu_std + con_std) / 3
+            
+            # This is the REAL separability measure we care about
+            correct_gap_to_std = avg_gap / (avg_std + 1e-8)
             
             # Check monotonic progression (either increasing or decreasing)
             means_list = [ent_mean, neu_mean, con_mean]
@@ -214,20 +220,31 @@ def calculate_overall_performance_score(comprehensive_stats):
             snr_con = abs(con_mean) / (con_std + 1e-8)
             avg_snr = np.mean([snr_ent, snr_neu, snr_con])
             min_snr = min([snr_ent, snr_neu, snr_con])
+
+            # Calculate separation absolute
+            total_range = max(ent_mean, neu_mean, con_mean) - min(ent_mean, neu_mean, con_mean)
             
             # Composite score for this metric
             metric_score = (
-                gap_to_std_ratio * 0.4 +           # Primary concern: overlap
-                min(avg_snr, 5.0) * 0.2 +           # Signal quality (capped)
+                correct_gap_to_std * 0.7 +           # Primary concern: overlap
+                (2.0 if is_monotonic else 0.0) +    # BONUS: Monotonic progression (fixed bonus)
+                min(avg_snr / 5.0, 0.5) * 0.3  +      # SECONDARY: Signal quality (30%, capped)
                 min(total_range, 2.0) * 0.1         # Absolute separation
             )
             
             score += metric_score * weight
+
+            if correct_gap_to_std >= 2.2:
+                print("PHASE 2 READY: A metric exceeds target threshold!")
+                score += 5.0  # Bonus for meeting phase requirements
+            elif best_gap_to_std >= 1.8:
+                print("CLOSE TO PHASE 2: Metric approaching threshold")
+                score += 2.0  # Smaller bonus for getting close
             
             print(f"  {metric_name}:")
             print(f"    Means: {ent_mean:.4f} → {neu_mean:.4f} → {con_mean:.4f}")
             print(f"    Range: {total_range:.4f}, Avg Std: {avg_std:.4f}")
-            print(f"    Gap/Std Ratio: {gap_to_std_ratio:.4f}")
+            print(f"    Gap/Std Ratio: {correct_gap_to_std:.4f}")
             print(f"    Monotonic: {is_monotonic}")
             print(f"    Metric Score: {metric_score:.4f}")
             

@@ -1,0 +1,51 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 178745
+Node: gpuvm02
+Time: Tue  1 Jul 13:21:25 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Tue Jul  1 13:21:26 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.120                Driver Version: 550.120        CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A30                     Off |   00000000:02:00.0 Off |                    0 |
+| N/A   35C    P0             30W /  165W |       1MiB /  24576MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A30
+GPU memory: 25.2 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting Hyperparam Search...
+
+Starting Comprehensive Order Embeddings Hyperparameter Search
+This will test all combinations with full lattice metric evaluation...
+📂 Loading data from data/processed/snli_full_standard_SBERT.pt
+Sampling 10000 from 549367 for efficiency
+Split: 8000 train, 2000 eval samples
+Train split saved to: data/processed/snli_full_standard_SBERT_train_OELattice_split.pt
+Eval split saved to: data/processed/snli_full_standard_SBERT_eval_OELattice_split.pt
+\Combination 1/81
+order_dim=75, asymmetry_weight=1.0
+margin=1.0, lr=0.001
