@@ -179,7 +179,7 @@ class OrderEmbeddingTrainer:
     """Enhanced trainer for Order Embedding Model with asymmetric loss"""
 
     def __init__(self, model: OrderEmbeddingModel, device='cuda' if torch.cuda.is_available() else 'cpu', lr: float = 1e-3,
-                l1_lambda: float = 1e-4, consistency_weight: float = 0.1, separation_weight: float=0.2):
+                l1_lambda: float = 1e-4, consistency_weight: float = 0.2, separation_weight: float=0.2):
         """
         Initialize the trainer.
         Args:
@@ -528,7 +528,7 @@ class OrderEmbeddingTrainer:
 def train_order_embeddings(processed_data_path: str, output_dir: str = "models/",
                            epochs: int = 50, batch_size: int = 32, order_dim: int = 50,
                            asymmetry_weight: float = 0.2, lr: float = 1e-3, margin: float = 1.5, 
-                           l1_lambda: float = 1e-4, consistency_weight: float = 0.1, 
+                           l1_lambda: float = 1e-4, consistency_weight: float = 0.2, 
                            separation_weight: float = 0.2, random_seed: int = 42):
     """Train enhanced order embedding model with asymmetric loss"""
 

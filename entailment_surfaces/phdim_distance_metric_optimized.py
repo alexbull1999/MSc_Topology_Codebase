@@ -40,7 +40,7 @@ class SurfaceDistanceMetricAnalyzer:
                  order_model_path: str,
                  results_dir: str = 'entailment_surfaces/results/surface_analysis',
                  device: str = 'cuda' if torch.cuda.is_available() else 'cpu',
-                 seed: int = 42):
+                 seed: int = 42): #main is 42, seeded_2 is 100, seeded_3 is 333
         """
         Initialize analyzer with pre-processed data paths
         
@@ -57,7 +57,7 @@ class SurfaceDistanceMetricAnalyzer:
         self.results_dir.mkdir(parents=True, exist_ok=True)
         self.device = torch.device(device)
         self.seed = seed
-        
+
         # GPU OPTIMIZATION: Add efficiency settings
         torch.manual_seed(seed)
         np.random.seed(seed)
@@ -81,21 +81,26 @@ class SurfaceDistanceMetricAnalyzer:
             'canberra',        # Weighted Manhattan
             'braycurtis',      # Normalized Manhattan
             
-            # Custom metrics (implemented separately)
-            'hyperbolic',      # Hyperbolic distance (if in hyperbolic space)
-            'order_violation', # Order embedding violation energy
         ]
 
          # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
         self.embedding_spaces = [
-            'bert_concat',          # Concatenated [premise||hypothesis] - joint representation
-            'bert_difference',      # Premise - Hypothesis (relationship vector)
+            'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
+            'sbert_difference',      # Premise - Hypothesis (relationship vector)
             'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
             'order_difference',     # Order premise - hypothesis (order relationship)
             'order_violations',     # Order violation energies (inherently relational)
             'hyperbolic_concat',    # Concatenated hyperbolic embeddings
             'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
             'cone_features',        # Multiple cone-related features
+
+            # Lattice embedding spaces (All on SBERT raw embeddings)
+            'lattice_containment', # Element-wise containment relationships
+            'lattice_order_violations', # Element-wise order violations  
+            'lattice_height',          # Element-wise height differences
+            'lattice_subsumption',     # Element-wise subsumption coverage
+            'lattice_bidirectional_order_violations',   # Both directions of violations
+            'lattice_enhanced'         # All lattice features combined
         ]
 
         # PH-Dim parameters
@@ -323,16 +328,16 @@ class SurfaceDistanceMetricAnalyzer:
             space_embeddings = {}
             
             for label in data_by_class.keys():
-                if space == 'bert_concat':
+                if space == 'sbert_concat':
                     # OPTIMIZATION: GPU concatenation
                     space_embeddings[label] = torch.cat([
                         data_by_class[label]['premise_bert'],
                         data_by_class[label]['hypothesis_bert']
-                    ], dim=1)
+                    ], dim=1).cpu()
                     
-                elif space == 'bert_difference':
+                elif space == 'sbert_difference':
                     # OPTIMIZATION: GPU subtraction
-                    space_embeddings[label] = data_by_class[label]['premise_bert'] - data_by_class[label]['hypothesis_bert']
+                    space_embeddings[label] = (data_by_class[label]['premise_bert'] - data_by_class[label]['hypothesis_bert']).cpu()
                     
                 elif space == 'order_concat':
                     # Concatenated EUCLIDEAN order embeddings
@@ -340,7 +345,7 @@ class SurfaceDistanceMetricAnalyzer:
                         space_embeddings[label] = torch.cat([
                             data_by_class[label]['premise_order_euclidean'],
                             data_by_class[label]['hypothesis_order_euclidean']
-                        ], dim=1)
+                        ], dim=1).cpu()
                     else:
                         print(f"    Euclidean order embeddings not available for {space}")
                         continue
@@ -348,7 +353,7 @@ class SurfaceDistanceMetricAnalyzer:
                 elif space == 'order_difference':
                     # EUCLIDEAN order relationship vector
                     if 'premise_order_euclidean' in data_by_class[label]:
-                        space_embeddings[label] = data_by_class[label]['premise_order_euclidean'] - data_by_class[label]['hypothesis_order_euclidean']
+                        space_embeddings[label] = (data_by_class[label]['premise_order_euclidean'] - data_by_class[label]['hypothesis_order_euclidean']).cpu()
                     else:
                         print(f"    Euclidean order embeddings not available for {space}")
                         continue
@@ -356,7 +361,7 @@ class SurfaceDistanceMetricAnalyzer:
                 elif space == 'order_violations':
                     # EUCLIDEAN order violation energies
                     if 'euclidean_order_violations' in data_by_class[label]:
-                        space_embeddings[label] = data_by_class[label]['euclidean_order_violations'].unsqueeze(1)
+                        space_embeddings[label] = data_by_class[label]['euclidean_order_violations'].unsqueeze(1).cpu()
                     else:
                         print(f"    Euclidean order violations not available for {space}")
                         continue
@@ -367,7 +372,7 @@ class SurfaceDistanceMetricAnalyzer:
                         space_embeddings[label] = torch.cat([
                             data_by_class[label]['premise_order_hyperbolic'],
                             data_by_class[label]['hypothesis_order_hyperbolic']
-                        ], dim=1)
+                        ], dim=1).cpu()
                     else:
                         print(f"    Hyperbolic order embeddings not available for {space}")
                         continue
@@ -375,7 +380,7 @@ class SurfaceDistanceMetricAnalyzer:
                 elif space == 'hyperbolic_distances':
                     if 'hyperbolic_distances' in data_by_class[label] and data_by_class[label]['hyperbolic_distances'] is not None:
                         # Direct hyperbolic distances between premise-hypothesis pairs
-                        space_embeddings[label] = data_by_class[label]['hyperbolic_distances'].unsqueeze(1)
+                        space_embeddings[label] = data_by_class[label]['hyperbolic_distances'].unsqueeze(1).cpu()
                     else:
                         print(f"    Hyperbolic distances not available for {space}")
                         continue
@@ -383,11 +388,52 @@ class SurfaceDistanceMetricAnalyzer:
                 elif space == 'cone_features':
                     if 'enhanced_cone_features' in data_by_class[label] and data_by_class[label]['enhanced_cone_features'] is not None:
                         # Combined enhanced features (multi-dimensional)
-                        space_embeddings[label] = data_by_class[label]['enhanced_cone_features']
+                        space_embeddings[label] = data_by_class[label]['enhanced_cone_features'].cpu()
                     else:
                         print(f"    Enhanced cone features not available for {space}")
                         continue
-            
+
+                elif space == 'lattice_containment':
+                    # Compute on-demand, don't store
+                    epsilon = 1e-8
+                    premise_bert = data_by_class[label]['premise_bert']
+                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+                    space_embeddings[label] = ((premise_bert * hypothesis_bert) / (torch.abs(premise_bert) + torch.abs(hypothesis_bert) + epsilon)).cpu()
+
+                elif space == 'lattice_order_violations':
+                    premise_bert = data_by_class[label]['premise_bert']
+                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+                    space_embeddings[label] = (torch.maximum(torch.zeros_like(premise_bert), hypothesis_bert - premise_bert) ** 2).cpu()
+
+                elif space == 'lattice_height':
+                    premise_bert = data_by_class[label]['premise_bert']
+                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+                    space_embeddings[label] = (hypothesis_bert - premise_bert).cpu()
+
+                elif space == 'lattice_subsumption':
+                    epsilon = 1e-8
+                    premise_bert = data_by_class[label]['premise_bert']
+                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+                    space_embeddings[label] = (torch.minimum(premise_bert, hypothesis_bert) / (torch.abs(hypothesis_bert) + epsilon)).cpu()
+
+                elif space == 'lattice_bidirectional_order_violations':
+                    premise_bert = data_by_class[label]['premise_bert']
+                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+                    forward_violations = torch.maximum(torch.zeros_like(premise_bert), hypothesis_bert - premise_bert) ** 2
+                    backward_violations = torch.maximum(torch.zeros_like(premise_bert), premise_bert - hypothesis_bert) ** 2
+                    space_embeddings[label] = (torch.cat([forward_violations, backward_violations], dim=1)).cpu()
+
+                elif space == 'lattice_enhanced':
+                    # Compute all components on-demand
+                    epsilon = 1e-8
+                    premise_bert = data_by_class[label]['premise_bert']
+                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+                    containment = (premise_bert * hypothesis_bert) / (torch.abs(premise_bert) + torch.abs(hypothesis_bert) + epsilon)
+                    order_violations = torch.maximum(torch.zeros_like(premise_bert), hypothesis_bert - premise_bert) ** 2
+                    height = hypothesis_bert - premise_bert
+                    subsumption = torch.minimum(premise_bert, hypothesis_bert) / (torch.abs(hypothesis_bert) + epsilon)
+                    space_embeddings[label] = (torch.cat([containment, order_violations, height, subsumption], dim=1)).cpu()
+
             # Only add space if we have embeddings
             if space_embeddings:
                 all_embeddings[space] = space_embeddings
@@ -432,6 +478,7 @@ class SurfaceDistanceMetricAnalyzer:
         else:
             raise ValueError(f"Unknown metric: {metric}")
 
+
     def compute_topology_analysis(self, embeddings: torch.Tensor, metric: str, 
                                  class_name: str, space_name: str) -> float:
         """
@@ -453,13 +500,16 @@ class SurfaceDistanceMetricAnalyzer:
             print(f"    Warning: Only {len(embeddings)} samples, need ≥{self.phd_params['min_points']}")
             return np.nan
         
-        try:
-            # OPTIMIZATION: Subsample on GPU first, then convert to numpy
+        try:            
             max_points = min(self.phd_params['max_points'], len(embeddings))
             if len(embeddings) > max_points:
-                indices = torch.randperm(len(embeddings), device=self.device)[:max_points]
+                torch.manual_seed(self.phd_params['seed'])
+                if embeddings.device.type == 'cpu':
+                    indices = torch.randperm(len(embeddings))[:max_points]
+                else:
+                    indices = torch.randperm(len(embeddings), device=self.device)[:max_points]
                 embeddings = embeddings[indices]
-            
+
             embeddings_np = embeddings.detach().cpu().numpy()
             
             # Sklearn-supported metrics: use fast_ripser for efficiency
@@ -497,20 +547,7 @@ class SurfaceDistanceMetricAnalyzer:
                     alpha=self.phd_params['alpha'],
                     seed=self.phd_params['seed']
                 )
-                
-            elif metric in ['hyperbolic', 'order_violation']:
-                phd = calculate_ph_dim(
-                    embeddings_np,
-                    min_points=self.phd_params['min_points'],
-                    max_points=min(self.phd_params['max_points'], len(embeddings)),
-                    point_jump=self.phd_params['point_jump'],
-                    h_dim=self.phd_params['h_dim'],
-                    metric=None,  # Let ripser handle raw points
-                    alpha=self.phd_params['alpha'],
-                    seed=self.phd_params['seed']
-                    # Custom distance will be computed internally by ripser as needed
-                )
-                
+
             else:
                 raise ValueError(f"Unknown metric: {metric}")
             
@@ -582,14 +619,6 @@ class SurfaceDistanceMetricAnalyzer:
                             p_value = int(metric.split('_')[1])
                             c1_np, c2_np = c1.cpu().numpy(), c2.cpu().numpy()
                             dist = pairwise_distances([c1_np], [c2_np], metric='minkowski', p=p_value)[0, 0]
-                        elif metric == 'hyperbolic':
-                            # Use hyperbolic distance for centroids
-                            c1_np, c2_np = c1.cpu().numpy(), c2.cpu().numpy()
-                            dist = self._hyperbolic_distance_pair(c1_np, c2_np)
-                        elif metric == 'order_violation':
-                            # Use order violation distance for centroids
-                            c1_np, c2_np = c1.cpu().numpy(), c2.cpu().numpy()
-                            dist = self._order_violation_distance_pair(c1_np, c2_np)
                         else:
                             # Fallback to euclidean on GPU
                             dist = torch.norm(c1 - c2).item()
@@ -612,9 +641,14 @@ class SurfaceDistanceMetricAnalyzer:
                         # OPTIMIZATION: Random sampling on GPU
                         embs1 = embeddings_by_class[label1]
                         embs2 = embeddings_by_class[label2]
-                        
-                        idx1 = torch.randperm(len(embs1), device=self.device)[:sample_size]
-                        idx2 = torch.randperm(len(embs2), device=self.device)[:sample_size]
+                        torch.manual_seed(self.phd_params['seed'])
+
+                        if embs1.device.type == 'cpu':
+                            idx1 = torch.randperm(len(embs1))[:sample_size]
+                            idx2 = torch.randperm(len(embs2))[:sample_size]
+                        else:
+                            idx1 = torch.randperm(len(embs1), device=embs1.device)[:sample_size]
+                            idx2 = torch.randperm(len(embs2), device=embs2.device)[:sample_size]
                         
                         embs1_sample = embs1[idx1]
                         embs2_sample = embs2[idx2]
@@ -629,12 +663,6 @@ class SurfaceDistanceMetricAnalyzer:
                         elif metric.startswith('minkowski'):
                             p_value = int(metric.split('_')[1])
                             cross_distances = pairwise_distances(embs1_sample_np, embs2_sample_np, metric='minkowski', p=p_value)
-                        elif metric == 'hyperbolic':
-                            # Use hyperbolic distance implementation
-                            cross_distances = self._compute_hyperbolic_cross_distances(embs1_sample_np, embs2_sample_np)
-                        elif metric == 'order_violation':
-                            # Use order violation distance implementation
-                            cross_distances = self._compute_order_violation_cross_distances(embs1_sample_np, embs2_sample_np)
                         else:
                             # Fallback for unknown metrics
                             cross_distances = pairwise_distances(embs1_sample_np, embs2_sample_np, metric='euclidean')
@@ -658,27 +686,6 @@ class SurfaceDistanceMetricAnalyzer:
                 
                 if entailment_spread > 0:
                     entailment_separation = avg_entailment_distance / entailment_spread
-
-            # Surface gradient score - Is there a clear ordering: entailment < neutral < contradiction?
-            surface_gradient = 0.0
-            if ('entailment_to_neutral' in centroid_distances and 
-                'entailment_to_contradiction' in centroid_distances and
-                'neutral_to_contradiction' in centroid_distances):
-                
-                ent_to_neutral = centroid_distances['entailment_to_neutral']
-                ent_to_contradiction = centroid_distances['entailment_to_contradiction']
-                neutral_to_contradiction = centroid_distances['neutral_to_contradiction']
-                
-                # Ideal ordering: ent_to_neutral < ent_to_contradiction
-                if ent_to_neutral < ent_to_contradiction:
-                    surface_gradient += 1.0
-                
-                # Bonus if neutral is truly between entailment and contradiction
-                if ent_to_neutral < neutral_to_contradiction < ent_to_contradiction:
-                    surface_gradient += 0.5
-            
-            # 4. OVERALL SURFACE LEARNING SCORE
-            surface_learning_score = (entailment_separation / 10.0 + surface_gradient) / 2.0
             
             results = {
                 # Centroid distances
@@ -692,152 +699,13 @@ class SurfaceDistanceMetricAnalyzer:
                 
                 # Surface learning metrics
                 'entailment_separation': entailment_separation,
-                'surface_gradient': surface_gradient,
-                'surface_learning_score': surface_learning_score
             }
-            
-            print(f"    Entailment separation: {entailment_separation:.4f}")
-            print(f"    Surface gradient: {surface_gradient:.4f}")
-            print(f"    Surface learning score: {surface_learning_score:.4f}")
-            
+                        
             return results
             
         except Exception as e:
             print(f"    Error in cross-class analysis: {e}")
             return {}
-
-    def _hyperbolic_distance_pair(self, x: np.ndarray, y: np.ndarray) -> float:
-        """Efficient hyperbolic distance for single pair"""
-        # Ensure points are in unit ball
-        x_norm = np.linalg.norm(x)
-        y_norm = np.linalg.norm(y)
-        
-        if x_norm >= 0.99:
-            x = x * (0.99 / x_norm)
-        if y_norm >= 0.99:
-            y = y * (0.99 / y_norm)
-        
-        # Hyperbolic distance formula
-        diff = x - y
-        euclidean_dist_sq = np.dot(diff, diff)
-        
-        numerator = 2 * euclidean_dist_sq
-        denominator = (1 - np.dot(x, x)) * (1 - np.dot(y, y))
-        
-        if denominator > 1e-10:
-            ratio = 1 + numerator / denominator
-            if ratio >= 1:
-                return np.arccosh(ratio)
-        
-        return 0.0  # Fallback
-
-    def _order_violation_distance_pair(self, x: np.ndarray, y: np.ndarray) -> float:
-        """Efficient order violation distance for single pair"""
-        if len(x.shape) == 0 or x.shape[0] == 1:  # 1D case
-            return abs(float(x) - float(y))
-        else:
-            # Multi-dimensional case
-            violation_x_to_y = np.maximum(0, x - y)
-            violation_y_to_x = np.maximum(0, y - x)
-            return np.sum(violation_x_to_y) + np.sum(violation_y_to_x)
-
-    def _compute_hyperbolic_cross_distances(self, embs1: np.ndarray, embs2: np.ndarray) -> np.ndarray:
-        """Compute hyperbolic cross-distances between two sets of embeddings"""
-        n1, n2 = len(embs1), len(embs2)
-        cross_distances = np.zeros((n1, n2))
-        
-        for i in range(n1):
-            for j in range(n2):
-                cross_distances[i, j] = self._hyperbolic_distance_pair(embs1[i], embs2[j])
-        
-        return cross_distances
-
-    def _compute_order_violation_cross_distances(self, embs1: np.ndarray, embs2: np.ndarray) -> np.ndarray:
-        """Compute order violation cross-distances between two sets of embeddings"""
-        n1, n2 = len(embs1), len(embs2)
-        cross_distances = np.zeros((n1, n2))
-        
-        for i in range(n1):
-            for j in range(n2):
-                cross_distances[i, j] = self._order_violation_distance_pair(embs1[i], embs2[j])
-        
-        return cross_distances
-
-
-    def evaluate_surface_separation_quality(self, phd_scores: Dict[str, float]) -> Dict[str, float]:
-        """Evaluate how well this metric separates entailment classes - CORRECTED: Focus on maximum class separation"""
-        valid_scores = {k: v for k, v in phd_scores.items() if not np.isnan(v)}
-        
-        if len(valid_scores) < 2:
-            return {
-                'surface_quality': 0.0, 
-                'separation_ratio': 0.0, 
-                'entailment_simplicity': 0.0,
-                'class_distinctiveness': 0.0,
-                'overall_separation': 0.0
-            }
-        
-        scores = list(valid_scores.values())
-        
-        # Basic separation metrics
-        separation_ratio = max(scores) / min(scores) if min(scores) > 0 else 0.0
-        min_max_diff = max(scores) - min(scores)
-        std_dev = np.std(scores)
-        
-        # Entailment simplicity - test if entailment has simpler topology than others
-        entailment_simplicity = 0.0
-        if 'entailment' in valid_scores:
-            entailment_phd = valid_scores['entailment']
-            other_phds = [v for k, v in valid_scores.items() if k != 'entailment']
-            if other_phds:
-                entailment_simplicity = sum(1 for phd in other_phds if entailment_phd < phd) / len(other_phds)
-        
-        # Class distinctiveness - how well separated are ALL classes from each other
-        class_distinctiveness = 0.0
-        if len(valid_scores) >= 3:
-            class_list = list(valid_scores.keys())
-            pairwise_diffs = []
-            
-            for i in range(len(class_list)):
-                for j in range(i+1, len(class_list)):
-                    diff = abs(valid_scores[class_list[i]] - valid_scores[class_list[j]])
-                    pairwise_diffs.append(diff)
-            
-            if pairwise_diffs:
-                avg_pairwise_diff = np.mean(pairwise_diffs)
-                max_possible_diff = max(scores) - min(scores)
-                if max_possible_diff > 0:
-                    class_distinctiveness = avg_pairwise_diff / max_possible_diff
-        elif len(valid_scores) == 2:
-            max_possible_diff = max(scores) - min(scores)
-            class_distinctiveness = 1.0 if max_possible_diff > 0 else 0.0
-        
-        # Overall separation quality combines multiple factors
-        overall_separation = (
-            separation_ratio / 20.0 +      # Ratio component (normalized)
-            min_max_diff / 10.0 +          # Absolute difference component  
-            std_dev / 5.0 +                # Standard deviation component
-            class_distinctiveness          # Pairwise distinctiveness
-        ) / 4.0
-        
-        # Surface quality for backward compatibility
-        surface_quality = (
-            separation_ratio/20.0 + 
-            min_max_diff/10.0 + 
-            entailment_simplicity + 
-            class_distinctiveness
-        ) / 4.0
-        
-        return {
-            'surface_quality': surface_quality,
-            'separation_ratio': separation_ratio,
-            'entailment_simplicity': entailment_simplicity,
-            'class_distinctiveness': class_distinctiveness,
-            'overall_separation': overall_separation,
-            'min_max_diff': min_max_diff,
-            'std_dev': std_dev
-        }
-
     
 
     def run_comprehensive_analysis(self):
@@ -884,11 +752,7 @@ class SurfaceDistanceMetricAnalyzer:
                     )
                     phd_scores[class_name] = phd
                     metric_results[f'phd_{class_name}'] = phd
-                
-                # Evaluate surface separation quality (from Step 1)
-                surface_metrics = self.evaluate_surface_separation_quality(phd_scores)
-                metric_results.update(surface_metrics)
-                
+                                
                 # STEP 2: Compute cross-class distances for surface learning
                 cross_class_metrics = self.compute_cross_class_surface_analysis(
                     space_embeddings, metric, space_name
@@ -897,26 +761,18 @@ class SurfaceDistanceMetricAnalyzer:
                 
                 space_results[metric] = metric_results
                 
-                print(f"  STEP 1 - PH-Dim scores: {phd_scores}")
-                print(f"  STEP 1 - Surface quality: {surface_metrics['surface_quality']:.4f}")
-                print(f"  STEP 2 - Cross-class surface score: {cross_class_metrics.get('surface_learning_score', 0):.4f}")
-                
-                # Combined score for ranking
-                combined_score = (surface_metrics['surface_quality'] + 
-                                cross_class_metrics.get('surface_learning_score', 0)) / 2.0
-                metric_results['combined_surface_score'] = combined_score
-                print(f"  COMBINED surface learning potential: {combined_score:.4f}")
+                print(f" PH-Dim scores: {phd_scores}")                
             
             all_results[space_name] = space_results
             
-            # Save intermediate results
-            results_file = self.results_dir / f"surface_analysis_{space_name}_{timestamp}.json"
+            # M intermediate results
+            results_file = self.results_dir / f"surface_analysis_{space_name}_{timestamp}_SEED3.json"
             with open(results_file, 'w') as f:
                 json.dump(space_results, f, indent=2, default=str)
             print(f"\nSaved {space_name} results to {results_file}")
         
         # Save complete results and generate comprehensive report
-        final_results_file = self.results_dir / f"comprehensive_surface_analysis_{timestamp}.json"
+        final_results_file = self.results_dir / f"comprehensive_surface_analysis_{timestamp}_SEED3.json"
         with open(final_results_file, 'w') as f:
             json.dump(all_results, f, indent=2, default=str)
         
@@ -934,7 +790,7 @@ class SurfaceDistanceMetricAnalyzer:
 
     def _generate_simple_report(self, results: Dict, timestamp: str):
         """Generate simple plain output report for analysis"""
-        report_file = self.results_dir / f"simple_analysis_report_{timestamp}.txt"
+        report_file = self.results_dir / f"simple_analysis_report_{timestamp}_SEED3.txt"
         
         with open(report_file, 'w') as f:
             f.write("SURFACE DISTANCE METRIC ANALYSIS - PLAIN RESULTS\n")
@@ -953,27 +809,14 @@ class SurfaceDistanceMetricAnalyzer:
                         if key.startswith('phd_'):
                             f.write(f"    {key}: {value}\n")
                     
-                    # Surface separation quality
-                    f.write("  Surface Separation Quality:\n")
-                    separation_keys = ['surface_quality', 'separation_ratio', 'entailment_simplicity', 
-                                     'class_distinctiveness', 'overall_separation', 'min_max_diff', 'std_dev']
-                    for key in separation_keys:
-                        if key in metric_results:
-                            f.write(f"    {key}: {metric_results[key]}\n")
-                    
                     # Cross-class analysis
                     f.write("  Cross-Class Surface Analysis:\n")
                     cross_class_keys = ['centroid_ent_to_neutral', 'centroid_ent_to_contradiction', 
                                       'centroid_neutral_to_contradiction', 'min_ent_to_neutral', 
-                                      'min_ent_to_contradiction', 'entailment_separation', 
-                                      'class_separation_quality', 'surface_learning_score']
+                                      'min_ent_to_contradiction', 'entailment_separation']
                     for key in cross_class_keys:
                         if key in metric_results:
                             f.write(f"    {key}: {metric_results[key]}\n")
-                    
-                    # Combined score
-                    if 'combined_surface_score' in metric_results:
-                        f.write(f"  Combined Surface Score: {metric_results['combined_surface_score']}\n")
                 
                 f.write("\n" + "="*80 + "\n\n")
         
@@ -985,10 +828,10 @@ def main():
 
     # Initialize analyzer
     analyzer = SurfaceDistanceMetricAnalyzer(
-        bert_data_path="data/processed/snli_full_standard_BERT.pt",
-        order_model_path="models/enhanced_order_embeddings_snli_full.pt",
+        bert_data_path="data/processed/snli_full_standard_SBERT.pt",
+        order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
         results_dir="entailment_surfaces/results",
-        seed=42
+        seed=333
     )
     
     # Run comprehensive analysis

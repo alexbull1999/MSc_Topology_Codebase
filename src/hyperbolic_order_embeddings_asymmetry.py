@@ -8,12 +8,19 @@ import matplotlib.pyplot as plt
 import os
 from typing import Dict, List, Tuple
 import json
+import logging
+import sys
 
 """
 if 3-way margin loss performs better; add that to this file 
 """
 
 from .order_embeddings_asymmetry import EntailmentDataset
+
+def flush_output():
+    """Force output to appear immediately in SLURM"""
+    sys.stdout.flush()
+    sys.stderr.flush()
 
 
 def set_random_seed(seed: int = 42):
@@ -44,6 +51,10 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
         self.order_dim = order_dim
         self.asymmetry_weight = asymmetry_weight
         
+        # Numerical stability
+        self.eps = 1e-8
+        self.max_norm = 0.98  # Stay away from boundary of unit ball
+
         # Poincaré ball manifold
         self.ball = geoopt.PoincareBall()
         
@@ -51,7 +62,7 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
         # All parameters live on the hyperbolic manifold
         
         # Initial projection dimension (we need to map from 768D BERT to smaller space first)
-        intermediate_dim = min(order_dim * 2, 100)  # Reasonable intermediate size
+        intermediate_dim = min(order_dim * 4, 200)  # Reasonable intermediate size
         
         # Hyperbolic weight matrices - these are ManifoldParameters
         self.hyp_weight1 = geoopt.ManifoldParameter(
@@ -87,15 +98,15 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
         # because they're scalars, not points in hyperbolic space
         
         self.specificity_scaling = nn.Parameter(
-            torch.tensor(0.5),  # Initialize with reasonable guess
+            torch.tensor(1.0),  # Initialize with reasonable guess
             requires_grad=True
         )
         self.base_tolerance = nn.Parameter(
-            torch.tensor(0.3),  # Initialize with reasonable guess
+            torch.tensor(0.5),  # Initialize with reasonable guess
             requires_grad=True
         )
         self.proximity_weight = nn.Parameter(
-            torch.tensor(0.3),  # Weight for proximity vs specificity violation
+            torch.tensor(0.5),  # Weight for proximity vs specificity violation
             requires_grad=True
         )
         
@@ -105,29 +116,26 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
             requires_grad=True
         )
         self.distance_scaling = nn.Parameter(
-            torch.tensor(1.0),  # Overall scaling for hyperbolic distances
+            torch.tensor(2.0),  # Overall scaling for hyperbolic distances
             requires_grad=True
         )
         
-        # Parameter constraints (buffers - not learnable)
-        self.register_buffer('min_scaling', torch.tensor(0.05))
-        self.register_buffer('max_scaling', torch.tensor(3.0))
-        self.register_buffer('min_tolerance', torch.tensor(0.01))
-        self.register_buffer('max_tolerance', torch.tensor(1.5))
-        self.register_buffer('min_weight', torch.tensor(0.01))
-        self.register_buffer('max_weight', torch.tensor(2.0))
-        self.register_buffer('min_power', torch.tensor(0.5))
-        self.register_buffer('max_power', torch.tensor(2.0))
+        # FIXED: More reasonable parameter constraints
+        self.register_buffer('min_scaling', torch.tensor(0.1))     # Increased from 0.05
+        self.register_buffer('max_scaling', torch.tensor(5.0))     # Increased from 3.0
+        self.register_buffer('min_tolerance', torch.tensor(0.05))  # Increased from 0.01
+        self.register_buffer('max_tolerance', torch.tensor(2.0))   # Increased from 1.5
+        self.register_buffer('min_weight', torch.tensor(0.05))     # Increased from 0.01
+        self.register_buffer('max_weight', torch.tensor(3.0))      # Increased from 2.0
+        self.register_buffer('min_power', torch.tensor(0.5))       # Same
+        self.register_buffer('max_power', torch.tensor(2.0))       # Same
         
-        # Numerical stability
-        self.eps = 1e-8
-        self.max_norm = 0.95  # Stay away from boundary of unit ball
 
 
     def _init_hyperbolic_matrix(self, in_dim: int, out_dim: int) -> torch.Tensor:
         """Initialize hyperbolic weight matrix with small values"""
         # Start with small random values and ensure they're in the unit ball
-        matrix = torch.randn(in_dim, out_dim) * 0.01
+        matrix = torch.randn(in_dim, out_dim) * 0.1
         # Ensure all points are inside unit ball
         norms = torch.norm(matrix, dim=-1, keepdim=True)
         matrix = torch.where(norms >= self.max_norm, matrix * (self.max_norm / (norms + self.eps)), matrix)
@@ -135,7 +143,7 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
 
     def _init_hyperbolic_vector(self, dim: int) -> torch.Tensor:
         """Initialize hyperbolic bias vector"""
-        vector = torch.randn(dim) * 0.01
+        vector = torch.randn(dim) * 0.1
         norm = torch.norm(vector)
         if norm >= self.max_norm:
             vector = vector * (self.max_norm / (norm + self.eps))
@@ -153,46 +161,55 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
 
     def mobius_linear(self, x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor) -> torch.Tensor:
         """
-        Möbius linear transformation - the pure hyperbolic equivalent of nn.Linear
-        
-        This implements the mathematical operation for linear transformations
-        in hyperbolic space using the Möbius gyrovector space operations.
-        
-        Based on: "Hyperbolic Neural Networks" (Ganea et al., 2018)
+        NUMERICALLY STABLE Möbius linear transformation
         """
         batch_size = x.shape[0]
+    
+        try:
+            # Ensure input is safe
+            x = self._safe_clamp_to_ball(x)
         
-        # For numerical stability, we work in the tangent space at origin
-        # This is mathematically correct for the Poincaré ball model
+            # Step 1: Map input to tangent space at origin
+            x_tangent = self.ball.logmap0(x)
         
-        # Step 1: Map input to tangent space at origin
-        x_tangent = self.ball.logmap0(x)
+            # Check for NaN/inf after logmap
+            if torch.isnan(x_tangent).any() or torch.isinf(x_tangent).any():
+                print("Warning: NaN/inf in tangent space")
+                flush_output()
+                raise
         
-        # Step 2: Apply Euclidean transformation in tangent space
-        # Note: This is correct! Tangent spaces are Euclidean
-        if weight.dim() == 2:
-            # Matrix multiplication for weight matrix
-            if x_tangent.shape[-1] != weight.shape[0]:
-                # Handle dimension mismatch by projecting
-                proj_size = min(x_tangent.shape[-1], weight.shape[0])
-                x_tangent = x_tangent[..., :proj_size]
-                weight_used = weight[:proj_size, :]
-            else:
-                weight_used = weight
+            # Step 2: Apply transformation with careful dimension matching
+            if weight.dim() == 2:
+                # Better dimension handling
+                input_dim = min(x_tangent.shape[-1], weight.shape[0])
+                output_dim = weight.shape[1]
             
-            transformed = torch.matmul(x_tangent, weight_used)
-        else:
-            # Element-wise for bias vector
-            transformed = x_tangent + bias[:x_tangent.shape[-1]]
+                # Take only the dimensions that match
+                x_tangent_proj = x_tangent[:, :input_dim]
+                weight_proj = weight[:input_dim, :]
+            
+                transformed = torch.matmul(x_tangent_proj, weight_proj)
+            else:
+                # Element-wise for bias vector
+                min_dim = min(x_tangent.shape[-1], bias.shape[0])
+                transformed = x_tangent[:, :min_dim] + bias[:min_dim]
         
-        # Step 3: Map back to hyperbolic space with scaling for stability
-        scale_factor = 0.5  # Conservative scaling to stay inside unit ball
-        result = self.ball.expmap0(transformed * scale_factor)
+            # Step 3: Map back to hyperbolic space with conservative scaling
+            scale_factor = 0.9  
         
-        # Step 4: Ensure points stay inside unit ball
-        norms = torch.norm(result, dim=-1, keepdim=True)
-        result = torch.where(norms >= self.max_norm, result * (self.max_norm / (norms + self.eps)), result)
+            # Clamp transformed values
+            transformed = torch.clamp(transformed, min=-20.0, max=20.0)
         
+            result = self.ball.expmap0(transformed * scale_factor)
+        
+            # Step 4: Ensure points stay inside unit ball
+            result = self._safe_clamp_to_ball(result)
+        
+        except Exception as e:
+            print(f"Error in mobius_linear: {e}")
+            flush_output()
+            raise
+    
         return result
 
     def hyperbolic_nonlinearity(self, x: torch.Tensor) -> torch.Tensor:
@@ -210,7 +227,7 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
         activated = torch.tanh(x_tangent)
         
         # Map back with conservative scaling
-        result = self.ball.expmap0(activated * 0.3)
+        result = self.ball.expmap0(activated * 0.5)
         
         # Ensure inside unit ball
         norms = torch.norm(result, dim=-1, keepdim=True)
@@ -220,69 +237,111 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
 
     def forward(self, bert_embeddings: torch.Tensor) -> torch.Tensor:
         """
-        Pure hyperbolic forward pass
-        
-        Args:
-            bert_embeddings: [batch_size, bert_dim] BERT embeddings (Euclidean)
-            
-        Returns:
-            hyperbolic_embeddings: [batch_size, order_dim] pure hyperbolic embeddings
+        NUMERICALLY STABLE pure hyperbolic forward pass
         """
         batch_size = bert_embeddings.shape[0]
-        
-        # Initial mapping from Euclidean BERT space to hyperbolic space
-        # This is unavoidable since BERT embeddings are Euclidean
-        initial_scale = 0.001  # Very conservative initial scaling
-        
-        # Take subset of BERT dimensions to fit our intermediate dimension
+    
+        # Check for NaN/inf in input
+        if torch.isnan(bert_embeddings).any() or torch.isinf(bert_embeddings).any():
+            print("Warning: NaN/inf detected in BERT embeddings")
+            bert_embeddings = torch.where(torch.isnan(bert_embeddings) | torch.isinf(bert_embeddings), 
+                                        torch.zeros_like(bert_embeddings), bert_embeddings)
+    
+        # MUCH more conservative initial scaling
+        initial_scale = 0.8  # Even smaller than before
+    
+        # Take subset and normalize input
         input_subset = bert_embeddings[:, :self.hyp_weight1.shape[0]]
+        # input_subset = input_subset / (torch.norm(input_subset, dim=-1, keepdim=True) + 1e-8)  # Normalize
+    
+        # Initial projection to hyperbolic space with safety
+        try:
+            x = self.ball.expmap0(input_subset * initial_scale)
+            x = self._safe_clamp_to_ball(x)
+            # DEBUG: Check embedding magnitudes
+            if torch.norm(x[0]).item() < 1e-4:
+                print(f"Warning: Very small embeddings after initial projection: {torch.norm(x[0]).item():.6f}")
+                flush_output()
+
+        except Exception as e:
+            print(f"Error in initial projection: {e}")
+            flush_output()
+            raise
+    
+        # First pure hyperbolic layer with error handling
+        try:
+            x = self.mobius_linear(x, self.hyp_weight1, self.hyp_bias1)
+            x = self._safe_clamp_to_ball(x)
+            x = self.hyperbolic_nonlinearity(x)
+            x = self._safe_clamp_to_ball(x)
+        except Exception as e:
+            print(f"Error in first hyperbolic layer: {e}")
+            flush_output()
+            raise
+    
+        # Second pure hyperbolic layer with error handling
+        try:
+            x = self.mobius_linear(x, self.hyp_weight2, self.hyp_bias2)
+            x = self._safe_clamp_to_ball(x)
+            x = self.hyperbolic_nonlinearity(x)
+            x = self._safe_clamp_to_ball(x)
+        except Exception as e:
+            print(f"Error in second hyperbolic layer: {e}")
+            flush_output()
+            raise
         
-        # Initial projection to hyperbolic space
-        x = self.ball.expmap0(input_subset * initial_scale)
-        
-        # First pure hyperbolic layer
-        x = self.mobius_linear(x, self.hyp_weight1, self.hyp_bias1)
-        x = self.hyperbolic_nonlinearity(x)
-        
-        # Second pure hyperbolic layer  
-        x = self.mobius_linear(x, self.hyp_weight2, self.hyp_bias2)
-        x = self.hyperbolic_nonlinearity(x)
-        
+    
         return x
 
+    # FIX 2: Completely redesigned energy function that actually produces meaningful values:
     def learnable_hyperbolic_order_violation_energy(self, u_emb: torch.Tensor, v_emb: torch.Tensor) -> Dict[str, torch.Tensor]:
         """
-        Pure hyperbolic order violation energy with learnable parameters
-        
-        This uses only hyperbolic operations and learns optimal parameters
-        for the energy function during training.
+        REDESIGNED hyperbolic order violation energy that produces meaningful values
         """
         # Get constrained learnable parameters
         specificity_scaling, base_tolerance, proximity_weight, specificity_power, distance_scaling = self.get_constrained_parameters()
+    
+        try:
+            # Clamp embeddings to stay well inside unit ball
+            u_emb_safe = self._safe_clamp_to_ball(u_emb)
+            v_emb_safe = self._safe_clamp_to_ball(v_emb)
         
-        # Component 1: Specificity violation (pure hyperbolic)
-        u_norms = self.ball.dist0(u_emb) * distance_scaling  # Distance from origin
-        v_norms = self.ball.dist0(v_emb) * distance_scaling
+            # Component 1: SIMPLE distance-based energy (this will not be zero!)
+            pairwise_dist = self.ball.dist(u_emb_safe, v_emb_safe)
         
-        # For entailment: v should be more specific than u (v_norm > u_norm)
-        specificity_violation = torch.relu(u_norms - v_norms)
+            # Component 2: Norm-based specificity
+            u_norms = self.ball.dist0(u_emb_safe)
+            v_norms = self.ball.dist0(v_emb_safe)
+
+            # DEBUG: Print distance ranges
+            # if pairwise_dist.numel() > 0:
+            #     print(f"DEBUG: Distance range: {pairwise_dist.min().item():.6f} to {pairwise_dist.max().item():.6f}")
+            #     print(f"DEBUG: Norm range: {u_norms.min().item():.6f} to {u_norms.max().item():.6f}")
+                # flush_output()
         
-        # Component 2: Learnable proximity violation
-        pairwise_dist = self.ball.dist(u_emb, v_emb) * distance_scaling
-        specificity_diff = torch.abs(u_norms - v_norms)
+            # SIMPLE energy function that will produce non-zero values
+            # Base energy from distance
+            base_energy = pairwise_dist * distance_scaling * 5.0
         
-        # LEARNABLE expected geodesic formula with power scaling
-        expected_geodesic = (specificity_diff ** specificity_power) * specificity_scaling + base_tolerance
-        proximity_violation = torch.relu(pairwise_dist - expected_geodesic)
+            # Add specificity component
+            specificity_diff = torch.abs(u_norms - v_norms)
+            specificity_energy = specificity_diff * specificity_scaling * 3.0
         
-        # Learnable combination of violations
-        total_violation = specificity_violation + proximity_weight * proximity_violation
+            # Combine with learnable weights
+            total_violation = base_energy + specificity_energy + (base_tolerance * 2.0)
         
+            # Ensure non-zero values
+            total_violation = torch.clamp(total_violation, min=0.01, max=20.0)
+        
+        except Exception as e:
+            print(f"Error in energy computation: {e}")
+            raise
+    
         return {
             'total_energy': total_violation,
-            'specificity_violation': specificity_violation,
-            'proximity_violation': proximity_violation,
-            'expected_geodesic': expected_geodesic,
+            'specificity_violation': specificity_energy,
+            'proximity_violation': base_energy,
+            'expected_geodesic': base_tolerance.expand(total_violation.shape),
             'u_norms': u_norms,
             'v_norms': v_norms,
             'pairwise_dist': pairwise_dist,
@@ -294,6 +353,22 @@ class PureHyperbolicLearnableOrderEmbeddingModel(nn.Module):
                 'distance_scaling': distance_scaling.item()
             }
         }
+
+
+    # FIX 2: Add safe clamping method to the model class:
+    def _safe_clamp_to_ball(self, x: torch.Tensor) -> torch.Tensor:
+        """Safely clamp points to stay well inside Poincaré ball"""
+        norms = torch.norm(x, dim=-1, keepdim=True)
+        safe_max = 0.9  
+    
+        # Replace any NaN or inf values
+        x = torch.where(torch.isnan(x) | torch.isinf(x), torch.zeros_like(x), x)
+        norms = torch.where(torch.isnan(norms) | torch.isinf(norms), torch.ones_like(norms), norms)
+    
+        # Clamp to safe region
+        x_safe = torch.where(norms > safe_max, x * (safe_max / (norms + self.eps)), x)
+    
+        return x_safe
 
     def hyperbolic_asymmetric_features(self, hyperbolic_embeddings: torch.Tensor) -> torch.Tensor:
         """
@@ -359,19 +434,19 @@ class PureHyperbolicOrderEmbeddingTrainer:
     Enhanced trainer with 3-way margin loss and corrected asymmetric loss
     """
     
-    def __init__(self, model: PureHyperbolicLearnableOrderEmbeddingModel, device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model: PureHyperbolicLearnableOrderEmbeddingModel, device='cuda' if torch.cuda.is_available() else 'cpu', lr: float=1e-3):
         super().__init__()
         self.model = model.to(device)
         self.device = device
         
         # Use Riemannian optimizer for hyperbolic parameters
         self.optimizer = geoopt.optim.RiemannianAdam([
-            {'params': [p for n, p in model.named_parameters() if 'hyp_' in n or 'asym_' in n], 'lr': 1e-3},
-            {'params': [p for n, p in model.named_parameters() if 'hyp_' not in n and 'asym_' not in n], 'lr': 5e-3}
-        ], weight_decay=1e-4)
+            {'params': [p for n, p in model.named_parameters() if 'hyp_' in n or 'asym_' in n], 'lr': lr/3}, #very small lr for hyperbolic
+            {'params': [p for n, p in model.named_parameters() if 'hyp_' not in n and 'asym_' not in n], 'lr': lr}
+        ], weight_decay=1e-5)
         
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            self.optimizer, mode='min', patience=10, factor=0.5
+            self.optimizer, mode='min', patience=10, factor=0.5, min_lr=1e-8
         )
         
         # Training history
@@ -381,96 +456,173 @@ class PureHyperbolicOrderEmbeddingTrainer:
         self.parameter_history = []
 
 
+    # # FIX 3: Much simpler loss function that will work with the energy values:
+    # def compute_enhanced_hyperbolic_loss(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, 
+    #                                 labels: torch.Tensor, label_strs: List[str], 
+    #                                 margin: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
+    #     """
+    #     SIMPLIFIED but effective 3-way hyperbolic loss
+    #     """
+    #     # Get pure hyperbolic embeddings
+    #     premise_hyp = self.model(premise_embs)
+    #     hypothesis_hyp = self.model(hypothesis_embs)
+    
+    #     # Compute hyperbolic order violation energies
+    #     energy_dict = self.model.compute_bidirectional_energies(premise_hyp, hypothesis_hyp)
+    #     forward_energies = energy_dict['forward_energy']
+    
+    #     # Create masks for each class
+    #     entailment_mask = (labels == 0)
+    #     neutral_mask = (labels == 1)
+    #     contradiction_mask = (labels == 2)
+    
+    #     # SIMPLE 3-CLASS LOSS with clear targets
+    #     total_loss = 0.0
+    
+    #     # Target energies that make sense
+    #     entailment_target = 0.0    # Low but not zero
+    #     neutral_target = 5.0       # Medium
+    #     contradiction_target = 10.0 # High
+    
+    #     # MSE loss to specific targets
+    #     if entailment_mask.any():
+    #         entailment_energies = forward_energies[entailment_mask]
+    #         entailment_loss = torch.nn.functional.mse_loss(
+    #             entailment_energies, 
+    #             torch.full_like(entailment_energies, entailment_target)
+    #         )
+    #         total_loss += entailment_loss
+    
+    #     if neutral_mask.any():
+    #         neutral_energies = forward_energies[neutral_mask]
+    #         neutral_loss = torch.nn.functional.mse_loss(
+    #             neutral_energies, 
+    #             torch.full_like(neutral_energies, neutral_target)
+    #         )
+    #         total_loss += neutral_loss
+    
+    #     if contradiction_mask.any():
+    #         contradiction_energies = forward_energies[contradiction_mask]
+    #         contradiction_loss = torch.nn.functional.mse_loss(
+    #             contradiction_energies, 
+    #             torch.full_like(contradiction_energies, contradiction_target)
+    #         )
+    #         total_loss += contradiction_loss
+    
+    #     # Add ranking loss to ensure order
+    #     ranking_loss = 0.0
+    #     large_margin = 2.0
+    #     if entailment_mask.any() and neutral_mask.any():
+    #         ent_mean = forward_energies[entailment_mask].mean()
+    #         neut_mean = forward_energies[neutral_mask].mean()
+    #         ranking_loss += torch.clamp(ent_mean - neut_mean + large_margin, min=0)
+    
+    #     if neutral_mask.any() and contradiction_mask.any():
+    #         neut_mean = forward_energies[neutral_mask].mean()
+    #         cont_mean = forward_energies[contradiction_mask].mean()
+    #         ranking_loss += torch.clamp(neut_mean - cont_mean + large_margin, min=0)
+    
+    #     # Combine losses
+    #     total_loss = total_loss + 0.5 * ranking_loss
+    
+    #     # Simple asymmetric loss
+    #     asymmetric_energies = energy_dict['asymmetric_energy']
+    #     asymmetric_loss = torch.mean(asymmetric_energies)  # Just minimize asymmetric energy
+    
+    #     # Total combined loss
+    #     final_loss = total_loss + self.model.asymmetry_weight * asymmetric_loss
+    
+    #     # Compute energy statistics for monitoring
+    #     energy_stats = self._compute_energy_statistics(energy_dict, label_strs)
+    
+    #     return final_loss, forward_energies, energy_stats
+
+
     def compute_enhanced_hyperbolic_loss(self, premise_embs: torch.Tensor, hypothesis_embs: torch.Tensor, 
-                                       labels: torch.Tensor, label_strs: List[str], 
-                                       margin: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
+                                labels: torch.Tensor, label_strs: List[str], 
+                                margin: float = 1.0) -> Tuple[torch.Tensor, torch.Tensor, Dict]:
         """
-        Enhanced 3-way hyperbolic loss with corrected asymmetric patterns
-        
-        Args:
-            premise_embs: Premise BERT embeddings
-            hypothesis_embs: Hypothesis BERT embeddings
-            labels: Label indices (0=entailment, 1=neutral, 2=contradiction)
-            label_strs: String labels
-            margin: Base margin for class separation
-            
-        Returns:
-            Total loss, forward energies, and energy statistics
+        ADAPTIVE hyperbolic loss with dynamic targets
         """
         # Get pure hyperbolic embeddings
         premise_hyp = self.model(premise_embs)
         hypothesis_hyp = self.model(hypothesis_embs)
-        
+
         # Compute hyperbolic order violation energies
         energy_dict = self.model.compute_bidirectional_energies(premise_hyp, hypothesis_hyp)
         forward_energies = energy_dict['forward_energy']
+
+        # ADAPTIVE TARGETS based on current energy distribution
+        ent_mask = (labels == 0)
+        neu_mask = (labels == 1)
+        con_mask = (labels == 2)
+    
+        # Get current energy ranges for adaptive targeting
+        if forward_energies.numel() > 0:
+            energy_min = forward_energies.min().item()
+            energy_max = forward_energies.max().item()
+            energy_range = energy_max - energy_min
         
-        # Create masks for each class
-        entailment_mask = (labels == 0)
-        neutral_mask = (labels == 1)
-        contradiction_mask = (labels == 2)
-        
-        # 3-CLASS HYPERBOLIC MAX-MARGIN LOSS
+            # Adaptive targets: spread across current range
+            ent_target = energy_min + 0.2 * energy_range  # Low end
+            neu_target = energy_min + 0.5 * energy_range  # Middle
+            con_target = energy_min + 0.8 * energy_range  # High end
+        else:
+            # Fallback if no energies
+            ent_target, neu_target, con_target = 3.0, 5.0, 7.0
+
+        print(f"DEBUG: Adaptive targets - Ent: {ent_target:.2f}, Neu: {neu_target:.2f}, Con: {con_target:.2f}")
+    
+        # MSE loss to adaptive targets
         total_loss = 0.0
-        
-        # Entailment pairs: minimize energy (target ~0)
-        if entailment_mask.any():
-            entailment_energies = forward_energies[entailment_mask]
-            entailment_loss = entailment_energies.mean()
-            total_loss += entailment_loss
-        
-        # Neutral pairs: medium energy (target ~margin)
-        if neutral_mask.any():
-            neutral_energies = forward_energies[neutral_mask]
-            # Loss if energy is too low (< margin/2) or too high (> 2*margin)
-            neutral_loss = (
-                torch.clamp(margin/2 - neutral_energies, min=0).mean() +  # Push up if too low
-                torch.clamp(neutral_energies - 2*margin, min=0).mean()    # Push down if too high
+    
+        if ent_mask.any():
+            ent_energies = forward_energies[ent_mask]
+            ent_loss = torch.nn.functional.mse_loss(
+                ent_energies, torch.full_like(ent_energies, ent_target)
             )
-            total_loss += neutral_loss
-        
-        # Contradiction pairs: high energy (target ~2*margin)
-        if contradiction_mask.any():
-            contradiction_energies = forward_energies[contradiction_mask]
-            # Loss if energy is too low (should be > 1.5*margin)
-            contradiction_loss = torch.clamp(1.5*margin - contradiction_energies, min=0).mean()
-            total_loss += contradiction_loss
-        
-        # RANKING LOSSES: Ensure E < N < C hierarchy
+            total_loss += ent_loss
+
+        if neu_mask.any():
+            neu_energies = forward_energies[neu_mask]
+            neu_loss = torch.nn.functional.mse_loss(
+                neu_energies, torch.full_like(neu_energies, neu_target)
+            )
+            total_loss += neu_loss
+
+        if con_mask.any():
+            con_energies = forward_energies[con_mask]
+            con_loss = torch.nn.functional.mse_loss(
+                con_energies, torch.full_like(con_energies, con_target)
+            )
+            total_loss += con_loss
+
+        # Keep existing ranking loss
         ranking_loss = 0.0
-        small_margin = 0.5
-        
-        # Entailment should have lower energy than neutral
-        if entailment_mask.any() and neutral_mask.any():
-            ent_mean = forward_energies[entailment_mask].mean()
-            neut_mean = forward_energies[neutral_mask].mean()
-            ranking_loss += torch.clamp(ent_mean - neut_mean + small_margin, min=0)
-        
-        # Neutral should have lower energy than contradiction
-        if neutral_mask.any() and contradiction_mask.any():
-            neut_mean = forward_energies[neutral_mask].mean()
-            cont_mean = forward_energies[contradiction_mask].mean()
-            ranking_loss += torch.clamp(neut_mean - cont_mean + small_margin, min=0)
-        
-        # Entailment should have lower energy than contradiction
-        if entailment_mask.any() and contradiction_mask.any():
-            ent_mean = forward_energies[entailment_mask].mean()
-            cont_mean = forward_energies[contradiction_mask].mean()
-            ranking_loss += torch.clamp(ent_mean - cont_mean + small_margin, min=0)
-        
-        # Combine main and ranking losses
-        standard_loss = total_loss + 0.5 * ranking_loss
-        
-        # CORRECTED ASYMMETRIC LOSS
-        asymmetric_loss = self.compute_corrected_asymmetric_loss(premise_hyp, hypothesis_hyp, labels, label_strs)
-        
-        # TOTAL COMBINED LOSS
-        total_loss = standard_loss + self.model.asymmetry_weight * asymmetric_loss
-        
+    
+        if ent_mask.any() and neu_mask.any():
+            ent_mean = forward_energies[ent_mask].mean()
+            neu_mean = forward_energies[neu_mask].mean()
+            ranking_loss += torch.clamp(ent_mean - neu_mean + margin, min=0)
+
+        if neu_mask.any() and con_mask.any():
+            neu_mean = forward_energies[neu_mask].mean()
+            con_mean = forward_energies[con_mask].mean()
+            ranking_loss += torch.clamp(neu_mean - con_mean + margin, min=0)
+
+        # Combine losses
+        total_loss = total_loss + 0.5 * ranking_loss
+
+        # Keep existing asymmetric loss
+        asymmetric_energies = energy_dict['asymmetric_energy']
+        asymmetric_loss = torch.mean(asymmetric_energies)
+    
+        final_loss = total_loss + self.model.asymmetry_weight * asymmetric_loss
+
         # Compute energy statistics for monitoring
         energy_stats = self._compute_energy_statistics(energy_dict, label_strs)
-        
-        return total_loss, forward_energies, energy_stats
+
+        return final_loss, forward_energies, energy_stats
     
 
     def compute_corrected_asymmetric_loss(self, premise_hyp: torch.Tensor, hypothesis_hyp: torch.Tensor, 
@@ -530,6 +682,12 @@ class PureHyperbolicOrderEmbeddingTrainer:
         backward_energies = energy_dict['backward_energy']
         asymmetry_measures = energy_dict['asymmetry_measure']
         asymmetric_energies = energy_dict['asymmetric_energy']
+
+        # DEBUG: Print some sample values
+        # if len(forward_energies) > 0:
+        #     print(f"DEBUG: Sample forward energies: {forward_energies[:3].detach().cpu().numpy()}")
+        #     print(f"DEBUG: Energy range: {forward_energies.min().item():.4f} to {forward_energies.max().item():.4f}")
+            # flush_output()
         
         for i, label_str in enumerate(label_strs):
             if label_str in stats:
@@ -540,29 +698,9 @@ class PureHyperbolicOrderEmbeddingTrainer:
                     'asymmetric_energy': asymmetric_energies[i].item()
                 })
         
-        # Compute summary statistics
-        summary_stats = {}
-        for label, energy_list in stats.items():
-            if energy_list:
-                forward_energies = [e['forward_energy'] for e in energy_list]
-                backward_energies = [e['backward_energy'] for e in energy_list]
-                asymmetries = [e['asymmetry_measure'] for e in energy_list]
-                asym_energies = [e['asymmetric_energy'] for e in energy_list]
-                
-                summary_stats[label] = {
-                    'mean_forward_energy': np.mean(forward_energies),
-                    'std_forward_energy': np.std(forward_energies),
-                    'mean_backward_energy': np.mean(backward_energies),
-                    'std_backward_energy': np.std(backward_energies),
-                    'mean_asymmetry': np.mean(asymmetries),
-                    'std_asymmetry': np.std(asymmetries),
-                    'mean_asymmetric_energy': np.mean(asym_energies),
-                    'std_asymmetric_energy': np.std(asym_energies)
-                }
-        
-        return summary_stats
+        return stats
 
-    def train_epoch(self, dataloader) -> float:
+    def train_epoch(self, dataloader, margin: float=1.0) -> float:
         """Train one epoch with enhanced 3-way loss and corrected asymmetric patterns"""
         self.model.train()
         total_loss = 0
@@ -581,7 +719,7 @@ class PureHyperbolicOrderEmbeddingTrainer:
             
             # Compute enhanced 3-way hyperbolic loss
             loss, forward_energies, energy_stats = self.compute_enhanced_hyperbolic_loss(
-                premise_embs, hypothesis_embs, labels, label_strs
+                premise_embs, hypothesis_embs, labels, label_strs, margin
             )
             
             loss.backward()
@@ -609,47 +747,49 @@ class PureHyperbolicOrderEmbeddingTrainer:
         
         return avg_loss
     
-    def evaluate(self, dataloader) -> Tuple[float, Dict]:
-        """Evaluate model with enhanced 3-way loss and energy analysis"""
+    def evaluate(self, dataloader, margin: float=1.0) -> Tuple[float, Dict]:
+        """Evaluate model with enhanced 3-way loss and energy analysis - FIXED VERSION"""
         self.model.eval()
         total_loss = 0
         num_batches = 0
-        
-        # Collect energies by label for detailed analysis
-        all_stats = {'entailment': [], 'neutral': [], 'contradiction': []}
-        
+    
+        # Collect individual energy records by label for detailed analysis
+        all_energy_records = {'entailment': [], 'neutral': [], 'contradiction': []}
+    
         with torch.no_grad():
             for batch in dataloader:
                 premise_embs = batch['premise_emb'].to(self.device)
                 hypothesis_embs = batch['hypothesis_emb'].to(self.device)
                 labels = batch['label'].to(self.device)
                 label_strs = batch['label_str']
-                
+            
                 loss, forward_energies, energy_stats = self.compute_enhanced_hyperbolic_loss(
-                    premise_embs, hypothesis_embs, labels, label_strs
+                    premise_embs, hypothesis_embs, labels, label_strs, margin
                 )
-                
+            
                 total_loss += loss.item()
                 num_batches += 1
-                
-                # Accumulate energy statistics
-                for label in all_stats:
+            
+                # Accumulate individual energy records (not summary stats)
+                for label in all_energy_records:
                     if label in energy_stats:
-                        all_stats[label].extend(energy_stats[label])
-        
+                        # energy_stats[label] contains individual records from _compute_energy_statistics
+                        # We need to extract the individual records, not the summary
+                        all_energy_records[label].extend(energy_stats[label])
+    
         avg_loss = total_loss / num_batches
         self.val_losses.append(avg_loss)
-        
-        # Compute comprehensive summary statistics
+    
+        # Compute final summary statistics from all collected records
         summary_stats = {}
-        for label, energy_list in all_stats.items():
+        for label, energy_list in all_energy_records.items():
             if energy_list:
-                # Extract all energy types
+                # Now energy_list contains individual energy dictionaries
                 forward_energies = [e['forward_energy'] for e in energy_list]
                 backward_energies = [e['backward_energy'] for e in energy_list]
                 asymmetries = [e['asymmetry_measure'] for e in energy_list]
                 asym_energies = [e['asymmetric_energy'] for e in energy_list]
-                
+            
                 summary_stats[label] = {
                     'count': len(energy_list),
                     'forward_energy': {
@@ -669,16 +809,16 @@ class PureHyperbolicOrderEmbeddingTrainer:
                         'std': np.std(asym_energies)
                     }
                 }
-        
+    
         self.energy_rankings.append(summary_stats)
-        
+    
         return avg_loss, summary_stats
 
 
 
 def train_pure_hyperbolic_order_embeddings(processed_data_path: str, output_dir: str = "models/",
                                          epochs: int = 50, batch_size: int = 32, order_dim: int = 50,
-                                         asymmetry_weight: float = 0.2, random_seed: int = 42):
+                                         asymmetry_weight: float = 0.2, lr: float=1e-3, margin: float=1.0, random_seed: int = 42):
     """
     Train pure hyperbolic order embedding model with learnable energy parameters
     
@@ -698,7 +838,7 @@ def train_pure_hyperbolic_order_embeddings(processed_data_path: str, output_dir:
     generator = set_random_seed(random_seed)
     
     print(f"Loading data from {processed_data_path}")
-    processed_data = torch.load(processed_data_path)
+    processed_data = torch.load(processed_data_path, weights_only=False)
     
     # Create dataset and dataloaders
     dataset = EntailmentDataset(processed_data)
@@ -720,7 +860,7 @@ def train_pure_hyperbolic_order_embeddings(processed_data_path: str, output_dir:
         order_dim=order_dim, 
         asymmetry_weight=asymmetry_weight
     )
-    trainer = PureHyperbolicOrderEmbeddingTrainer(model, device)
+    trainer = PureHyperbolicOrderEmbeddingTrainer(model, device, lr)
     
     print(f"Training pure hyperbolic model on {device}")
     print(f"Initial learned parameters: {model.get_learned_parameters_summary()}")
@@ -732,10 +872,10 @@ def train_pure_hyperbolic_order_embeddings(processed_data_path: str, output_dir:
     
     for epoch in range(epochs):
         # Train
-        train_loss = trainer.train_epoch(train_loader)
+        train_loss = trainer.train_epoch(train_loader, margin)
         
         # Validate
-        val_loss, energy_stats = trainer.evaluate(val_loader)
+        val_loss, energy_stats = trainer.evaluate(val_loader, margin)
         trainer.scheduler.step(val_loss)
         
         # Print progress
@@ -1009,6 +1149,74 @@ def test_pure_hyperbolic_order_embeddings():
     return model, trainer
 
 
+def test_energy_with_large_variation():
+    """Test with expectation of larger embedding values"""
+    model = PureHyperbolicLearnableOrderEmbeddingModel(order_dim=10, asymmetry_weight=0.1)
+    
+    # Create more different inputs
+    premise1 = torch.randn(2, 768) * 2.0   # Larger variation
+    premise2 = torch.randn(2, 768) * 2.0 + 3.0  
+    
+    hypothesis1 = torch.randn(2, 768) * 2.0  
+    hypothesis2 = torch.randn(2, 768) * 2.0 - 3.0  
+    
+    print("=== TESTING LARGE HYPERBOLIC EMBEDDING VARIATION ===")
+    
+    premise_hyp1 = model(premise1)
+    premise_hyp2 = model(premise2)
+    hypothesis_hyp1 = model(hypothesis1)
+    hypothesis_hyp2 = model(hypothesis2)
+    
+    print(f"Premise embeddings 1: {premise_hyp1[0, :3]}")
+    print(f"Premise embeddings 2: {premise_hyp2[0, :3]}")
+    print(f"Hypothesis embeddings 1: {hypothesis_hyp1[0, :3]}")
+    print(f"Hypothesis embeddings 2: {hypothesis_hyp2[0, :3]}")
+    
+    # Check embedding magnitudes
+    p1_norm = torch.norm(premise_hyp1[0]).item()
+    p2_norm = torch.norm(premise_hyp2[0]).item()
+    h1_norm = torch.norm(hypothesis_hyp1[0]).item()
+    h2_norm = torch.norm(hypothesis_hyp2[0]).item()
+    
+    print(f"\nEmbedding norms:")
+    print(f"Premise 1 norm: {p1_norm:.6f}")
+    print(f"Premise 2 norm: {p2_norm:.6f}")
+    print(f"Hypothesis 1 norm: {h1_norm:.6f}")
+    print(f"Hypothesis 2 norm: {h2_norm:.6f}")
+    
+    # Check differences
+    premise_diff = torch.norm(premise_hyp1[0] - premise_hyp2[0]).item()
+    hypothesis_diff = torch.norm(hypothesis_hyp1[0] - hypothesis_hyp2[0]).item()
+    
+    print(f"\nEmbedding differences:")
+    print(f"Premise difference: {premise_diff:.6f}")
+    print(f"Hypothesis difference: {hypothesis_diff:.6f}")
+    
+    # Test energies
+    energy_dict1 = model.compute_bidirectional_energies(premise_hyp1, hypothesis_hyp1)
+    energy_dict2 = model.compute_bidirectional_energies(premise_hyp2, hypothesis_hyp2)
+    
+    print(f"\nEnergy comparison:")
+    print(f"Energy set 1: {energy_dict1['forward_energy']}")
+    print(f"Energy set 2: {energy_dict2['forward_energy']}")
+    
+    energy_diff = torch.norm(energy_dict1['forward_energy'] - energy_dict2['forward_energy']).item()
+    print(f"Energy difference: {energy_diff:.6f}")
+    
+    # Success criteria: embeddings should be > 1e-3, energy differences > 0.1
+    embedding_ok = min(p1_norm, p2_norm, h1_norm, h2_norm) > 1e-3
+    difference_ok = energy_diff > 0.1
+    
+    if embedding_ok and difference_ok:
+        print("✅ SUCCESS: Large embeddings and meaningful energy differences!")
+        return True
+    else:
+        print("❌ Still need larger embeddings or energy differences")
+        print(f"   Min embedding norm: {min(p1_norm, p2_norm, h1_norm, h2_norm):.6f} (need > 1e-3)")
+        print(f"   Energy difference: {energy_diff:.6f} (need > 0.1)")
+        return False
+
 
 if __name__ == "__main__":
-    test_pure_hyperbolic_order_embeddings()
+    test_energy_with_large_variation()
+    

@@ -237,7 +237,7 @@ def calculate_overall_performance_score(comprehensive_stats):
             if correct_gap_to_std >= 2.2:
                 print("PHASE 2 READY: A metric exceeds target threshold!")
                 score += 5.0  # Bonus for meeting phase requirements
-            elif best_gap_to_std >= 1.8:
+            elif correct_gap_to_std >= 1.8:
                 print("CLOSE TO PHASE 2: Metric approaching threshold")
                 score += 2.0  # Smaller bonus for getting close
             

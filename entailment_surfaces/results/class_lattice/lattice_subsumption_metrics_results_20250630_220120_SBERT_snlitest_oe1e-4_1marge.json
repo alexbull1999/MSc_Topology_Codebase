@@ -1,6 +1,6 @@
 {
   "subsumption_metrics_by_class": {
-    "bert_embeddings": {
+    "sbert_embeddings": {
       "entailment": {
         "containment_proxy_score": 0.16470070387570812,
         "asymmetric_energy_score": "2.6379714",
