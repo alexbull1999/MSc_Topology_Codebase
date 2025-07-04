@@ -61,8 +61,8 @@ echo "Found BERT data: data/processed/snli_full_standard_BERT.pt"
 
 # Check if trained order model exists
 ORDER_MODEL=""
-if [ -f "models/enhanced_order_embeddings_snli_full.pt" ]; then
-    ORDER_MODEL="models/enhanced_order_embeddings_snli_full.pt"
+if [ -f "models/enhanced_order_embeddings_snli_SBERT_full.pt" ]; then
+    ORDER_MODEL="models/enhanced_order_embeddings_snli_SBERT_full.pt"
     echo "✓ Found order model: $ORDER_MODEL"
 else
     echo "ERROR: No trained order embedding model found in models/"
