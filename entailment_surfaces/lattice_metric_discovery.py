@@ -54,6 +54,9 @@ class ClassTestResult:
 
 class SubsumptionMetrics:
     """Implementation of subsumption-aware distance metrics"""
+    # NOTE -- THESE ARE DIFFERENT TO THE EMBEDDING SPACES WE ENDED UP TESTING IN PHDIM FILES, AS THESE METRICS
+    # PROVIDE SCALAR DISTANE OUTPUTS BETWEEN INDIVIDUAL P-H PAIRS, WHEREAS EMBEDDING SPACES REQUIRE VECTOR REPRESENTATIONS
+    # FOR PH-DIM CLUSTERING; HENCE WE TRANSFORM THEM INTO ELEMENT-WISE RELATIONSHIPS ACROSS ALL DIMENSIONS
 
     @staticmethod
     def containment_proxy_distance(p_emb: np.ndarray, h_emb: np.ndarray, use_threshold: bool = False) -> float:

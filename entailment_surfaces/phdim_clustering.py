@@ -29,6 +29,7 @@ from persim import PersistenceImager
 from phdim_distance_metric_optimized import SurfaceDistanceMetricAnalyzer
 from gph.python import ripser_parallel
 from itertools import permutations
+import matplotlib.pyplot as plt
 
 
 # Import existing modules
@@ -128,7 +129,6 @@ class ClusteringValidator:
         # Target embedding spaces from Revised Next Steps
         self.target_spaces = [
             'lattice_containment',  # Most promising
-            'lattice_enhanced',
             'sbert_concat',        
             'hyperbolic_concat'     
         ]
@@ -496,8 +496,12 @@ class ClusteringValidator:
         successful_combinations = []
         
         # Test each combination using the same fixed sample indices
-        for space_name in self.target_spaces:
-            for metric_name in self.distance_metrics:
+        for space_idx, space_name in enumerate(self.target_spaces):
+            print(f"\n{'='*60}")
+            print(f"PROCESSING EMBEDDING SPACE {space_idx+1}/{len(self.target_spaces)}: {space_name}")
+            print(f"{'='*60}")
+            
+            for metric_idx, metric_name in enumerate(self.distance_metrics):
                 result = self.validate_embedding_space(
                     space_name, metric_name, all_embeddings, fixed_sample_indices
                 )
@@ -506,13 +510,14 @@ class ClusteringValidator:
                     all_results.append(result)
                     if result.success:
                         successful_combinations.append(result)
-
-                # CLEAR MEMORY after each embedding space to prevent OOM
-            if space_idx < len(self.target_spaces) - 1:  # Don't clear on last iteration
-                print(f"\nClearing memory after {space_name}...")
+                
+                # CLEAR MEMORY after each metric to prevent OOM
+                print(f"Clearing memory after {space_name} + {metric_name}...")
                 import gc
                 gc.collect()
-                torch.cuda.empty_cache() if torch.cuda.is_available() else None
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                    
         
         # Summary
         print("\n" + "="*60)
@@ -549,13 +554,18 @@ class ClusteringValidator:
                 {
                     'embedding_space': r.embedding_space,
                     'distance_metric': r.distance_metric,
-                    'clustering_accuracy': r.clustering_accuracy,
-                    'silhouette_score': r.silhouette_score,
-                    'adjusted_rand_score': r.adjusted_rand_score,
-                    'num_samples': r.num_samples,
-                    'success': r.success,
-                    'ph_dim_values': r.ph_dim_values,
-                    'ph_dim_stats': r.ph_dim_stats
+                    'clustering_accuracy': float(r.clustering_accuracy),
+                    'silhouette_score': float(r.silhouette_score),
+                    'adjusted_rand_score': float(r.adjusted_rand_score),
+                    'num_samples': int(r.num_samples),
+                    'success': bool(r.success),
+                    'ph_dim_values': {
+                    k: [float(x) for x in v] for k, v in r.ph_dim_values.items()  # Convert all to Python floats
+                    },
+                    'ph_dim_stats': {
+                    k: {stat_k: float(stat_v) for stat_k, stat_v in stat_dict.items()} 
+                    for k, stat_dict in r.ph_dim_stats.items()  # Convert all to Python floats
+                    }
                 }
                 for r in all_results
             ]

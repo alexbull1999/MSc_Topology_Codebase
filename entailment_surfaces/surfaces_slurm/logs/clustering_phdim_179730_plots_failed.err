@@ -44,63 +44,51 @@
   return fit_method(estimator, *args, **kwargs)
 /vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
   return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
-  return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (3). Possibly due to duplicate points in X.
   return fit_method(estimator, *args, **kwargs)
 /vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
   return fit_method(estimator, *args, **kwargs)
 /vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (3). Possibly due to duplicate points in X.
   return fit_method(estimator, *args, **kwargs)
-/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
   return fit_method(estimator, *args, **kwargs)
-/var/spool/slurm/d/job179610/slurm_script: line 57: 108165 Killed                  python entailment_surfaces/phdim_clustering.py
-slurmstepd: error: Detected 1 oom_kill event in StepId=179610.batch. Some of the step tasks have been OOM Killed.
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/sklearn/base.py:1152: ConvergenceWarning: Number of distinct clusters (1) found smaller than n_clusters (3). Possibly due to duplicate points in X.
+  return fit_method(estimator, *args, **kwargs)
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/phdim_clustering.py", line 712, in <module>
+    main()
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/phdim_clustering.py", line 707, in main
+    results = validator.run_full_validation()
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/phdim_clustering.py", line 603, in run_full_validation
+    self.generate_sample_size_plots(all_results, timestamp)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/phdim_clustering.py", line 626, in generate_sample_size_plots
+    plt.figure(figsize=(12, 8))
+NameError: name 'plt' is not defined

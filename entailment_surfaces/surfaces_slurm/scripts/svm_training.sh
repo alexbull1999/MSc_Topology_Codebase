@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=clustering_phdim
-#SBATCH --partition=a16gpu
-#SBATCH --time=12:00:00
+#SBATCH --job-name=svm_training
+#SBATCH --partition=gpgpuB
+#SBATCH --time=6:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/clustering_phdim_%j.out
-#SBATCH --error=../logs/clustering_phdim_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/svm_training_%j.out
+#SBATCH --error=../logs/svm_training_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -51,10 +51,10 @@ echo "Checking for required input data and models..."
 cd ~/MSc_Topology_Codebase
 
 echo ""
-echo "Starting PH-Dim Clustering Analysis..."
+echo "Starting SVM training..."
 echo ""
 
-python entailment_surfaces/phdim_clustering.py 
+python entailment_surfaces/svm_distance_learning.py 
 
 
 # Capture exit code
@@ -68,7 +68,7 @@ echo "Time: $(date)"
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
     echo "=== ANALYSIS SUCCESSFUL ==="
-    echo "PHDIM Clustering successful!"
+    echo "SVM Training successful!"
     echo ""
 
 else

@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=clustering_phdim
-#SBATCH --partition=a16gpu
+#SBATCH --job-name=clustering_validation
+#SBATCH --partition=gpgpuB
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --output=../logs/clustering_phdim_%j.out
-#SBATCH --error=../logs/clustering_phdim_%j.err
+#SBATCH --output=../logs/clustering_validation_%j.out
+#SBATCH --error=../logs/clustering_validation_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -51,10 +51,10 @@ echo "Checking for required input data and models..."
 cd ~/MSc_Topology_Codebase
 
 echo ""
-echo "Starting PH-Dim Clustering Analysis..."
+echo "Starting PH-Dim Clustering Validation Analysis..."
 echo ""
 
-python entailment_surfaces/phdim_clustering.py 
+python entailment_surfaces/phdim_clustering_validation_best_metrics.py 
 
 
 # Capture exit code
