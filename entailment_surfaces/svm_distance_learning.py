@@ -10,7 +10,9 @@ import os
 import json
 from datetime import datetime
 
-sys.path.append('MSc_Topology_Codebase/entailment_surfaces')
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.order_embeddings_asymmetry import OrderEmbeddingModel
 
 def flush_output():
     """Force output to appear immediately in SLURM"""
@@ -85,6 +87,66 @@ def generate_lattice_containment_embeddings(premise_embeddings, hypothesis_embed
     
     # Concatenate all batches
     return np.concatenate(all_lattice_embeddings, axis=0)
+
+def generate_order_asymmetry_embeddings(premise_embeddings, hypothesis_embeddings, batch_size=1000):
+    """Generate order asymmetry embedding space for each premise-hypothesis pair"""
+    print("Generating order asymmetry embedding space")
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Using device: {device}")
+    order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt"
+
+    checkpoint = torch.load(order_model_path, map_location=device, weights_only=False)
+
+    model_config = checkpoint['model_config']
+    order_model = OrderEmbeddingModel(
+        bert_dim=model_config['bert_dim'],
+        order_dim=model_config['order_dim'],
+        asymmetry_weight=model_config.get('asymmetry_weight', 0.2)
+    )
+    order_model.load_state_dict(checkpoint['model_state_dict'])
+    order_model.to(device)
+    order_model.eval()
+    
+    total_samples = len(premise_embeddings)
+    print(f"Processing {total_samples} samples in batches of {batch_size}")
+    
+    # Process in batches to avoid memory issues
+    all_order_asymmetry_embeddings = []
+    
+    for i in range(0, total_samples, batch_size):
+        end_idx = min(i + batch_size, total_samples)
+        print(f"Processing batch {i//batch_size + 1}/{(total_samples-1)//batch_size + 1}")
+        
+        # Get batch
+        premise_batch = premise_embeddings[i:end_idx]
+        hypothesis_batch = hypothesis_embeddings[i:end_idx]
+        
+        # Convert to tensors if needed
+        if not torch.is_tensor(premise_batch):
+            premise_batch = torch.tensor(premise_batch)
+        if not torch.is_tensor(hypothesis_batch):
+            hypothesis_batch = torch.tensor(hypothesis_batch)
+        
+        # Move to device
+        premise_batch = premise_batch.to(device)
+        hypothesis_batch = hypothesis_batch.to(device)
+
+        # Compute lattice embeddings for this batch
+        with torch.no_grad():
+            premise_order_batch = order_model(premise_batch)
+            hypothesis_order_batch = order_model(hypothesis_batch)
+            asymmetry_vectors_batch = torch.abs(premise_order_batch - hypothesis_order_batch)
+            # Move back to CPU and store
+            all_order_asymmetry_embeddings.append(asymmetry_vectors_batch.cpu().numpy())
+
+        # Clear GPU memory
+        del premise_batch, premise_order_batch, hypothesis_batch, hypothesis_order_batch, asymmetry_vectors_batch
+        if device.type == 'cuda':
+            torch.cuda.empty_cache()
+    
+    # Concatenate all batches
+    return np.concatenate(all_order_asymmetry_embeddings, axis=0)
+
 
 def prepare_labels(labels):
     """Convert labels to numerical format"""
@@ -372,7 +434,7 @@ def validate_svm_teacher(svm, scaler, X_test_scaled, y_test, sample_size):
 def save_validation_results(svm, scaler, X_test_scaled, y_test, decision_values, y_pred, sample_size):
     """Save SVM validation results to file"""
     # Create results directory
-    os.makedirs('svm_validation_results', exist_ok=True)
+    os.makedirs('entailment_surfaces/svm_validation_results', exist_ok=True)
     
     # Generate timestamp for unique filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -409,12 +471,12 @@ def save_validation_results(svm, scaler, X_test_scaled, y_test, decision_values,
     }
     
     # Save as JSON
-    json_filename = f'svm_validation_results/svm_validation_optimized_full_{timestamp}_n{sample_size}.json'
+    json_filename = f'entailment_surfaces/svm_validation_results/svm_validation_order_asymmetry__{timestamp}_n{sample_size}.json'
     with open(json_filename, 'w') as f:
         json.dump(results, f, indent=2)
     
     # Save as readable text file
-    txt_filename = f'svm_validation_results/svm_validation_optimized_full_{timestamp}_n{sample_size}.txt'
+    txt_filename = f'entailment_surfaces/svm_validation_results/svm_validation_order_asymmetry_{timestamp}_n{sample_size}.txt'
     with open(txt_filename, 'w') as f:
         f.write("SVM TEACHER VALIDATION RESULTS\n")
         f.write("=" * 50 + "\n\n")
@@ -506,6 +568,7 @@ def analyze_lattice_embeddings(embeddings, labels):
 def main():
     # Configuration
     data_path = 'data/processed/snli_full_standard_SBERT.pt'
+    sample_size = 20000
     
     print("Starting SVM Teacher Training Pipeline")
     print("="*50)
@@ -513,15 +576,14 @@ def main():
     # Load data
     print(f"About to load data from: {data_path}")
     flush_output()
-    data = load_snli_data(data_path)
-    sample_size = len(data)
+    data = load_snli_data(data_path, sample_size)
     print("Data loaded successfully!")
     flush_output()
 
     print("About to generate embeddings...")
     flush_output()
-    # Generate lattice containment embedding space
-    X = generate_lattice_containment_embeddings(
+    # Generate lattice containment / order asymmetry embedding space
+    X = generate_order_asymmetry_embeddings(
         data['premise_embeddings'], 
         data['hypothesis_embeddings']
     )
@@ -531,7 +593,7 @@ def main():
     # Prepare labels
     y = prepare_labels(data['labels'])
     
-    print("Analyzing lattice embeddings...")
+    print("Analyzing lattice / order_asymmetry embeddings...")
     flush_output()
     # Analyze lattice embeddings
     analyze_lattice_embeddings(X, y)

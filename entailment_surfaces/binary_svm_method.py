@@ -118,28 +118,22 @@ def create_binary_ec_dataset(X, y):
     return X_binary, y_binary
 
 
-def train_binary_svm(X_binary, y_binary, test_size=0.2, random_state=42):
+def train_binary_svm(X_train_binary, y_train_binary, random_state=42):
     """Train binary SVM to separate Entailment from Contradiction"""
     print("\n" + "="*60)
     print("STEP 1: TRAINING BINARY ENTAILMENT vs CONTRADICTION SVM")
     print("="*60)
     
-    print("Splitting binary data into train/test sets")
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_binary, y_binary, test_size=test_size, random_state=random_state, stratify=y_binary
-    )
-    
     print("Scaling features")
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    X_train_scaled = scaler.fit_transform(X_train_binary)
     
     print("Setting up GridSearchCV for binary SVM optimization")
     
     # Define parameter grid
     param_grid = {
-        'C': [0.1, 1, 10, 100],
-        'gamma': ['scale', 'auto', 0.01, 0.1, 1]
+        'C': [1], # original tests: 'C': [0.1, 1, 10, 100] (1 was best)
+        'gamma': ['scale'] #original tests: 'gamma': ['scale', 'auto', 0.01, 0.1, 1]
     }
     
     print(f"Parameter grid: {param_grid}")
@@ -155,11 +149,11 @@ def train_binary_svm(X_binary, y_binary, test_size=0.2, random_state=42):
         cv=3,
         scoring='accuracy',
         n_jobs=-1,
-        verbose=1
+        verbose=2
     )
     
     print("Starting GridSearchCV for binary classification...")
-    grid_search.fit(X_train_scaled, y_train)
+    grid_search.fit(X_train_scaled, y_train_binary)
     
     print("Binary GridSearchCV completed!")
     print(f"Best parameters: {grid_search.best_params_}")
@@ -169,35 +163,24 @@ def train_binary_svm(X_binary, y_binary, test_size=0.2, random_state=42):
     best_binary_svm = grid_search.best_estimator_
     
     # Evaluate performance
-    train_score = best_binary_svm.score(X_train_scaled, y_train)
-    test_score = best_binary_svm.score(X_test_scaled, y_test)
+    train_score = best_binary_svm.score(X_train_scaled, y_train_binary)
     
     print(f"Binary SVM Training Accuracy: {train_score:.4f}")
-    print(f"Binary SVM Test Accuracy: {test_score:.4f}")
-    
-    # Detailed validation
-    y_pred = best_binary_svm.predict(X_test_scaled)
-    
-    print("\nBinary Classification Report:")
-    print(classification_report(y_test, y_pred, target_names=['Entailment', 'Contradiction']))
-    
-    print("\nBinary Confusion Matrix:")
-    print(confusion_matrix(y_test, y_pred))
     
     return best_binary_svm, scaler, grid_search
 
 
-def compute_entailment_scores(binary_svm, scaler, X_full, y_full):
+def compute_entailment_scores(binary_svm, scaler, X_data, y_data, dataset_name=""):
     """Compute continuous entailment scores for all samples using binary SVM"""
     print("\n" + "="*60)
-    print("STEP 2: COMPUTING CONTINUOUS ENTAILMENT SCORES")
+    print(f"STEP 2: COMPUTING CONTINUOUS ENTAILMENT for {dataset_name.upper()} SCORES")
     print("="*60)
     
     # Scale the full dataset
-    X_full_scaled = scaler.transform(X_full)
+    X_scaled = scaler.transform(X_data)
     
     # Get decision function values (signed distances from hyperplane)
-    entailment_scores = binary_svm.decision_function(X_full_scaled)
+    entailment_scores = binary_svm.decision_function(X_scaled)
     
     print(f"Computed entailment scores for {len(entailment_scores)} samples")
     print(f"Score range: [{np.min(entailment_scores):.3f}, {np.max(entailment_scores):.3f}]")
@@ -207,7 +190,7 @@ def compute_entailment_scores(binary_svm, scaler, X_full, y_full):
     
     print("\nEntailment Score Distribution by Class:")
     for class_idx in range(3):
-        class_scores = entailment_scores[y_full == class_idx]
+        class_scores = entailment_scores[y_data == class_idx]
         print(f"  {class_names[class_idx]:12s}: mean={np.mean(class_scores):6.3f}, "
               f"std={np.std(class_scores):5.3f}, "
               f"range=[{np.min(class_scores):6.3f}, {np.max(class_scores):6.3f}]")
@@ -215,22 +198,18 @@ def compute_entailment_scores(binary_svm, scaler, X_full, y_full):
     return entailment_scores
 
 
-def optimize_thresholds(entailment_scores, y_full, test_size=0.2, random_state=42):
+def optimize_thresholds(train_scores, y_train):
     """Find optimal thresholds for 3-way classification based on entailment scores"""
     print("\n" + "="*60)
     print("STEP 3: OPTIMIZING CLASSIFICATION THRESHOLDS")
     print("="*60)
     
-    # Split data for threshold optimization
-    scores_train, scores_test, y_train, y_test = train_test_split(
-        entailment_scores, y_full, test_size=test_size, random_state=random_state, stratify=y_full
-    )
-    
     print("Searching for optimal thresholds...")
     
     # Grid search over threshold values
-    entailment_thresholds = np.linspace(np.min(scores_train), np.max(scores_train), 50)
-    contradiction_thresholds = np.linspace(np.min(scores_train), np.max(scores_train), 50)
+    score_min, score_max = np.min(train_scores), np.max(train_scores)
+    entailment_thresholds = np.linspace(score_min, score_max, 50)
+    contradiction_thresholds = np.linspace(score_min, score_max, 50)
     
     best_accuracy = 0
     best_thresholds = None
@@ -238,11 +217,11 @@ def optimize_thresholds(entailment_scores, y_full, test_size=0.2, random_state=4
     
     for e_thresh in entailment_thresholds:
         for c_thresh in contradiction_thresholds:
-            if e_thresh <= c_thresh:  # Ensure logical ordering
+            if e_thresh >= c_thresh:  # Ensure logical ordering
                 continue
                 
             # Apply thresholds
-            y_pred = apply_thresholds(scores_train, e_thresh, c_thresh)
+            y_pred = apply_thresholds(train_scores, e_thresh, c_thresh)
             
             # Calculate accuracy
             accuracy = np.mean(y_pred == y_train)
@@ -252,26 +231,20 @@ def optimize_thresholds(entailment_scores, y_full, test_size=0.2, random_state=4
                 best_thresholds = (e_thresh, c_thresh)
     
     print(f"Best threshold optimization accuracy: {best_accuracy:.4f}")
-    print(f"Best thresholds: Entailment > {best_thresholds[0]:.3f}, Contradiction < {best_thresholds[1]:.3f}")
+    print(f"Best thresholds: Entailment < {best_thresholds[0]:.3f}, Contradiction > {best_thresholds[1]:.3f}")
     
-    # Test on held-out data
-    y_test_pred = apply_thresholds(scores_test, best_thresholds[0], best_thresholds[1])
-    test_accuracy = np.mean(y_test_pred == y_test)
-    
-    print(f"Test accuracy with optimal thresholds: {test_accuracy:.4f}")
-    
-    return best_thresholds, test_accuracy
+    return best_thresholds
 
 
 def apply_thresholds(scores, entailment_threshold, contradiction_threshold):
     """Apply thresholds to convert continuous scores to discrete classes"""
     predictions = np.ones(len(scores))  # Default to neutral (1)
     
-    # High scores -> Entailment (0)
-    predictions[scores > entailment_threshold] = 0
+    # Low scores -> Entailment (0)
+    predictions[scores < entailment_threshold] = 0
     
-    # Low scores -> Contradiction (2)
-    predictions[scores < contradiction_threshold] = 2
+    # High scores -> Contradiction (2)
+    predictions[scores > contradiction_threshold] = 2
     
     return predictions.astype(int)
 
@@ -428,8 +401,7 @@ def main():
     # Load data
     print(f"About to load data from: {data_path}")
     flush_output()
-    data = load_snli_data(data_path)
-    sample_size = len(data)
+    data = load_snli_data(data_path, sample_size)
     print("Data loaded successfully!")
     flush_output()
 
@@ -453,23 +425,29 @@ def main():
     
     print("Creating binary dataset and training E vs C SVM...")
     flush_output()
-    # Train SVM teacher
-    X_binary, y_binary = create_binary_ec_dataset(X, y)
-    binary_svm, scaler, grid_search = train_binary_svm(X_binary, y_binary)
-    
-    print("Computing entailment scores for all samples...")
-    flush_output()
-    # Validate SVM teacher
-    entailment_scores = compute_entailment_scores(binary_svm, scaler, X, y)
-
-    print("Optimizing thresholds for 3-way classification...")
-    optimal_thresholds, threshold_accuracy = optimize_thresholds(entailment_scores, y)
-
-
-    print("Final validation...")
-    y_pred, final_accuracy = validate_hierarchical_classifier(
-        entailment_scores, y, optimal_thresholds, sample_size
+    # 2. Perform a SINGLE Train/Test Split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
     )
+
+    # 3. Train Binary SVM on the TRAINING data only
+    X_train_binary, y_train_binary = create_binary_ec_dataset(X_train, y_train)
+    binary_svm, scaler, _ = train_binary_svm(X_train_binary, y_train_binary) 
+
+    # 4. Compute scores for BOTH train and test sets using the single trained SVM
+    train_scores = compute_entailment_scores(binary_svm, scaler, X_train, y_train, "training dataset")
+    test_scores = compute_entailment_scores(binary_svm, scaler, X_test, y_test, "test dataset")
+    
+    # 5. Find thresholds on the TRAINING scores only
+    optimal_thresholds = optimize_thresholds(train_scores, y_train)
+
+    # 6. Final validation on the HELD-OUT test set
+    print("\n" + "="*60)
+    print("FINAL HIERARCHICAL CLASSIFIER VALIDATION ON TEST SET")
+    print("="*60)
+    y_pred, final_accuracy = validate_hierarchical_classifier(test_scores, y_test, optimal_thresholds, sample_size)
+    
+    print("\nPIPELINE COMPLETE")
     
     print("\n" + "="*60)
     print("HIERARCHICAL SVM TRAINING COMPLETE")
@@ -477,7 +455,7 @@ def main():
     print(f"Final Test Accuracy: {final_accuracy:.4f}")
     print(f"Improvement over baseline: {final_accuracy - 0.656:.4f}")
     
-    return binary_svm, scaler, entailment_scores, optimal_thresholds, grid_search
+    return binary_svm, scaler, test_scores, optimal_thresholds, grid_search
 
 if __name__ == "__main__":
-    binary_svm, scaler, entailment_scores, thresholds, grid_search = main()
+    binary_svm, scaler, test_scores, thresholds, grid_search = main()

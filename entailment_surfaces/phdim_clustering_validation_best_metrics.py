@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Tuple
 import warnings
+import copy
 warnings.filterwarnings('ignore')
 
 # Import necessary components from the clustering validation module
@@ -37,12 +38,12 @@ class StatisticalValidation:
         
         # Top performers to test with more samples
         self.top_combinations = [
-            ('lattice_containment', 'euclidean'),
-            ('lattice_containment', 'cosine'),
-            ('lattice_containment', 'minkowski_3'),
-            ('sbert_concat', 'euclidean'),
-            ('sbert_concat', 'minkowski_3'),
-            ('hyperbolic_concat', 'euclidean')
+            ('order_asymmetry', 'euclidean'),
+            ('order_asymmetry', 'chebyshev'),
+            ('order_asymmetry', 'minkowski_3'),
+            ('directional_order_asymmetry', 'euclidean'),
+            ('directional_order_asymmetry', 'chebyshev'),
+            ('directional_order_asymmetry', 'minkowski_3')
         ]
         
         # Sample size for statistical validation
@@ -64,7 +65,7 @@ class StatisticalValidation:
         all_embeddings = self.base_validator.generate_embedding_spaces_by_class()
         
         # Only keep the embedding spaces we're testing
-        needed_spaces = ['lattice_containment', 'sbert_concat', 'hyperbolic_concat']
+        needed_spaces = ['order_asymmetry', 'directional_order_asymmetry']
         filtered_embeddings = {space: all_embeddings[space] for space in needed_spaces if space in all_embeddings}
         
         # Delete the full embeddings dictionary to save memory
@@ -381,15 +382,13 @@ class StatisticalValidation:
         from datetime import datetime
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        results_file = self.output_dir / f"statistical_validation_{timestamp}.json"
+        results_file = self.output_dir / f"order_asymmetry_statistical_validation_{timestamp}.json"
         
         try:
-            serializable_results = json.loads(
-                json.dumps(validation_results, default=convert_numpy_types)
-            )
+            results_to_save = copy.deepcopy(validation_results)
             
             with open(results_file, 'w') as f:
-                json.dump(serializable_results, f, indent=2)
+                json.dump(serializable_results, f, indent=2, default=convert_numpy_types)
             
             print(f"\nStatistical validation results saved to: {results_file}")
             
@@ -406,8 +405,8 @@ class StatisticalValidation:
                     simplified_results[combo_name] = {
                         'space': results.get('space', ''),
                         'metric': results.get('metric', ''),
-                        'statistics': results.get('statistics', {}),
-                        'significance_tests': results.get('significance_tests', {})
+                        'statistics': copy.deepcopy(results.get('statistics', {})),
+                        'significance_tests': copy.deepcopy(results.get('significance_tests', {}))
                     }
             
             # Try again with simplified data

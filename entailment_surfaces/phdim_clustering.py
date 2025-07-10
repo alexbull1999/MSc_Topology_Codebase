@@ -128,15 +128,23 @@ class ClusteringValidator:
         
         # Target embedding spaces from Revised Next Steps
         self.target_spaces = [
-            'lattice_containment',  # Most promising
-            'sbert_concat',        
-            'hyperbolic_concat'     
+            #'lattice_containment',  # Most promising
+            #'sbert_concat',        
+            #'hyperbolic_concat'
+            'order_asymmetry',
+            'directional_order_asymmetry'     
         ]
         
         # All distance metrics
         self.distance_metrics = [
-            'euclidean', 'manhattan', 'chebyshev', 'cosine',
-            'minkowski_3', 'minkowski_4', 'canberra', 'braycurtis'
+            'euclidean', 
+            'manhattan', 
+            'chebyshev', 
+            'cosine',
+            'minkowski_3', 
+            'minkowski_4' 
+            #'canberra' 
+            #'braycurtis'
         ]
         
         # Sampling parameters
@@ -572,11 +580,11 @@ class ClusteringValidator:
         }
         
         # Save files
-        results_file = self.output_dir / f"phase1_clustering_results_{timestamp}.json"
+        results_file = self.output_dir / f"order_asymmetry_clustering_results_{timestamp}.json"
         with open(results_file, 'w') as f:
             json.dump(results_data, f, indent=2)
         
-        summary_file = self.output_dir / f"phase1_summary_report_{timestamp}.txt"
+        summary_file = self.output_dir / f"order_asymmetry_summary_report_{timestamp}.txt"
         with open(summary_file, 'w') as f:
             f.write("PHASE 1 CLUSTERING VALIDATION RESULTS\n")
             f.write("="*50 + "\n\n")
@@ -685,7 +693,7 @@ class ClusteringValidator:
         plt.tight_layout()
         
         # Save summary plot
-        summary_plot_file = self.plots_dir / f"sample_size_summary_{timestamp}.png"
+        summary_plot_file = self.plots_dir / f"sample_size_summary_{space_name}_{timestamp}.png"
         plt.savefig(summary_plot_file, dpi=300, bbox_inches='tight')
         plt.close()
         

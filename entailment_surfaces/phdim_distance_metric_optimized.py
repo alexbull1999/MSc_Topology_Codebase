@@ -15,6 +15,8 @@ import pickle
 import time
 from datetime import datetime
 import logging
+import torch.nn.functional as F
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -83,24 +85,33 @@ class SurfaceDistanceMetricAnalyzer:
             
         ]
 
-         # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
-        self.embedding_spaces = [
-            'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
-            'sbert_difference',      # Premise - Hypothesis (relationship vector)
-            'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
-            'order_difference',     # Order premise - hypothesis (order relationship)
-            'order_violations',     # Order violation energies (inherently relational)
-            'hyperbolic_concat',    # Concatenated hyperbolic embeddings
-            'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
-            'cone_features',        # Multiple cone-related features
+        #  # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
+        # self.embedding_spaces = [
+        #     'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
+        #     'sbert_difference',      # Premise - Hypothesis (relationship vector)
+        #     'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
+        #     'order_difference',     # Order premise - hypothesis (order relationship)
+        #     'order_violations',     # Order violation energies (inherently relational)
+        #     'hyperbolic_concat',    # Concatenated hyperbolic embeddings
+        #     'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
+        #     'cone_features',        # Multiple cone-related features
 
-            # Lattice embedding spaces (All on SBERT raw embeddings)
-            'lattice_containment', # Element-wise containment relationships
-            'lattice_order_violations', # Element-wise order violations  
-            'lattice_height',          # Element-wise height differences
-            'lattice_subsumption',     # Element-wise subsumption coverage
-            'lattice_bidirectional_order_violations',   # Both directions of violations
-            'lattice_enhanced'         # All lattice features combined
+        #     # Lattice embedding spaces (All on SBERT raw embeddings)
+        #     'lattice_containment', # Element-wise containment relationships
+        #     'lattice_order_violations', # Element-wise order violations  
+        #     'lattice_height',          # Element-wise height differences
+        #     'lattice_subsumption',     # Element-wise subsumption coverage
+        #     'lattice_bidirectional_order_violations',   # Both directions of violations
+        #     'lattice_enhanced'         # All lattice features combined
+        # ]
+
+        self.embedding_spaces = [
+            #Neutral vs E/C focused embeddings spaces
+            'order_asymmetry',
+            'directional_order_asymmetry',
+            'energy_based_order_asymmetry',
+            'theoretical_based_order_asymmetry',
+            'asymmetric_feature_weighting'
         ]
 
         # PH-Dim parameters
@@ -434,6 +445,64 @@ class SurfaceDistanceMetricAnalyzer:
                     subsumption = torch.minimum(premise_bert, hypothesis_bert) / (torch.abs(hypothesis_bert) + epsilon)
                     space_embeddings[label] = (torch.cat([containment, order_violations, height, subsumption], dim=1)).cpu()
 
+                elif space == 'order_asymmetry':
+                    premise_order = data_by_class[label]['premise_order_euclidean']
+                    hypothesis_order = data_by_class[label]['hypothesis_order_euclidean']
+                    asymmetry_vectors = torch.abs(premise_order - hypothesis_order)
+                    space_embeddings[label] = asymmetry_vectors.cpu()
+
+                elif space == 'directional_order_asymmetry':
+                    premise_order = data_by_class[label]['premise_order_euclidean']
+                    hypothesis_order = data_by_class[label]['hypothesis_order_euclidean']
+    
+                    # Capture directional asymmetry (100D total)
+                    forward_diff = premise_order - hypothesis_order      # P→H direction
+                    backward_diff = hypothesis_order - premise_order     # H→P direction
+                    asymmetry_vectors = torch.cat([forward_diff, backward_diff], dim=1)
+                    space_embeddings[label] = asymmetry_vectors.cpu()
+
+                elif space == 'energy_based_order_asymmetry':
+                    forward_energy = data_by_class[label]['forward_order_energies']
+                    backward_energy = data_by_class[label]['backward_order_energies']
+                    # Create energy-based features
+                    energy_features = torch.stack([
+                        forward_energy,                                    # P→H energy
+                        backward_energy,                                   # H→P energy  
+                        torch.abs(forward_energy - backward_energy),      # Asymmetry magnitude
+                        forward_energy + backward_energy,                 # Total energy
+                        forward_energy / (backward_energy + 1e-8)         # Energy ratio
+                    ], dim=1)
+                    space_embeddings[label] = energy_features.cpu()
+
+                elif space == 'theoretical_based_order_asymmetry':
+                    premise_order = data_by_class[label]['premise_order_euclidean']
+                    hypothesis_order = data_by_class[label]['hypothesis_order_euclidean']
+                    # Compute directional differences
+                    forward_diff = premise_order - hypothesis_order
+                    backward_diff = hypothesis_order - premise_order
+    
+                    # Create features that match the theoretical expectations
+                    features = torch.cat([
+                        forward_diff,                                      # Forward direction (50D)
+                        backward_diff,                                     # Backward direction (50D)
+                        torch.abs(forward_diff - backward_diff),          # Asymmetry magnitude (50D)
+                        (forward_diff + backward_diff) / 2,               # Symmetric component (50D)
+                    ], dim=1)
+                    space_embeddings[label] = features.cpu()  # 200D total
+
+                elif space == 'asymmetric_feature_weighting':
+                    premise_order = data_by_class[label]['premise_order_euclidean']
+                    hypothesis_order = data_by_class[label]['hypothesis_order_euclidean']
+                    premise_asym = self.order_model.get_asymmetric_features(premise_order)
+                    hypothesis_asym = self.order_model.get_asymmetric_features(hypothesis_order)
+                    # Directional asymmetric features
+                    asymmetry_vectors = torch.cat([
+                        premise_asym - hypothesis_asym,    # Forward asymmetric direction
+                        hypothesis_asym - premise_asym,    # Backward asymmetric direction
+                    ], dim=1)
+                    space_embeddings[label] = asymmetry_vectors.cpu()
+
+
             # Only add space if we have embeddings
             if space_embeddings:
                 all_embeddings[space] = space_embeddings
@@ -766,13 +835,13 @@ class SurfaceDistanceMetricAnalyzer:
             all_results[space_name] = space_results
             
             # M intermediate results
-            results_file = self.results_dir / f"surface_analysis_{space_name}_{timestamp}_SEED3.json"
+            results_file = self.results_dir / f"surface_analysis_{space_name}_{timestamp}_SYMMETRY7.json"
             with open(results_file, 'w') as f:
                 json.dump(space_results, f, indent=2, default=str)
             print(f"\nSaved {space_name} results to {results_file}")
         
         # Save complete results and generate comprehensive report
-        final_results_file = self.results_dir / f"comprehensive_surface_analysis_{timestamp}_SEED3.json"
+        final_results_file = self.results_dir / f"comprehensive_surface_analysis_{timestamp}_SYMMETRY7.json"
         with open(final_results_file, 'w') as f:
             json.dump(all_results, f, indent=2, default=str)
         
@@ -790,7 +859,7 @@ class SurfaceDistanceMetricAnalyzer:
 
     def _generate_simple_report(self, results: Dict, timestamp: str):
         """Generate simple plain output report for analysis"""
-        report_file = self.results_dir / f"simple_analysis_report_{timestamp}_SEED3.txt"
+        report_file = self.results_dir / f"simple_analysis_report_{timestamp}_SYMMETRY7.txt"
         
         with open(report_file, 'w') as f:
             f.write("SURFACE DISTANCE METRIC ANALYSIS - PLAIN RESULTS\n")

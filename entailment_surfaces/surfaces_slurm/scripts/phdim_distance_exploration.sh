@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=surface_distance_analysis
-#SBATCH --partition=gpgpuB
+#SBATCH --partition=gpgpuC
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/surface_analysis_full_data_SBERT_LATTICE_SEEDED_3_%j.out
-#SBATCH --error=../logs/surface_analysis_full_data_SBERT__LATTICE_SEEDED_3_%j.err
+#SBATCH --output=../logs/surface_analysis_full_data_SBERT_SYMMETRY_7_%j.out
+#SBATCH --error=../logs/surface_analysis_full_data_SBERT_SYMMETRY_7_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
