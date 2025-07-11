@@ -146,7 +146,7 @@ class ContrastiveAutoencoderTrainer:
         
         return avg_losses
     
-    def validate_epoch(self, val_loader):
+    def validate_epoch(self, val_loader, contrastive_weight=None):
         """
         Validate for one epoch
         
@@ -157,6 +157,8 @@ class ContrastiveAutoencoderTrainer:
             Dictionary with average validation losses
         """
         self.model.eval()
+
+        print(f"DEBUG: validate_epoch called with contrastive_weight={contrastive_weight}")
         
         epoch_losses = {
             'total_loss': 0.0,
@@ -166,16 +168,25 @@ class ContrastiveAutoencoderTrainer:
         }
         
         with torch.no_grad():
+            batch_idx = 0
             for batch in val_loader:
+
+                if batch_idx == 0:
+                    print(f"DEBUG: First validation batch:")
+                    print(f"  contrastive_loss raw: {contrastive_loss.item()}")
+                    print(f"  reconstruction_loss raw: {reconstruction_loss.item()}")
+                    print(f"  total_loss raw: {total_loss.item()}")
+                    batch_idx += 1
+
                 embeddings = batch['embeddings'].to(self.device)
                 labels = batch['labels'].to(self.device)
                 
                 # Forward pass
                 latent, reconstructed = self.model(embeddings)
                 
-                # Compute loss
+                # Compute loss WITH dynamic weight
                 total_loss, contrastive_loss, reconstruction_loss = self.loss_function(
-                    latent, labels, reconstructed, embeddings
+                    latent, labels, reconstructed, embeddings, contrastive_weight=contrastive_weight
                 )
                 
                 # Accumulate losses
@@ -236,7 +247,7 @@ class ContrastiveAutoencoderTrainer:
             train_losses = self.train_epoch(train_loader, epoch, self.beta_config)
             
             # Validation phase (always use current beta for consistency)
-            val_losses = self.validate_epoch(val_loader)
+            val_losses = self.validate_epoch(val_loader, train_losses.get('contrastive_weight'))
             
             # Calculate epoch time
             epoch_time = time.time() - epoch_start_time

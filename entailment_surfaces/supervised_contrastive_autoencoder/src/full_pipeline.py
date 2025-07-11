@@ -9,6 +9,7 @@ import os
 import json
 import argparse
 from datetime import datetime
+import numpy as np
 
 # Import our modules
 from contrastive_autoencoder_model import ContrastiveAutoencoder
@@ -215,6 +216,24 @@ def evaluate_model(model, train_loader, val_loader, test_loader, config, results
     
     return evaluation_results
 
+def prepare_for_json(obj):
+    """Prepare object for JSON serialization by converting numpy types"""
+    if isinstance(obj, dict):
+        return {k: prepare_for_json(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [prepare_for_json(item) for item in obj]
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, torch.Tensor):
+        return obj.tolist()
+    elif isinstance(obj, (np.float32, np.float64)):
+        return float(obj)
+    elif isinstance(obj, (np.int32, np.int64)):
+        return int(obj)
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
+    else:
+        return obj
 
 def save_final_results(config, train_history, evaluation_results, exp_dir):
     """Save final experiment results"""
@@ -232,8 +251,9 @@ def save_final_results(config, train_history, evaluation_results, exp_dir):
     
     # Save comprehensive results
     final_results_path = os.path.join(exp_dir, 'final_results.json')
+    final_results_clean = prepare_for_json(final_results)
     with open(final_results_path, 'w') as f:
-        json.dump(final_results, f, indent=2)
+        json.dump(final_results_clean, f, indent=2)
     
     print(f"Final results saved to: {final_results_path}")
     

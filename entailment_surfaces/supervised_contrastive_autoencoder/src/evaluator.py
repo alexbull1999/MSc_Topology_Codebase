@@ -326,13 +326,13 @@ class ContrastiveAutoencoderEvaluator:
                     for j in range(i+1, len(group))
                 ])
                 
-                group_stats.append({
+                class_stats.append({
                     'centroid': group_centroid,
                     'variance': group_variance,
                     'mean_pairwise_distance': group_mean_pairwise_distance
                 })
             
-            group_statistics[class_name] = group_stats
+            group_statistics[class_name] = class_stats
         
         # Test clustering of group representatives (centroids)
         if len(class_groups) == 3:  # All classes have groups
