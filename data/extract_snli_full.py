@@ -57,8 +57,8 @@ def extract_snli_full_dataset(arrow_file_path, output_path, seed=42):
 
 
 if __name__ == "__main__":
-    arrow_file = 'data/raw/snli/test/data-00000-of-00001.arrow'
+    arrow_file = 'data/raw/snli/validation/data-00000-of-00001.arrow'
     
     # Extract full dataset
-    full_output_path = 'data/raw/snli/test/snli_full_test.json'
+    full_output_path = 'data/raw/snli/validation/snli_full_val.json'
     df = extract_snli_full_dataset(arrow_file, full_output_path)

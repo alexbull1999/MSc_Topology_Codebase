@@ -198,13 +198,13 @@ def test_text_processing():
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
     # Test dataset
-    data_path = "data/raw/snli/test/snli_full_test.json"
+    data_path = "data/raw/snli/validation/snli_full_val.json"
     if os.path.exists(data_path):
         processed_data = processor.process_entailment_dataset(data_path)
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/snli_full_standard_SBERT_test.pt"
+        output_path = "data/processed/snli_full_standard_SBERT_validation.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

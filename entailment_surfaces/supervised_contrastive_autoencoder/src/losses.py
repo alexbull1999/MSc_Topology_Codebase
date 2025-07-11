@@ -130,32 +130,60 @@ class CombinedLoss(nn.Module):
         
         self.contrastive_loss = SupervisedContrastiveLoss(temperature=temperature)
         self.reconstruction_loss = ReconstructionLoss(loss_type=reconstruction_type)
-    
-    def forward(self, latent_features, labels, reconstructed, original):
+
+    @staticmethod
+    def get_contrastive_beta(epoch, warmup_epochs=10, max_beta=2.0, schedule_type='linear'):
+        """
+        Beta scheduling for contrastive loss weight
+        
+        Args:
+            epoch: Current epoch number
+            warmup_epochs: Number of epochs with pure reconstruction (β=0)
+            max_beta: Maximum contrastive weight
+            schedule_type: 'linear', 'cosine', or 'exponential'
+        """
+        if epoch < warmup_epochs:
+            return 0.0  # Pure reconstruction phase
+        
+        # Calculate progress after warmup
+        progress = (epoch - warmup_epochs) / max(1, (50 - warmup_epochs))  # Assuming 50 total epochs
+        progress = min(1.0, progress)  # Clamp to [0, 1]
+        
+        if schedule_type == 'linear':
+            return progress * max_beta
+        elif schedule_type == 'cosine':
+            import math
+            return 0.5 * max_beta * (1 + math.cos(math.pi * (1 - progress)))
+        elif schedule_type == 'exponential':
+            return max_beta * (progress ** 2)
+        else:
+            return progress * max_beta
+
+    def forward(self, latent_features, labels, reconstructed, original, contrastive_weight=None):
         """
         Compute combined loss
-        
         Args:
             latent_features: Latent representations [batch_size, latent_dim]
             labels: Class labels [batch_size]
             reconstructed: Reconstructed embeddings [batch_size, input_dim]
             original: Original embeddings [batch_size, input_dim]
-            
+            contrastive_weight: Beta parameter for scheduling
         Returns:
             total_loss: Combined loss value
             contrastive_loss: Contrastive loss component
             reconstruction_loss: Reconstruction loss component
         """
-        # Compute individual losses
+        if contrastive_weight is None:
+            contrastive_weight = self.contrastive_weight
+        # Use dynamic weight instead of fixed weight
         contrastive_loss = self.contrastive_loss(latent_features, labels)
         reconstruction_loss = self.reconstruction_loss(reconstructed, original)
         
-        # Combine losses
-        total_loss = (self.contrastive_weight * contrastive_loss + 
+        total_loss = (contrastive_weight * contrastive_loss + 
                      self.reconstruction_weight * reconstruction_loss)
         
         return total_loss, contrastive_loss, reconstruction_loss
-
+    
 
 def test_losses():
     """Test loss function implementations"""

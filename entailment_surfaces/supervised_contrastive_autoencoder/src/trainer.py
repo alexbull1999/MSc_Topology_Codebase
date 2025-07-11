@@ -24,7 +24,7 @@ class ContrastiveAutoencoderTrainer:
     Trainer for the supervised contrastive autoencoder
     """
     
-    def __init__(self, model, loss_function, optimizer, device):
+    def __init__(self, model, loss_function, optimizer, device='cuda'):
         """
         Initialize trainer
         
@@ -37,7 +37,7 @@ class ContrastiveAutoencoderTrainer:
         self.model = model
         self.loss_function = loss_function
         self.optimizer = optimizer
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = device
         
         # Move model to device
         self.model.to(device)
@@ -62,22 +62,37 @@ class ContrastiveAutoencoderTrainer:
         print(f"Trainer initialized on device: {device}")
         print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
     
-    def train_epoch(self, train_loader):
+    def train_epoch(self, train_loader, current_epoch, beta_config=None):
         """
         Train for one epoch
         
         Args:
             train_loader: Training data loader
+            current_epoch: Current epoch number (for beta scheduling)
+            beta_config: Beta scheduling configuration
             
         Returns:
             Dictionary with average losses for the epoch
         """
         self.model.train()
+
+        # Calculate dynamic contrastive weight if beta scheduling is enabled
+        if beta_config and beta_config.get('enabled', False):
+            from losses import CombinedLoss
+            contrastive_weight = CombinedLoss.get_contrastive_beta(
+                epoch=current_epoch,
+                warmup_epochs=beta_config.get('warmup_epochs', 10),
+                max_beta=beta_config.get('max_beta', 2.0),
+                schedule_type=beta_config.get('schedule_type', 'linear')
+            )
+        else:
+            contrastive_weight = None  # Use default from loss function
         
         epoch_losses = {
             'total_loss': 0.0,
             'contrastive_loss': 0.0,
             'reconstruction_loss': 0.0,
+            'contrastive_weight': contrastive_weight if contrastive_weight is not None else self.loss_function.contrastive_weight,
             'num_batches': 0
         }
         
@@ -90,7 +105,7 @@ class ContrastiveAutoencoderTrainer:
             
             # Compute loss
             total_loss, contrastive_loss, reconstruction_loss = self.loss_function(
-                latent, labels, reconstructed, embeddings
+                latent, labels, reconstructed, embeddings, contrastive_weight=contrastive_weight
             )
             
             # Backward pass
@@ -106,16 +121,18 @@ class ContrastiveAutoencoderTrainer:
             
             # Print progress
             if batch_idx % 100 == 0:
+                beta_info = f", β={contrastive_weight:.3f}" if contrastive_weight is not None else ""
                 print(f"Batch {batch_idx}/{len(train_loader)}: "
                       f"Loss = {total_loss.item():.4f} "
                       f"(C: {contrastive_loss.item():.4f}, "
-                      f"R: {reconstruction_loss.item():.4f})")
+                      f"R: {reconstruction_loss.item():.4f}{beta_info})")
         
         # Calculate average losses
         avg_losses = {
             'total_loss': epoch_losses['total_loss'] / epoch_losses['num_batches'],
             'contrastive_loss': epoch_losses['contrastive_loss'] / epoch_losses['num_batches'],
-            'reconstruction_loss': epoch_losses['reconstruction_loss'] / epoch_losses['num_batches']
+            'reconstruction_loss': epoch_losses['reconstruction_loss'] / epoch_losses['num_batches'],
+            'contrastive_weight': epoch_losses['contrastive_weight']
         }
         
         return avg_losses
@@ -168,7 +185,7 @@ class ContrastiveAutoencoderTrainer:
         return avg_losses
     
     def train(self, train_loader, val_loader, num_epochs=50, patience=10, 
-              save_dir='checkpoints', save_every=5):
+              save_dir='checkpoints', save_every=5, beta_config=None):
         """
         Main training loop
         
@@ -179,12 +196,25 @@ class ContrastiveAutoencoderTrainer:
             patience: Early stopping patience
             save_dir: Directory to save checkpoints
             save_every: Save checkpoint every N epochs
+            beta_config: Beta scheduling configuration
         """
         print("Starting training...")
+        if beta_config and beta_config.get('enabled', False):
+            print("Beta scheduling enabled:")
+            print(f"  Warmup epochs: {beta_config.get('warmup_epochs', 10)}")
+            print(f"  Max beta: {beta_config.get('max_beta', 2.0)}")
+            print(f"  Schedule type: {beta_config.get('schedule_type', 'linear')}")
         print("=" * 50)
         
         # Create save directory
         os.makedirs(save_dir, exist_ok=True)
+        
+        # Add beta tracking to training history
+        if 'contrastive_weight' not in self.train_history:
+            self.train_history['contrastive_weight'] = []
+        
+        # Store beta_config for use throughout training
+        self.beta_config = beta_config
         
         # Training loop
         for epoch in range(num_epochs):
@@ -194,9 +224,9 @@ class ContrastiveAutoencoderTrainer:
             print("-" * 30)
             
             # Training phase
-            train_losses = self.train_epoch(train_loader)
+            train_losses = self.train_epoch(train_loader, epoch, self.beta_config)
             
-            # Validation phase
+            # Validation phase (always use current beta for consistency)
             val_losses = self.validate_epoch(val_loader)
             
             # Calculate epoch time
@@ -204,9 +234,10 @@ class ContrastiveAutoencoderTrainer:
             
             # Print epoch summary
             print(f"Epoch {epoch + 1} completed in {epoch_time:.2f}s")
+            beta_info = f" (β={train_losses['contrastive_weight']:.3f})" if self.beta_config and self.beta_config.get('enabled', False) else ""
             print(f"Train Loss: {train_losses['total_loss']:.4f} "
                   f"(C: {train_losses['contrastive_loss']:.4f}, "
-                  f"R: {train_losses['reconstruction_loss']:.4f})")
+                  f"R: {train_losses['reconstruction_loss']:.4f}){beta_info}")
             print(f"Val Loss: {val_losses['total_loss']:.4f} "
                   f"(C: {val_losses['contrastive_loss']:.4f}, "
                   f"R: {val_losses['reconstruction_loss']:.4f})")
@@ -220,6 +251,7 @@ class ContrastiveAutoencoderTrainer:
             self.train_history['val_contrastive_loss'].append(val_losses['contrastive_loss'])
             self.train_history['val_reconstruction_loss'].append(val_losses['reconstruction_loss'])
             self.train_history['learning_rate'].append(self.optimizer.param_groups[0]['lr'])
+            self.train_history['contrastive_weight'].append(train_losses['contrastive_weight'])
             
             # Check for improvement
             if val_losses['total_loss'] < self.best_val_loss:
