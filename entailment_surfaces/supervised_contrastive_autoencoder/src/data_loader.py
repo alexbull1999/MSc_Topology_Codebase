@@ -5,11 +5,12 @@ Handles SNLI data loading, lattice containment embedding generation, and batch p
 
 import torch
 import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, Sampler
 import numpy as np
 from sklearn.model_selection import train_test_split
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Iterator
 import os
+from collections import defaultdict
 
 class LatticeContainmentEmbedder:
     """
@@ -273,6 +274,135 @@ class EntailmentDataLoader:
         )
         
         return train_loader, val_loader, test_loader
+
+    def get_balanced_dataloaders(self, batch_size=32, samples_per_class=None, num_workers=0):
+        """
+        Create balanced PyTorch DataLoaders for contrastive training
+    
+        Args:
+            batch_size: Total batch size
+            samples_per_class: Number of samples per class per batch
+            num_workers: Number of workers for data loading
+        
+        Returns:
+            train_loader, val_loader, test_loader with balanced batching
+        """
+        if self.train_dataset is None:
+            raise ValueError("Data not loaded. Call load_data() first.")
+    
+        # Use balanced sampler for BOTH training AND validation
+        train_sampler = BalancedBatchSampler(
+            self.train_dataset, 
+            batch_size=batch_size, 
+            samples_per_class=samples_per_class
+        )
+    
+        val_sampler = BalancedBatchSampler(
+            self.val_dataset, 
+            batch_size=batch_size, 
+            samples_per_class=samples_per_class
+        )
+    
+        train_loader = DataLoader(
+            self.train_dataset,
+            batch_sampler=train_sampler,
+            num_workers=num_workers
+        )
+    
+        val_loader = DataLoader(
+            self.val_dataset,
+            batch_sampler=val_sampler,
+            num_workers=num_workers
+        )
+    
+        # Test loader can be regular (evaluation doesn't compute contrastive loss)
+        test_loader = DataLoader(
+            self.test_dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            num_workers=num_workers
+        )
+    
+        return train_loader, val_loader, test_loader
+
+
+class BalancedBatchSampler(Sampler):
+    """
+    Sampler that yields batches with equal number of samples from each class
+    """
+    def __init__(self, dataset, batch_size: int, samples_per_class: int = None):
+        """
+        Args:
+            dataset: Dataset with labels accessible via dataset.labels
+            batch_size: Total batch size
+            samples_per_class: Number of samples per class in each batch.
+                              If None, will be batch_size // num_classes
+        """
+        self.dataset = dataset
+        self.batch_size = batch_size
+        
+        # Get labels
+        if hasattr(dataset, 'labels'):
+            self.labels = dataset.labels.tolist() if torch.is_tensor(dataset.labels) else dataset.labels
+        else:
+            # Extract labels by iterating through dataset
+            self.labels = [dataset[i]['labels'].item() for i in range(len(dataset))]
+        
+        # Group indices by class
+        self.class_indices = defaultdict(list)
+        for idx, label in enumerate(self.labels):
+            self.class_indices[label].append(idx)
+        
+        self.num_classes = len(self.class_indices)
+        
+        # Set samples per class
+        if samples_per_class is None:
+            self.samples_per_class = batch_size // self.num_classes
+        else:
+            self.samples_per_class = samples_per_class
+            
+        # Ensure batch size is compatible
+        assert self.samples_per_class * self.num_classes <= batch_size, \
+            f"samples_per_class ({self.samples_per_class}) * num_classes ({self.num_classes}) " \
+            f"must be <= batch_size ({batch_size})"
+        
+        # Calculate number of batches
+        min_class_size = min(len(indices) for indices in self.class_indices.values())
+        self.num_batches = min_class_size // self.samples_per_class
+        
+        print(f"BalancedBatchSampler initialized:")
+        print(f"  Classes: {list(self.class_indices.keys())}")
+        print(f"  Samples per class: {self.samples_per_class}")
+        print(f"  Batch size: {self.samples_per_class * self.num_classes}")
+        print(f"  Number of batches: {self.num_batches}")
+        for class_label, indices in self.class_indices.items():
+            print(f"  Class {class_label}: {len(indices)} samples")
+    
+    def __iter__(self) -> Iterator[List[int]]:
+        # Shuffle indices for each class
+        shuffled_indices = {}
+        for class_label, indices in self.class_indices.items():
+            shuffled = indices.copy()
+            np.random.shuffle(shuffled)
+            shuffled_indices[class_label] = shuffled
+        
+        # Generate batches
+        for batch_idx in range(self.num_batches):
+            batch = []
+            
+            # Add samples from each class
+            for class_label in sorted(self.class_indices.keys()):
+                start_idx = batch_idx * self.samples_per_class
+                end_idx = start_idx + self.samples_per_class
+                class_samples = shuffled_indices[class_label][start_idx:end_idx]
+                batch.extend(class_samples)
+            
+            # Shuffle the batch to mix classes
+            np.random.shuffle(batch)
+            yield batch
+    
+    def __len__(self) -> int:
+        return self.num_batches
 
 
 def test_data_loader():

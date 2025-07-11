@@ -29,7 +29,7 @@ def create_experiment_config():
             'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
             'sample_size': None,  # Use full dataset, set to int for testing
             'batch_size_generation': 1000,  # For lattice embedding generation
-            'batch_size_training': 32       # For model training
+            'batch_size_training': 30       # For model training
         },
         
         # Model configuration
@@ -121,10 +121,20 @@ def load_data(config):
     # Load and process data
     train_dataset, val_dataset, test_dataset = data_loader.load_data()
     
-    # Create PyTorch DataLoaders
-    train_loader, val_loader, test_loader = data_loader.get_dataloaders(
-        batch_size=config['data']['batch_size_training'],
-        shuffle=True
+    # Create balanced PyTorch DataLoaders
+    print("Creating balanced data loaders...")
+    
+    # Calculate samples per class for balanced batching
+    training_batch_size = config['data']['batch_size_training']
+    samples_per_class = training_batch_size // 3  # 3 classes: entailment, neutral, contradiction
+    
+    print(f"Batch size: {training_batch_size}")
+    print(f"Samples per class per batch: {samples_per_class}")
+    print(f"Effective batch size: {samples_per_class * 3}")
+    
+    train_loader, val_loader, test_loader = data_loader.get_balanced_dataloaders(
+        batch_size=training_batch_size,
+        samples_per_class=samples_per_class
     )
     
     print(f"Data loading completed!")
@@ -330,7 +340,7 @@ def main(config_override=None):
         best_model_path = os.path.join(checkpoints_dir, 'best_model.pt')
         if os.path.exists(best_model_path):
             print(f"Loading best model from {best_model_path}")
-            checkpoint = torch.load(best_model_path, map_location=device)
+            checkpoint = torch.load(best_model_path, map_location=device, weights_only=True)
             model.load_state_dict(checkpoint['model_state_dict'])
         
         # Evaluate model

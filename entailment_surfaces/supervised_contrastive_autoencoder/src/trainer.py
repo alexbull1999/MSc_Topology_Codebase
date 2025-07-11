@@ -171,13 +171,6 @@ class ContrastiveAutoencoderTrainer:
             batch_idx = 0
             for batch in val_loader:
 
-                if batch_idx == 0:
-                    print(f"DEBUG: First validation batch:")
-                    print(f"  contrastive_loss raw: {contrastive_loss.item()}")
-                    print(f"  reconstruction_loss raw: {reconstruction_loss.item()}")
-                    print(f"  total_loss raw: {total_loss.item()}")
-                    batch_idx += 1
-
                 embeddings = batch['embeddings'].to(self.device)
                 labels = batch['labels'].to(self.device)
                 
@@ -188,6 +181,24 @@ class ContrastiveAutoencoderTrainer:
                 total_loss, contrastive_loss, reconstruction_loss = self.loss_function(
                     latent, labels, reconstructed, embeddings, contrastive_weight=contrastive_weight
                 )
+
+                if batch_idx == 0:
+                    print(f"DEBUG: First validation batch:")
+                    print(f"  contrastive_loss raw: {contrastive_loss.item()}")
+                    print(f"  reconstruction_loss raw: {reconstruction_loss.item()}")
+                    print(f"  total_loss raw: {total_loss.item()}")
+                    batch_idx += 1
+
+                # Check for NaN immediately after loss calculation
+                if torch.isnan(total_loss) or torch.isnan(contrastive_loss) or torch.isnan(reconstruction_loss):
+                    print(f"!!! NaN detected in validation at batch {batch_idx}!")
+                    print(f"  Total loss: {total_loss.item()}")
+                    print(f"  Contrastive loss: {contrastive_loss.item()}")
+                    print(f"  Reconstruction loss: {reconstruction_loss.item()}")
+                    print(f"  Contrastive weight: {contrastive_weight}")
+                    print(f"  Latent stats: min={latent.min().item():.6f}, max={latent.max().item():.6f}")
+                    print(f"  Labels unique: {torch.unique(labels)}")
+                    exit(1)
                 
                 # Accumulate losses
                 epoch_losses['total_loss'] += total_loss.item()
