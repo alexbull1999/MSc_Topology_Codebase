@@ -83,7 +83,8 @@ class ContrastiveAutoencoderTrainer:
                 epoch=current_epoch,
                 warmup_epochs=beta_config.get('warmup_epochs', 10),
                 max_beta=beta_config.get('max_beta', 2.0),
-                schedule_type=beta_config.get('schedule_type', 'linear')
+                schedule_type=beta_config.get('schedule_type', 'linear'),
+                total_epochs=beta_config.get('total_epochs', 50) 
             )
         else:
             contrastive_weight = None  # Use default from loss function
@@ -107,6 +108,14 @@ class ContrastiveAutoencoderTrainer:
             total_loss, contrastive_loss, reconstruction_loss = self.loss_function(
                 latent, labels, reconstructed, embeddings, contrastive_weight=contrastive_weight
             )
+
+            # Check for NaN loss immediately after calculation
+            if torch.isnan(total_loss):
+                print(f"!!! NaN loss detected at batch {batch_idx}. Stopping epoch. !!!")
+                print(f"  Contrastive Loss: {contrastive_loss.item()}, Recon Loss: {reconstruction_loss.item()}")
+                # Break the loop to prevent NaN from propagating
+                # We will return the averages of the batches that successfully completed
+                exit(1)
             
             # Backward pass
             self.optimizer.zero_grad()

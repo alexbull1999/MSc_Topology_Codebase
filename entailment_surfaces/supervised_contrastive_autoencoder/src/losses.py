@@ -63,7 +63,9 @@ class SupervisedContrastiveLoss(nn.Module):
         log_prob = logits - torch.log(exp_logits.sum(1, keepdim=True))
         
         # Compute mean log probability over positive pairs
-        mean_log_prob_pos = (mask_positive * log_prob).sum(1) / mask_positive.sum(1)
+        # Add a small epsilon to the denominator to prevent division by zero
+        epsilon = 1e-8
+        mean_log_prob_pos = (mask_positive * log_prob).sum(1) / (mask_positive.sum(1) + epsilon)
         
         # Loss is negative log probability
         loss = -(self.temperature / self.base_temperature) * mean_log_prob_pos
@@ -132,7 +134,7 @@ class CombinedLoss(nn.Module):
         self.reconstruction_loss = ReconstructionLoss(loss_type=reconstruction_type)
 
     @staticmethod
-    def get_contrastive_beta(epoch, warmup_epochs=10, max_beta=2.0, schedule_type='linear'):
+    def get_contrastive_beta(epoch, warmup_epochs=10, max_beta=2.0, schedule_type='linear', total_epochs=50):
         """
         Beta scheduling for contrastive loss weight
         
@@ -144,9 +146,9 @@ class CombinedLoss(nn.Module):
         """
         if epoch < warmup_epochs:
             return 0.0  # Pure reconstruction phase
-        
-        # Calculate progress after warmup
-        progress = (epoch - warmup_epochs) / max(1, (50 - warmup_epochs))  # Assuming 50 total epochs
+    
+        # Calculate progress after warmup - USE total_epochs parameter
+        progress = (epoch - warmup_epochs) / max(1, (total_epochs - warmup_epochs))
         progress = min(1.0, progress)  # Clamp to [0, 1]
         
         if schedule_type == 'linear':

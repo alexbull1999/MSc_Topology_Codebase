@@ -167,6 +167,11 @@ def train_model(trainer, train_loader, val_loader, config, checkpoints_dir):
     """Train the contrastive autoencoder"""
     print("Starting model training...")
     print("=" * 50)
+
+    # Extract beta config if present
+    beta_config = config['loss'].get('beta_scheduling', None)
+    if beta_config:
+        beta_config['total_epochs'] = config['training']['num_epochs']  # ADD THIS LINE
     
     trainer.train(
         train_loader=train_loader,
@@ -174,7 +179,8 @@ def train_model(trainer, train_loader, val_loader, config, checkpoints_dir):
         num_epochs=config['training']['num_epochs'],
         patience=config['training']['patience'],
         save_dir=checkpoints_dir,
-        save_every=config['training']['save_every']
+        save_every=config['training']['save_every'],
+        beta_config=beta_config  # ADD THIS LINE
     )
     
     print(f"Training completed!")
