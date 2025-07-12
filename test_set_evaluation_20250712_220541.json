@@ -1,0 +1,73 @@
+{
+  "timestamp": "20250712_220541",
+  "model_path": "entailment_surfaces/supervised_contrastive_autoencoder/experiments/global_concat_test_20250712_180422_BEST_NOLEAKAGE/checkpoints/best_model.pt",
+  "test_results": {
+    "test_accuracy": 0.8132125407166124,
+    "per_class_f1": [
+      0.8357010500308832,
+      0.7492296404988995,
+      0.8588957055214724
+    ],
+    "average_f1": 0.8146087986837517,
+    "confusion_matrix": [
+      [
+        2706,
+        600,
+        62
+      ],
+      [
+        338,
+        2553,
+        328
+      ],
+      [
+        64,
+        443,
+        2730
+      ]
+    ],
+    "detailed_report": {
+      "entailment": {
+        "precision": 0.8706563706563707,
+        "recall": 0.8034441805225653,
+        "f1-score": 0.8357010500308832,
+        "support": 3368.0
+      },
+      "neutral": {
+        "precision": 0.7099555061179088,
+        "recall": 0.7931034482758621,
+        "f1-score": 0.7492296404988995,
+        "support": 3219.0
+      },
+      "contradiction": {
+        "precision": 0.875,
+        "recall": 0.8433734939759037,
+        "f1-score": 0.8588957055214724,
+        "support": 3237.0
+      },
+      "accuracy": 0.8132125407166124,
+      "macro avg": {
+        "precision": 0.8185372922580932,
+        "recall": 0.813307040924777,
+        "f1-score": 0.8146087986837517,
+        "support": 9824.0
+      },
+      "weighted avg": {
+        "precision": 0.819431232752871,
+        "recall": 0.8132125407166124,
+        "f1-score": 0.8150098481314106,
+        "support": 9824.0
+      }
+    },
+    "num_test_samples": 9824,
+    "num_train_samples": 50000
+  },
+  "data_config": {
+    "train_path": "data/processed/snli_full_standard_SBERT.pt",
+    "val_path": "data/processed/snli_full_standard_SBERT_validation.pt",
+    "test_path": "data/processed/snli_full_standard_SBERT_test.pt",
+    "embedding_type": "concat",
+    "sample_size": null,
+    "batch_size": 1020
+  }
+}

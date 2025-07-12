@@ -229,9 +229,9 @@ class GlobalContrastiveEvaluator:
         
         # Fix the per-class F1 score extraction
         per_class_f1 = [
-            class_report.get('0', {}).get('f1-score', 0.0),
-            class_report.get('1', {}).get('f1-score', 0.0), 
-            class_report.get('2', {}).get('f1-score', 0.0)
+            class_report.get('entailment', {}).get('f1-score', 0.0),
+            class_report.get('neutral', {}).get('f1-score', 0.0), 
+            class_report.get('contradiction', {}).get('f1-score', 0.0)
         ]
         
         print(f"  Per-class F1: {per_class_f1}")
@@ -297,12 +297,16 @@ class GlobalContrastiveEvaluator:
             labels = torch.from_numpy(labels)
 
         # SUBSAMPLE if too large (same as clustering)
-        if len(latent_representations) > 50000:
-            indices = torch.randperm(len(latent_representations))[:50000]
+        if len(latent_representations) > 20000:
+            indices = torch.randperm(len(latent_representations))[:20000]
             latent_representations = latent_representations[indices]
             labels = labels[indices]
             print(f"Subsampled to {len(latent_representations)} points for separation evaluation")
         
+        # Move to CPU to save GPU memory
+        latent_representations = latent_representations.cpu()
+        labels = labels.cpu()
+
         # Compute pairwise distances
         distances = torch.cdist(latent_representations, latent_representations, p=2)
         

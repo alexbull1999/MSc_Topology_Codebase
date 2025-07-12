@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/autoencoder_pipeline_baseline_global_lattice_recon_weight_%j.out
-#SBATCH --error=../logs/autoencoder_pipeline_baseline_global_lattice_recon_weight_%j.err
+#SBATCH --output=../logs/autoencoder_pipeline_100epoch_NOLEAKAGE__global_lattice_%j.out
+#SBATCH --error=../logs/autoencoder_pipeline_100epoch_NOLEAKAGE_global_lattice_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

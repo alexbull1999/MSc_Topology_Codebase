@@ -26,8 +26,8 @@ def create_experiment_config():
         # Data configuration
         'data': {
             'train_path': 'data/processed/snli_full_standard_SBERT.pt',
-            'val_path': 'data/processed/snli_full_standard_SBERT.pt',
-            'test_path': 'data/processed/snli_full_standard_SBERT.pt',
+            'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
+            'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
             'embedding_type': 'lattice',  # 'lattice', 'concat', 'difference', 'cosine_concat'
             'batch_size': 1020,
             'sample_size': None,  # Use all data
@@ -65,7 +65,7 @@ def create_experiment_config():
         
         # Training configuration
         'training': {
-            'num_epochs': 70,  # Fewer epochs since global updates are expensive
+            'num_epochs': 100,  # Fewer epochs since global updates are expensive
             'patience': 8,
             'save_every': 5,
             'debug_frequency': 25  # More frequent debug output
@@ -89,7 +89,7 @@ def setup_experiment(config):
     # Create experiment directory
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     experiment_name = config['output']['experiment_name']
-    exp_dir = f"experiments/{experiment_name}_{timestamp}"
+    exp_dir = f"entailment_surfaces/supervised_contrastive_autoencoder/experiments/{experiment_name}_{timestamp}"
     
     # Create subdirectories
     checkpoints_dir = os.path.join(exp_dir, 'checkpoints')

@@ -140,7 +140,7 @@ class FullDatasetContrastiveLoss(nn.Module):
         all_features = torch.cat([features, global_features_subset], dim=0)
         all_labels = torch.cat([labels, global_labels_subset], dim=0)
         
-        print(f"  Enhanced batch: {current_batch_size} current + {len(global_features_subset)} global = {len(all_features)} total")
+        #print(f"  Enhanced batch: {current_batch_size} current + {len(global_features_subset)} global = {len(all_features)} total")
         
         return self._compute_contrastive_loss(all_features, all_labels)
     
@@ -178,7 +178,7 @@ class FullDatasetContrastiveLoss(nn.Module):
         if len(pos_distances) > 10:  # Only print if reasonable sample size
             separation_ratio = neg_distances.mean() / pos_distances.mean()
             gap = neg_distances.min() - pos_distances.max()
-            print(f"    Batch distances: Pos={pos_distances.mean():.3f}, Neg={neg_distances.mean():.3f}, Ratio={separation_ratio:.2f}x, Gap={gap:.3f}")
+            #print(f"    Batch distances: Pos={pos_distances.mean():.3f}, Neg={neg_distances.mean():.3f}, Ratio={separation_ratio:.2f}x, Gap={gap:.3f}")
         
         return total_loss
 
