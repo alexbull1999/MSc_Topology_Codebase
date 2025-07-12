@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline_global.py", line 290, in main
+    train_history = train_model(trainer, train_loader, val_loader, config, checkpoints_dir)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline_global.py", line 182, in train_model
+    trainer.train(
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/trainer_global.py", line 202, in train
+    train_losses = self.train_epoch(train_loader, epoch, debug_frequency)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/trainer_global.py", line 74, in train_epoch
+    self.loss_function.contrastive_loss.update_global_dataset(
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/losses_global.py", line 76, in update_global_dataset
+    self._analyze_global_separation()
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/losses_global.py", line 88, in _analyze_global_separation
+    distances = torch.cdist(self.global_features, self.global_features, p=2)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/functional.py", line 1336, in cdist
+    return _VF.cdist(x1, x2, p, None)  # type: ignore[attr-defined]
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1117.66 GiB. GPU 0 has a total capacity of 14.56 GiB of which 13.93 GiB is free. Including non-PyTorch memory, this process has 650.00 MiB memory in use. Of the allocated memory 502.13 MiB is allocated by PyTorch, and 21.87 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

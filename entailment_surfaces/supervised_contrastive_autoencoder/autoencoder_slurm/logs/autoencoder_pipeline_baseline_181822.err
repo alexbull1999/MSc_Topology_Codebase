@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline.py", line 331, in main
+    model, trainer = create_model_and_trainer(config, device)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline.py", line 181, in train_model
+    if beta_config:
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/trainer.py", line 308, in train
+    self.save_checkpoint(save_dir, f'best_model.pt', epoch + 1, is_best=True)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/trainer.py", line 363, in save_checkpoint
+    torch.save(checkpoint, filepath)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/serialization.py", line 651, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/serialization.py", line 525, in _open_zipfile_writer
+    return container(name_or_buffer)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/serialization.py", line 496, in __init__
+    super().__init__(torch._C.PyTorchFileWriter(self.name))
+RuntimeError: Parent directory entailment_surfaces/supervised_contrastive_autoencoder/experiments/contrastive_autoencoder_20250712_103210/checkpoints does not exist.

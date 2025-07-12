@@ -1,0 +1,32 @@
+{
+  "epoch": [
+    1
+  ],
+  "train_loss": [
+    1.9346057640551633
+  ],
+  "train_contrastive_loss": [
+    1.9346057640551633
+  ],
+  "train_reconstruction_loss": [
+    0.0
+  ],
+  "val_loss": [
+    1.8926099900648803
+  ],
+  "val_contrastive_loss": [
+    1.8926099900648803
+  ],
+  "val_reconstruction_loss": [
+    0.0
+  ],
+  "learning_rate": [
+    0.0001
+  ],
+  "train_separation_ratio": [
+    1.61764564297416
+  ],
+  "val_separation_ratio": [
+    2.2007992704931363
+  ]
+}

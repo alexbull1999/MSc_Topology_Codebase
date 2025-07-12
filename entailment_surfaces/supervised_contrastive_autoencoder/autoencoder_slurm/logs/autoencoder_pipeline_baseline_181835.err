@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline.py", line 334, in main
+    train_history = train_model(trainer, train_loader, val_loader, config, checkpoints_dir)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline.py", line 184, in train_model
+    trainer.train(
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/trainer.py", line 258, in train
+    train_losses = self.train_epoch(train_loader, epoch, beta_config=None)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/trainer.py", line 95, in train_epoch
+    latent, reconstructed = self.model(embeddings)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/contrastive_autoencoder_model.py", line 92, in forward
+    latent = self.encode(x)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/contrastive_autoencoder_model.py", line 75, in encode
+    return self.encoder(x)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/container.py", line 219, in forward
+    input = module(input)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 117, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (1020x1536 and 768x512)

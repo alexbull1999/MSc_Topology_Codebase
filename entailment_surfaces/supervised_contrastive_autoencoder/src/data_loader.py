@@ -20,60 +20,114 @@ class LatticeContainmentEmbedder:
     def __init__(self, epsilon=1e-8):
         self.epsilon = epsilon
     
+    # def generate_embeddings(self, premise_embeddings, hypothesis_embeddings, batch_size=1000):
+    #     """
+    #     Generate lattice containment embeddings from premise-hypothesis pairs
+        
+    #     Args:
+    #         premise_embeddings: Tensor of premise embeddings [N, 768]
+    #         hypothesis_embeddings: Tensor of hypothesis embeddings [N, 768]
+    #         batch_size: Batch size for processing to avoid memory issues
+            
+    #     Returns:
+    #         lattice_embeddings: Tensor of lattice containment embeddings [N, 768]
+    #     """
+    #     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        
+    #     print(f"Generating lattice containment embeddings on {device}")
+    #     print(f"Processing {len(premise_embeddings)} samples in batches of {batch_size}")
+        
+    #     total_samples = len(premise_embeddings)
+    #     all_lattice_embeddings = []
+        
+    #     for i in range(0, total_samples, batch_size):
+    #         end_idx = min(i + batch_size, total_samples)
+    #         batch_num = i // batch_size + 1
+    #         total_batches = (total_samples - 1) // batch_size + 1
+            
+    #         print(f"Processing batch {batch_num}/{total_batches}")
+            
+    #         # Get batch
+    #         premise_batch = premise_embeddings[i:end_idx]
+    #         hypothesis_batch = hypothesis_embeddings[i:end_idx]
+            
+    #         # Move to device
+    #         premise_batch = premise_batch.to(device)
+    #         hypothesis_batch = hypothesis_batch.to(device)
+            
+    #         # Compute lattice embeddings
+    #         with torch.no_grad():
+    #             lattice_batch = (premise_batch * hypothesis_batch) / (
+    #                 torch.abs(premise_batch) + torch.abs(hypothesis_batch) + self.epsilon
+    #             )
+            
+    #         # Move back to CPU and store
+    #         all_lattice_embeddings.append(lattice_batch.cpu())
+            
+    #         # Clear GPU memory
+    #         del premise_batch, hypothesis_batch, lattice_batch
+    #         if device.type == 'cuda':
+    #             torch.cuda.empty_cache()
+        
+    #     # Concatenate all batches
+    #     lattice_embeddings = torch.cat(all_lattice_embeddings, dim=0)
+        
+    #     print(f"Generated lattice embeddings shape: {lattice_embeddings.shape}")
+    #     return lattice_embeddings
+
     def generate_embeddings(self, premise_embeddings, hypothesis_embeddings, batch_size=1000):
         """
-        Generate lattice containment embeddings from premise-hypothesis pairs
-        
+        Generate SBERT concatenation embeddings from premise-hypothesis pairs
+    
         Args:
             premise_embeddings: Tensor of premise embeddings [N, 768]
             hypothesis_embeddings: Tensor of hypothesis embeddings [N, 768]
             batch_size: Batch size for processing to avoid memory issues
-            
+        
         Returns:
-            lattice_embeddings: Tensor of lattice containment embeddings [N, 768]
+            concat_embeddings: Tensor of concatenated embeddings [N, 1536]
         """
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        
-        print(f"Generating lattice containment embeddings on {device}")
+    
+        print(f"Generating SBERT concatenation embeddings on {device}")
         print(f"Processing {len(premise_embeddings)} samples in batches of {batch_size}")
-        
+    
         total_samples = len(premise_embeddings)
-        all_lattice_embeddings = []
-        
+        all_concat_embeddings = []
+    
         for i in range(0, total_samples, batch_size):
             end_idx = min(i + batch_size, total_samples)
             batch_num = i // batch_size + 1
             total_batches = (total_samples - 1) // batch_size + 1
-            
+        
             print(f"Processing batch {batch_num}/{total_batches}")
-            
+        
             # Get batch
             premise_batch = premise_embeddings[i:end_idx]
             hypothesis_batch = hypothesis_embeddings[i:end_idx]
-            
+        
             # Move to device
             premise_batch = premise_batch.to(device)
             hypothesis_batch = hypothesis_batch.to(device)
-            
-            # Compute lattice embeddings
+        
+            # Compute concatenation embeddings
             with torch.no_grad():
-                lattice_batch = (premise_batch * hypothesis_batch) / (
-                    torch.abs(premise_batch) + torch.abs(hypothesis_batch) + self.epsilon
-                )
-            
+                # Simple concatenation: [premise, hypothesis]
+                concat_batch = torch.cat([premise_batch, hypothesis_batch], dim=1)
+        
             # Move back to CPU and store
-            all_lattice_embeddings.append(lattice_batch.cpu())
-            
+            all_concat_embeddings.append(concat_batch.cpu())
+        
             # Clear GPU memory
-            del premise_batch, hypothesis_batch, lattice_batch
+            del premise_batch, hypothesis_batch, concat_batch
             if device.type == 'cuda':
                 torch.cuda.empty_cache()
-        
+    
         # Concatenate all batches
-        lattice_embeddings = torch.cat(all_lattice_embeddings, dim=0)
-        
-        print(f"Generated lattice embeddings shape: {lattice_embeddings.shape}")
-        return lattice_embeddings
+        concat_embeddings = torch.cat(all_concat_embeddings, dim=0)
+    
+        print(f"Generated concatenation embeddings shape: {concat_embeddings.shape}")
+        return concat_embeddings
 
 
 class EntailmentDataset(Dataset):
