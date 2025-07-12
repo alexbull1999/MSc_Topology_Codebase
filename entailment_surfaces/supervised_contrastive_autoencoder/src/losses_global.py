@@ -212,11 +212,20 @@ class FullDatasetCombinedLoss(nn.Module):
     """
     
     def __init__(self, contrastive_weight=1.0, reconstruction_weight=0.0, 
-                 margin=2.0, update_frequency=3, max_global_samples=5000):
+                 margin=2.0, update_frequency=3, max_global_samples=5000,
+                 schedule_reconstruction=True, warmup_epochs=30, 
+                 max_reconstruction_weight=0.3, schedule_type='linear'):
         super().__init__()
         
         self.contrastive_weight = contrastive_weight
         self.reconstruction_weight = reconstruction_weight
+        
+        # NEW: scheduling parameters
+        self.base_reconstruction_weight = reconstruction_weight
+        self.schedule_reconstruction = schedule_reconstruction
+        self.warmup_epochs = warmup_epochs
+        self.max_reconstruction_weight = max_reconstruction_weight
+        self.schedule_type = schedule_type
         
         self.contrastive_loss = FullDatasetContrastiveLoss(
             margin=margin, 
@@ -224,21 +233,43 @@ class FullDatasetCombinedLoss(nn.Module):
             max_global_samples=max_global_samples
         )
         
-        if reconstruction_weight > 0:
-            self.reconstruction_loss = ReconstructionLoss()
-        else:
-            self.reconstruction_loss = None
+        # Always create reconstruction loss for scheduled training
+        self.reconstruction_loss = ReconstructionLoss()
         
         print(f"FullDatasetCombinedLoss initialized:")
         print(f"  Contrastive weight: {contrastive_weight}")
-        print(f"  Reconstruction weight: {reconstruction_weight}")
+        print(f"  Base reconstruction weight: {reconstruction_weight}")
+        if schedule_reconstruction:
+            print(f"  Scheduled reconstruction: warmup={warmup_epochs} epochs, max_weight={max_reconstruction_weight}")
+        
+
+    def get_reconstruction_weight(self, epoch):
+        """Calculate reconstruction weight based on epoch"""
+        if not self.schedule_reconstruction or epoch < self.warmup_epochs:
+            return self.base_reconstruction_weight
+        
+        # Calculate progress after warmup
+        progress = (epoch - self.warmup_epochs) / max(1, 50 - self.warmup_epochs)  # Assume 50 total epochs
+        progress = min(1.0, progress)
+        
+        if self.schedule_type == 'linear':
+            weight = self.base_reconstruction_weight + progress * (self.max_reconstruction_weight - self.base_reconstruction_weight)
+        elif self.schedule_type == 'exponential':
+            weight = self.base_reconstruction_weight + (progress ** 2) * (self.max_reconstruction_weight - self.base_reconstruction_weight)
+        else:
+            weight = self.base_reconstruction_weight + progress * (self.max_reconstruction_weight - self.base_reconstruction_weight)
+        
+        return weight
     
-    def forward(self, latent_features, labels, reconstructed=None, original=None, contrastive_weight=None):
+    def forward(self, latent_features, labels, reconstructed=None, original=None, contrastive_weight=None, current_epoch=0):
         """
         Compute combined loss with full dataset contrastive
         """
         if contrastive_weight is None:
             contrastive_weight = self.contrastive_weight
+
+        # Get dynamic reconstruction weight
+        current_recon_weight = self.get_reconstruction_weight(current_epoch)
         
         # Full dataset contrastive loss
         contrastive_loss = self.contrastive_loss(latent_features, labels)

@@ -49,7 +49,12 @@ def create_experiment_config():
             'reconstruction_weight': 0.0,  # Start with pure contrastive
             'margin': 2.0,
             'update_frequency': 3,  # Update global dataset every 3 epochs
-            'max_global_samples': 5000  # Subsample global dataset for efficiency
+            'max_global_samples': 5000,  # Subsample global dataset for efficiency
+            # NEW: scheduling parameters
+            'schedule_reconstruction': True,
+            'warmup_epochs': 30,
+            'max_reconstruction_weight': 0.3,
+            'schedule_type': 'linear'  # or 'exponential'
         },
         
         # Optimizer configuration
@@ -60,7 +65,7 @@ def create_experiment_config():
         
         # Training configuration
         'training': {
-            'num_epochs': 20,  # Fewer epochs since global updates are expensive
+            'num_epochs': 70,  # Fewer epochs since global updates are expensive
             'patience': 8,
             'save_every': 5,
             'debug_frequency': 25  # More frequent debug output

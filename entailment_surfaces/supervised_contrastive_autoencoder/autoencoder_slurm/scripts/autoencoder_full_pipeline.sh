@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/autoencoder_pipeline_baseline_global_concat_%j.out
-#SBATCH --error=../logs/autoencoder_pipeline_baseline_global_concat_%j.err
+#SBATCH --output=../logs/autoencoder_pipeline_baseline_global_lattice_recon_weight_%j.out
+#SBATCH --error=../logs/autoencoder_pipeline_baseline_global_lattice_recon_weight_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -54,7 +54,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline_global.py concat
+python entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline_global.py lattice
 
 
 # Capture exit code

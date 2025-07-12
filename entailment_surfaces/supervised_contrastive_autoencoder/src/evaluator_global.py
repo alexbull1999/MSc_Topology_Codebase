@@ -92,6 +92,12 @@ class GlobalContrastiveEvaluator:
         # Convert to numpy for sklearn
         latent_np = latent_representations.numpy()
         labels_np = labels.numpy()
+
+        if len(latent_np) > 50000:  # Only subsample if dataset is large
+            indices = np.random.choice(len(latent_np), 50000, replace=False)
+            latent_np = latent_np[indices]
+            labels_np = labels_np[indices]
+            print(f"Subsampled to {len(latent_np)} points for clustering evaluation")
         
         # K-means clustering
         kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
@@ -182,6 +188,19 @@ class GlobalContrastiveEvaluator:
         y_train = train_labels.numpy()
         X_val = val_latent.numpy()
         y_val = val_labels.numpy()
+
+        # Subsample training to 50k, validation to 10k
+        if len(X_train) > 50000:
+            train_indices = np.random.choice(len(X_train), 50000, replace=False)
+            X_train = X_train[train_indices]
+            y_train = y_train[train_indices]
+            print(f"Subsampled training to {len(X_train)} samples")
+
+        if len(X_val) > 10000:
+            val_indices = np.random.choice(len(X_val), 10000, replace=False)
+            X_val = X_val[val_indices]
+            y_val = y_val[val_indices]
+            print(f"Subsampled validation to {len(X_val)} samples")
         
         print(f"  Training on {len(X_train)} samples, evaluating on {len(X_val)} samples")
         
@@ -209,13 +228,11 @@ class GlobalContrastiveEvaluator:
         print(f"  Accuracy: {accuracy:.4f}")
         
         # Fix the per-class F1 score extraction
-        class_names = ['0', '1', '2']  # sklearn uses string keys for classes
-        per_class_f1 = []
-        for class_name in class_names:
-            if class_name in class_report:
-                per_class_f1.append(class_report[class_name]['f1-score'])
-            else:
-                per_class_f1.append(0.0)  # If class not present
+        per_class_f1 = [
+            class_report.get('0', {}).get('f1-score', 0.0),
+            class_report.get('1', {}).get('f1-score', 0.0), 
+            class_report.get('2', {}).get('f1-score', 0.0)
+        ]
         
         print(f"  Per-class F1: {per_class_f1}")
         
@@ -278,6 +295,13 @@ class GlobalContrastiveEvaluator:
             latent_representations = torch.from_numpy(latent_representations)
         if isinstance(labels, np.ndarray):
             labels = torch.from_numpy(labels)
+
+        # SUBSAMPLE if too large (same as clustering)
+        if len(latent_representations) > 50000:
+            indices = torch.randperm(len(latent_representations))[:50000]
+            latent_representations = latent_representations[indices]
+            labels = labels[indices]
+            print(f"Subsampled to {len(latent_representations)} points for separation evaluation")
         
         # Compute pairwise distances
         distances = torch.cdist(latent_representations, latent_representations, p=2)

@@ -99,7 +99,7 @@ class GlobalDatasetTrainer:
             
             # Compute loss
             total_loss, contrastive_loss, reconstruction_loss = self.loss_function(
-                latent, labels, reconstructed, embeddings
+                latent, labels, reconstructed, embeddings, current_epoch=current_epoch
             )
             
             # Backward pass
@@ -134,7 +134,7 @@ class GlobalDatasetTrainer:
         
         return avg_losses
     
-    def validate_epoch(self, val_loader):
+    def validate_epoch(self, val_loader, current_epoch=0):
         """
         Validate for one epoch
         """
@@ -159,7 +159,7 @@ class GlobalDatasetTrainer:
                 
                 # Compute loss (validation uses current batch only for efficiency)
                 total_loss, contrastive_loss, reconstruction_loss = self.loss_function(
-                    latent, labels, reconstructed, embeddings
+                    latent, labels, reconstructed, embeddings, current_epoch=current_epoch
                 )
                 
                 # Get distance statistics
@@ -183,7 +183,7 @@ class GlobalDatasetTrainer:
         
         return avg_losses
     
-    def train(self, train_loader, val_loader, num_epochs=25, patience=8, 
+    def train(self, train_loader, val_loader, num_epochs=70, patience=8, 
               save_dir='checkpoints', save_every=5, debug_frequency=50):
         """
         Main training loop
@@ -202,10 +202,12 @@ class GlobalDatasetTrainer:
             train_losses = self.train_epoch(train_loader, epoch, debug_frequency)
             
             # Validation phase
-            val_losses = self.validate_epoch(val_loader)
+            val_losses = self.validate_epoch(val_loader, epoch)
             
             # Calculate epoch time
             epoch_time = time.time() - epoch_start_time
+
+            current_recon_weight = self.loss_function.get_reconstruction_weight(epoch + 1)
             
             # Print epoch summary
             print(f"\n{'='*60}")
@@ -216,6 +218,8 @@ class GlobalDatasetTrainer:
             print(f"Val:   Loss={val_losses['total_loss']:.4f} "
                   f"(C:{val_losses['contrastive_loss']:.4f}, R:{val_losses['reconstruction_loss']:.4f}) "
                   f"Ratio={val_losses['avg_separation_ratio']:.2f}x")
+            print(f"Reconstruction weight: {current_recon_weight:.3f}")
+
             
             # Update training history
             self.train_history['epoch'].append(epoch + 1)
