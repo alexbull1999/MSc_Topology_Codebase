@@ -18,6 +18,19 @@ from data_loader_global import GlobalDataLoader
 from evaluator_global import GlobalContrastiveEvaluator
 
 
+def np_encoder(object):
+    """ Custom encoder for numpy data types """
+    if isinstance(object, np.integer):
+        return int(object)
+    elif isinstance(object, np.floating):
+        return float(object)
+    elif isinstance(object, np.ndarray):
+        return object.tolist()
+    else:
+        # Let the default encoder raise the TypeError for other types
+        return object
+
+
 def create_experiment_config():
     """
     Create configuration for global dataset training
@@ -37,7 +50,7 @@ def create_experiment_config():
         
         # Model configuration
         'model': {
-            'input_dim': 768,  # Will be updated based on embedding_type
+            'input_dim': 1536,  # Will be updated based on embedding_type
             'latent_dim': 75,
             'hidden_dims': [512, 256],
             'dropout_rate': 0.2
@@ -65,7 +78,7 @@ def create_experiment_config():
         
         # Training configuration
         'training': {
-            'num_epochs': 100,  # Fewer epochs since global updates are expensive
+            'num_epochs': 200,  # Fewer epochs since global updates are expensive
             'patience': 8,
             'save_every': 5,
             'debug_frequency': 25  # More frequent debug output
@@ -246,7 +259,7 @@ def save_final_results(config, train_history, evaluation_results, exp_dir):
     # Save comprehensive results
     final_results_path = os.path.join(exp_dir, 'final_results.json')
     with open(final_results_path, 'w') as f:
-        json.dump(final_results, f, indent=2)
+        json.dump(final_results, f, indent=2, default=np_encoder)
     
     print(f"Final results saved to: {final_results_path}")
     return final_results_path

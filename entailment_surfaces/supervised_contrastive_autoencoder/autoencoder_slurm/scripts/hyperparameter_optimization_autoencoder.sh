@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=autoencoder_pipeline
+#SBATCH --job-name=hyperparam_optimization_autoencoder
 #SBATCH --partition=gpgpuC
 #SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/autoencoder_pipeline_200epoch_NOLEAKAGE__global_concat_%j.out
-#SBATCH --error=../logs/autoencoder_pipeline_200epoch_NOLEAKAGE_global_concat_%j.err
+#SBATCH --output=../logs/hyperparam_optimization_autoencoder_%j.out
+#SBATCH --error=../logs/hyperparam_optimization_autoencoder_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -49,12 +49,12 @@ print('PyTorch setup verified!')
 cd ~/MSc_Topology_Codebase
 
 echo ""
-echo "Starting AutoEncoder Pipeline..."
+echo "Starting Hyperparam Optimization..."
 echo ""
 
 export PYTHONUNBUFFERED=1
 
-python entailment_surfaces/supervised_contrastive_autoencoder/src/full_pipeline_global.py concat
+python entailment_surfaces/supervised_contrastive_autoencoder/src/hyperparameter_optimization_search_global.py
 
 
 # Capture exit code
