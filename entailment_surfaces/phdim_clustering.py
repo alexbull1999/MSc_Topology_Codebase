@@ -75,7 +75,7 @@ def ph_dim_and_diagrams_from_distance_matrix(dm: np.ndarray,
     assert dm.ndim == 2, dm
     assert dm.shape[0] == dm.shape[1], dm.shape
 
-    np.random.seed(seed)
+    #np.random.seed(seed) <--- REMOVE: this was causing the global seed state to change unintentionally
     test_n = range(min_points, max_points, point_jump)
     lengths = []
     all_diagrams = []  # Store all persistence diagrams
@@ -128,9 +128,9 @@ class ClusteringValidator:
         
         # Target embedding spaces from Revised Next Steps
         self.target_spaces = [
-            #'lattice_containment',  # Most promising
-            #'sbert_concat',        
-            #'hyperbolic_concat'
+            'lattice_containment',  # Most promising
+            'sbert_concat',        
+            'hyperbolic_concat',
             'order_asymmetry',
             'directional_order_asymmetry'     
         ]
@@ -142,9 +142,9 @@ class ClusteringValidator:
             'chebyshev', 
             'cosine',
             'minkowski_3', 
-            'minkowski_4' 
-            #'canberra' 
-            #'braycurtis'
+            'minkowski_4', 
+            'canberra', 
+            'braycurtis'
         ]
         
         # Sampling parameters
@@ -368,8 +368,8 @@ class ClusteringValidator:
                         max_points=min(1000, sampled_embeddings.shape[0]),
                         point_jump=50,
                         h_dim=0,
-                        alpha=1.0,
-                        seed=self.seed  # Same seed for all PH computations
+                        alpha=1.0
+                        #seed=self.seed  <--- REMOVE: this was causing the global seed state to change unintentionally
                     )
                     
                     # Store PH-dimension value

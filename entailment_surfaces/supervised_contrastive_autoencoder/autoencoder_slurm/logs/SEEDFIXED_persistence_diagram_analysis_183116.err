@@ -1,0 +1,10 @@
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams_comparison.py", line 492, in <module>
+    h0_analysis_results = analyzer.analyze_similarities(h_dim=0)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams_comparison.py", line 345, in analyze_similarities
+    b_dist, _ = bottleneck(diagrams[i], diagrams[j], matching=False)
+TypeError: cannot unpack non-iterable numpy.float64 object

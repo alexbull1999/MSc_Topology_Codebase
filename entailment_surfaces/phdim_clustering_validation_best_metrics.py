@@ -38,12 +38,20 @@ class StatisticalValidation:
         
         # Top performers to test with more samples
         self.top_combinations = [
-            ('order_asymmetry', 'euclidean'),
-            ('order_asymmetry', 'chebyshev'),
-            ('order_asymmetry', 'minkowski_3'),
-            ('directional_order_asymmetry', 'euclidean'),
-            ('directional_order_asymmetry', 'chebyshev'),
-            ('directional_order_asymmetry', 'minkowski_3')
+            # ('sbert_concat', 'euclidean'),
+            # ('sbert_concat', 'chebyshev'),
+            # ('sbert_concat', 'cosine'),
+            # ('sbert_concat', 'minkowski_3'),
+            # ('sbert_concat', 'minkowski_4'),
+            ('sbert_concat', 'canberra'),
+            ('sbert_concat', 'braycurtis'),
+            ('lattice_containment', 'euclidean'),
+            ('lattice_containment', 'chebyshev'),
+            ('lattice_containment', 'cosine'),
+            ('lattice_containment', 'minkowski_3'),
+            ('lattice_containment', 'minkowski_4'),
+            ('lattice_containment', 'canberra'),
+            ('lattice_containment', 'braycurtis')
         ]
         
         # Sample size for statistical validation
@@ -65,7 +73,7 @@ class StatisticalValidation:
         all_embeddings = self.base_validator.generate_embedding_spaces_by_class()
         
         # Only keep the embedding spaces we're testing
-        needed_spaces = ['order_asymmetry', 'directional_order_asymmetry']
+        needed_spaces = ['sbert_concat', 'lattice_containment']
         filtered_embeddings = {space: all_embeddings[space] for space in needed_spaces if space in all_embeddings}
         
         # Delete the full embeddings dictionary to save memory
@@ -186,8 +194,8 @@ class StatisticalValidation:
                         max_points=800,
                         point_jump=50,
                         h_dim=0,
-                        alpha=1.0,
-                        seed=42
+                        alpha=1.0
+                        #seed=42 <--- REMOVE: this was causing the global seed state to change unintentionally
                     )
                     
                     ph_dim_values[class_name].append(ph_dim)
@@ -382,13 +390,13 @@ class StatisticalValidation:
         from datetime import datetime
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        results_file = self.output_dir / f"order_asymmetry_statistical_validation_{timestamp}.json"
+        results_file = self.output_dir / f"sbert_concat_statistical_validation_{timestamp}.json"
         
         try:
             results_to_save = copy.deepcopy(validation_results)
             
             with open(results_file, 'w') as f:
-                json.dump(serializable_results, f, indent=2, default=convert_numpy_types)
+                json.dump(results_to_save, f, indent=2, default=convert_numpy_types)
             
             print(f"\nStatistical validation results saved to: {results_file}")
             

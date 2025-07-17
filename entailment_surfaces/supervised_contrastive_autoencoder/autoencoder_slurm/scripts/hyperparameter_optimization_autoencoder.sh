@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=hyperparam_optimization_autoencoder
 #SBATCH --partition=gpgpuC
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/hyperparam_optimization_autoencoder_%j.out
-#SBATCH --error=../logs/hyperparam_optimization_autoencoder_%j.err
+#SBATCH --output=../logs/hyperparam_optimization_autoencoder_vArchLarge_%j.out
+#SBATCH --error=../logs/hyperparam_optimization_autoencoder_vArchLarge_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -68,7 +68,7 @@ echo "Time: $(date)"
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
     echo "=== ANALYSIS SUCCESSFUL ==="
-    echo "Autoencoder pipeline successful!"
+    echo "Hyperparam search successful!"
     echo ""
 
 else

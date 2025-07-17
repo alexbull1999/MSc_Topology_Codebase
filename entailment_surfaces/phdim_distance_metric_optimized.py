@@ -85,34 +85,34 @@ class SurfaceDistanceMetricAnalyzer:
             
         ]
 
-        #  # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
-        # self.embedding_spaces = [
-        #     'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
-        #     'sbert_difference',      # Premise - Hypothesis (relationship vector)
-        #     'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
-        #     'order_difference',     # Order premise - hypothesis (order relationship)
-        #     'order_violations',     # Order violation energies (inherently relational)
-        #     'hyperbolic_concat',    # Concatenated hyperbolic embeddings
-        #     'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
-        #     'cone_features',        # Multiple cone-related features
-
-        #     # Lattice embedding spaces (All on SBERT raw embeddings)
-        #     'lattice_containment', # Element-wise containment relationships
-        #     'lattice_order_violations', # Element-wise order violations  
-        #     'lattice_height',          # Element-wise height differences
-        #     'lattice_subsumption',     # Element-wise subsumption coverage
-        #     'lattice_bidirectional_order_violations',   # Both directions of violations
-        #     'lattice_enhanced'         # All lattice features combined
-        # ]
-
+         # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
         self.embedding_spaces = [
-            #Neutral vs E/C focused embeddings spaces
-            'order_asymmetry',
-            'directional_order_asymmetry',
-            'energy_based_order_asymmetry',
-            'theoretical_based_order_asymmetry',
-            'asymmetric_feature_weighting'
+            'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
+            'sbert_difference',      # Premise - Hypothesis (relationship vector)
+            'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
+            'order_difference',     # Order premise - hypothesis (order relationship)
+            'order_violations',     # Order violation energies (inherently relational)
+            'hyperbolic_concat',    # Concatenated hyperbolic embeddings
+            'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
+            'cone_features',        # Multiple cone-related features
+
+            # Lattice embedding spaces (All on SBERT raw embeddings)
+            'lattice_containment', # Element-wise containment relationships
+            'lattice_order_violations', # Element-wise order violations  
+            'lattice_height',          # Element-wise height differences
+            'lattice_subsumption',     # Element-wise subsumption coverage
+            'lattice_bidirectional_order_violations',   # Both directions of violations
+            'lattice_enhanced'         # All lattice features combined
         ]
+
+        # self.embedding_spaces = [
+        #     #Neutral vs E/C focused embeddings spaces
+        #     'order_asymmetry',
+        #     'directional_order_asymmetry',
+        #     'energy_based_order_asymmetry',
+        #     'theoretical_based_order_asymmetry',
+        #     'asymmetric_feature_weighting'
+        # ]
 
         # PH-Dim parameters
         self.phd_params = {

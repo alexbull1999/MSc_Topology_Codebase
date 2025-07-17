@@ -94,8 +94,8 @@ class FlexibleEmbedder:
                 
                 elif self.embedding_type == 'cosine_concat':
                     # Concatenation + cosine similarity
-                    cos_sim = torch.cosine_similarity(premise_batch, hypothesis_batch, dim=1, keepdim=True)
-                    batch_embeddings = torch.cat([premise_batch, hypothesis_batch, cos_sim], dim=1)
+                    cos_sim = torch.cosine_similarity(premise_batch, hypothesis_batch, dim=1)
+                    batch_embeddings = torch.cat([premise_batch, hypothesis_batch, cos_sim.unsqueeze(1)], dim=1)
                 
                 else:
                     raise ValueError(f"Unknown embedding_type: {self.embedding_type}")

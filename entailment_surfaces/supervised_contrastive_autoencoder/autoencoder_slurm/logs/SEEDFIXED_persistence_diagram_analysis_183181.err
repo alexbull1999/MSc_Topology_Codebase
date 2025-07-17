@@ -1,0 +1,1460 @@
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:51: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/wasserstein.py:61: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:55: UserWarning: dgm1 has points with non-finite death times;ignoring those points
+  warnings.warn(
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/persim/bottleneck.py:64: UserWarning: dgm2 has points with non-finite death times;ignoring those points
+  warnings.warn(

@@ -9,6 +9,7 @@ import os
 import json
 from datetime import datetime
 from pathlib import Path
+import numpy as np
 
 # Import our clean modules
 from contrastive_autoencoder_model_global import ContrastiveAutoencoder
@@ -72,6 +73,7 @@ def create_experiment_config():
         
         # Optimizer configuration
         'optimizer': {
+            'optimizer_type': 'Adam',
             'lr': 0.0001,
             'weight_decay': 1e-5
         },
@@ -174,10 +176,26 @@ def create_model_and_trainer(config, device):
     
     # Create global dataset loss function
     loss_function = FullDatasetCombinedLoss(**config['loss'])
+
+    # Create optimizer based on type
+    optimizer_type = config['optimizer'].get('optimizer_type', 'Adam')
+    
+    # Extract only the parameters that the optimizer expects
+    optimizer_params = {
+        'lr': config['optimizer'].get('lr', 0.0001),
+        'weight_decay': config['optimizer'].get('weight_decay', 1e-5)
+    }
     
     # Create optimizer
-    optimizer = optim.Adam(model.parameters(), **config['optimizer'])
-    print(f"Optimizer created (lr={config['optimizer']['lr']})")
+    if optimizer_type == 'Adam':
+        optimizer = optim.Adam(model.parameters(), **optimizer_params)
+    elif optimizer_type == 'AdamW':
+        optimizer = optim.AdamW(model.parameters(), **optimizer_params)
+    else:
+        raise ValueError(f"Unknown optimizer type")
+
+
+    print(f"Optimizer created: {optimizer_type} (lr={optimizer_params['lr']})")
     
     # Create global dataset trainer
     trainer = GlobalDatasetTrainer(
@@ -379,6 +397,36 @@ def run_concat_experiment():
     
     return main(config_override)
 
+def run_cosine_experiment():
+    """
+    Run experiment with cosine_concat embeddings for comparison
+    """
+    config_override = {
+        'data': {
+            'embedding_type': 'cosine_concat'
+        },
+        'output': {
+            'experiment_name': 'global_cosine_test'
+        }
+    }
+    
+    return main(config_override)
+
+def run_difference_experiment():
+    """
+    Run experiment with difference embeddings for comparison
+    """
+    config_override = {
+        'data': {
+            'embedding_type': 'difference'
+        },
+        'output': {
+            'experiment_name': 'global_difference_test'
+        }
+    }
+    
+    return main(config_override)
+
 
 def test_pipeline():
     """
@@ -427,9 +475,9 @@ def test_pipeline():
         result = main(config_override)
         
         if result[0] is not None:
-            print("✅ Pipeline test completed successfully!")
+            print("Pipeline test completed successfully!")
         else:
-            print("❌ Pipeline test failed!")
+            print("Pipeline test failed!")
             
     finally:
         # Clean up
@@ -446,6 +494,10 @@ if __name__ == "__main__":
             run_lattice_experiment()
         elif sys.argv[1] == 'concat':
             run_concat_experiment()
+        elif sys.argv[1] == 'cosine':
+            run_cosine_experiment()
+        elif sys.argv[1] == 'difference':
+            run_difference_experiment()
         else:
             print("Usage: python full_pipeline.py [test|lattice|concat]")
     else:

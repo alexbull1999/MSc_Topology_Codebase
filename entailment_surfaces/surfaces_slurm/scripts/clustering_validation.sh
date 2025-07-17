@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=clustering_validation
-#SBATCH --partition=gpgpuC
+#SBATCH --partition=a16gpu
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/order_asymmetry_clustering_validation_%j.out
-#SBATCH --error=../logs/order_asymmetry_clustering_validation_%j.err
+#SBATCH --output=../logs/remaining_sbert_concat_lattice_clustering_validation_SEEDFIXED_%j.out
+#SBATCH --error=../logs/remaining_sbert_concat_lattice_clustering_validation_SEEDFIXED_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

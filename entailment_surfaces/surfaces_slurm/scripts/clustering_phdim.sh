@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/clustering_phdim_order_asymmetry_%j.out
-#SBATCH --error=../logs/clustering_phdim_order_asymmetry_%j.err
+#SBATCH --output=../logs/SEEDFIXED_clustering_phdim_%j.out
+#SBATCH --error=../logs/SEEDFIXED_clustering_phdim_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
