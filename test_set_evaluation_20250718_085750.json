@@ -1,0 +1,73 @@
+{
+  "timestamp": "20250718_085750",
+  "model_path": "entailment_surfaces/supervised_contrastive_autoencoder/experiments/topological_robust_prototype_test_cosineconcat_83.16baselinemodel_20250717_201441/checkpoints/checkpoint_epoch_60.pt",
+  "test_results": {
+    "test_accuracy": 0.82064332247557,
+    "per_class_f1": [
+      0.8433124813821865,
+      0.7578172900061312,
+      0.8608424336973478
+    ],
+    "average_f1": 0.8206574016952218,
+    "confusion_matrix": [
+      [
+        2831,
+        461,
+        76
+      ],
+      [
+        409,
+        2472,
+        338
+      ],
+      [
+        106,
+        372,
+        2759
+      ]
+    ],
+    "detailed_report": {
+      "entailment": {
+        "precision": 0.8460848774656307,
+        "recall": 0.8405581947743468,
+        "f1-score": 0.8433124813821865,
+        "support": 3368.0
+      },
+      "neutral": {
+        "precision": 0.7479576399394856,
+        "recall": 0.7679403541472507,
+        "f1-score": 0.7578172900061312,
+        "support": 3219.0
+      },
+      "contradiction": {
+        "precision": 0.8695241096753861,
+        "recall": 0.852332406549274,
+        "f1-score": 0.8608424336973478,
+        "support": 3237.0
+      },
+      "accuracy": 0.82064332247557,
+      "macro avg": {
+        "precision": 0.8211888756935007,
+        "recall": 0.8202769851569571,
+        "f1-score": 0.8206574016952218,
+        "support": 9824.0
+      },
+      "weighted avg": {
+        "precision": 0.8216550339259644,
+        "recall": 0.82064332247557,
+        "f1-score": 0.8210746388134421,
+        "support": 9824.0
+      }
+    },
+    "num_test_samples": 9824,
+    "num_train_samples": 50000
+  },
+  "data_config": {
+    "train_path": "data/processed/snli_full_standard_SBERT.pt",
+    "val_path": "data/processed/snli_full_standard_SBERT_validation.pt",
+    "test_path": "data/processed/snli_full_standard_SBERT_test.pt",
+    "embedding_type": "cosine_concat",
+    "sample_size": null,
+    "batch_size": 3300
+  }
+}

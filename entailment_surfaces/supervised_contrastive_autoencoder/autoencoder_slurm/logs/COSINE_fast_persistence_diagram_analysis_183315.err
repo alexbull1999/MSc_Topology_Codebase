@@ -1,0 +1,4 @@
+/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams_comparison_vFast.py:295: RuntimeWarning: invalid value encountered in divide
+  p_normalized = persistences / total_persistence
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/numpy/core/_methods.py:173: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)

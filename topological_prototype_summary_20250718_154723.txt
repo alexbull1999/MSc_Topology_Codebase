@@ -1,0 +1,20 @@
+TOPOLOGICAL PROTOTYPE TESTING RESULTS
+==================================================
+
+Baseline accuracy (no topology): 83.16%
+Best accuracy (with topology): 0.7920%
+Total improvement: +-82.37%
+
+Best prototype method: centroid
+Best prototype path: entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_centroid_vCosine.pkl
+
+Best model directory: topological_centroid_prototype_test_cosineconcat_83.16baselinemodel_20250718_145038
+
+All Results (sorted by accuracy):
+----------------------------------------
+ 1.   0.79% (+-82.37%) - centroid
+ 2.   0.79% (+-82.37%) - medoid
+ 3.   0.79% (+-82.37%) - robust
+
+Note: Only the best model directory is preserved to save disk space.
+All other experiment directories were automatically cleaned up.

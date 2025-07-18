@@ -1,0 +1,17 @@
+TOPOLOGICAL PROTOTYPE TESTING RESULTS
+==================================================
+
+Baseline accuracy (no topology): 83.16%
+Best accuracy (with topology): 0.0000%
+Total improvement: +-83.16%
+
+Best prototype method: None
+Best prototype path: None
+
+Best model directory: None
+
+All Results (sorted by accuracy):
+----------------------------------------
+
+Note: Only the best model directory is preserved to save disk space.
+All other experiment directories were automatically cleaned up.
