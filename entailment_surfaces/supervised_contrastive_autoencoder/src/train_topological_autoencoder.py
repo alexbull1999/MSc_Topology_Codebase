@@ -7,7 +7,8 @@ from pathlib import Path
 import numpy as np
 from full_pipeline_global import setup_experiment, load_data
 from contrastive_autoencoder_model_global import ContrastiveAutoencoder
-from losses_global import TopologicallyRegularizedCombinedLoss
+from attention_autoencoder_model import AttentionAutoencoder
+from losses_global_topological import TopologicallyRegularizedCombinedLoss
 from trainer_topological import TopologicalTrainer
 from evaluator_global import GlobalContrastiveEvaluator
 
@@ -23,7 +24,7 @@ def create_topological_config():
             'val_path': 'data/processed/snli_full_standard_SBERT.pt',
             'test_path': 'data/processed/snli_full_standard_SBERT.pt',
             'embedding_type': 'concat',  # Use your best performing type
-            'batch_size': 1500,
+            'batch_size': 1020,
             'sample_size': None,
             'balanced_sampling': True,
             'random_state': 42
@@ -43,9 +44,9 @@ def create_topological_config():
             
             # Topological loss settings
             'topological_weight': 0.01,  # Main learning signal
-            'max_topological_weight': 0.1,
-            'topological_warmup_epochs': 10,  # FIXED: Start immediately (no warmup)
-            'prototypes_path': 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_robust.pkl',
+            'max_topological_weight': 0.05,
+            'topological_warmup_epochs': 8,  # FIXED: Start immediately (no warmup)
+            'prototypes_path': None,
             
             # Reconstruction scheduling (for compatibility with FullDatasetCombinedLoss)
             'schedule_reconstruction': True,  # Keep constant for Phase 1
@@ -66,8 +67,8 @@ def create_topological_config():
         },
         
         'training': {
-            'num_epochs': 50,  # More epochs needed for topological learning
-            'patience': 10,  # More patience for topology to emerge
+            'num_epochs': 100,  # More epochs needed for topological learning
+            'patience': 50,  # More patience for topology to emerge // was 10 -- removing patience essentially
             'save_every': 5,
             'debug_frequency': 25
         },
@@ -130,7 +131,7 @@ def main_topological_training():
     train_loader, val_loader, test_loader = load_data(config)
     
     # Create model (reuse your existing model)
-    model = ContrastiveAutoencoder(**config['model'])
+    model = AttentionAutoencoder(**config['model'])
     
     # Create topological loss function
     loss_function = TopologicallyRegularizedCombinedLoss(**config['loss'])

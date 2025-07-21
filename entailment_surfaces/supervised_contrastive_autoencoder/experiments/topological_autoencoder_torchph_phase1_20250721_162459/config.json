@@ -4,14 +4,14 @@
     "val_path": "data/processed/snli_full_standard_SBERT.pt",
     "test_path": "data/processed/snli_full_standard_SBERT.pt",
     "embedding_type": "concat",
-    "batch_size": 1500,
+    "batch_size": 1020,
     "sample_size": null,
     "balanced_sampling": true,
     "random_state": 42
   },
   "model": {
     "input_dim": 1536,
-    "latent_dim": 50,
+    "latent_dim": 75,
     "hidden_dims": [
       1024,
       768,
@@ -24,10 +24,10 @@
   "loss": {
     "contrastive_weight": 1.0,
     "reconstruction_weight": 0.1,
-    "topological_weight": 5.0,
-    "max_topological_weight": 10.0,
-    "topological_warmup_epochs": 10,
-    "prototypes_path": "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_robust.pkl",
+    "topological_weight": 0.01,
+    "max_topological_weight": 0.05,
+    "topological_warmup_epochs": 8,
+    "prototypes_path": null,
     "schedule_reconstruction": true,
     "warmup_epochs": 10,
     "max_reconstruction_weight": 0.3,
@@ -41,8 +41,8 @@
     "weight_decay": 1e-05
   },
   "training": {
-    "num_epochs": 50,
-    "patience": 10,
+    "num_epochs": 100,
+    "patience": 50,
     "save_every": 5,
     "debug_frequency": 25
   },

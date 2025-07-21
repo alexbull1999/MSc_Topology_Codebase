@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+from moor_topological_loss import MoorTopologicalLoss 
 
 
 class FullDatasetContrastiveLoss(nn.Module):
@@ -326,13 +327,11 @@ class FullDatasetCombinedLoss(nn.Module):
         
         return stats
 
-
 class TopologicallyRegularizedCombinedLoss(nn.Module):
     """
-    Combined loss with TorchPH-based topological regularization.
-    Extends your existing FullDatasetCombinedLoss.
+    Combined loss that orchestrates contrastive, reconstruction, and the 
+    CLASS-SPECIFIC Moor et al. topological loss.
     """
-    
     def __init__(self, contrastive_weight=1.0, reconstruction_weight=0.1, 
                  topological_weight=1.0, prototypes_path=None,
                  margin=2.0, update_frequency=3, max_global_samples=5000,
@@ -340,10 +339,7 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
                  schedule_reconstruction=True, warmup_epochs=30, 
                  max_reconstruction_weight=0.3, schedule_type='linear'):
         super().__init__()
-        
-        # Import your existing loss
-        from topological_losses import TorchTopologicalPersistenceLoss
-        
+                
         # Create base combined loss
         self.base_loss = FullDatasetCombinedLoss(
             contrastive_weight=contrastive_weight,
@@ -358,37 +354,35 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         )
         
         # Topological loss
+        self.topological_loss_fn = MoorTopologicalLoss()
         self.topological_weight = topological_weight
         self.max_topological_weight = max_topological_weight
         self.topological_warmup_epochs = topological_warmup_epochs
         self.current_epoch = 0
         
         if prototypes_path:
-            self.topological_loss = TorchTopologicalPersistenceLoss(prototypes_path)
             print(f"Topological loss initialized with prototypes: {prototypes_path}")
         else:
-            print("No topological loss - prototypes path not provided or not found")
-    
+            print("No prototypes being used for topological loss - whole dataset instead.")
+
     def set_epoch(self, epoch: int):
-        """Update current epoch for warmup scheduling."""
         self.current_epoch = epoch
         if hasattr(self.base_loss, 'set_epoch'):
             self.base_loss.set_epoch(epoch)
-    
+
     def get_current_topological_weight(self) -> float:
         """Get current topological weight based on warmup schedule."""
         if self.current_epoch < self.topological_warmup_epochs:
             return 0
+        elif self.topological_warmup_epochs == 0:
+            return self.max_topological_weight
         else:
             # Linear warmup
             progress = self.current_epoch / self.topological_warmup_epochs
             return min(self.topological_weight * progress, self.max_topological_weight)
-    
+
     def forward(self, latent_features, reconstructed, original_embeddings, labels):
-        """
-        Forward pass with topological regularization.
-        """
-        # Base loss (contrastive + reconstruction)
+        # 1. Calculate the standard losses (contrastive + reconstruction)
         base_loss_value, contrastive_loss, reconstruction_loss = self.base_loss(
             latent_features=latent_features,
             labels=labels, 
@@ -396,76 +390,41 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
             original=original_embeddings,
             current_epoch=self.current_epoch
         )
-
         loss_components = {
             'contrastive_loss': contrastive_loss.item(),
             'reconstruction_loss': reconstruction_loss.item()
         }
         
-        # Topological loss
-        topological_loss_value = torch.tensor(0.0, device=latent_features.device)
+        # 2. Calculate the CLASS-SPECIFIC topological loss
         current_topo_weight = self.get_current_topological_weight()
         
+        if self.topological_loss_fn is not None and current_topo_weight > 0:
+            class_topo_losses = []
+            for class_idx in range(3): # 0, 1, 2 for entailment, neutral, contradiction
+                class_mask = (labels == class_idx)
+                
+                # Ensure we have enough points to compute topology
+                if class_mask.sum() > 1:
+                    input_subset = original_embeddings[class_mask]
+                    latent_subset = latent_features[class_mask]
+                    
+                    # Apply the loss to this class's subset
+                    class_loss = self.topological_loss_fn(input_subset, latent_subset)
+                    class_topo_losses.append(class_loss)
+
+            # Average the loss across the classes that were present in the batch
+            if class_topo_losses:
+                topological_loss = torch.mean(torch.stack(class_topo_losses))
+            else:
+                topological_loss = torch.tensor(0.0, device=latent_features.device)
+                print("WARNING - FAILED TO COMPUTE / DETECT TOPOLGICAL LOSS")
+        else:
+            topological_loss = torch.tensor(0.0, device=latent_features.device)
+
+        # 3. Combine all losses
+        total_loss = base_loss_value + (current_topo_weight * topological_loss)
         
-        if self.topological_loss is not None and current_topo_weight > 0:
-            try:
-                topological_loss_value = self.topological_loss(latent_features, labels)
-                topological_loss_value = topological_loss_value * current_topo_weight
-            except Exception as e:
-                print(f"WARNING: Topological loss computation failed: {e}")
-                topological_loss_value = torch.tensor(0.0, device=latent_features.device)
-        
-        # Total loss
-        total_loss = base_loss_value + topological_loss_value
-        
-        # Update loss components
-        loss_components['topological_loss'] = topological_loss_value.item()
+        loss_components['topological_loss'] = topological_loss.item()
         loss_components['topological_weight'] = current_topo_weight
         
         return total_loss, loss_components
-
-
-def test_losses():
-    """Test loss functions with synthetic data"""
-    print("Testing loss functions...")
-    
-    # Create synthetic data
-    batch_size = 64
-    latent_dim = 75
-    
-    # Create features with some class structure
-    features = torch.randn(batch_size, latent_dim)
-    labels = torch.randint(0, 3, (batch_size,))
-    
-    print(f"Test data: {features.shape}, labels: {torch.unique(labels, return_counts=True)}")
-    
-    # Test FullDatasetCombinedLoss
-    loss_fn = FullDatasetCombinedLoss(
-        contrastive_weight=1.0,
-        reconstruction_weight=0.0,
-        margin=2.0,
-        update_frequency=3
-    )
-    
-    # Test without global dataset (should fallback to current batch)
-    reconstructed = torch.randn_like(features)
-    original = torch.randn_like(features)
-    
-    total_loss, contrastive_loss, reconstruction_loss = loss_fn(
-        features, labels, reconstructed, original
-    )
-    
-    print(f"Loss test results:")
-    print(f"  Total loss: {total_loss.item():.4f}")
-    print(f"  Contrastive loss: {contrastive_loss.item():.4f}")
-    print(f"  Reconstruction loss: {reconstruction_loss.item():.4f}")
-    
-    # Test distance stats
-    stats = loss_fn.get_distance_stats(features, labels)
-    print(f"Distance stats: Ratio={stats['separation_ratio']:.2f}x, Gap={stats['gap']:.3f}")
-    
-    print("✅ Loss functions test completed!")
-
-
-if __name__ == "__main__":
-    test_losses()
