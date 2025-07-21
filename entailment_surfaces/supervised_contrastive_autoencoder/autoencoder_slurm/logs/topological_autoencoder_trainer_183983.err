@@ -1,0 +1,5 @@
+RESULT MIGHT BE INACURATE
+Max number of iteration reached, currently 100000. Sometimes iterations go on in cycle even though the solution has been reached, to check if it's the case here have a look at the minimal reduced cost. If it is very close to machine precision, you might actually have the correct solution, if not try setting the maximum number of iterations a bit higher
+/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/site-packages/ot/lp/__init__.py:547: UserWarning: numItermax reached before optimality. Try to increase numItermax.
+  check_result(result_code)
+slurmstepd: error: *** JOB 183983 ON gpuvm14 CANCELLED AT 2025-07-19T15:13:51 ***

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/SBERT_topological_autoencoder_comparison_%j.out
-#SBATCH --error=../logs/SBERT_topological_autoencoder_comparison_%j.err
+#SBATCH --output=../logs/topological_autoencoder_trainer_%j.out
+#SBATCH --error=../logs/topological_autoencoder_trainer_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -49,12 +49,12 @@ print('PyTorch setup verified!')
 cd ~/MSc_Topology_Codebase
 
 echo ""
-echo "Starting Topological Comparison..."
+echo "Starting Topological Training..."
 echo ""
 
 export PYTHONUNBUFFERED=1
 
-python entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagram_comparison_bestvsavg.py
+python entailment_surfaces/supervised_contrastive_autoencoder/src/train_topological_autoencoder.py
 
 
 # Capture exit code
