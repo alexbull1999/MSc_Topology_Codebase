@@ -327,7 +327,11 @@ class GlobalContrastiveEvaluator:
         # Calculate separation metrics
         pos_mean = pos_distances.mean().item()
         neg_mean = neg_distances.mean().item()
-        separation_ratio = neg_mean / pos_mean
+        if pos_mean == 0.0:
+            print("  Warning: No positive distance separation detected (likely pure reconstruction model)")
+            separation_ratio = float('inf') if neg_mean > 0 else 1.0
+        else:
+            separation_ratio = neg_mean / pos_mean
         gap = neg_distances.min().item() - pos_distances.max().item()
         
         separation_results = {

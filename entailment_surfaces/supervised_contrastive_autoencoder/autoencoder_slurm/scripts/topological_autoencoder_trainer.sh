@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/MOOR_topological_autoencoder_trainer_%j.out
-#SBATCH --error=../logs/MOOR_topological_autoencoder_trainer_%j.err
+#SBATCH --output=../logs/PURE_MOOR_topological_attention_autoencoder_trainer_lattice_%j.out
+#SBATCH --error=../logs/PURE_MOOR_topological_attention_autoencoder_trainer_lattice_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

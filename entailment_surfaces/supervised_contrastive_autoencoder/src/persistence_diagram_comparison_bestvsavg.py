@@ -11,6 +11,7 @@ from typing import Tuple, List
 import os
 import sys
 from contrastive_autoencoder_model_global import ContrastiveAutoencoder
+from attention_autoencoder_model import AttentionAutoencoder
 from data_loader_global import GlobalDataLoader
 
 
@@ -70,7 +71,7 @@ def ph_dim_and_diagrams_from_distance_matrix(dm: np.ndarray,
 
 
 class BestModelDiagnostic:
-    def __init__(self, model_path, data_paths, prototype_path=None, embedding_type='cosine_concat'):
+    def __init__(self, model_path, data_paths, prototype_path=None, embedding_type='concat'):
         """
         Args:
             model_path: Path to your best 83.13% model checkpoint
@@ -105,13 +106,13 @@ class BestModelDiagnostic:
     
         # Extract model configuration (you may need to adjust these based on your saved model)
         model_config = {
-            'input_dim': 1536,  # SBERT concat dimension
-            'latent_dim': 75,
+            'input_dim': 1536,  # SBERT concat dimension or Lattice = 768
+            'latent_dim': 100,
             'hidden_dims': [1024, 768, 512, 256, 128],
             'dropout_rate': 0.2
         }
         # Create model instance
-        model = ContrastiveAutoencoder(**model_config)
+        model = AttentionAutoencoder(**model_config)
     
         # Load trained weights
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -440,7 +441,7 @@ class BestModelDiagnostic:
 # Usage example:
 if __name__ == "__main__":
     # Set up paths (adjust these to your actual paths)
-    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/topological_autoencoder_torchph_phase1_20250720_122636/checkpoints/best_model.pt"
+    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/attention_topological_autoencoder_torchph_phase1_20250722_141516/checkpoints/best_model.pt"
     
     data_paths = {
         'train': "data/processed/snli_full_standard_SBERT.pt",
@@ -448,7 +449,7 @@ if __name__ == "__main__":
         'test': "data/processed/snli_full_standard_SBERT_test.pt"
     }
     
-    prototype_path = "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_robust.pkl"
+    prototype_path = "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_medoid.pkl"
     
     # Run diagnostic
     diagnostic = BestModelDiagnostic(

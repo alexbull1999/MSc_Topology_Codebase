@@ -50,18 +50,20 @@ class AttentionAutoencoder(nn.Module):
             batch_first=False
         )
 
-        # --- Decoder (Reconstructs from refined latent space) ---
-        decoder_layers = []
-        prev_dim = latent_dim
-        for hidden_dim in reversed(hidden_dims):
-            decoder_layers.extend([
-                nn.Linear(prev_dim, hidden_dim),
-                nn.ReLU(),
-                nn.Dropout(dropout_rate)
-            ])
-            prev_dim = hidden_dim
-        decoder_layers.append(nn.Linear(prev_dim, input_dim))
-        self.decoder = nn.Sequential(*decoder_layers)
+        # # --- Decoder (Reconstructs from refined latent space) --- <--- MIRROR WAS CAUSING DECODER DEGENERACY???
+        # decoder_layers = []
+        # prev_dim = latent_dim
+        # for hidden_dim in reversed(hidden_dims):
+        #     decoder_layers.extend([
+        #         nn.Linear(prev_dim, hidden_dim),
+        #         nn.ReLU(),
+        #         nn.Dropout(dropout_rate)
+        #     ])
+        #     prev_dim = hidden_dim
+        # decoder_layers.append(nn.Linear(prev_dim, input_dim))
+        # self.decoder = nn.Sequential(*decoder_layers)
+
+        self.decoder = nn.Linear(latent_dim, input_dim)
 
         print(f"AttentionAutoencoder initialized:")
         print(f"  Input dim: {input_dim}")

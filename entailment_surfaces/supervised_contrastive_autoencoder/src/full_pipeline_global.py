@@ -17,6 +17,8 @@ from losses_global import FullDatasetCombinedLoss
 from trainer_global import GlobalDatasetTrainer
 from data_loader_global import GlobalDataLoader
 from evaluator_global import GlobalContrastiveEvaluator
+from attention_autoencoder_model import AttentionAutoencoder
+from loss_plot_utils import plot_training_losses
 
 
 def np_encoder(object):
@@ -42,7 +44,7 @@ def create_experiment_config():
             'train_path': 'data/processed/snli_full_standard_SBERT.pt',
             'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
             'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
-            'embedding_type': 'lattice',  # 'lattice', 'concat', 'difference', 'cosine_concat'
+            'embedding_type': 'concat',  # 'lattice', 'concat', 'difference', 'cosine_concat'
             'batch_size': 1020,
             'sample_size': None,  # Use all data
             'balanced_sampling': True,
@@ -53,21 +55,21 @@ def create_experiment_config():
         'model': {
             'input_dim': 1536,  # Will be updated based on embedding_type
             'latent_dim': 75,
-            'hidden_dims': [512, 256],
+            'hidden_dims': [1024, 768, 512, 256, 128],
             'dropout_rate': 0.2
         },
         
         # Loss configuration - GLOBAL DATASET
         'loss': {
             'contrastive_weight': 1.0,
-            'reconstruction_weight': 0.0,  # Start with pure contrastive
+            'reconstruction_weight': 100.0,  # Start with pure contrastive
             'margin': 2.0,
             'update_frequency': 3,  # Update global dataset every 3 epochs
             'max_global_samples': 5000,  # Subsample global dataset for efficiency
             # NEW: scheduling parameters
-            'schedule_reconstruction': True,
-            'warmup_epochs': 30,
-            'max_reconstruction_weight': 0.3,
+            'schedule_reconstruction': False,
+            'warmup_epochs': 0,
+            'max_reconstruction_weight': 100.0,
             'schedule_type': 'linear'  # or 'exponential'
         },
         
@@ -82,7 +84,7 @@ def create_experiment_config():
         'training': {
             'num_epochs': 200,  # Fewer epochs since global updates are expensive
             'patience': 8,
-            'save_every': 5,
+            'save_every': 20,
             'debug_frequency': 25  # More frequent debug output
         },
         
@@ -90,7 +92,7 @@ def create_experiment_config():
         'output': {
             'save_results': True,
             'save_plots': True,
-            'experiment_name': 'global_dataset_lattice_test'
+            'experiment_name': 'cosine_concat'
         }
     }
     
@@ -282,6 +284,21 @@ def save_final_results(config, train_history, evaluation_results, exp_dir):
     print(f"Final results saved to: {final_results_path}")
     return final_results_path
 
+def create_and_save_plots(train_history, exp_dir, experiment_name):
+    """
+    Create and save loss plots after training completes
+    """
+    print("Creating loss plots...")
+        
+    # Create plots
+    plot_path = plot_training_losses(
+        train_history=train_history,
+        save_dir=exp_dir,
+        experiment_name=experiment_name
+    )
+    
+    print(f"Loss plots saved to: {plot_path}")
+    return plot_path
 
 def main(config_override=None):
     """
@@ -324,6 +341,7 @@ def main(config_override=None):
         
         # Train model
         train_history = train_model(trainer, train_loader, val_loader, config, checkpoints_dir)
+        create_and_save_plots(train_history, exp_dir, config['output']['experiment_name'])
         
         # Load best model for evaluation
         best_model_path = os.path.join(checkpoints_dir, 'best_model.pt')
@@ -391,7 +409,7 @@ def run_concat_experiment():
             'embedding_type': 'concat'
         },
         'output': {
-            'experiment_name': 'global_concat_test'
+            'experiment_name': 'global_concat_test_attention'
         }
     }
     
@@ -406,7 +424,7 @@ def run_cosine_experiment():
             'embedding_type': 'cosine_concat'
         },
         'output': {
-            'experiment_name': 'global_cosine_test'
+            'experiment_name': 'global_cosine_test_no_attention'
         }
     }
     

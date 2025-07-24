@@ -257,46 +257,70 @@ class PersistencePrototypeCreator:
         print(f"Prototypes loaded from {load_path}")
     
     def visualize_prototypes(self, save_path: str = None):
-        """Create visualizations of the prototypes"""
+        """Create visualizations of the H1 prototypes with better zoom and detail"""
         if not self.prototypes:
             print("No prototypes to visualize. Run create_prototypes() first.")
             return
-        
-        fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-        fig.suptitle('Persistence Diagram Prototypes', fontsize=16)
-        
+    
+        # Only plot H1 diagrams in a single row
+        fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+        fig.suptitle('H1 Persistence Diagram Prototypes', fontsize=16)
+    
         class_names = list(self.prototypes.keys())
+    
+        # First pass: find global min/max for consistent zooming
+        all_h1_data = []
+        for class_name in class_names:
+            h1_data = self.prototypes[class_name]['H1']
+            if len(h1_data) > 0:
+                all_h1_data.append(h1_data)
+    
+        if all_h1_data:
+            all_points = np.vstack(all_h1_data)
+            global_min = np.min(all_points)
+            global_max = np.max(all_points)
         
-        for dim_idx, dim_name in enumerate(['H0', 'H1']):
-            for class_idx, class_name in enumerate(class_names):
-                ax = axes[dim_idx, class_idx]
-                
-                prototype = self.prototypes[class_name][dim_name]
-                
-                if len(prototype) > 0:
-                    # Plot persistence diagram
-                    ax.scatter(prototype[:, 0], prototype[:, 1], alpha=0.7, s=50)
-                    
-                    # Plot diagonal line
-                    max_val = np.max(prototype)
-                    min_val = np.min(prototype)
-                    ax.plot([min_val, max_val], [min_val, max_val], 'k--', alpha=0.5)
-                    
-                    ax.set_xlabel('Birth')
-                    ax.set_ylabel('Death')
-                    ax.set_title(f'{class_name.title()} {dim_name}')
-                    ax.grid(True, alpha=0.3)
-                else:
-                    ax.text(0.5, 0.5, 'Empty\nDiagram', ha='center', va='center', 
-                           transform=ax.transAxes)
-                    ax.set_title(f'{class_name.title()} {dim_name}')
+            # Add small padding for better visualization
+            padding = (global_max - global_min) * 0.05
+            plot_min = max(0, global_min - padding)
+            plot_max = global_max + padding
+        else:
+            plot_min, plot_max = 0, 1
+    
+        for class_idx, class_name in enumerate(class_names):
+            ax = axes[class_idx]
         
+            h1_prototype = self.prototypes[class_name]['H1']
+        
+            if len(h1_prototype) > 0:
+                # Plot persistence diagram points
+                ax.scatter(h1_prototype[:, 0], h1_prototype[:, 1], alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+            
+                # Plot diagonal line
+                ax.plot([plot_min, plot_max], [plot_min, plot_max], 'k--', alpha=0.5, linewidth=1)
+            
+                # Set consistent axis limits for all plots
+                ax.set_xlim(plot_min, plot_max)
+                ax.set_ylim(plot_min, plot_max)
+            
+            
+            else:
+                ax.text(0.5, 0.5, 'Empty\nH1 Diagram', ha='center', va='center', transform=ax.transAxes, fontsize=14)
+                ax.set_xlim(0, 1)
+                ax.set_ylim(0, 1)
+        
+            ax.set_xlabel('Birth', fontsize=12)
+            ax.set_ylabel('Death', fontsize=12)
+            ax.set_title(f'{class_name.title()} H1', fontsize=14, fontweight='bold')
+            ax.grid(True, alpha=0.3)
+            ax.set_aspect('equal')
+    
         plt.tight_layout()
-        
+    
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"Prototype visualization saved to {save_path}")
-        
+            print(f"\nH1 prototype visualization saved to {save_path}")
+    
         plt.show()
     
     def get_prototype_summary(self) -> str:
@@ -350,7 +374,7 @@ def main():
         prototypes = creator.create_prototypes(method=method)
     
         # Save prototypes
-        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}_vCosine.pkl'
+        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}_vCosine2.pkl'
         creator.save_prototypes(PROTOTYPES_PATH)
     
         # Generate summary
@@ -358,12 +382,12 @@ def main():
         print("\n" + summary)
     
         # Save summary
-        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary_vCosine.txt'
+        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary_vCosine2.txt'
         with open(SUMMARY_PATH, 'w') as f:
             f.write(summary)
     
         # Create visualizations
-        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations_vCosine.png'
+        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations_vCosine2.png'
         creator.visualize_prototypes(VIZ_PATH)
     
         print(f"\nPrototype creation complete!")

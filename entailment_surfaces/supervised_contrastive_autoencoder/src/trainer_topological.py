@@ -87,8 +87,11 @@ class TopologicalTrainer:
             self.loss_function.set_epoch(current_epoch)
 
             # Update global dataset at specified intervals
-        if hasattr(self.loss_function, 'contrastive_loss') and \
-           hasattr(self.loss_function.contrastive_loss, 'update_global_dataset'):
+        if (hasattr(self.loss_function, 'base_loss') and 
+            hasattr(self.loss_function.base_loss, 'contrastive_loss') and
+            hasattr(self.loss_function.base_loss.contrastive_loss, 'update_global_dataset') and
+            hasattr(self.loss_function.base_loss, 'contrastive_weight') and self.loss_function.base_loss.contrastive_weight > 0):
+            
             update_freq = getattr(self.loss_function.contrastive_loss, 'update_frequency', 3)
             if current_epoch % update_freq == 0:
                 print(f"\n🌍 Updating global dataset at epoch {current_epoch + 1}")

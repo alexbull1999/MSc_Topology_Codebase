@@ -156,6 +156,9 @@ class PersistenceDiagramCollector:
             premise_emb = self.bert_data['premise_embeddings'][sampled_indices]
             hypothesis_emb = self.bert_data['hypothesis_embeddings'][sampled_indices]
             embeddings = torch.cat([premise_emb, hypothesis_emb], dim=1)
+        elif self.embedding_type == 'lattice':
+            # Original lattice containment formula
+            embeddings = (premise_batch * hypothesis_batch) / (torch.abs(premise_batch) + torch.abs(hypothesis_batch) + self.epsilon)
         else:
             raise NotImplementedError(f"Embedding space {self.embedding_space} not implemented")
         
@@ -580,7 +583,7 @@ def main():
     print("This version uses only statistical methods - no expensive distance computations")
     
     # Load data
-    SAVE_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams.pkl'
+    SAVE_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams_LATTICE.pkl'
     
     if not Path(SAVE_PATH).exists():
         print("Running diagram collection...")

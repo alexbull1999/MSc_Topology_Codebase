@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/fast_persistence_diagram_analysis_%j.out
-#SBATCH --error=../logs/fast_persistence_diagram_analysis_%j.err
+#SBATCH --output=../logs/fast_persistence_diagram_analysis_vLattice_%j.out
+#SBATCH --error=../logs/fast_persistence_diagram_analysis_vLattice_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

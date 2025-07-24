@@ -21,9 +21,9 @@ def create_topological_config():
     config = {
         'data': {
             'train_path': 'data/processed/snli_full_standard_SBERT.pt',
-            'val_path': 'data/processed/snli_full_standard_SBERT.pt',
-            'test_path': 'data/processed/snli_full_standard_SBERT.pt',
-            'embedding_type': 'concat',  # Use your best performing type
+            'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
+            'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
+            'embedding_type': 'lattice',  # Use your best performing type
             'batch_size': 1020,
             'sample_size': None,
             'balanced_sampling': True,
@@ -39,13 +39,13 @@ def create_topological_config():
         
         'loss': {
             # Phase 1: Topological + Reconstruction (NO contrastive initially)
-            'contrastive_weight': 1.0,  # Start with 0
+            'contrastive_weight': 0.0,  # Start with 0
             'reconstruction_weight': 0.1,  # INCREASED: Strong semantic preservation signal
             
             # Topological loss settings
-            'topological_weight': 0.01,  # Main learning signal
-            'max_topological_weight': 0.05,
-            'topological_warmup_epochs': 8,  # FIXED: Start immediately (no warmup)
+            'topological_weight': 1.00,  # Main learning signal
+            'max_topological_weight': 1.00,
+            'topological_warmup_epochs': 0,  # FIXED: Start immediately (no warmup)
             'prototypes_path': None,
             
             # Reconstruction scheduling (for compatibility with FullDatasetCombinedLoss)
@@ -67,8 +67,8 @@ def create_topological_config():
         },
         
         'training': {
-            'num_epochs': 100,  # More epochs needed for topological learning
-            'patience': 50,  # More patience for topology to emerge // was 10 -- removing patience essentially
+            'num_epochs': 300,  # More epochs needed for topological learning
+            'patience': 20,  # More patience for topology to emerge // was 10 -- removing patience essentially
             'save_every': 5,
             'debug_frequency': 25
         },

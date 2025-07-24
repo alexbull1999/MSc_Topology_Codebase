@@ -1,0 +1,69 @@
+Computing persistence diagrams for each class...
+  Computing for contradiction...
+    contradiction: 2137 H1 features
+    PH dimension: -17.7387
+  Computing for entailment...
+    entailment: 1368 H1 features
+    PH dimension: 19.1374
+  Computing for neutral...
+    neutral: 1699 H1 features
+    PH dimension: 125.9951
+Loaded prototypes from entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_medoid.pkl
+
+============================================================
+COMPARISON: Current Model vs Target Prototypes
+============================================================
+
+CONTRADICTION:
+  Current model:
+    H1 features: 2137
+    Total persistence: 83.4211
+    Max persistence: 0.1711
+    Mean persistence: 0.0390
+  Target prototype:
+    H1 features: 2682
+    Total persistence: 97.8927
+    Max persistence: 0.1796
+    Mean persistence: 0.0365
+  Gap ratio (current/target): 0.8522
+  ✅ Current model is reasonably close to target
+
+ENTAILMENT:
+  Current model:
+    H1 features: 1368
+    Total persistence: 64.4981
+    Max persistence: 0.2244
+    Mean persistence: 0.0471
+  Target prototype:
+    H1 features: 1490
+    Total persistence: 64.9597
+    Max persistence: 0.2117
+    Mean persistence: 0.0436
+  Gap ratio (current/target): 0.9929
+  ✅ Current model is reasonably close to target
+
+NEUTRAL:
+  Current model:
+    H1 features: 1699
+    Total persistence: 69.9267
+    Max persistence: 0.1818
+    Mean persistence: 0.0412
+  Target prototype:
+    H1 features: 2042
+    Total persistence: 75.5131
+    Max persistence: 0.1902
+    Mean persistence: 0.0370
+  Gap ratio (current/target): 0.9260
+  ✅ Current model is reasonably close to target
+
+============================================================
+OVERALL ASSESSMENT:
+============================================================
+✅ GOOD NEWS: Current model is reasonably close to targets
+   Small-scale topological regularization should work
+Visualization saved as 'persistence_comparison.png'
+
+SUMMARY:
+contradiction: Close to target (0.85x)
+entailment: Close to target (0.99x)
+neutral: Close to target (0.93x)

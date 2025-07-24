@@ -50,22 +50,24 @@ class ContrastiveAutoencoder(nn.Module):
         
         self.encoder = nn.Sequential(*encoder_layers)
         
-        # Build decoder (reverse of encoder)
-        decoder_layers = []
-        prev_dim = latent_dim
+        # # Build decoder (reverse of encoder). <--- THIS LED TO DECODER DEGENERACY 
+        # decoder_layers = []
+        # prev_dim = latent_dim
         
-        for hidden_dim in reversed(hidden_dims):
-            decoder_layers.extend([
-                nn.Linear(prev_dim, hidden_dim),
-                nn.ReLU(),
-                nn.Dropout(dropout_rate)
-            ])
-            prev_dim = hidden_dim
+        # for hidden_dim in reversed(hidden_dims):
+        #     decoder_layers.extend([
+        #         nn.Linear(prev_dim, hidden_dim),
+        #         nn.ReLU(),
+        #         nn.Dropout(dropout_rate)
+        #     ])
+        #     prev_dim = hidden_dim
         
-        # Final decoder layer to reconstruct input
-        decoder_layers.append(nn.Linear(prev_dim, input_dim))
+        # # Final decoder layer to reconstruct input
+        # decoder_layers.append(nn.Linear(prev_dim, input_dim))
         
-        self.decoder = nn.Sequential(*decoder_layers)
+        # self.decoder = nn.Sequential(*decoder_layers)
+
+        self.decoder = nn.Linear(latent_dim, input_dim)
         
         print(f"ContrastiveAutoencoder initialized:")
         print(f"  Input dim: {input_dim}")

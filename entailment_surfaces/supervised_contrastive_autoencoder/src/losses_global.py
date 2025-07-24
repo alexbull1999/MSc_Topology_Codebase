@@ -169,6 +169,7 @@ class FullDatasetContrastiveLoss(nn.Module):
             return torch.tensor(0.0, device=device, requires_grad=True)
         
         # Proper contrastive loss: minimize positive, maximize negative (with margin)
+        #GET RID OF POSITIVE LOSS FORCING ALL SAMPLES TO BE EACH OTHER!!!! (FOR Topological Loss as well...)
         pos_loss = pos_distances.mean()
         neg_loss = torch.clamp(self.margin - neg_distances, min=0).mean()
         
@@ -214,7 +215,7 @@ class FullDatasetCombinedLoss(nn.Module):
     def __init__(self, contrastive_weight=1.0, reconstruction_weight=0.0, 
                  margin=2.0, update_frequency=3, max_global_samples=5000,
                  schedule_reconstruction=True, warmup_epochs=30, 
-                 max_reconstruction_weight=0.3, schedule_type='linear'):
+                 max_reconstruction_weight=0.3, schedule_type='exponential'):
         super().__init__()
         
         self.contrastive_weight = contrastive_weight
