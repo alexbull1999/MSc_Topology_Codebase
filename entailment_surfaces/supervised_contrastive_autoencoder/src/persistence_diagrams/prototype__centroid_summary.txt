@@ -5,35 +5,35 @@ PERSISTENCE DIAGRAM PROTOTYPES SUMMARY
 ENTAILMENT CLASS PROTOTYPES:
   H0:
     Features: 949
-    Total persistence: 443.4589
-    Max persistence: 0.7394
-    Mean persistence: 0.4673
+    Total persistence: 3654.7659
+    Max persistence: 4.9740
+    Mean persistence: 3.8512
   H1:
-    Features: 1490
-    Total persistence: 65.0204
-    Max persistence: 0.1103
-    Mean persistence: 0.0436
+    Features: 1296
+    Total persistence: 199.2753
+    Max persistence: 0.3768
+    Mean persistence: 0.1538
 
 NEUTRAL CLASS PROTOTYPES:
   H0:
     Features: 949
-    Total persistence: 514.3984
-    Max persistence: 0.7484
-    Mean persistence: 0.5420
+    Total persistence: 3950.6362
+    Max persistence: 5.0104
+    Mean persistence: 4.1629
   H1:
-    Features: 2042
-    Total persistence: 76.1858
-    Max persistence: 0.0961
-    Mean persistence: 0.0373
+    Features: 1716
+    Total persistence: 213.2020
+    Max persistence: 0.3186
+    Mean persistence: 0.1242
 
 CONTRADICTION CLASS PROTOTYPES:
   H0:
     Features: 949
-    Total persistence: 557.3435
-    Max persistence: 0.7699
-    Mean persistence: 0.5873
+    Total persistence: 4098.7245
+    Max persistence: 5.0407
+    Mean persistence: 4.3190
   H1:
-    Features: 2682
-    Total persistence: 96.7003
-    Max persistence: 0.0909
-    Mean persistence: 0.0361
+    Features: 2127
+    Total persistence: 246.3860
+    Max persistence: 0.2968
+    Mean persistence: 0.1158

@@ -7,6 +7,15 @@ from sklearn.cluster import KMeans
 from scipy.spatial.distance import pdist, squareform
 import warnings
 
+try:
+    import persim
+    PERSIM_AVAILABLE = True
+    print("Persim library available for bottleneck distance computation")
+except ImportError:
+    PERSIM_AVAILABLE = False
+    print("WARNING: Persim not available. Install with: pip install persim")
+    print("Note: This is required for bottleneck distance computation")
+
 class PersistencePrototypeCreator:
     """
     Creates prototype persistence diagrams for each class based on the similarity analysis.
@@ -18,8 +27,8 @@ class PersistencePrototypeCreator:
     def __init__(self, diagrams_data: Dict):
         self.diagrams_data = diagrams_data
         self.prototypes = {}
+        self.bottleneck_prototypes = {}
         print("Initialized prototype creator")
-        print("Based on analysis results, all classes show excellent stability for averaging")
     
     def _clean_diagram(self, diagram: np.ndarray) -> np.ndarray:
         """Remove infinite and invalid points from persistence diagram"""
@@ -36,6 +45,81 @@ class PersistencePrototypeCreator:
             clean_diagram = clean_diagram[valid_mask]
         
         return clean_diagram
+
+    def _compute_bottleneck_frechet_mean(self, diagrams: List[np.ndarray], max_diagrams: int = 10) -> np.ndarray:
+        """
+        Compute Fréchet mean using bottleneck distance.
+        
+        This finds the persistence diagram that minimizes the sum of bottleneck 
+        distances to all other diagrams - the theoretically correct "average".
+        """
+        if not PERSIM_AVAILABLE:
+            raise ImportError("Persim library required for bottleneck distance computation")
+        
+        print(f"    Computing bottleneck distance Fréchet mean with {len(diagrams)} diagrams...")
+        
+        # Clean all diagrams
+        cleaned_diagrams = [self._clean_diagram(d) for d in diagrams]
+        non_empty_diagrams = [d for d in cleaned_diagrams if d.size > 0]
+        
+        if not non_empty_diagrams:
+            return np.array([]).reshape(0, 2)
+        
+        if len(non_empty_diagrams) == 1:
+            return non_empty_diagrams[0]
+
+        np.random.seed(42)
+
+        if len(non_empty_diagrams) > max_diagrams:
+            print(f"      Subsampling to {max_diagrams} diagrams for efficiency...")
+            indices = np.random.choice(len(non_empty_diagrams), max_diagrams, replace=False)
+            non_empty_diagrams = [non_empty_diagrams[i] for i in indices]
+        
+        try:
+            print("      Computing pairwise bottleneck distances...")
+            
+            # Compute bottleneck distance from each diagram to all others
+            min_total_distance = float('inf')
+            best_diagram_idx = 0
+            
+            for i, candidate_diagram in enumerate(non_empty_diagrams):
+                total_distance = 0.0
+                
+                # Compute sum of bottleneck distances to all other diagrams
+                for j, other_diagram in enumerate(non_empty_diagrams):
+                    if i != j:
+                        # Compute bottleneck distance
+                        distance = persim.bottleneck(candidate_diagram, other_diagram)
+                        total_distance += distance
+                
+                print(f"        Diagram {i}: total bottleneck distance = {total_distance:.6f}")
+                
+                # Keep track of the diagram with minimum total distance
+                if total_distance < min_total_distance:
+                    min_total_distance = total_distance
+                    best_diagram_idx = i
+            
+            frechet_mean = non_empty_diagrams[best_diagram_idx]
+            
+            print(f"      Selected diagram {best_diagram_idx} as Fréchet mean")
+            print(f"      Total bottleneck distance: {min_total_distance:.6f}")
+            print(f"      Mean bottleneck distance: {min_total_distance/(len(non_empty_diagrams)-1):.6f}")
+            
+            if len(frechet_mean) > 0:
+                persistences = frechet_mean[:, 1] - frechet_mean[:, 0]
+                print(f"      Features: {len(frechet_mean)}")
+                print(f"      Total persistence: {np.sum(persistences):.4f}")
+                print(f"      Max persistence: {np.max(persistences):.6f}")
+            
+            return frechet_mean
+            
+        except Exception as e:
+            print(f"      Bottleneck Fréchet mean computation failed: {e}")
+            print(f"      Error details: {type(e).__name__}")
+            import traceback
+            traceback.print_exc()
+            print("      Falling back to robust centroid method...")
+            return self._compute_robust_average_prototype(non_empty_diagrams)
     
     def _compute_centroid_prototype(self, diagrams: List[np.ndarray]) -> np.ndarray:
         """
@@ -202,7 +286,7 @@ class PersistencePrototypeCreator:
         Create prototype persistence diagrams for each class
         
         Args:
-            method: 'centroid', 'medoid', or 'robust' (recommended)
+            method: 'centroid', 'medoid', 'robust', or 'bottleneck' 
         
         Returns:
             Dictionary with prototypes for each class and dimension
@@ -228,6 +312,8 @@ class PersistencePrototypeCreator:
                     prototype = self._compute_medoid_prototype(diagrams)
                 elif method == 'robust':
                     prototype = self._compute_robust_average_prototype(diagrams)
+                elif method == 'bottleneck':
+                    prototype = self._compute_bottleneck_frechet_mean(diagrams)
                 else:
                     raise ValueError(f"Unknown method: {method}")
                 
@@ -241,24 +327,33 @@ class PersistencePrototypeCreator:
             
             prototypes[class_name] = class_prototypes
         
-        self.prototypes = prototypes
+        if method == 'bottleneck':
+            self.bottleneck_prototypes = prototypes
+        else:
+            self.prototypes = prototypes
         return prototypes
     
-    def save_prototypes(self, save_path: str):
+    def save_prototypes(self, save_path: str, method: str = None):
         """Save prototypes to file"""
+        if method == 'bottleneck':
+            prototypes_to_save = self.bottleneck_prototypes
+        else:
+            prototypes_to_save = self.prototypes
+
         with open(save_path, 'wb') as f:
-            pickle.dump(self.prototypes, f)
+            pickle.dump(prototypes_to_save, f)
         print(f"\nPrototypes saved to {save_path}")
     
-    def load_prototypes(self, load_path: str):
-        """Load prototypes from file"""
-        with open(load_path, 'rb') as f:
-            self.prototypes = pickle.load(f)
-        print(f"Prototypes loaded from {load_path}")
     
-    def visualize_prototypes(self, save_path: str = None):
+    def visualize_prototypes(self, save_path: str = None, method: str = None):
         """Create visualizations of the H1 prototypes with better zoom and detail"""
-        if not self.prototypes:
+
+        if method == 'bottleneck':
+            prototypes_to_viz = self.bottleneck_prototypes
+        else:
+            prototypes_to_viz = self.prototypes
+
+        if not prototypes_to_viz:
             print("No prototypes to visualize. Run create_prototypes() first.")
             return
     
@@ -271,7 +366,7 @@ class PersistencePrototypeCreator:
         # First pass: find global min/max for consistent zooming
         all_h1_data = []
         for class_name in class_names:
-            h1_data = self.prototypes[class_name]['H1']
+            h1_data = prototypes_to_viz[class_name]['H1']
             if len(h1_data) > 0:
                 all_h1_data.append(h1_data)
     
@@ -290,7 +385,7 @@ class PersistencePrototypeCreator:
         for class_idx, class_name in enumerate(class_names):
             ax = axes[class_idx]
         
-            h1_prototype = self.prototypes[class_name]['H1']
+            h1_prototype = prototypes_to_viz[class_name]['H1']
         
             if len(h1_prototype) > 0:
                 # Plot persistence diagram points
@@ -323,17 +418,23 @@ class PersistencePrototypeCreator:
     
         plt.show()
     
-    def get_prototype_summary(self) -> str:
+    def get_prototype_summary(self, method) -> str:
         """Generate a summary report of the prototypes"""
-        if not self.prototypes:
-            return "No prototypes created yet."
+        if method == 'bottleneck':
+            prototypes_to_summarize = self.bottleneck_prototypes
+        else:
+            prototypes_to_summarize = self.prototypes
+            
+        if not prototypes_to_summarize:
+            return f"No {method} prototypes created yet."
+        
         
         report = []
         report.append("="*60)
         report.append("PERSISTENCE DIAGRAM PROTOTYPES SUMMARY")
         report.append("="*60)
         
-        for class_name, class_prototypes in self.prototypes.items():
+        for class_name, class_prototypes in prototypes_to_summarize.items():
             report.append(f"\n{class_name.upper()} CLASS PROTOTYPES:")
             
             for dim_name, prototype in class_prototypes.items():
@@ -356,7 +457,7 @@ def main():
     print("Creating persistence diagram prototypes...")
     
     # Load the collected diagrams
-    DIAGRAMS_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams.pkl'
+    DIAGRAMS_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams_CONCAT_EUCLIDEAN.pkl'
     
     if not Path(DIAGRAMS_PATH).exists():
         print(f"Error: {DIAGRAMS_PATH} not found!")
@@ -368,27 +469,26 @@ def main():
     # Create prototypes
     creator = PersistencePrototypeCreator(all_diagrams)
     
-    # Use robust method (recommended given your stability results)
-    methods = ['medoid', 'robust', 'centroid']
+    methods = ['bottleneck']
     for method in methods:
         prototypes = creator.create_prototypes(method=method)
     
         # Save prototypes
-        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}_vCosine2.pkl'
-        creator.save_prototypes(PROTOTYPES_PATH)
+        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}.pkl'
+        creator.save_prototypes(PROTOTYPES_PATH, method=method)
     
         # Generate summary
-        summary = creator.get_prototype_summary()
+        summary = creator.get_prototype_summary(method=method)
         print("\n" + summary)
     
         # Save summary
-        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary_vCosine2.txt'
+        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary.txt'
         with open(SUMMARY_PATH, 'w') as f:
             f.write(summary)
     
         # Create visualizations
-        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations_vCosine2.png'
-        creator.visualize_prototypes(VIZ_PATH)
+        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations.png'
+        creator.visualize_prototypes(VIZ_PATH, method=method)
     
         print(f"\nPrototype creation complete!")
         print(f"Files created:")

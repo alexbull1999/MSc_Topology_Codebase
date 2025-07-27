@@ -107,12 +107,12 @@ class BestModelDiagnostic:
         # Extract model configuration (you may need to adjust these based on your saved model)
         model_config = {
             'input_dim': 1536,  # SBERT concat dimension or Lattice = 768
-            'latent_dim': 100,
+            'latent_dim': 75,
             'hidden_dims': [1024, 768, 512, 256, 128],
             'dropout_rate': 0.2
         }
         # Create model instance
-        model = AttentionAutoencoder(**model_config)
+        model = ContrastiveAutoencoder(**model_config)
     
         # Load trained weights
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -441,7 +441,7 @@ class BestModelDiagnostic:
 # Usage example:
 if __name__ == "__main__":
     # Set up paths (adjust these to your actual paths)
-    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/attention_topological_autoencoder_torchph_phase1_20250722_141516/checkpoints/best_model.pt"
+    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/moor_topo-contrastive_autoencoder_noattention_20250725_170549/checkpoints/checkpoint_epoch_50.pt"
     
     data_paths = {
         'train': "data/processed/snli_full_standard_SBERT.pt",

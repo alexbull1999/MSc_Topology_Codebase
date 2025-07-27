@@ -86,7 +86,7 @@ class PersistenceDiagramCollector:
     Collect persistence diagrams using the same methodology as phdim_clustering_validation_best_metrics.py
     """
     
-    def __init__(self, embedding_space='sbert_concat', distance_metric='cosine', 
+    def __init__(self, embedding_space='sbert_concat', distance_metric='euclidean', 
                  bert_data_path=None, device='cuda'):
         self.embedding_space = embedding_space
         self.distance_metric = distance_metric
@@ -583,7 +583,7 @@ def main():
     print("This version uses only statistical methods - no expensive distance computations")
     
     # Load data
-    SAVE_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams_LATTICE.pkl'
+    SAVE_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams_CONCAT_EUCLIDEAN.pkl'
     
     if not Path(SAVE_PATH).exists():
         print("Running diagram collection...")

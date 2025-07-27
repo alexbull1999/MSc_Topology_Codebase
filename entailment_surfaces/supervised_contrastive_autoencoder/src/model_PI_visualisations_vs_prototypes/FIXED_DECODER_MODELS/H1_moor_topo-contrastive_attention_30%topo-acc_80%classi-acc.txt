@@ -1,0 +1,69 @@
+Computing persistence diagrams for each class...
+  Computing for contradiction...
+    contradiction: 1842 H1 features
+    PH dimension: -11.0545
+  Computing for entailment...
+    entailment: 1357 H1 features
+    PH dimension: 25.6912
+  Computing for neutral...
+    neutral: 1768 H1 features
+    PH dimension: -41.9663
+Loaded prototypes from entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_medoid.pkl
+
+============================================================
+COMPARISON: Current Model vs Target Prototypes
+============================================================
+
+CONTRADICTION:
+  Current model:
+    H1 features: 1842
+    Total persistence: 26.4207
+    Max persistence: 0.0753
+    Mean persistence: 0.0143
+  Target prototype:
+    H1 features: 2682
+    Total persistence: 97.8927
+    Max persistence: 0.1796
+    Mean persistence: 0.0365
+  Gap ratio (current/target): 0.2699
+  ❌ Current model has much LOWER complexity than target
+
+ENTAILMENT:
+  Current model:
+    H1 features: 1357
+    Total persistence: 21.7161
+    Max persistence: 0.0748
+    Mean persistence: 0.0160
+  Target prototype:
+    H1 features: 1490
+    Total persistence: 64.9597
+    Max persistence: 0.2117
+    Mean persistence: 0.0436
+  Gap ratio (current/target): 0.3343
+  ❌ Current model has much LOWER complexity than target
+
+NEUTRAL:
+  Current model:
+    H1 features: 1768
+    Total persistence: 30.8891
+    Max persistence: 0.0786
+    Mean persistence: 0.0175
+  Target prototype:
+    H1 features: 2042
+    Total persistence: 75.5131
+    Max persistence: 0.1902
+    Mean persistence: 0.0370
+  Gap ratio (current/target): 0.4091
+  ❌ Current model has much LOWER complexity than target
+
+============================================================
+OVERALL ASSESSMENT:
+============================================================
+⚠️  MIXED RESULTS: Some classes close, others far off
+   May need class-specific regularization weights
+Visualization saved as 'persistence_comparison.png'
+
+SUMMARY:
+contradiction: Much simpler than target (0.27x)
+entailment: Much simpler than target (0.33x)
+neutral: Much simpler than target (0.41x)

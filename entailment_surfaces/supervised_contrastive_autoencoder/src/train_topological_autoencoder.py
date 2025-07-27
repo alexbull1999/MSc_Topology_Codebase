@@ -23,7 +23,7 @@ def create_topological_config():
             'train_path': 'data/processed/snli_full_standard_SBERT.pt',
             'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
             'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
-            'embedding_type': 'lattice',  # Use your best performing type
+            'embedding_type': 'concat',  # Use your best performing type
             'batch_size': 1020,
             'sample_size': None,
             'balanced_sampling': True,
@@ -40,22 +40,23 @@ def create_topological_config():
         'loss': {
             # Phase 1: Topological + Reconstruction (NO contrastive initially)
             'contrastive_weight': 0.0,  # Start with 0
-            'reconstruction_weight': 0.1,  # INCREASED: Strong semantic preservation signal
+            'reconstruction_weight': 100.0,  # INCREASED: Strong semantic preservation signal
             
             # Topological loss settings
-            'topological_weight': 1.00,  # Main learning signal
-            'max_topological_weight': 1.00,
+            'topological_weight': 1.0,  # Main learning signal
+            'max_topological_weight': 1.0,
             'topological_warmup_epochs': 0,  # FIXED: Start immediately (no warmup)
             'prototypes_path': None,
             
             # Reconstruction scheduling (for compatibility with FullDatasetCombinedLoss)
-            'schedule_reconstruction': True,  # Keep constant for Phase 1
-            'warmup_epochs': 10,  # No warmup needed
-            'max_reconstruction_weight': 0.3,
+            'schedule_reconstruction': False,  # Keep constant for Phase 1
+            'warmup_epochs': 0,  # No warmup needed
+            'max_reconstruction_weight': 100.0,
             'schedule_type': 'linear',
             
             # Global dataset settings (required for FullDatasetCombinedLoss compatibility)
-            'margin': 2.0,  # ADDED: Required even with contrastive_weight=0
+            'positive_margin': 2.0,  # ADDED: Required even with contrastive_weight=0
+            'negative_margin': 10.0,
             'update_frequency': 3,
             'max_global_samples': 5000
         },
@@ -67,16 +68,16 @@ def create_topological_config():
         },
         
         'training': {
-            'num_epochs': 300,  # More epochs needed for topological learning
-            'patience': 20,  # More patience for topology to emerge // was 10 -- removing patience essentially
-            'save_every': 5,
+            'num_epochs': 100,  # More epochs needed for topological learning
+            'patience': 10,  # More patience for topology to emerge // was 10 -- removing patience essentially
+            'save_every': 10,
             'debug_frequency': 25
         },
         
         'output': {
             'save_results': True,
             'save_plots': True,
-            'experiment_name': 'topological_autoencoder_torchph_phase1'
+            'experiment_name': 'gw_topological_autoencoder_attention'
         }
     }
     
@@ -109,6 +110,96 @@ def evaluate_model(model, train_loader, val_loader, test_loader, config, results
         print(f"Evaluation results saved to: {results_path}")
     
     return evaluation_results
+
+
+def create_and_save_topological_plots(train_history, exp_dir, experiment_name):
+    """
+    Create and save loss plots after topological training completes
+    """
+    print("Creating topological loss plots...")
+    
+    # Import plotting functions
+    from loss_plot_utils_topological import plot_topological_training_losses, plot_curriculum_learning_analysis
+    
+    # Create main training plots
+    main_plot_path = plot_topological_training_losses(
+        train_history=train_history,
+        save_dir=exp_dir,
+        experiment_name=experiment_name
+    )
+    
+    # Create curriculum learning analysis if relevant data exists
+    curriculum_plot_path = None
+    if any(key in train_history for key in ['topological_weight', 'persistence_weight']):
+        curriculum_plot_path = plot_curriculum_learning_analysis(
+            train_history=train_history,
+            save_dir=exp_dir,
+            experiment_name=experiment_name
+        )
+    
+    print(f"Main training plots saved to: {main_plot_path}")
+    if curriculum_plot_path:
+        print(f"Curriculum analysis saved to: {curriculum_plot_path}")
+    
+    return main_plot_path, curriculum_plot_path
+
+
+def save_topological_training_summary(train_history, save_dir, experiment_name):
+    """
+    Save a text summary of the topological training progress
+    """
+    summary_path = os.path.join(save_dir, f'{experiment_name}_training_summary.txt')
+    
+    with open(summary_path, 'w') as f:
+        f.write(f"TOPOLOGICAL AUTOENCODER TRAINING SUMMARY\n")
+        f.write(f"{'='*50}\n")
+        f.write(f"Experiment: {experiment_name}\n")
+        f.write(f"Total Epochs: {len(train_history['epoch'])}\n\n")
+        
+        # Final losses
+        if train_history['train_loss']:
+            f.write(f"Final Losses:\n")
+            f.write(f"  Total Loss (Train): {train_history['train_loss'][-1]:.6f}\n")
+            f.write(f"  Total Loss (Val):   {train_history['val_loss'][-1]:.6f}\n")
+            
+            if 'train_contrastive_loss' in train_history:
+                f.write(f"  Contrastive (Train): {train_history['train_contrastive_loss'][-1]:.6f}\n")
+                f.write(f"  Contrastive (Val):   {train_history['val_contrastive_loss'][-1]:.6f}\n")
+            
+            if 'train_topological_loss' in train_history:
+                f.write(f"  Topological (Train): {train_history['train_topological_loss'][-1]:.6f}\n")
+                f.write(f"  Topological (Val):   {train_history['val_topological_loss'][-1]:.6f}\n")
+            elif 'train_persistence_loss' in train_history:
+                f.write(f"  Persistence (Train): {train_history['train_persistence_loss'][-1]:.6f}\n")
+                f.write(f"  Persistence (Val):   {train_history['val_persistence_loss'][-1]:.6f}\n")
+            
+            if 'train_reconstruction_loss' in train_history:
+                f.write(f"  Reconstruction (Train): {train_history['train_reconstruction_loss'][-1]:.6f}\n")
+                f.write(f"  Reconstruction (Val):   {train_history['val_reconstruction_loss'][-1]:.6f}\n")
+        
+        # Separation metrics
+        if 'train_separation_ratio' in train_history:
+            f.write(f"\nSeparation Metrics:\n")
+            f.write(f"  Final Train Separation: {train_history['train_separation_ratio'][-1]:.2f}x\n")
+            f.write(f"  Final Val Separation:   {train_history['val_separation_ratio'][-1]:.2f}x\n")
+        
+        # Topological metrics
+        if 'total_persistence' in train_history:
+            f.write(f"\nTopological Metrics:\n")
+            f.write(f"  Final Total Persistence: {train_history['total_persistence'][-1]:.6f}\n")
+        
+        # Weight schedule info
+        if 'topological_weight' in train_history:
+            f.write(f"\nCurriculum Learning:\n")
+            f.write(f"  Initial Topological Weight: {train_history['topological_weight'][0]:.6f}\n")
+            f.write(f"  Final Topological Weight:   {train_history['topological_weight'][-1]:.6f}\n")
+        elif 'persistence_weight' in train_history:
+            f.write(f"\nCurriculum Learning:\n")
+            f.write(f"  Initial Persistence Weight: {train_history['persistence_weight'][0]:.6f}\n")
+            f.write(f"  Final Persistence Weight:   {train_history['persistence_weight'][-1]:.6f}\n")
+    
+    print(f"Training summary saved to: {summary_path}")
+    return summary_path
 
 
 def main_topological_training():
@@ -161,6 +252,10 @@ def main_topological_training():
         
         print("✅ Topological training completed successfully!")
         
+        train_history = trainer.train_history
+        create_and_save_topological_plots(train_history, exp_dir, config['output']['experiment_name'])
+        save_topological_training_summary(train_history, exp_dir, config['output']['experiment_name'])
+
         # Save results
         print("Saving results...")
         # You can reuse your existing evaluation functions here

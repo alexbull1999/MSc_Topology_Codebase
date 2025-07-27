@@ -20,7 +20,7 @@ def debug_reconstruction_model():
     print("=" * 60)
     
     # Configuration
-    MODEL_PATH = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/global_concat_test_attention_20250724_203741/checkpoints/best_model.pt"  # Update this
+    MODEL_PATH = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/moor_topo-contrastive_autoencoder_noattention_20250725_170549/checkpoints/checkpoint_epoch_50.pt"  # Update this
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     print(f"Device: {device}")

@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 from moor_topological_loss import MoorTopologicalLoss 
+from gw_topological_losses import GromovWassersteinTopologicalLoss
 
 
 class FullDatasetContrastiveLoss(nn.Module):
@@ -15,9 +16,10 @@ class FullDatasetContrastiveLoss(nn.Module):
     Contrastive loss that uses the entire dataset for global context
     """
     
-    def __init__(self, margin=2.0, update_frequency=3, max_global_samples=5000):
+    def __init__(self, positive_margin=2.0, negative_margin=10.0, update_frequency=3, max_global_samples=5000):
         super().__init__()
-        self.margin = margin
+        self.positive_margin = positive_margin
+        self.negative_margin = negative_margin
         self.update_frequency = update_frequency
         self.max_global_samples = max_global_samples
         self.global_features = None
@@ -25,7 +27,8 @@ class FullDatasetContrastiveLoss(nn.Module):
         self.batch_count = 0
         
         print(f"FullDatasetContrastiveLoss initialized:")
-        print(f"  Margin: {margin}")
+        print(f"  Positive Margin: {positive_margin}")
+        print(f"  Negative Margin: {negative_margin}")
         print(f"  Update frequency: {update_frequency} epochs")
         print(f"  Max global samples: {max_global_samples}")
     
@@ -170,9 +173,16 @@ class FullDatasetContrastiveLoss(nn.Module):
             return torch.tensor(0.0, device=device, requires_grad=True)
         
         # Proper contrastive loss: minimize positive, maximize negative (with margin)
-        pos_loss = pos_distances.mean()
-        neg_loss = torch.clamp(self.margin - neg_distances, min=0).mean()
+        #When combined with topology only keep negative loss. i.e. don't force same classes to come together.
+
+        pos_loss = torch.clamp(pos_distances - self.positive_margin, min=0).mean()
+
+
+        # pos_loss = pos_distances.mean()
+        neg_loss = torch.clamp(self.negative_margin - neg_distances, min=0).mean()
         
+        # total_loss = pos_loss + neg_loss
+
         total_loss = pos_loss + neg_loss
         
         # Debug current batch separation
@@ -213,7 +223,7 @@ class FullDatasetCombinedLoss(nn.Module):
     """
     
     def __init__(self, contrastive_weight=1.0, reconstruction_weight=0.0, 
-                 margin=2.0, update_frequency=3, max_global_samples=5000,
+                 positive_margin=2.0, negative_margin=10.0, update_frequency=3, max_global_samples=5000,
                  schedule_reconstruction=True, warmup_epochs=30, 
                  max_reconstruction_weight=0.3, schedule_type='linear'):
         super().__init__()
@@ -229,7 +239,8 @@ class FullDatasetCombinedLoss(nn.Module):
         self.schedule_type = schedule_type
         
         self.contrastive_loss = FullDatasetContrastiveLoss(
-            margin=margin, 
+            positive_margin=positive_margin, 
+            negative_margin=negative_margin,
             update_frequency=update_frequency,
             max_global_samples=max_global_samples
         )
@@ -334,7 +345,7 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
     """
     def __init__(self, contrastive_weight=1.0, reconstruction_weight=0.1, 
                  topological_weight=1.0, prototypes_path=None,
-                 margin=2.0, update_frequency=3, max_global_samples=5000,
+                 positive_margin=2.0, negative_margin=10.0, update_frequency=3, max_global_samples=5000,
                  topological_warmup_epochs=10, max_topological_weight=5.0,
                  schedule_reconstruction=True, warmup_epochs=30, 
                  max_reconstruction_weight=0.3, schedule_type='linear'):
@@ -344,7 +355,8 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         self.base_loss = FullDatasetCombinedLoss(
             contrastive_weight=contrastive_weight,
             reconstruction_weight=reconstruction_weight,
-            margin=margin,
+            positive_margin=positive_margin,
+            negative_margin=negative_margin,
             update_frequency=update_frequency,
             max_global_samples=max_global_samples,
             schedule_reconstruction=schedule_reconstruction,
@@ -354,7 +366,11 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         )
         
         # Topological loss
-        self.topological_loss_fn = MoorTopologicalLoss()
+        self.topological_loss_fn = GromovWassersteinTopologicalLoss(
+            gw_weight=0.01,
+            distance_weight=20,
+            distance_type='stress'
+        )
         self.topological_weight = topological_weight
         self.max_topological_weight = max_topological_weight
         self.topological_warmup_epochs = topological_warmup_epochs
@@ -373,7 +389,7 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
     def get_current_topological_weight(self) -> float:
         """Get current topological weight based on warmup schedule."""
         if self.current_epoch < self.topological_warmup_epochs:
-            return 0
+            return self.topological_weight
         elif self.topological_warmup_epochs == 0:
             return self.max_topological_weight
         else:
@@ -409,8 +425,18 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
                     latent_subset = latent_features[class_mask]
                     
                     # Apply the loss to this class's subset
-                    class_loss = self.topological_loss_fn(input_subset, latent_subset)
+                    class_loss, gw_loss, dist_loss = self.topological_loss_fn(input_subset, latent_subset)
                     class_topo_losses.append(class_loss)
+
+                    if self.current_epoch % 10 == 0:
+                        print(f"  GW Loss Components:")
+                        print(f"    Raw GW loss: {gw_loss.item():.6f}")
+                        print(f"    Raw distance loss: {dist_loss.item():.6f}")
+                        print(f"    Weighted GW: {(self.topological_loss_fn.gw_weight * gw_loss).item():.6f}")
+                        print(f"    Weighted distance: {(self.topological_loss_fn.distance_weight * dist_loss).item():.6f}")
+                        print(f"    Total loss: {class_loss.item():.6f}")
+                        print(f"    GW/Distance ratio: {(gw_loss / (dist_loss + 1e-8)).item():.3f}")
+                        
 
             # Average the loss across the classes that were present in the batch
             if class_topo_losses:
