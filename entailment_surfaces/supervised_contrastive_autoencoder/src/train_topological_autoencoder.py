@@ -24,7 +24,7 @@ def create_topological_config():
             'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
             'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
             'embedding_type': 'concat',  # Use your best performing type
-            'batch_size': 1020,
+            'batch_size': 3000,
             'sample_size': None,
             'balanced_sampling': True,
             'random_state': 42
@@ -43,7 +43,7 @@ def create_topological_config():
             'reconstruction_weight': 100.0,  # INCREASED: Strong semantic preservation signal
             
             # Topological loss settings
-            'topological_weight': 1.0,  # Main learning signal
+            'topological_weight':1.0,  # Main learning signal
             'max_topological_weight': 1.0,
             'topological_warmup_epochs': 0,  # FIXED: Start immediately (no warmup)
             'prototypes_path': None,
@@ -77,7 +77,7 @@ def create_topological_config():
         'output': {
             'save_results': True,
             'save_plots': True,
-            'experiment_name': 'gw_topological_autoencoder_attention'
+            'experiment_name': 'signature_moor_lifted_autoencoder_attention'
         }
     }
     

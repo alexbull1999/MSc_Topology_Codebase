@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/gw_topological_attention_concat_%j.out
-#SBATCH --error=../logs/gw_topological_attention_concat_%j.err
+#SBATCH --output=../logs/signature_moor_lifted_attention_concat_%j.out
+#SBATCH --error=../logs/signature_moor_lifted_attention_concat_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

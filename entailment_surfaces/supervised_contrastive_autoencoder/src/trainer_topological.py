@@ -95,7 +95,7 @@ class TopologicalTrainer:
             update_freq = getattr(self.loss_function.base_loss.contrastive_loss, 'update_frequency', 3)
             if current_epoch % update_freq == 0:
                 print(f"\n🌍 Updating global dataset at epoch {current_epoch + 1}")
-                self.loss_function.base_loss.contrastive_loss.update_global_dataset(
+                self.loss_function.update_global_datasets(
                     train_loader, self.model, self.device
                 )
         

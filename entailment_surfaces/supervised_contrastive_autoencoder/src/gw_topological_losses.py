@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from torch_topological.nn import VietorisRipsComplex
+from distance_matrix_test import calculate_ph_dim
 
 
 class GromovWassersteinTopologicalLoss(nn.Module):
@@ -19,13 +20,15 @@ class GromovWassersteinTopologicalLoss(nn.Module):
     """
     
     def __init__(self, gw_weight=1.0, distance_weight=0.1, distance_type='stress', 
-                 max_dimension=1, distance_metric='euclidean'):
+                 max_dimension=1, distance_metric='euclidean', min_persistence=0.2, significance_weight=10.0):
         super().__init__()
         self.gw_weight = gw_weight
         self.distance_weight = distance_weight
         self.distance_type = distance_type
         self.max_dimension = max_dimension
         self.distance_metric = distance_metric
+        self.min_persistence = min_persistence      # NEW
+        self.significance_weight = significance_weight  # NEW
         
         # Initialize VietorisRips complex for differentiable persistence computation
         self.vr_complex = VietorisRipsComplex(
@@ -69,7 +72,11 @@ class GromovWassersteinTopologicalLoss(nn.Module):
                 print(f"Warning: Unknown metric '{self.distance_metric}', using Euclidean")
                 distance_matrix = torch.cdist(features, features, p=2)
         
-        print(f"    Distance matrix: min={distance_matrix.min():.3f}, max={distance_matrix.max():.3f}, mean={distance_matrix.mean():.3f}")
+
+        if distance_matrix.max() > 0:
+            distance_matrix = distance_matrix / distance_matrix.max()
+
+        # print(f"    Distance matrix: min={distance_matrix.min():.3f}, max={distance_matrix.max():.3f}, mean={distance_matrix.mean():.3f}")
 
         return distance_matrix
 
@@ -122,11 +129,11 @@ class GromovWassersteinTopologicalLoss(nn.Module):
                 print("ERROR - No diagram found for H1")
                 raise
 
-            for dim_name, diagram in diagrams.items():
-                if len(diagram) > 0:
-                    births = diagram[:, 0]
-                    deaths = diagram[:, 1]
-                    print(f"    {dim_name}: {len(diagram)} features, birth_range=[{births.min():.3f}, {births.max():.3f}], death_range=[{deaths.min():.3f}, {deaths.max():.3f}]")
+            # for dim_name, diagram in diagrams.items():
+            #     if len(diagram) > 0:
+            #         births = diagram[:, 0]
+            #         deaths = diagram[:, 1]
+            #         print(f"    {dim_name}: {len(diagram)} features, birth_range=[{births.min():.3f}, {births.max():.3f}], death_range=[{deaths.min():.3f}, {deaths.max():.3f}]")
                 
             return diagrams
                 
@@ -184,8 +191,42 @@ class GromovWassersteinTopologicalLoss(nn.Module):
         distance = torch.sum(transport_plan * cost_matrix)
         
         return distance
+
+    def filter_meaningful_features(self, diagram, min_persistence=0.01):
+        """Only keep features with substantial persistence"""
+        if len(diagram) == 0:
+            return diagram
     
-    def gromov_wasserstein_distance(self, diagrams1, diagrams2):
+        persistence = diagram[:, 1] - diagram[:, 0]
+        # print(f"    Persistence range: [{persistence.min():.3f}, {persistence.max():.3f}], mean: {persistence.mean():.3f}")
+
+        meaningful_mask = persistence >= min_persistence
+        filtered = diagram[meaningful_mask]
+    
+        # print(f"    Filtered: {len(diagram)} → {len(filtered)} features (min_pers={min_persistence})")
+        return filtered
+
+    def persistence_significance_loss(self, latent_diagrams):
+        """Reward creation of substantial persistence features"""
+        total_significance = torch.tensor(0.0, device=list(latent_diagrams.values())[0].device, requires_grad=True)
+    
+        for dim_name, diagram in latent_diagrams.items():
+            if len(diagram) == 0:
+                continue
+            
+            persistence = diagram[:, 1] - diagram[:, 0]
+        
+            # Reward substantial persistence features
+            if len(persistence) > 0:
+                # Use negative loss because we want to maximize substantial features
+                significance = -torch.mean(persistence) * 10 # Simple linear reward
+                total_significance = total_significance + significance
+            
+                # print(f"    {dim_name} significance reward: {significance.item():.6f}")
+    
+        return total_significance
+    
+    def gromov_wasserstein_distance(self, diagrams1, diagrams2, min_persistence=0.05):
         """
         Compute combined Gromov-Wasserstein distance across all dimensions
         
@@ -195,25 +236,31 @@ class GromovWassersteinTopologicalLoss(nn.Module):
         Returns:
             total_distance: Combined distance across H0 and H1
         """
-        total_distance = torch.tensor(0.0, device=list(diagrams1.values())[0].device, requires_grad=True)
-        
-        # Compare H0 diagrams (connected components)
-        h0_dist = self.sinkhorn_approximation(diagrams1['h0'], diagrams2['h0'])
-        
-        # Compare H1 diagrams (loops/holes)  
-        h1_dist = self.sinkhorn_approximation(diagrams1['h1'], diagrams2['h1'])
 
-        # Print persistence diagram info
-        print(f"    H0 features: input={len(diagrams1['h0'])}, latent={len(diagrams2['h0'])}")
-        print(f"    H1 features: input={len(diagrams1['h1'])}, latent={len(diagrams2['h1'])}")
-        print(f"    H0 distance: {h0_dist.item():.6f}")
-        print(f"    H1 distance: {h1_dist.item():.6f}")
-        
-        # Combine distances (you could weight these differently if needed)
-        total_distance = h0_dist + h1_dist
-        
-        return total_distance
+        # Filter both diagrams to only include meaningful features
+        filtered_diagrams1 = {}
+        filtered_diagrams2 = {}
     
+        for dim_key in ['h0', 'h1']:
+            filtered_diagrams1[dim_key] = self.filter_meaningful_features(
+                diagrams1[dim_key], min_persistence
+            )
+            filtered_diagrams2[dim_key] = self.filter_meaningful_features(
+                diagrams2[dim_key], min_persistence
+            )
+    
+        # Compute GW distance on filtered diagrams
+        h0_dist = self.sinkhorn_approximation(filtered_diagrams1['h0'], filtered_diagrams2['h0'])
+        h1_dist = self.sinkhorn_approximation(filtered_diagrams1['h1'], filtered_diagrams2['h1'])
+    
+        # Weight H1 more heavily
+        total_distance = 0.5 * h0_dist + 0.5 * h1_dist
+    
+        # print(f"    Filtered GW: H0={h0_dist.item():.6f}, H1={h1_dist.item():.6f}")
+    
+        return total_distance
+        
+
     def distance_preservation_loss(self, input_features, latent_features):
         """
         Distance preservation loss functions
@@ -265,6 +312,11 @@ class GromovWassersteinTopologicalLoss(nn.Module):
         # Step 1: Distance matrix embedding
         input_dist_matrix = self.distance_matrix_embedding(input_features)
         latent_dist_matrix = self.distance_matrix_embedding(latent_features)
+
+        # DEBUG
+        input_ph_dim = calculate_ph_dim(input_dist_matrix.detach().cpu().numpy(), metric='precomputed')
+        latent_ph_dim = calculate_ph_dim(latent_dist_matrix.detach().cpu().numpy(), metric='precomputed')
+        # print(f"Input PH dim: {input_ph_dim:.2f}, Latent PH dim: {latent_ph_dim:.2f}")
         
         # Step 2: Compute persistence diagrams (both H0 and H1)
         input_persistence = self.compute_persistence_diagram(input_dist_matrix)
@@ -274,19 +326,18 @@ class GromovWassersteinTopologicalLoss(nn.Module):
         gw_loss = self.gromov_wasserstein_distance(input_persistence, latent_persistence)
         
         # Step 4: Distance preservation loss (geometric)
+        significance_reward = self.persistence_significance_loss(latent_persistence)
+
         dist_loss = self.distance_preservation_loss(input_features, latent_features)
         
         # Step 5: Combined loss
-        total_loss = self.gw_weight * gw_loss + self.distance_weight * dist_loss
+        total_loss = self.gw_weight * gw_loss + self.distance_weight * dist_loss + self.significance_weight * significance_reward
 
-        # # Print loss components for monitoring
-        # print(f"  GW Loss Components:")
-        # print(f"    Raw GW loss: {gw_loss.item():.6f}")
-        # print(f"    Raw distance loss: {dist_loss.item():.6f}")
-        # print(f"    Weighted GW: {(self.gw_weight * gw_loss).item():.6f}")
-        # print(f"    Weighted distance: {(self.distance_weight * dist_loss).item():.6f}")
+        # print(f"  Enhanced Loss Components:")
+        # print(f"    Raw GW loss (filtered): {gw_loss.item():.6f}")
+        # print(f"    Significance reward: {significance_reward.item():.6f}")
+        # print(f"    Distance loss: {dist_loss.item():.6f}")
         # print(f"    Total loss: {total_loss.item():.6f}")
-        # print(f"    GW/Distance ratio: {(gw_loss / (dist_loss + 1e-8)).item():.3f}")
         
         return total_loss, gw_loss, dist_loss
 

@@ -227,7 +227,7 @@ class BestModelDiagnostic:
             
             try:
                 # Compute distance matrix using cosine distance (as used in project)
-                distance_matrix = pairwise_distances(features, metric='cosine')
+                distance_matrix = pairwise_distances(features, metric='euclidean')
                 
                 # Use the CORRECT method from the project
                 phd_score, diagrams = ph_dim_and_diagrams_from_distance_matrix(
@@ -237,14 +237,22 @@ class BestModelDiagnostic:
                     h_dim=1
                 )
                 
+                h0_diagram = diagrams[0]
                 h1_diagram = diagrams[1]  # Extract H1 features
                 
                 # Filter finite values only
+                h0_finite_mask = np.isfinite(h0_diagram).all(axis=1)
+                h0_diagram = h0_diagram[h0_finite_mask]
+
                 finite_mask = np.isfinite(h1_diagram).all(axis=1)
                 h1_diagram = h1_diagram[finite_mask]
                 
-                class_diagrams[class_name] = h1_diagram
-                print(f"    {class_name}: {len(h1_diagram)} H1 features")
+                class_diagrams[class_name] = {
+                    'H0': h0_diagram,
+                    'H1': h1_diagram
+
+                } 
+                print(f"    {class_name}: {len(h0_diagram)} H0 features, {len(h1_diagram)} H1 features")
                 print(f"    PH dimension: {phd_score:.4f}")
                 
             except Exception as e:
@@ -269,145 +277,168 @@ class BestModelDiagnostic:
             return None
     
     def compare_with_prototypes(self, current_diagrams, prototypes):
-        """Compare current diagrams with prototypes"""
+        """Compare current diagrams with prototypes for both H0 and H1"""
         if prototypes is None:
             print("No prototypes to compare with")
             return
-            
+        
         print("\n" + "="*60)
         print("COMPARISON: Current Model vs Target Prototypes")
         print("="*60)
+    
+        overall_gaps = {'H0': {}, 'H1': {}}
+    
+        # Compare both H0 and H1 dimensions
+        for dim_name in ['H0', 'H1']:
+            print(f"\n{dim_name} DIMENSION COMPARISON:")
+            print("-" * 40)
         
-        overall_gaps = {}
-        
-        for class_name in current_diagrams:
-            print(f"\n{class_name.upper()}:")
+            for class_name in current_diagrams:
+                print(f"\n{class_name.upper()} - {dim_name}:")
             
-            current = current_diagrams[class_name]
-            
-            # Get prototype (adjust key structure based on your prototype format)
-            if class_name in prototypes and 'H1' in prototypes[class_name]:
-                target = prototypes[class_name]['H1']
-            else:
-                print(f"  No prototype found for {class_name}")
-                continue
-            
-            # Basic statistics comparison
-            print(f"  Current model:")
-            print(f"    H1 features: {len(current)}")
-            if len(current) > 0:
-                persistences = current[:, 1] - current[:, 0]
-                current_total = np.sum(persistences)
-                current_max = np.max(persistences)
-                current_mean = np.mean(persistences)
-                print(f"    Total persistence: {current_total:.4f}")
-                print(f"    Max persistence: {current_max:.4f}")
-                print(f"    Mean persistence: {current_mean:.4f}")
-            else:
-                current_total = 0
-                print(f"    No H1 features detected!")
-            
-            print(f"  Target prototype:")
-            print(f"    H1 features: {len(target)}")
-            if len(target) > 0:
-                target_persistences = target[:, 1] - target[:, 0]
-                target_total = np.sum(target_persistences)
-                target_max = np.max(target_persistences)
-                target_mean = np.mean(target_persistences)
-                print(f"    Total persistence: {target_total:.4f}")
-                print(f"    Max persistence: {target_max:.4f}")
-                print(f"    Mean persistence: {target_mean:.4f}")
-            else:
-                target_total = 0
-            
-            # Gap analysis
-            if current_total > 0 and target_total > 0:
-                gap_ratio = current_total / target_total
-                overall_gaps[class_name] = gap_ratio
-                print(f"  Gap ratio (current/target): {gap_ratio:.4f}")
-                
-                if gap_ratio < 0.5:
-                    print(f"  ❌ Current model has much LOWER complexity than target")
-                elif gap_ratio > 2.0:
-                    print(f"  ❌ Current model has much HIGHER complexity than target")
+                # Get current diagram for this dimension
+                if dim_name in current_diagrams[class_name]:
+                    current = current_diagrams[class_name][dim_name]
                 else:
-                    print(f"  ✅ Current model is reasonably close to target")
-            elif current_total == 0:
-                print(f"  ❌ Current model has NO topological complexity!")
-                overall_gaps[class_name] = 0
-            elif target_total == 0:
-                print(f"  ❌ Target has no complexity (unexpected)")
-                overall_gaps[class_name] = float('inf')
-        
-        # Overall assessment
+                    print(f"  No current {dim_name} data for {class_name}")
+                    continue
+            
+                # Get prototype for this dimension
+                if class_name in prototypes and dim_name in prototypes[class_name]:
+                    target = prototypes[class_name][dim_name]
+                else:
+                    print(f"  No prototype found for {class_name} {dim_name}")
+                    continue
+            
+                # Basic statistics comparison
+                print(f"  Current model:")
+                print(f"    {dim_name} features: {len(current)}")
+                if len(current) > 0:
+                    persistences = current[:, 1] - current[:, 0]
+                    current_total = np.sum(persistences)
+                    current_max = np.max(persistences)
+                    current_mean = np.mean(persistences)
+                    print(f"    Total persistence: {current_total:.4f}")
+                    print(f"    Max persistence: {current_max:.4f}")
+                    print(f"    Mean persistence: {current_mean:.4f}")
+                else:
+                    current_total = 0
+                    print(f"    No {dim_name} features detected!")
+            
+                print(f"  Target prototype:")
+                print(f"    {dim_name} features: {len(target)}")
+                if len(target) > 0:
+                    target_persistences = target[:, 1] - target[:, 0]
+                    target_total = np.sum(target_persistences)
+                    target_max = np.max(target_persistences)
+                    target_mean = np.mean(target_persistences)
+                    print(f"    Total persistence: {target_total:.4f}")
+                    print(f"    Max persistence: {target_max:.4f}")
+                    print(f"    Mean persistence: {target_mean:.4f}")
+                else:
+                    target_total = 0
+            
+                # Gap analysis
+                if current_total > 0 and target_total > 0:
+                    gap_ratio = current_total / target_total
+                    overall_gaps[dim_name][class_name] = gap_ratio
+                    print(f"  Gap ratio (current/target): {gap_ratio:.4f}")
+                
+                    if gap_ratio < 0.5:
+                        print(f"  ❌ Current model has much LOWER complexity than target")
+                    elif gap_ratio > 2.0:
+                        print(f"  ❌ Current model has much HIGHER complexity than target")
+                    else:
+                        print(f"  ✅ Current model is reasonably close to target")
+                elif current_total == 0:
+                    print(f"  ❌ Current model has NO topological complexity!")
+                    overall_gaps[dim_name][class_name] = 0
+                elif target_total == 0:
+                    print(f"  ❌ Target has no complexity (unexpected)")
+                    overall_gaps[dim_name][class_name] = float('inf')
+    
+        # Overall assessment for each dimension
         print(f"\n" + "="*60)
         print("OVERALL ASSESSMENT:")
         print("="*60)
+    
+        for dim_name in ['H0', 'H1']:
+            print(f"\n{dim_name} DIMENSION:")
+            gaps = overall_gaps[dim_name]
         
-        if all(gap == 0 for gap in overall_gaps.values()):
-            print("❌ FUNDAMENTAL PROBLEM: Current model has NO topological complexity")
-            print("   The latent space is too simple/uniform to generate H1 features")
-            print("   Recommendation: Need to establish basic topological structure first")
-        elif all(0.5 <= gap <= 2.0 for gap in overall_gaps.values() if gap > 0):
-            print("✅ GOOD NEWS: Current model is reasonably close to targets")
-            print("   Small-scale topological regularization should work")
-        else:
-            print("⚠️  MIXED RESULTS: Some classes close, others far off")
-            print("   May need class-specific regularization weights")
+            if all(gap == 0 for gap in gaps.values()):
+                print(f"❌ FUNDAMENTAL PROBLEM: Current model has NO {dim_name} topological complexity")
+                print(f"   The latent space is too simple/uniform to generate {dim_name} features")
+                print("   Recommendation: Need to establish basic topological structure first")
+            elif all(0.5 <= gap <= 2.0 for gap in gaps.values() if gap > 0):
+                print(f"✅ GOOD NEWS: Current model is reasonably close to {dim_name} targets")
+                print("   Small-scale topological regularization should work")
+            else:
+                print(f"⚠️  MIXED RESULTS: Some classes close, others far off for {dim_name}")
+                print("   May need class-specific regularization weights")
             
         return overall_gaps
-    
+
     def visualize_comparison(self, current_diagrams, prototypes=None):
-        """Create visualization comparing current vs prototype diagrams"""
-        fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-        
+        """Create visualization comparing current vs prototype diagrams for both H0 and H1"""
+    
         class_names = ['entailment', 'neutral', 'contradiction']
         colors = ['green', 'blue', 'red']
+    
+        # Create separate visualizations for H0 and H1
+        for dim_name in ['H0', 'H1']:
+            fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+            fig.suptitle(f'{dim_name} Persistence Diagrams: Current Model vs Target Prototypes', fontsize=16)
         
-        for i, (class_name, color) in enumerate(zip(class_names, colors)):
-            # Current model diagrams (top row)
-            ax_current = axes[0, i]
-            if class_name in current_diagrams:
-                current = current_diagrams[class_name]
-                if len(current) > 0:
-                    ax_current.scatter(current[:, 0], current[:, 1], 
+            for i, (class_name, color) in enumerate(zip(class_names, colors)):
+                # Current model diagrams (top row)
+                ax_current = axes[0, i]
+                if class_name in current_diagrams and dim_name in current_diagrams[class_name]:
+                    current = current_diagrams[class_name][dim_name]
+                    if len(current) > 0:
+                        ax_current.scatter(current[:, 0], current[:, 1], 
                                      alpha=0.7, color=color, s=50)
-                    max_val = max(current.flatten()) if len(current) > 0 else 1
-                    ax_current.plot([0, max_val], [0, max_val], 'k--', alpha=0.5)
-                else:
-                    ax_current.text(0.5, 0.5, 'No H1 Features', 
+                        max_val = max(current.flatten()) if len(current) > 0 else 1
+                        ax_current.plot([0, max_val], [0, max_val], 'k--', alpha=0.5)
+                    else:
+                        ax_current.text(0.5, 0.5, f'No {dim_name} Features', 
                                   transform=ax_current.transAxes, ha='center', va='center')
-            
-            ax_current.set_title(f'{class_name.title()} - Current Model')
-            ax_current.set_xlabel('Birth')
-            ax_current.set_ylabel('Death')
-            ax_current.grid(True, alpha=0.3)
-            
-            # Prototype diagrams (bottom row)
-            ax_proto = axes[1, i]
-            if prototypes and class_name in prototypes and 'H1' in prototypes[class_name]:
-                target = prototypes[class_name]['H1']
-                if len(target) > 0:
-                    ax_proto.scatter(target[:, 0], target[:, 1], 
-                                   alpha=0.7, color=color, s=50)
-                    max_val = max(target.flatten()) if len(target) > 0 else 1
-                    ax_proto.plot([0, max_val], [0, max_val], 'k--', alpha=0.5)
                 else:
-                    ax_proto.text(0.5, 0.5, 'No H1 Features', 
+                    ax_current.text(0.5, 0.5, f'No {dim_name} Data', 
+                              transform=ax_current.transAxes, ha='center', va='center')
+            
+                ax_current.set_title(f'{class_name.title()} - Current Model')
+                ax_current.set_xlabel('Birth')
+                ax_current.set_ylabel('Death')
+                ax_current.grid(True, alpha=0.3)
+            
+                # Prototype diagrams (bottom row)
+                ax_proto = axes[1, i]
+                if prototypes and class_name in prototypes and dim_name in prototypes[class_name]:
+                    target = prototypes[class_name][dim_name]
+                    if len(target) > 0:
+                        ax_proto.scatter(target[:, 0], target[:, 1], 
+                                   alpha=0.7, color=color, s=50)
+                        max_val = max(target.flatten()) if len(target) > 0 else 1
+                        ax_proto.plot([0, max_val], [0, max_val], 'k--', alpha=0.5)
+                    else:
+                        ax_proto.text(0.5, 0.5, f'No {dim_name} Features', 
                                 transform=ax_proto.transAxes, ha='center', va='center')
-            else:
-                ax_proto.text(0.5, 0.5, 'No Prototype', 
+                else:
+                    ax_proto.text(0.5, 0.5, 'No Prototype', 
                             transform=ax_proto.transAxes, ha='center', va='center')
             
-            ax_proto.set_title(f'{class_name.title()} - Target Prototype')
-            ax_proto.set_xlabel('Birth')
-            ax_proto.set_ylabel('Death')
-            ax_proto.grid(True, alpha=0.3)
+                ax_proto.set_title(f'{class_name.title()} - Target Prototype')
+                ax_proto.set_xlabel('Birth')
+                ax_proto.set_ylabel('Death')
+                ax_proto.grid(True, alpha=0.3)
         
-        plt.tight_layout()
-        plt.savefig('persistence_comparison.png', dpi=300, bbox_inches='tight')
-        plt.show()
-        print("Visualization saved as 'persistence_comparison.png'")
+            plt.tight_layout()
+            filename = f'{dim_name}_persistence_comparison.png'
+            plt.savefig(filename, dpi=300, bbox_inches='tight')
+            plt.show()
+            print(f"{dim_name} visualization saved as '{filename}'")
+            plt.close()  # Close the figure to free memory
     
     def run_full_diagnostic(self):
         """Run the complete diagnostic analysis"""
@@ -441,7 +472,7 @@ class BestModelDiagnostic:
 # Usage example:
 if __name__ == "__main__":
     # Set up paths (adjust these to your actual paths)
-    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/moor_topo-contrastive_autoencoder_noattention_20250725_170549/checkpoints/checkpoint_epoch_50.pt"
+    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/signature_moor_lifted_autoencoder_no_attention_20250728_143530/checkpoints/best_model.pt"
     
     data_paths = {
         'train': "data/processed/snli_full_standard_SBERT.pt",
@@ -449,7 +480,7 @@ if __name__ == "__main__":
         'test': "data/processed/snli_full_standard_SBERT_test.pt"
     }
     
-    prototype_path = "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_medoid.pkl"
+    prototype_path = "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_bottleneck.pkl"
     
     # Run diagnostic
     diagnostic = BestModelDiagnostic(
@@ -463,15 +494,38 @@ if __name__ == "__main__":
     
     # Print summary
     print(f"\nSUMMARY:")
-    for class_name, gap in gaps.items():
-        if gap == 0:
-            print(f"{class_name}: No topological complexity")
-        elif gap < 0.5:
-            print(f"{class_name}: Much simpler than target ({gap:.2f}x)")
-        elif gap > 2.0:
-            print(f"{class_name}: Much more complex than target ({gap:.2f}x)")
+    print("="*40)
+
+    # gaps is now {'H0': {class: gap}, 'H1': {class: gap}}
+    for dim_name in ['H0', 'H1']:
+        print(f"\n{dim_name} DIMENSION:")
+        if dim_name in gaps and gaps[dim_name]:
+            for class_name, gap in gaps[dim_name].items():
+                if gap == 0:
+                    print(f"  {class_name}: No topological complexity")
+                elif gap < 0.5:
+                    print(f"  {class_name}: Much simpler than target ({gap:.2f}x)")
+                elif gap > 2.0:
+                    print(f"  {class_name}: Much more complex than target ({gap:.2f}x)")
+                else:
+                    print(f"  {class_name}: Close to target ({gap:.2f}x)")
         else:
-            print(f"{class_name}: Close to target ({gap:.2f}x)")
+            print(f"  No {dim_name} gap data available")
+
+    # Overall assessment
+    all_h0_gaps = list(gaps['H0'].values()) if gaps['H0'] else []
+    all_h1_gaps = list(gaps['H1'].values()) if gaps['H1'] else []
+    all_gaps = all_h0_gaps + all_h1_gaps
+
+    print(f"\nOVERALL ASSESSMENT:")
+    if not all_gaps:
+        print("❌ NO DATA: Unable to compute any gaps")
+    elif all(gap == 0 for gap in all_gaps):
+        print("❌ CRITICAL: Model has NO topological complexity in either dimension")
+    elif all(0.5 <= gap <= 2.0 for gap in all_gaps if gap > 0):
+        print("✅ EXCELLENT: Model topology is close to targets in both dimensions")
+    else:
+        print("⚠️  MIXED: Some dimensions/classes close to target, others need work")
 
     
 

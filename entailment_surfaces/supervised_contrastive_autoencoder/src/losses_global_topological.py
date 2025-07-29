@@ -9,6 +9,8 @@ import torch.nn.functional as F
 import numpy as np
 from moor_topological_loss import MoorTopologicalLoss 
 from gw_topological_losses import GromovWassersteinTopologicalLoss
+from sliced_wasserstein_loss import SlicedWassersteinTopologicalLoss
+from signature_moor_loss import MoorSignatureLossWithLifting
 
 
 class FullDatasetContrastiveLoss(nn.Module):
@@ -338,6 +340,7 @@ class FullDatasetCombinedLoss(nn.Module):
         
         return stats
 
+
 class TopologicallyRegularizedCombinedLoss(nn.Module):
     """
     Combined loss that orchestrates contrastive, reconstruction, and the 
@@ -366,11 +369,28 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         )
         
         # Topological loss
-        self.topological_loss_fn = GromovWassersteinTopologicalLoss(
-            gw_weight=0.01,
-            distance_weight=20,
-            distance_type='stress'
-        )
+        # self.topological_loss_fn = GromovWassersteinTopologicalLoss(
+        #     gw_weight=0.1,
+        #     distance_weight=20,
+        #     distance_type='stress',
+        #     min_persistence=0.01,    # Filter out noise
+        #     significance_weight=0.01
+        # )
+
+        # self.topological_loss_fn = SlicedWassersteinTopologicalLoss(
+        #     sw_weight=1.0,        # Start with same weight as before
+        #     distance_weight=1.0,  # Keep the MDS component
+        #     num_directions=10    # Standard for sliced Wasserstein
+        #     )
+
+        self.topological_loss_fn = MoorSignatureLossWithLifting(
+            max_dimension=0,        # H0 only to start
+            p=2,                   # L2 norm
+            normalise=True,        # Normalize distances
+            dimensions=0            # H0 only to start
+            )
+
+
         self.topological_weight = topological_weight
         self.max_topological_weight = max_topological_weight
         self.topological_warmup_epochs = topological_warmup_epochs
@@ -425,18 +445,17 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
                     latent_subset = latent_features[class_mask]
                     
                     # Apply the loss to this class's subset
-                    class_loss, gw_loss, dist_loss = self.topological_loss_fn(input_subset, latent_subset)
+                    class_loss = self.topological_loss_fn(input_subset, latent_subset)
                     class_topo_losses.append(class_loss)
 
                     if self.current_epoch % 10 == 0:
-                        print(f"  GW Loss Components:")
-                        print(f"    Raw GW loss: {gw_loss.item():.6f}")
-                        print(f"    Raw distance loss: {dist_loss.item():.6f}")
-                        print(f"    Weighted GW: {(self.topological_loss_fn.gw_weight * gw_loss).item():.6f}")
-                        print(f"    Weighted distance: {(self.topological_loss_fn.distance_weight * dist_loss).item():.6f}")
-                        print(f"    Total loss: {class_loss.item():.6f}")
-                        print(f"    GW/Distance ratio: {(gw_loss / (dist_loss + 1e-8)).item():.3f}")
-                        
+                        print(f"  Signature (Moor) Loss: {class_loss.item():.6f}")
+                        # print(f"    Raw Summary loss: {summary_loss.item():.6f}")
+                        # print(f"    Raw distance loss: {dist_loss.item():.6f}")
+                        # print(f"    Weighted Summary: {(self.topological_loss_fn.summary_weight * summary_loss).item():.6f}")
+                        # print(f"    Weighted distance: {(self.topological_loss_fn.distance_weight * dist_loss).item():.6f}")
+                        # print(f"    Total loss: {class_loss.item():.6f}")
+                        # print(f"    Summary/Distance ratio: {(summary_loss / (dist_loss + 1e-8)).item():.3f}")
 
             # Average the loss across the classes that were present in the batch
             if class_topo_losses:

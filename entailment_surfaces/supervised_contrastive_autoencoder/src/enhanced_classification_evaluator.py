@@ -486,12 +486,12 @@ if __name__ == "__main__":
     print("=" * 70)
     
     # Configuration - modify these paths as needed
-    MODEL_PATH = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/coarse_embeddingcosine_concat_hiddendims[1024, 768, 512, 256, 128]_dropout0.2_optimAdam_lr0.0001_20250715_204239/checkpoints/best_model.pt"  # Update this path
+    MODEL_PATH = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/global_concat_pure_reconstruction_20250724_123815_no_attention/checkpoints/best_model.pt"  # Update this path
     DATA_CONFIG = {
         'train_path': 'data/processed/snli_full_standard_SBERT.pt',
         'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
         'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
-        'embedding_type': 'cosine_concat',  
+        'embedding_type': 'concat',  
         'batch_size': 1020,
         'sample_size': None,
         'balanced_sampling': True,
@@ -516,9 +516,9 @@ if __name__ == "__main__":
         
         # Create model instance (adjust parameters to match your trained model)
         model = ContrastiveAutoencoder(
-            input_dim=1537,  # Adjust if different
-            latent_dim=75,  # Adjust to match your trained model
-            hidden_dims=[1024, 768, 512, 256, 128],  # Adjust to match your model
+            input_dim=1536,  # Adjust if different
+            latent_dim=100,  # Adjust to match your trained model
+            hidden_dims=[],  # Adjust to match your model
             dropout_rate=0.2
         )
 

@@ -346,7 +346,7 @@ class PersistencePrototypeCreator:
     
     
     def visualize_prototypes(self, save_path: str = None, method: str = None):
-        """Create visualizations of the H1 prototypes with better zoom and detail"""
+        """Create visualizations showing H0 (top row) and H1 (bottom row) prototypes"""
 
         if method == 'bottleneck':
             prototypes_to_viz = self.bottleneck_prototypes
@@ -356,66 +356,93 @@ class PersistencePrototypeCreator:
         if not prototypes_to_viz:
             print("No prototypes to visualize. Run create_prototypes() first.")
             return
-    
-        # Only plot H1 diagrams in a single row
-        fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-        fig.suptitle('H1 Persistence Diagram Prototypes', fontsize=16)
-    
-        class_names = list(self.prototypes.keys())
-    
-        # First pass: find global min/max for consistent zooming
+
+        # Create 2x3 subplot grid: H0 on top row, H1 on bottom row
+        fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+        fig.suptitle(f'Persistence Diagram Prototypes ({method} method)', fontsize=16)
+
+        class_names = list(prototypes_to_viz.keys())
+
+        # Find global limits for each dimension separately
+        all_h0_data = []
         all_h1_data = []
         for class_name in class_names:
+            h0_data = prototypes_to_viz[class_name]['H0']
             h1_data = prototypes_to_viz[class_name]['H1']
+            if len(h0_data) > 0:
+                all_h0_data.append(h0_data)
             if len(h1_data) > 0:
                 all_h1_data.append(h1_data)
-    
-        if all_h1_data:
-            all_points = np.vstack(all_h1_data)
-            global_min = np.min(all_points)
-            global_max = np.max(all_points)
-        
-            # Add small padding for better visualization
-            padding = (global_max - global_min) * 0.05
-            plot_min = max(0, global_min - padding)
-            plot_max = global_max + padding
+
+        # Set limits for H0
+        if all_h0_data:
+            all_h0_points = np.vstack(all_h0_data)
+            h0_min = np.min(all_h0_points)
+            h0_max = np.max(all_h0_points)
+            h0_padding = (h0_max - h0_min) * 0.05
+            h0_plot_min = -0.1  # Move y-axis down to show points at origin
+            h0_plot_max = h0_max + h0_padding
         else:
-            plot_min, plot_max = 0, 1
-    
+            h0_plot_min, h0_plot_max = -0.1, 1
+
+        # Set limits for H1
+        if all_h1_data:
+            all_h1_points = np.vstack(all_h1_data)
+            h1_min = np.min(all_h1_points)
+            h1_max = np.max(all_h1_points)
+            h1_padding = (h1_max - h1_min) * 0.05
+            h1_plot_min = max(0, h1_min - h1_padding)
+            h1_plot_max = h1_max + h1_padding
+        else:
+            h1_plot_min, h1_plot_max = 0, 1
+
         for class_idx, class_name in enumerate(class_names):
-            ax = axes[class_idx]
-        
-            h1_prototype = prototypes_to_viz[class_name]['H1']
-        
-            if len(h1_prototype) > 0:
-                # Plot persistence diagram points
-                ax.scatter(h1_prototype[:, 0], h1_prototype[:, 1], alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
-            
-                # Plot diagonal line
-                ax.plot([plot_min, plot_max], [plot_min, plot_max], 'k--', alpha=0.5, linewidth=1)
-            
-                # Set consistent axis limits for all plots
-                ax.set_xlim(plot_min, plot_max)
-                ax.set_ylim(plot_min, plot_max)
-            
-            
+            # H0 plots (top row)
+            ax_h0 = axes[0, class_idx]
+            h0_prototype = prototypes_to_viz[class_name]['H0']
+
+            if len(h0_prototype) > 0:
+                ax_h0.scatter(h0_prototype[:, 0], h0_prototype[:, 1], alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+                ax_h0.plot([h0_plot_min, h0_plot_max], [h0_plot_min, h0_plot_max], 'k--', alpha=0.5, linewidth=1)
+                ax_h0.set_xlim(h0_plot_min, h0_plot_max)
+                ax_h0.set_ylim(h0_plot_min, h0_plot_max)
             else:
-                ax.text(0.5, 0.5, 'Empty\nH1 Diagram', ha='center', va='center', transform=ax.transAxes, fontsize=14)
-                ax.set_xlim(0, 1)
-                ax.set_ylim(0, 1)
-        
-            ax.set_xlabel('Birth', fontsize=12)
-            ax.set_ylabel('Death', fontsize=12)
-            ax.set_title(f'{class_name.title()} H1', fontsize=14, fontweight='bold')
-            ax.grid(True, alpha=0.3)
-            ax.set_aspect('equal')
-    
+                ax_h0.text(0.5, 0.5, 'Empty\nH0 Diagram', ha='center', va='center', transform=ax_h0.transAxes, fontsize=14)
+                ax_h0.set_xlim(0, 1)
+                ax_h0.set_ylim(0, 1)
+
+            ax_h0.set_xlabel('Birth', fontsize=12)
+            ax_h0.set_ylabel('Death', fontsize=12)
+            ax_h0.set_title(f'{class_name.title()} H0', fontsize=14, fontweight='bold')
+            ax_h0.grid(True, alpha=0.3)
+            ax_h0.set_aspect('equal')
+
+            # H1 plots (bottom row)
+            ax_h1 = axes[1, class_idx]
+            h1_prototype = prototypes_to_viz[class_name]['H1']
+
+            if len(h1_prototype) > 0:
+                ax_h1.scatter(h1_prototype[:, 0], h1_prototype[:, 1], alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+                ax_h1.plot([h1_plot_min, h1_plot_max], [h1_plot_min, h1_plot_max], 'k--', alpha=0.5, linewidth=1)
+                ax_h1.set_xlim(h1_plot_min, h1_plot_max)
+                ax_h1.set_ylim(h1_plot_min, h1_plot_max)
+            else:
+                ax_h1.text(0.5, 0.5, 'Empty\nH1 Diagram', ha='center', va='center', transform=ax_h1.transAxes, fontsize=14)
+                ax_h1.set_xlim(0, 1)
+                ax_h1.set_ylim(0, 1)
+
+            ax_h1.set_xlabel('Birth', fontsize=12)
+            ax_h1.set_ylabel('Death', fontsize=12)
+            ax_h1.set_title(f'{class_name.title()} H1', fontsize=14, fontweight='bold')
+            ax_h1.grid(True, alpha=0.3)
+            ax_h1.set_aspect('equal')
+
         plt.tight_layout()
-    
+
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"\nH1 prototype visualization saved to {save_path}")
-    
+            print(f"\nPrototype visualization saved to {save_path}")
+
         plt.show()
     
     def get_prototype_summary(self, method) -> str:
@@ -452,6 +479,113 @@ class PersistencePrototypeCreator:
         return "\n".join(report)
 
 
+
+def load_and_visualize_bottleneck_prototypes(prototypes_path):
+    """Load bottleneck prototypes from pkl file and visualize them"""
+    
+    
+    # Load the prototypes
+    with open(prototypes_path, 'rb') as f:
+        bottleneck_prototypes = pickle.load(f)
+    
+    print("Loaded bottleneck prototypes:")
+    for class_name, prototypes in bottleneck_prototypes.items():
+        print(f"{class_name}:")
+        for dim, diagram in prototypes.items():
+            print(f"  {dim}: {len(diagram)} features")
+    
+    # Create visualization
+    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+    fig.suptitle('Bottleneck Distance Prototypes', fontsize=16)
+    
+    class_names = list(bottleneck_prototypes.keys())
+    
+    # Find global limits
+    all_h0_data = []
+    all_h1_data = []
+    for class_name in class_names:
+        h0_data = bottleneck_prototypes[class_name]['H0']
+        h1_data = bottleneck_prototypes[class_name]['H1']
+        if len(h0_data) > 0:
+            all_h0_data.append(h0_data)
+        if len(h1_data) > 0:
+            all_h1_data.append(h1_data)
+    
+    # Set limits for H0
+    if all_h0_data:
+        all_h0_points = np.vstack(all_h0_data)
+        h0_min = np.min(all_h0_points)
+        h0_max = np.max(all_h0_points)
+        h0_padding = (h0_max - h0_min) * 0.05
+        h0_plot_min = max(0, h0_min - h0_padding)
+        h0_plot_max = h0_max + h0_padding
+    else:
+        h0_plot_min, h0_plot_max = 0, 1
+    
+    # Set limits for H1
+    if all_h1_data:
+        all_h1_points = np.vstack(all_h1_data)
+        h1_min = np.min(all_h1_points)
+        h1_max = np.max(all_h1_points)
+        h1_padding = (h1_max - h1_min) * 0.05
+        h1_plot_min = max(0, h1_min - h1_padding)
+        h1_plot_max = h1_max + h1_padding
+    else:
+        h1_plot_min, h1_plot_max = 0, 1
+    
+    for class_idx, class_name in enumerate(class_names):
+        # H0 plots (top row)
+        ax_h0 = axes[0, class_idx]
+        h0_prototype = bottleneck_prototypes[class_name]['H0']
+        
+        if len(h0_prototype) > 0:
+            ax_h0.scatter(h0_prototype[:, 0], h0_prototype[:, 1], 
+                         alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+            ax_h0.plot([h0_plot_min, h0_plot_max], [h0_plot_min, h0_plot_max], 
+                      'k--', alpha=0.5, linewidth=1)
+            ax_h0.set_xlim(h0_plot_min, h0_plot_max)
+            ax_h0.set_ylim(h0_plot_min, h0_plot_max)
+        else:
+            ax_h0.text(0.5, 0.5, 'Empty\nH0 Diagram', ha='center', va='center', 
+                      transform=ax_h0.transAxes, fontsize=14)
+            ax_h0.set_xlim(0, 1)
+            ax_h0.set_ylim(0, 1)
+        
+        ax_h0.set_xlabel('Birth', fontsize=12)
+        ax_h0.set_ylabel('Death', fontsize=12)
+        ax_h0.set_title(f'{class_name.title()} H0', fontsize=14, fontweight='bold')
+        ax_h0.grid(True, alpha=0.3)
+        ax_h0.set_aspect('equal')
+        
+        # H1 plots (bottom row)
+        ax_h1 = axes[1, class_idx]
+        h1_prototype = bottleneck_prototypes[class_name]['H1']
+        
+        if len(h1_prototype) > 0:
+            ax_h1.scatter(h1_prototype[:, 0], h1_prototype[:, 1], 
+                         alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+            ax_h1.plot([h1_plot_min, h1_plot_max], [h1_plot_min, h1_plot_max], 
+                      'k--', alpha=0.5, linewidth=1)
+            ax_h1.set_xlim(h1_plot_min, h1_plot_max)
+            ax_h1.set_ylim(h1_plot_min, h1_plot_max)
+        else:
+            ax_h1.text(0.5, 0.5, 'Empty\nH1 Diagram', ha='center', va='center', 
+                      transform=ax_h1.transAxes, fontsize=14)
+            ax_h1.set_xlim(0, 1)
+            ax_h1.set_ylim(0, 1)
+        
+        ax_h1.set_xlabel('Birth', fontsize=12)
+        ax_h1.set_ylabel('Death', fontsize=12)
+        ax_h1.set_title(f'{class_name.title()} H1', fontsize=14, fontweight='bold')
+        ax_h1.grid(True, alpha=0.3)
+        ax_h1.set_aspect('equal')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return bottleneck_prototypes
+
+
 def main():
     """Main function to create prototypes"""
     print("Creating persistence diagram prototypes...")
@@ -469,12 +603,12 @@ def main():
     # Create prototypes
     creator = PersistencePrototypeCreator(all_diagrams)
     
-    methods = ['bottleneck']
+    methods = ['medoid']
     for method in methods:
         prototypes = creator.create_prototypes(method=method)
     
         # Save prototypes
-        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}.pkl'
+        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}_2.pkl'
         creator.save_prototypes(PROTOTYPES_PATH, method=method)
     
         # Generate summary
@@ -482,12 +616,12 @@ def main():
         print("\n" + summary)
     
         # Save summary
-        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary.txt'
+        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary_2.txt'
         with open(SUMMARY_PATH, 'w') as f:
             f.write(summary)
     
         # Create visualizations
-        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations.png'
+        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations_2.png'
         creator.visualize_prototypes(VIZ_PATH, method=method)
     
         print(f"\nPrototype creation complete!")
@@ -499,3 +633,24 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # prototypes_path = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_bottleneck.pkl'
+    
+    # if not Path(prototypes_path).exists():
+    #     print(f"Error: {prototypes_path} not found!")
+    #     print("Run the prototype creation first.")
+    # else:
+    #     print("Loading and visualizing bottleneck prototypes...")
+        
+    #     # Load the prototypes
+    #     with open(prototypes_path, 'rb') as f:
+    #         bottleneck_prototypes = pickle.load(f)
+        
+    #     # Create a dummy creator object just for visualization
+    #     creator = PersistencePrototypeCreator({})  # Empty data, we just want the viz method
+    #     creator.bottleneck_prototypes = bottleneck_prototypes
+        
+    #     # Create visualization with the fixed method
+    #     viz_path = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/bottleneck_prototypes_visualization.png'
+    #     creator.visualize_prototypes(viz_path, method='bottleneck')
+        
+    #     print(f"Bottleneck prototypes visualization saved to {viz_path}")
