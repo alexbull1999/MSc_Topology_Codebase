@@ -86,7 +86,7 @@ class PersistenceDiagramCollector:
     Collect persistence diagrams using the same methodology as phdim_clustering_validation_best_metrics.py
     """
     
-    def __init__(self, embedding_space='sbert_concat', distance_metric='euclidean', 
+    def __init__(self, embedding_space='sbert_concat', distance_metric='cosine', 
                  bert_data_path=None, device='cuda'):
         self.embedding_space = embedding_space
         self.distance_metric = distance_metric

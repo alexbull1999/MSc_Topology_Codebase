@@ -50,7 +50,7 @@ class ContrastiveAutoencoder(nn.Module):
         
         self.encoder = nn.Sequential(*encoder_layers)
         
-        # # Build decoder (reverse of encoder). <--- THIS LED TO DECODER DEGENERACY 
+        # Build decoder (reverse of encoder). <--- THIS LED TO DECODER DEGENERACY 
         # decoder_layers = []
         # prev_dim = latent_dim
         

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --output=../logs/sbert_processing_testset_%j.out
-#SBATCH --error=../logs/sbert_processing_testset_%j.err
+#SBATCH --output=../logs/sbert_processing_mnli_train_%j.out
+#SBATCH --error=../logs/sbert_processing_mnli_train_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

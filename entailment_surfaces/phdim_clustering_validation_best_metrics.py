@@ -38,20 +38,20 @@ class StatisticalValidation:
         
         # Top performers to test with more samples
         self.top_combinations = [
-            # ('sbert_concat', 'euclidean'),
-            # ('sbert_concat', 'chebyshev'),
-            # ('sbert_concat', 'cosine'),
-            # ('sbert_concat', 'minkowski_3'),
-            # ('sbert_concat', 'minkowski_4'),
-            ('sbert_concat', 'canberra'),
+            ('sbert_concat', 'euclidean'),
+            ('sbert_concat', 'chebyshev'),
+            ('sbert_concat', 'cosine'),
+            ('sbert_concat', 'minkowski_3'),
+            ('sbert_concat', 'minkowski_4'),
+            # ('sbert_concat', 'canberra'),
             ('sbert_concat', 'braycurtis'),
-            ('lattice_containment', 'euclidean'),
-            ('lattice_containment', 'chebyshev'),
-            ('lattice_containment', 'cosine'),
-            ('lattice_containment', 'minkowski_3'),
-            ('lattice_containment', 'minkowski_4'),
-            ('lattice_containment', 'canberra'),
-            ('lattice_containment', 'braycurtis')
+            # ('lattice_containment', 'euclidean'),
+            # ('lattice_containment', 'chebyshev'),
+            # ('lattice_containment', 'cosine'),
+            # ('lattice_containment', 'minkowski_3'),
+            # ('lattice_containment', 'minkowski_4'),
+            # ('lattice_containment', 'canberra'),
+            # ('lattice_containment', 'braycurtis')
         ]
         
         # Sample size for statistical validation
@@ -428,7 +428,7 @@ class StatisticalValidation:
         from datetime import datetime
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        report_file = self.output_dir / f"statistical_summary_{timestamp}.txt"
+        report_file = self.output_dir / f"mnli_statistical_summary_{timestamp}.txt"
         
         with open(report_file, 'w') as f:
             f.write("PHASE 1 STATISTICAL VALIDATION SUMMARY\n")
@@ -469,7 +469,7 @@ class StatisticalValidation:
 def main():
     """Run statistical validation with increased sample sizes"""
     
-    bert_data_path = "data/processed/snli_full_standard_SBERT.pt"
+    bert_data_path = "data/processed/mnli_full_SBERT_train.pt"
     order_model_path = "models/enhanced_order_embeddings_snli_SBERT_full.pt"
     
     # Initialize base validator

@@ -88,21 +88,21 @@ class SurfaceDistanceMetricAnalyzer:
          # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
         self.embedding_spaces = [
             'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
-            'sbert_difference',      # Premise - Hypothesis (relationship vector)
-            'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
-            'order_difference',     # Order premise - hypothesis (order relationship)
-            'order_violations',     # Order violation energies (inherently relational)
-            'hyperbolic_concat',    # Concatenated hyperbolic embeddings
-            'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
-            'cone_features',        # Multiple cone-related features
+            # 'sbert_difference',      # Premise - Hypothesis (relationship vector)
+            # 'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
+            # 'order_difference',     # Order premise - hypothesis (order relationship)
+            # 'order_violations',     # Order violation energies (inherently relational)
+            # 'hyperbolic_concat',    # Concatenated hyperbolic embeddings
+            # 'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
+            # 'cone_features',        # Multiple cone-related features
 
             # Lattice embedding spaces (All on SBERT raw embeddings)
             'lattice_containment', # Element-wise containment relationships
-            'lattice_order_violations', # Element-wise order violations  
-            'lattice_height',          # Element-wise height differences
-            'lattice_subsumption',     # Element-wise subsumption coverage
-            'lattice_bidirectional_order_violations',   # Both directions of violations
-            'lattice_enhanced'         # All lattice features combined
+            # 'lattice_order_violations', # Element-wise order violations  
+            # 'lattice_height',          # Element-wise height differences
+            # 'lattice_subsumption',     # Element-wise subsumption coverage
+            # 'lattice_bidirectional_order_violations',   # Both directions of violations
+            # 'lattice_enhanced'         # All lattice features combined
         ]
 
         # self.embedding_spaces = [
@@ -859,7 +859,7 @@ class SurfaceDistanceMetricAnalyzer:
 
     def _generate_simple_report(self, results: Dict, timestamp: str):
         """Generate simple plain output report for analysis"""
-        report_file = self.results_dir / f"simple_analysis_report_{timestamp}_SYMMETRY7.txt"
+        report_file = self.results_dir / f"simple_analysis_report_{timestamp}_MNLI.txt"
         
         with open(report_file, 'w') as f:
             f.write("SURFACE DISTANCE METRIC ANALYSIS - PLAIN RESULTS\n")
@@ -897,7 +897,7 @@ def main():
 
     # Initialize analyzer
     analyzer = SurfaceDistanceMetricAnalyzer(
-        bert_data_path="data/processed/snli_full_standard_SBERT.pt",
+        bert_data_path="data/processed/mnli_full_SBERT_train.pt",
         order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
         results_dir="entailment_surfaces/results",
         seed=333

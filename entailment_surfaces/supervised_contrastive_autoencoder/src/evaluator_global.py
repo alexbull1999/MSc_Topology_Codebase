@@ -15,6 +15,9 @@ from sklearn.metrics import (
     silhouette_score, adjusted_rand_score, accuracy_score,
     classification_report, confusion_matrix
 )
+from attention_autoencoder_model import AttentionAutoencoder
+from data_loader_global import GlobalDataLoader
+from contrastive_autoencoder_model_global import ContrastiveAutoencoder
 
 
 class GlobalContrastiveEvaluator:
@@ -473,46 +476,76 @@ class GlobalContrastiveEvaluator:
         return results_file
 
 
+def load_data(config):
+    """
+    Load and prepare data
+    """
+    print("Loading data...")
+    print("=" * 40)
+    
+    # Create data loader
+    data_loader = GlobalDataLoader(
+        train_path=config['data']['train_path'],
+        val_path=config['data']['val_path'], 
+        test_path=config['data']['test_path'],
+        embedding_type=config['data']['embedding_type'],
+        sample_size=config['data']['sample_size'],
+        random_state=config['data']['random_state']
+    )
+    
+    # Load datasets
+    train_dataset, val_dataset, test_dataset = data_loader.load_data()
+        
+    # Create data loaders
+    train_loader, val_loader, test_loader = data_loader.get_dataloaders(
+        batch_size=config['data']['batch_size'],
+        balanced_sampling=config['data']['balanced_sampling']
+    )
+    
+    print(f"Data loading completed!")
+    print(f"  Train: {len(train_dataset)} samples, {len(train_loader)} batches")
+    print(f"  Val: {len(val_dataset)} samples, {len(val_loader)} batches")
+    print(f"  Test: {len(test_dataset)} samples, {len(test_loader)} batches")
+    
+    return train_loader, val_loader, test_loader
+
+
 def test_evaluator():
     """Test evaluator with synthetic model and data"""
     print("Testing GlobalContrastiveEvaluator...")
     
-    # Import dependencies
-    from contrastive_autoencoder_model import ContrastiveAutoencoder
-    from torch.utils.data import DataLoader, TensorDataset
     
     # Create model
-    model = ContrastiveAutoencoder(input_dim=768, latent_dim=75)
+    model = ContrastiveAutoencoder(input_dim=1536, latent_dim=75, hidden_dims=[1024, 768, 512, 256, 128])
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+
+    # Load best model for evaluation
+    gw_model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/H0H1_signature_moor_lifted_autoencoder_no_attention_20250728_152242/checkpoints/best_model.pt"
+    if os.path.exists(gw_model_path):
+        print(f"Loading best model from {gw_model_path}")
+        checkpoint = torch.load(gw_model_path, map_location=device)
+        model.load_state_dict(checkpoint['model_state_dict'])
     
     # Create evaluator
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     evaluator = GlobalContrastiveEvaluator(model, device)
     
-    # Create synthetic test data
-    n_samples = 300
-    embeddings = torch.randn(n_samples, 768)
-    labels = torch.randint(0, 3, (n_samples,))
-    
-    # Convert to expected format
-    class SyntheticDataset:
-        def __init__(self, embeddings, labels):
-            self.embeddings = embeddings
-            self.labels = labels
-        
-        def __len__(self):
-            return len(self.embeddings)
-        
-        def __getitem__(self, idx):
-            return {
-                'embeddings': self.embeddings[idx],
-                'labels': self.labels[idx]
-            }
-    
-    test_dataset = SyntheticDataset(embeddings, labels)
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
-    
-    print(f"Created synthetic dataset: {len(test_dataset)} samples")
-    
+    config = {
+        # Data configuration
+        'data': {
+            'train_path': 'data/processed/snli_full_standard_SBERT.pt',
+            'val_path': 'data/processed/snli_full_standard_SBERT_validation.pt',
+            'test_path': 'data/processed/snli_full_standard_SBERT_test.pt',
+            'embedding_type': 'concat',  # 'lattice', 'concat', 'difference', 'cosine_concat'
+            'batch_size': 1020,
+            'sample_size': None,  # Use all data
+            'balanced_sampling': True,
+            'random_state': 42
+        }
+    }
+
+    train_loader, val_loader, test_loader = load_data(config)
+
     # Run comprehensive evaluation
     print("\nRunning comprehensive evaluation...")
     results = evaluator.comprehensive_evaluation(test_loader, test_loader, test_loader)

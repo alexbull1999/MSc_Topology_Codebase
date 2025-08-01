@@ -128,11 +128,7 @@ class ClusteringValidator:
         
         # Target embedding spaces from Revised Next Steps
         self.target_spaces = [
-            'lattice_containment',  # Most promising
-            'sbert_concat',        
-            'hyperbolic_concat',
-            'order_asymmetry',
-            'directional_order_asymmetry'     
+            'sbert_concat'
         ]
         
         # All distance metrics
@@ -580,11 +576,11 @@ class ClusteringValidator:
         }
         
         # Save files
-        results_file = self.output_dir / f"order_asymmetry_clustering_results_{timestamp}.json"
+        results_file = self.output_dir / f"MNLI_clustering_results_{timestamp}.json"
         with open(results_file, 'w') as f:
             json.dump(results_data, f, indent=2)
         
-        summary_file = self.output_dir / f"order_asymmetry_summary_report_{timestamp}.txt"
+        summary_file = self.output_dir / f"MNLI_clustering_summary_report_{timestamp}.txt"
         with open(summary_file, 'w') as f:
             f.write("PHASE 1 CLUSTERING VALIDATION RESULTS\n")
             f.write("="*50 + "\n\n")
@@ -654,7 +650,7 @@ class ClusteringValidator:
             plt.tight_layout()
             
             # Save plot
-            plot_file = self.plots_dir / f"sample_size_analysis_{space_name}_{timestamp}.png"
+            plot_file = self.plots_dir / f"MNLI_sample_size_analysis_{space_name}_{timestamp}.png"
             plt.savefig(plot_file, dpi=300, bbox_inches='tight')
             plt.close()
             
@@ -702,7 +698,7 @@ class ClusteringValidator:
 
 def main():
     """Run Phase 1 clustering validation"""
-    bert_data_path = "data/processed/snli_full_standard_SBERT.pt"
+    bert_data_path = "data/processed/mnli_full_SBERT_train.pt"
     order_model_path = "models/enhanced_order_embeddings_snli_SBERT_full.pt"
     output_dir = "entailment_surfaces/clustering"
     

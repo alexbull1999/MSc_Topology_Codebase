@@ -591,7 +591,7 @@ def main():
     print("Creating persistence diagram prototypes...")
     
     # Load the collected diagrams
-    DIAGRAMS_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams_CONCAT_EUCLIDEAN.pkl'
+    DIAGRAMS_PATH = 'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/collected_diagrams_CONCAT_COSINE.pkl'
     
     if not Path(DIAGRAMS_PATH).exists():
         print(f"Error: {DIAGRAMS_PATH} not found!")
@@ -603,12 +603,12 @@ def main():
     # Create prototypes
     creator = PersistencePrototypeCreator(all_diagrams)
     
-    methods = ['medoid']
+    methods = ['bottleneck']
     for method in methods:
         prototypes = creator.create_prototypes(method=method)
     
         # Save prototypes
-        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}_2.pkl'
+        PROTOTYPES_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_{method}_COSINE.pkl'
         creator.save_prototypes(PROTOTYPES_PATH, method=method)
     
         # Generate summary
@@ -616,12 +616,12 @@ def main():
         print("\n" + summary)
     
         # Save summary
-        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary_2.txt'
+        SUMMARY_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_summary_COSINE.txt'
         with open(SUMMARY_PATH, 'w') as f:
             f.write(summary)
     
         # Create visualizations
-        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations_2.png'
+        VIZ_PATH = f'entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__{method}_visualizations_COSINE.png'
         creator.visualize_prototypes(VIZ_PATH, method=method)
     
         print(f"\nPrototype creation complete!")

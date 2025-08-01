@@ -1,0 +1,4370 @@
+Job ID: 188881
+Node: gpuvm14
+Time: Thu 31 Jul 19:02:23 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Thu Jul 31 19:02:25 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.133.07             Driver Version: 570.133.07     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:07.0 Off |                    0 |
+| N/A   38C    P8             13W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: Tesla T4
+GPU memory: 15.6 GB
+PyTorch setup verified!
+
+Starting Model training...
+
+Loading validation data: /vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl
+Loaded 9842 validation samples
+Loading separate models...
+Order model: MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model.pt
+Asymmetry model: MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model.pt
+Both models loaded on cuda
+Order model training stats: Best val loss = 0.1832686284383138
+Asymmetry model training stats: Best val loss = 1.4873974243164068
+Separate model clustering validator initialized
+Samples per class: 100
+
+================================================================================
+SEPARATE MODEL POINT CLOUD CLUSTERING VALIDATION
+================================================================================
+Generating fixed sample indices...
+  entailment: 3329 total samples available
+Token filtering: 254/3329 samples have ≥40 tokens
+    Selected 100 samples
+Token count stats: 47 ± 7 (range: 40-79)
+  neutral: 3235 total samples available
+Token filtering: 344/3235 samples have ≥40 tokens
+    Selected 100 samples
+Token count stats: 46 ± 7 (range: 40-72)
+  contradiction: 3278 total samples available
+Token filtering: 288/3278 samples have ≥40 tokens
+    Selected 100 samples
+Token count stats: 46 ± 6 (range: 40-68)
+
+Processing entailment samples...
+  Sample 1: P=23 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2851
+      Asymmetric energy: 1.3363
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.000321 - 0.226733
+      Persistence diagrams stored successfully
+  Sample 2: P=30 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1072
+      Asymmetric energy: 3.5431
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=33
+      Finite H1 features: 33
+      H1 lifespans: 0.005233 - 0.480481
+      Persistence diagrams stored successfully
+  Sample 3: P=29 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3933
+      Asymmetric energy: 3.8174
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.000837 - 0.878389
+      Persistence diagrams stored successfully
+  Sample 4: P=59 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 204 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3187
+      Asymmetric energy: 3.7297
+    Computing persistence on full 204 point cloud...
+      Direct ripser: H0=204, H1=33
+      Finite H1 features: 33
+      H1 lifespans: 0.002649 - 0.334059
+      Persistence diagrams stored successfully
+  Sample 5: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1353
+      Asymmetric energy: 4.5698
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.004720 - 0.301390
+      Persistence diagrams stored successfully
+  Sample 6: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7503
+      Asymmetric energy: 1.4174
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.005911 - 0.327686
+      Persistence diagrams stored successfully
+  Sample 7: P=35 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2855
+      Asymmetric energy: 3.1318
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.007227 - 0.376893
+      Persistence diagrams stored successfully
+  Sample 8: P=43 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 168 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2092
+      Asymmetric energy: 2.1889
+    Computing persistence on full 168 point cloud...
+      Direct ripser: H0=168, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.003525 - 0.531360
+      Persistence diagrams stored successfully
+  Sample 9: P=50 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 177 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0216
+      Asymmetric energy: 7.5148
+    Computing persistence on full 177 point cloud...
+      Direct ripser: H0=177, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.002687 - 0.300395
+      Persistence diagrams stored successfully
+  Sample 10: P=37 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 159 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3974
+      Asymmetric energy: 2.1798
+    Computing persistence on full 159 point cloud...
+      Direct ripser: H0=159, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.001237 - 0.804587
+      Persistence diagrams stored successfully
+  Sample 11: P=38 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1119
+      Asymmetric energy: 5.5205
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.009148 - 0.357719
+      Persistence diagrams stored successfully
+  Sample 12: P=28 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8426
+      Asymmetric energy: 2.7194
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.005973 - 0.406452
+      Persistence diagrams stored successfully
+  Sample 13: P=39 tokens, H=27 tokens
+    Point cloud breakdown:
+      Combined: 198 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2410
+      Asymmetric energy: 2.2161
+    Computing persistence on full 198 point cloud...
+      Direct ripser: H0=198, H1=35
+      Finite H1 features: 35
+      H1 lifespans: 0.002143 - 0.261527
+      Persistence diagrams stored successfully
+  Sample 14: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1284
+      Asymmetric energy: 2.5849
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.000826 - 0.338139
+      Persistence diagrams stored successfully
+  Sample 15: P=30 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3404
+      Asymmetric energy: 1.6688
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.002085 - 0.350683
+      Persistence diagrams stored successfully
+  Sample 16: P=27 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6663
+      Asymmetric energy: 3.1715
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=30
+      Finite H1 features: 30
+      H1 lifespans: 0.004377 - 0.430559
+      Persistence diagrams stored successfully
+  Sample 17: P=32 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0478
+      Asymmetric energy: 5.4473
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.003847 - 0.410294
+      Persistence diagrams stored successfully
+  Sample 18: P=39 tokens, H=6 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0006
+      Asymmetric energy: 13.8383
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.007389 - 0.213057
+      Persistence diagrams stored successfully
+  Sample 19: P=38 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1745
+      Asymmetric energy: 4.7058
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.001089 - 0.406278
+      Persistence diagrams stored successfully
+  Sample 20: P=31 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7532
+      Asymmetric energy: 2.6363
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.002897 - 0.538917
+      Persistence diagrams stored successfully
+  Sample 21: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3425
+      Asymmetric energy: 3.5752
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.003690 - 0.737427
+      Persistence diagrams stored successfully
+  Sample 22: P=24 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2028
+      Asymmetric energy: 1.2044
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=30
+      Finite H1 features: 30
+      H1 lifespans: 0.004728 - 0.368423
+      Persistence diagrams stored successfully
+  Sample 23: P=25 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0108
+      Asymmetric energy: 10.0548
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.012816 - 0.219450
+      Persistence diagrams stored successfully
+  Sample 24: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2310
+      Asymmetric energy: 2.0351
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.004443 - 0.453601
+      Persistence diagrams stored successfully
+  Sample 25: P=32 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4777
+      Asymmetric energy: 2.2402
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.000470 - 0.383083
+      Persistence diagrams stored successfully
+  Sample 26: P=32 tokens, H=23 tokens
+    Point cloud breakdown:
+      Combined: 165 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1853
+      Asymmetric energy: 6.3748
+    Computing persistence on full 165 point cloud...
+      Direct ripser: H0=165, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.000255 - 0.659335
+      Persistence diagrams stored successfully
+  Sample 27: P=52 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 177 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2171
+      Asymmetric energy: 4.9475
+    Computing persistence on full 177 point cloud...
+      Direct ripser: H0=177, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.003614 - 0.354848
+      Persistence diagrams stored successfully
+  Sample 28: P=22 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4867
+      Asymmetric energy: 1.5675
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.002218 - 0.297544
+      Persistence diagrams stored successfully
+  Sample 29: P=31 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8151
+      Asymmetric energy: 2.7539
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.001846 - 0.696363
+      Persistence diagrams stored successfully
+  Sample 30: P=34 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4572
+      Asymmetric energy: 3.5400
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.003020 - 0.208651
+      Persistence diagrams stored successfully
+  Sample 31: P=24 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5086
+      Asymmetric energy: 2.8531
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=35
+      Finite H1 features: 35
+      H1 lifespans: 0.001466 - 0.284183
+      Persistence diagrams stored successfully
+  Sample 32: P=37 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0250
+      Asymmetric energy: 9.6348
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.002064 - 0.077530
+      Persistence diagrams stored successfully
+  Sample 33: P=26 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3322
+      Asymmetric energy: 4.9004
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.002723 - 0.796209
+      Persistence diagrams stored successfully
+  Sample 34: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1033
+      Asymmetric energy: 3.0909
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.006221 - 0.383175
+      Persistence diagrams stored successfully
+  Sample 35: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9828
+      Asymmetric energy: 3.7943
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.004041 - 0.776969
+      Persistence diagrams stored successfully
+  Sample 36: P=30 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1493
+      Asymmetric energy: 4.0285
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.010335 - 0.658733
+      Persistence diagrams stored successfully
+  Sample 37: P=33 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1719
+      Asymmetric energy: 4.1781
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.004922 - 0.365495
+      Persistence diagrams stored successfully
+  Sample 38: P=29 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5952
+      Asymmetric energy: 2.6927
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.005716 - 0.386547
+      Persistence diagrams stored successfully
+  Sample 39: P=41 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 165 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3128
+      Asymmetric energy: 3.4195
+    Computing persistence on full 165 point cloud...
+      Direct ripser: H0=165, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.000121 - 0.318835
+      Persistence diagrams stored successfully
+  Sample 40: P=21 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1835
+      Asymmetric energy: 0.7599
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.000199 - 0.088284
+      Persistence diagrams stored successfully
+  Sample 41: P=53 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 192 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9251
+      Asymmetric energy: 1.7997
+    Computing persistence on full 192 point cloud...
+      Direct ripser: H0=192, H1=35
+      Finite H1 features: 35
+      H1 lifespans: 0.000669 - 0.590891
+      Persistence diagrams stored successfully
+  Sample 42: P=26 tokens, H=24 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4380
+      Asymmetric energy: 2.4255
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=32
+      Finite H1 features: 32
+      H1 lifespans: 0.000602 - 0.143993
+      Persistence diagrams stored successfully
+  Sample 43: P=21 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0042
+      Asymmetric energy: 0.5550
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.003624 - 0.095439
+      Persistence diagrams stored successfully
+  Sample 44: P=30 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1959
+      Asymmetric energy: 4.8745
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.001898 - 0.609544
+      Persistence diagrams stored successfully
+  Sample 45: P=26 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0518
+      Asymmetric energy: 3.3119
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.009085 - 0.604783
+      Persistence diagrams stored successfully
+  Sample 46: P=30 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2141
+      Asymmetric energy: 3.8062
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.006602 - 0.303194
+      Persistence diagrams stored successfully
+  Sample 47: P=33 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1740
+      Asymmetric energy: 3.9969
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=43
+      Finite H1 features: 43
+      H1 lifespans: 0.001042 - 0.572145
+      Persistence diagrams stored successfully
+  Sample 48: P=35 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1377
+      Asymmetric energy: 3.6920
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.002017 - 0.325685
+      Persistence diagrams stored successfully
+  Sample 49: P=26 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5208
+      Asymmetric energy: 1.6376
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=32
+      Finite H1 features: 32
+      H1 lifespans: 0.007236 - 0.483524
+      Persistence diagrams stored successfully
+  Sample 50: P=27 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0630
+      Asymmetric energy: 5.6935
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.002773 - 0.598416
+      Persistence diagrams stored successfully
+  Sample 51: P=38 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0003
+      Asymmetric energy: 11.0952
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.003191 - 0.401920
+      Persistence diagrams stored successfully
+  Sample 52: P=37 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5106
+      Asymmetric energy: 3.7789
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.006688 - 0.267922
+      Persistence diagrams stored successfully
+  Sample 53: P=25 tokens, H=32 tokens
+    Point cloud breakdown:
+      Combined: 171 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1522
+      Asymmetric energy: 3.0990
+    Computing persistence on full 171 point cloud...
+      Direct ripser: H0=171, H1=40
+      Finite H1 features: 40
+      H1 lifespans: 0.001421 - 0.291024
+      Persistence diagrams stored successfully
+  Sample 54: P=32 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.0340
+      Asymmetric energy: 1.4454
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.000148 - 0.451716
+      Persistence diagrams stored successfully
+  Sample 55: P=33 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2968
+      Asymmetric energy: 3.7112
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.018113 - 0.655257
+      Persistence diagrams stored successfully
+  Sample 56: P=39 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0081
+      Asymmetric energy: 8.8884
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.001585 - 0.585680
+      Persistence diagrams stored successfully
+  Sample 57: P=22 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2047
+      Asymmetric energy: 2.3559
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.000040 - 0.635527
+      Persistence diagrams stored successfully
+  Sample 58: P=24 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1296
+      Asymmetric energy: 0.9174
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.002712 - 0.244933
+      Persistence diagrams stored successfully
+  Sample 59: P=33 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.0670
+      Asymmetric energy: 2.6481
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=29
+      Finite H1 features: 29
+      H1 lifespans: 0.007499 - 0.493995
+      Persistence diagrams stored successfully
+  Sample 60: P=30 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0668
+      Asymmetric energy: 2.2808
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.000973 - 0.275303
+      Persistence diagrams stored successfully
+  Sample 61: P=31 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1929
+      Asymmetric energy: 4.3187
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.009552 - 0.711882
+      Persistence diagrams stored successfully
+  Sample 62: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3913
+      Asymmetric energy: 3.1439
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.001357 - 0.212174
+      Persistence diagrams stored successfully
+  Sample 63: P=29 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1556
+      Asymmetric energy: 3.4778
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.004028 - 0.611035
+      Persistence diagrams stored successfully
+  Sample 64: P=36 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1470
+      Asymmetric energy: 1.6275
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.000555 - 0.633472
+      Persistence diagrams stored successfully
+  Sample 65: P=28 tokens, H=26 tokens
+    Point cloud breakdown:
+      Combined: 162 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8474
+      Asymmetric energy: 2.4265
+    Computing persistence on full 162 point cloud...
+      Direct ripser: H0=162, H1=36
+      Finite H1 features: 36
+      H1 lifespans: 0.002787 - 0.399735
+      Persistence diagrams stored successfully
+  Sample 66: P=22 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4395
+      Asymmetric energy: 1.3349
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.003297 - 0.233017
+      Persistence diagrams stored successfully
+  Sample 67: P=36 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0001
+      Asymmetric energy: 6.8911
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.001552 - 0.558814
+      Persistence diagrams stored successfully
+  Sample 68: P=33 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5902
+      Asymmetric energy: 2.0691
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.002955 - 0.569492
+      Persistence diagrams stored successfully
+  Sample 69: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0453
+      Asymmetric energy: 4.5921
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.003066 - 0.401183
+      Persistence diagrams stored successfully
+  Sample 70: P=36 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4488
+      Asymmetric energy: 2.2590
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.001810 - 0.356448
+      Persistence diagrams stored successfully
+  Sample 71: P=27 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3771
+      Asymmetric energy: 2.9038
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=29
+      Finite H1 features: 29
+      H1 lifespans: 0.002719 - 0.344839
+      Persistence diagrams stored successfully
+  Sample 72: P=24 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2243
+      Asymmetric energy: 1.0867
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=32
+      Finite H1 features: 32
+      H1 lifespans: 0.001277 - 0.252995
+      Persistence diagrams stored successfully
+  Sample 73: P=36 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1799
+      Asymmetric energy: 5.1443
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.000898 - 0.124585
+      Persistence diagrams stored successfully
+  Sample 74: P=40 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 177 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4494
+      Asymmetric energy: 2.7319
+    Computing persistence on full 177 point cloud...
+      Direct ripser: H0=177, H1=35
+      Finite H1 features: 35
+      H1 lifespans: 0.000785 - 0.365123
+      Persistence diagrams stored successfully
+  Sample 75: P=41 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1881
+      Asymmetric energy: 2.5722
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.001469 - 0.280048
+      Persistence diagrams stored successfully
+  Sample 76: P=30 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3309
+      Asymmetric energy: 4.2718
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.000299 - 0.383531
+      Persistence diagrams stored successfully
+  Sample 77: P=26 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0170
+      Asymmetric energy: 0.9522
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.005403 - 0.128293
+      Persistence diagrams stored successfully
+  Sample 78: P=33 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6684
+      Asymmetric energy: 2.4806
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=34
+      Finite H1 features: 34
+      H1 lifespans: 0.000473 - 0.615910
+      Persistence diagrams stored successfully
+  Sample 79: P=37 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 168 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1364
+      Asymmetric energy: 2.3448
+    Computing persistence on full 168 point cloud...
+      Direct ripser: H0=168, H1=29
+      Finite H1 features: 29
+      H1 lifespans: 0.000504 - 0.229230
+      Persistence diagrams stored successfully
+  Sample 80: P=21 tokens, H=24 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6200
+      Asymmetric energy: 3.3044
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=32
+      Finite H1 features: 32
+      H1 lifespans: 0.000190 - 0.534154
+      Persistence diagrams stored successfully
+  Sample 81: P=58 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 195 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0014
+      Asymmetric energy: 12.0307
+    Computing persistence on full 195 point cloud...
+      Direct ripser: H0=195, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.001715 - 0.393637
+      Persistence diagrams stored successfully
+  Sample 82: P=41 tokens, H=5 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1096
+      Asymmetric energy: 4.9458
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.011371 - 0.505664
+      Persistence diagrams stored successfully
+  Sample 83: P=54 tokens, H=25 tokens
+    Point cloud breakdown:
+      Combined: 237 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0903
+      Asymmetric energy: 3.9339
+    Computing persistence on full 237 point cloud...
+      Direct ripser: H0=237, H1=42
+      Finite H1 features: 42
+      H1 lifespans: 0.000387 - 0.349613
+      Persistence diagrams stored successfully
+  Sample 84: P=29 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1472
+      Asymmetric energy: 4.3798
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=31
+      Finite H1 features: 31
+      H1 lifespans: 0.000089 - 0.401492
+      Persistence diagrams stored successfully
+  Sample 85: P=38 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0205
+      Asymmetric energy: 8.1117
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.003472 - 0.150820
+      Persistence diagrams stored successfully
+  Sample 86: P=31 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2556
+      Asymmetric energy: 3.2139
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.006927 - 0.419722
+      Persistence diagrams stored successfully
+  Sample 87: P=34 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5236
+      Asymmetric energy: 2.0768
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.003660 - 0.458078
+      Persistence diagrams stored successfully
+  Sample 88: P=31 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5290
+      Asymmetric energy: 2.5091
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.002681 - 0.599355
+      Persistence diagrams stored successfully
+  Sample 89: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4141
+      Asymmetric energy: 2.0147
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.001368 - 0.572083
+      Persistence diagrams stored successfully
+  Sample 90: P=21 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3934
+      Asymmetric energy: 2.4832
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.002997 - 0.550696
+      Persistence diagrams stored successfully
+  Sample 91: P=29 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3645
+      Asymmetric energy: 1.5041
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.008044 - 0.449300
+      Persistence diagrams stored successfully
+  Sample 92: P=25 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3865
+      Asymmetric energy: 3.8786
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.006231 - 0.192257
+      Persistence diagrams stored successfully
+  Sample 93: P=32 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4766
+      Asymmetric energy: 2.5134
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.001697 - 0.475541
+      Persistence diagrams stored successfully
+  Sample 94: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1837
+      Asymmetric energy: 3.8889
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.000418 - 0.406510
+      Persistence diagrams stored successfully
+  Sample 95: P=34 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1988
+      Asymmetric energy: 5.7362
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.015978 - 0.525390
+      Persistence diagrams stored successfully
+  Sample 96: P=27 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3690
+      Asymmetric energy: 1.5433
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=36
+      Finite H1 features: 36
+      H1 lifespans: 0.004765 - 0.408529
+      Persistence diagrams stored successfully
+  Sample 97: P=25 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2178
+      Asymmetric energy: 2.2133
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.001917 - 0.395798
+      Persistence diagrams stored successfully
+  Sample 98: P=41 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5904
+      Asymmetric energy: 4.5741
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.000102 - 0.451043
+      Persistence diagrams stored successfully
+  Sample 99: P=44 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 162 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0327
+      Asymmetric energy: 10.6374
+    Computing persistence on full 162 point cloud...
+      Direct ripser: H0=162, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.000634 - 0.474788
+      Persistence diagrams stored successfully
+  Sample 100: P=35 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.0127
+      Asymmetric energy: 6.4474
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.010538 - 0.549057
+      Persistence diagrams stored successfully
+
+Processing neutral samples...
+  Sample 1: P=27 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7143
+      Asymmetric energy: 2.9682
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.003894 - 0.562582
+      Persistence diagrams stored successfully
+  Sample 2: P=30 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5462
+      Asymmetric energy: 1.4041
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.001898 - 0.603307
+      Persistence diagrams stored successfully
+  Sample 3: P=36 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 159 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5137
+      Asymmetric energy: 2.1372
+    Computing persistence on full 159 point cloud...
+      Direct ripser: H0=159, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.001523 - 0.582790
+      Persistence diagrams stored successfully
+  Sample 4: P=57 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 207 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7824
+      Asymmetric energy: 2.1411
+    Computing persistence on full 207 point cloud...
+      Direct ripser: H0=207, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.000963 - 0.268722
+      Persistence diagrams stored successfully
+  Sample 5: P=25 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.9614
+      Asymmetric energy: 2.1871
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.004983 - 0.518654
+      Persistence diagrams stored successfully
+  Sample 6: P=32 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2041
+      Asymmetric energy: 3.4909
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.004357 - 0.651729
+      Persistence diagrams stored successfully
+  Sample 7: P=35 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3834
+      Asymmetric energy: 2.1219
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.010126 - 0.217773
+      Persistence diagrams stored successfully
+  Sample 8: P=30 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2621
+      Asymmetric energy: 2.0527
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=6
+      Finite H1 features: 6
+      H1 lifespans: 0.027205 - 0.463661
+      Persistence diagrams stored successfully
+  Sample 9: P=40 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3136
+      Asymmetric energy: 2.8019
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.000459 - 0.103426
+      Persistence diagrams stored successfully
+  Sample 10: P=25 tokens, H=23 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4653
+      Asymmetric energy: 2.2457
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=30
+      Finite H1 features: 30
+      H1 lifespans: 0.000585 - 0.594617
+      Persistence diagrams stored successfully
+  Sample 11: P=32 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.8240
+      Asymmetric energy: 2.3353
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.008209 - 0.565243
+      Persistence diagrams stored successfully
+  Sample 12: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5162
+      Asymmetric energy: 2.6520
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.000897 - 0.480489
+      Persistence diagrams stored successfully
+  Sample 13: P=25 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5638
+      Asymmetric energy: 3.9558
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.000870 - 0.689736
+      Persistence diagrams stored successfully
+  Sample 14: P=25 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5241
+      Asymmetric energy: 2.5580
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.000447 - 0.731375
+      Persistence diagrams stored successfully
+  Sample 15: P=43 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 162 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5103
+      Asymmetric energy: 3.7037
+    Computing persistence on full 162 point cloud...
+      Direct ripser: H0=162, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.000175 - 0.561501
+      Persistence diagrams stored successfully
+  Sample 16: P=36 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1962
+      Asymmetric energy: 4.4600
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.001022 - 0.170438
+      Persistence diagrams stored successfully
+  Sample 17: P=50 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 177 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8953
+      Asymmetric energy: 2.7350
+    Computing persistence on full 177 point cloud...
+      Direct ripser: H0=177, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.002687 - 0.467720
+      Persistence diagrams stored successfully
+  Sample 18: P=19 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.1811
+      Asymmetric energy: 3.9020
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.003916 - 0.238279
+      Persistence diagrams stored successfully
+  Sample 19: P=28 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.2309
+      Asymmetric energy: 1.5917
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.002589 - 0.429051
+      Persistence diagrams stored successfully
+  Sample 20: P=21 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5529
+      Asymmetric energy: 1.4003
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.014504 - 0.343500
+      Persistence diagrams stored successfully
+  Sample 21: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.8214
+      Asymmetric energy: 1.6728
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.001044 - 0.461951
+      Persistence diagrams stored successfully
+  Sample 22: P=27 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.8333
+      Asymmetric energy: 3.0927
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.002432 - 0.670099
+      Persistence diagrams stored successfully
+  Sample 23: P=40 tokens, H=6 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9308
+      Asymmetric energy: 2.5553
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.000785 - 0.216540
+      Persistence diagrams stored successfully
+  Sample 24: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.3639
+      Asymmetric energy: 2.8304
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.002743 - 0.357354
+      Persistence diagrams stored successfully
+  Sample 25: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8082
+      Asymmetric energy: 3.4598
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.001148 - 0.545286
+      Persistence diagrams stored successfully
+  Sample 26: P=34 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1902
+      Asymmetric energy: 1.8489
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.010219 - 0.654194
+      Persistence diagrams stored successfully
+  Sample 27: P=31 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.7938
+      Asymmetric energy: 5.0317
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.010428 - 0.223619
+      Persistence diagrams stored successfully
+  Sample 28: P=35 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6860
+      Asymmetric energy: 3.5488
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.020673 - 0.434120
+      Persistence diagrams stored successfully
+  Sample 29: P=57 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 207 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7243
+      Asymmetric energy: 3.0469
+    Computing persistence on full 207 point cloud...
+      Direct ripser: H0=207, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.001407 - 0.601567
+      Persistence diagrams stored successfully
+  Sample 30: P=27 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2150
+      Asymmetric energy: 5.8723
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.002521 - 0.283962
+      Persistence diagrams stored successfully
+  Sample 31: P=48 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 186 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5130
+      Asymmetric energy: 2.6281
+    Computing persistence on full 186 point cloud...
+      Direct ripser: H0=186, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.000972 - 0.374066
+      Persistence diagrams stored successfully
+  Sample 32: P=30 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6708
+      Asymmetric energy: 2.3494
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.001565 - 0.333894
+      Persistence diagrams stored successfully
+  Sample 33: P=29 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3045
+      Asymmetric energy: 5.2386
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.008289 - 0.761409
+      Persistence diagrams stored successfully
+  Sample 34: P=35 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.9212
+      Asymmetric energy: 2.4350
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.001331 - 0.678313
+      Persistence diagrams stored successfully
+  Sample 35: P=42 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 168 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5122
+      Asymmetric energy: 1.4704
+    Computing persistence on full 168 point cloud...
+      Direct ripser: H0=168, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.007362 - 0.539828
+      Persistence diagrams stored successfully
+  Sample 36: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9275
+      Asymmetric energy: 2.3920
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.001784 - 0.638697
+      Persistence diagrams stored successfully
+  Sample 37: P=39 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 183 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.0861
+      Asymmetric energy: 1.7028
+    Computing persistence on full 183 point cloud...
+      Direct ripser: H0=183, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.002926 - 0.542468
+      Persistence diagrams stored successfully
+  Sample 38: P=26 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9773
+      Asymmetric energy: 1.0499
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.000112 - 0.424279
+      Persistence diagrams stored successfully
+  Sample 39: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7015
+      Asymmetric energy: 1.3746
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.011356 - 0.705073
+      Persistence diagrams stored successfully
+  Sample 40: P=24 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9284
+      Asymmetric energy: 1.6207
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.006083 - 0.462798
+      Persistence diagrams stored successfully
+  Sample 41: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3367
+      Asymmetric energy: 2.8178
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.007789 - 0.430684
+      Persistence diagrams stored successfully
+  Sample 42: P=27 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4689
+      Asymmetric energy: 1.6325
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.007227 - 0.728819
+      Persistence diagrams stored successfully
+  Sample 43: P=35 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2875
+      Asymmetric energy: 2.6886
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.001572 - 0.536354
+      Persistence diagrams stored successfully
+  Sample 44: P=34 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5256
+      Asymmetric energy: 1.8537
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.005708 - 0.408674
+      Persistence diagrams stored successfully
+  Sample 45: P=33 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3210
+      Asymmetric energy: 3.0667
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.003023 - 0.570378
+      Persistence diagrams stored successfully
+  Sample 46: P=25 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5478
+      Asymmetric energy: 2.3319
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.002681 - 0.495402
+      Persistence diagrams stored successfully
+  Sample 47: P=25 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3835
+      Asymmetric energy: 1.8144
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.004245 - 0.593444
+      Persistence diagrams stored successfully
+  Sample 48: P=33 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4913
+      Asymmetric energy: 1.6496
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.005995 - 0.452630
+      Persistence diagrams stored successfully
+  Sample 49: P=22 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8196
+      Asymmetric energy: 1.4917
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.000097 - 0.429592
+      Persistence diagrams stored successfully
+  Sample 50: P=45 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 198 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.1251
+      Asymmetric energy: 3.0195
+    Computing persistence on full 198 point cloud...
+      Direct ripser: H0=198, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.000895 - 0.320702
+      Persistence diagrams stored successfully
+  Sample 51: P=38 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.1246
+      Asymmetric energy: 3.0744
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.001078 - 0.393589
+      Persistence diagrams stored successfully
+  Sample 52: P=31 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.2203
+      Asymmetric energy: 4.0219
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.000422 - 0.640286
+      Persistence diagrams stored successfully
+  Sample 53: P=29 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.7509
+      Asymmetric energy: 1.7885
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.000693 - 0.332271
+      Persistence diagrams stored successfully
+  Sample 54: P=29 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.8494
+      Asymmetric energy: 2.4402
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.015162 - 0.569263
+      Persistence diagrams stored successfully
+  Sample 55: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.9563
+      Asymmetric energy: 2.4677
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.002652 - 0.389450
+      Persistence diagrams stored successfully
+  Sample 56: P=26 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.4051
+      Asymmetric energy: 2.1663
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.000470 - 0.485637
+      Persistence diagrams stored successfully
+  Sample 57: P=28 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2460
+      Asymmetric energy: 1.5318
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.002060 - 0.588989
+      Persistence diagrams stored successfully
+  Sample 58: P=30 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.6432
+      Asymmetric energy: 3.4014
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.001368 - 0.378514
+      Persistence diagrams stored successfully
+  Sample 59: P=33 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2745
+      Asymmetric energy: 5.1183
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.003006 - 0.250060
+      Persistence diagrams stored successfully
+  Sample 60: P=34 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9470
+      Asymmetric energy: 2.9805
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.015978 - 0.427394
+      Persistence diagrams stored successfully
+  Sample 61: P=17 tokens, H=25 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.7577
+      Asymmetric energy: 3.2523
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.013113 - 0.377596
+      Persistence diagrams stored successfully
+  Sample 62: P=54 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 216 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5868
+      Asymmetric energy: 3.0316
+    Computing persistence on full 216 point cloud...
+      Direct ripser: H0=216, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.000387 - 0.532716
+      Persistence diagrams stored successfully
+  Sample 63: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7182
+      Asymmetric energy: 2.8429
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.007177 - 0.520623
+      Persistence diagrams stored successfully
+  Sample 64: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.7953
+      Asymmetric energy: 3.3526
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.004041 - 0.225631
+      Persistence diagrams stored successfully
+  Sample 65: P=29 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5869
+      Asymmetric energy: 1.6737
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.003227 - 0.553810
+      Persistence diagrams stored successfully
+  Sample 66: P=38 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7787
+      Asymmetric energy: 1.6665
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.003472 - 0.150820
+      Persistence diagrams stored successfully
+  Sample 67: P=27 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.2957
+      Asymmetric energy: 4.7665
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.000876 - 0.670621
+      Persistence diagrams stored successfully
+  Sample 68: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 6.0000
+      Asymmetric energy: 6.4863
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.010611 - 0.528213
+      Persistence diagrams stored successfully
+  Sample 69: P=26 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.0725
+      Asymmetric energy: 1.6250
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.007434 - 0.444194
+      Persistence diagrams stored successfully
+  Sample 70: P=57 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 210 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3369
+      Asymmetric energy: 3.0042
+    Computing persistence on full 210 point cloud...
+      Direct ripser: H0=210, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.000903 - 0.360931
+      Persistence diagrams stored successfully
+  Sample 71: P=35 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6556
+      Asymmetric energy: 1.4384
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.012780 - 0.344245
+      Persistence diagrams stored successfully
+  Sample 72: P=52 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 177 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9336
+      Asymmetric energy: 2.5485
+    Computing persistence on full 177 point cloud...
+      Direct ripser: H0=177, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.003614 - 0.505826
+      Persistence diagrams stored successfully
+  Sample 73: P=26 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3125
+      Asymmetric energy: 1.9266
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.002978 - 0.886363
+      Persistence diagrams stored successfully
+  Sample 74: P=38 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2723
+      Asymmetric energy: 3.0046
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.003142 - 0.425016
+      Persistence diagrams stored successfully
+  Sample 75: P=33 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3009
+      Asymmetric energy: 3.5147
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.007906 - 0.412650
+      Persistence diagrams stored successfully
+  Sample 76: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.3636
+      Asymmetric energy: 2.8570
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=6
+      Finite H1 features: 6
+      H1 lifespans: 0.015454 - 0.166299
+      Persistence diagrams stored successfully
+  Sample 77: P=24 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4433
+      Asymmetric energy: 2.1607
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.000913 - 0.677181
+      Persistence diagrams stored successfully
+  Sample 78: P=29 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.7233
+      Asymmetric energy: 2.8049
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.000377 - 0.308604
+      Persistence diagrams stored successfully
+  Sample 79: P=41 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 159 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2912
+      Asymmetric energy: 3.3684
+    Computing persistence on full 159 point cloud...
+      Direct ripser: H0=159, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.000442 - 0.551055
+      Persistence diagrams stored successfully
+  Sample 80: P=21 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1461
+      Asymmetric energy: 1.7405
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.006332 - 0.748900
+      Persistence diagrams stored successfully
+  Sample 81: P=29 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3716
+      Asymmetric energy: 1.4951
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.001809 - 0.567035
+      Persistence diagrams stored successfully
+  Sample 82: P=31 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.1292
+      Asymmetric energy: 2.8518
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.006338 - 0.834040
+      Persistence diagrams stored successfully
+  Sample 83: P=27 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8244
+      Asymmetric energy: 5.2540
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.006679 - 0.375573
+      Persistence diagrams stored successfully
+  Sample 84: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.1985
+      Asymmetric energy: 3.7341
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.000114 - 0.541819
+      Persistence diagrams stored successfully
+  Sample 85: P=30 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4761
+      Asymmetric energy: 2.0251
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.012059 - 0.510651
+      Persistence diagrams stored successfully
+  Sample 86: P=37 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.8126
+      Asymmetric energy: 1.7998
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.002783 - 0.353559
+      Persistence diagrams stored successfully
+  Sample 87: P=32 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9876
+      Asymmetric energy: 2.0309
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.003489 - 0.621439
+      Persistence diagrams stored successfully
+  Sample 88: P=33 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.0237
+      Asymmetric energy: 1.6084
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.005762 - 0.389673
+      Persistence diagrams stored successfully
+  Sample 89: P=23 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2955
+      Asymmetric energy: 2.3133
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=32
+      Finite H1 features: 32
+      H1 lifespans: 0.008034 - 0.420003
+      Persistence diagrams stored successfully
+  Sample 90: P=26 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.8615
+      Asymmetric energy: 3.2619
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=4
+      Finite H1 features: 4
+      H1 lifespans: 0.046855 - 0.206239
+      Persistence diagrams stored successfully
+  Sample 91: P=30 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9251
+      Asymmetric energy: 2.2940
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.001642 - 0.522712
+      Persistence diagrams stored successfully
+  Sample 92: P=27 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.2426
+      Asymmetric energy: 2.6782
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.001294 - 0.507335
+      Persistence diagrams stored successfully
+  Sample 93: P=32 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.2875
+      Asymmetric energy: 2.1151
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.000808 - 0.190987
+      Persistence diagrams stored successfully
+  Sample 94: P=31 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6066
+      Asymmetric energy: 2.0176
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.009147 - 0.703991
+      Persistence diagrams stored successfully
+  Sample 95: P=25 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9098
+      Asymmetric energy: 1.6492
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.003570 - 0.211586
+      Persistence diagrams stored successfully
+  Sample 96: P=22 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9537
+      Asymmetric energy: 1.9782
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.001954 - 0.448788
+      Persistence diagrams stored successfully
+  Sample 97: P=23 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.8589
+      Asymmetric energy: 3.4413
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.004072 - 0.607222
+      Persistence diagrams stored successfully
+  Sample 98: P=24 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4006
+      Asymmetric energy: 2.5485
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.000546 - 0.501772
+      Persistence diagrams stored successfully
+  Sample 99: P=31 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3702
+      Asymmetric energy: 4.0290
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.005673 - 0.319288
+      Persistence diagrams stored successfully
+  Sample 100: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3921
+      Asymmetric energy: 2.1727
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.009658 - 0.209025
+      Persistence diagrams stored successfully
+
+Processing contradiction samples...
+  Sample 1: P=20 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1193
+      Asymmetric energy: 0.9128
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.017568 - 0.702154
+      Persistence diagrams stored successfully
+  Sample 2: P=26 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9592
+      Asymmetric energy: 2.1969
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.001146 - 0.621498
+      Persistence diagrams stored successfully
+  Sample 3: P=39 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5765
+      Asymmetric energy: 3.3572
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.008150 - 0.260548
+      Persistence diagrams stored successfully
+  Sample 4: P=23 tokens, H=23 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.3232
+      Asymmetric energy: 3.5565
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.002058 - 0.889428
+      Persistence diagrams stored successfully
+  Sample 5: P=24 tokens, H=22 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 5.2359
+      Asymmetric energy: 5.6817
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=6
+      Finite H1 features: 6
+      H1 lifespans: 0.002625 - 0.130382
+      Persistence diagrams stored successfully
+  Sample 6: P=33 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1744
+      Asymmetric energy: 4.2035
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=36
+      Finite H1 features: 36
+      H1 lifespans: 0.002989 - 0.530035
+      Persistence diagrams stored successfully
+  Sample 7: P=36 tokens, H=5 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5959
+      Asymmetric energy: 4.0580
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=7
+      Finite H1 features: 7
+      H1 lifespans: 0.000727 - 0.055684
+      Persistence diagrams stored successfully
+  Sample 8: P=43 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2711
+      Asymmetric energy: 4.1646
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.003525 - 0.225993
+      Persistence diagrams stored successfully
+  Sample 9: P=20 tokens, H=31 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 5.4553
+      Asymmetric energy: 5.7710
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.012025 - 0.490354
+      Persistence diagrams stored successfully
+  Sample 10: P=29 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9309
+      Asymmetric energy: 2.9108
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.000201 - 0.218796
+      Persistence diagrams stored successfully
+  Sample 11: P=40 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1406
+      Asymmetric energy: 6.4191
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.000953 - 0.470896
+      Persistence diagrams stored successfully
+  Sample 12: P=29 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6373
+      Asymmetric energy: 1.6963
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.000972 - 0.233890
+      Persistence diagrams stored successfully
+  Sample 13: P=31 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.0903
+      Asymmetric energy: 2.0804
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.005958 - 0.473530
+      Persistence diagrams stored successfully
+  Sample 14: P=25 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.8559
+      Asymmetric energy: 4.7721
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=6
+      Finite H1 features: 6
+      H1 lifespans: 0.016053 - 0.127960
+      Persistence diagrams stored successfully
+  Sample 15: P=41 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4972
+      Asymmetric energy: 3.2301
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.000894 - 0.214988
+      Persistence diagrams stored successfully
+  Sample 16: P=34 tokens, H=7 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6506
+      Asymmetric energy: 1.7846
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.000095 - 0.583755
+      Persistence diagrams stored successfully
+  Sample 17: P=30 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.4891
+      Asymmetric energy: 2.5328
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.000553 - 0.185293
+      Persistence diagrams stored successfully
+  Sample 18: P=58 tokens, H=6 tokens
+    Point cloud breakdown:
+      Combined: 192 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.7072
+      Asymmetric energy: 3.4553
+    Computing persistence on full 192 point cloud...
+      Direct ripser: H0=192, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.001715 - 0.063111
+      Persistence diagrams stored successfully
+  Sample 19: P=51 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 186 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9995
+      Asymmetric energy: 1.8437
+    Computing persistence on full 186 point cloud...
+      Direct ripser: H0=186, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.000943 - 0.170293
+      Persistence diagrams stored successfully
+  Sample 20: P=40 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8137
+      Asymmetric energy: 2.0131
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=21
+      Finite H1 features: 21
+      H1 lifespans: 0.000953 - 0.561869
+      Persistence diagrams stored successfully
+  Sample 21: P=25 tokens, H=24 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.2220
+      Asymmetric energy: 2.1508
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=27
+      Finite H1 features: 27
+      H1 lifespans: 0.007349 - 0.790659
+      Persistence diagrams stored successfully
+  Sample 22: P=29 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1216
+      Asymmetric energy: 4.9768
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.004079 - 0.249823
+      Persistence diagrams stored successfully
+  Sample 23: P=33 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5136
+      Asymmetric energy: 1.3931
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.002043 - 0.302312
+      Persistence diagrams stored successfully
+  Sample 24: P=35 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7917
+      Asymmetric energy: 3.2932
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.007227 - 0.764789
+      Persistence diagrams stored successfully
+  Sample 25: P=23 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.2760
+      Asymmetric energy: 3.1413
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.010219 - 0.168106
+      Persistence diagrams stored successfully
+  Sample 26: P=41 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 150 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.7953
+      Asymmetric energy: 4.1836
+    Computing persistence on full 150 point cloud...
+      Direct ripser: H0=150, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.000442 - 0.194352
+      Persistence diagrams stored successfully
+  Sample 27: P=34 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9406
+      Asymmetric energy: 3.8773
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.001597 - 0.676308
+      Persistence diagrams stored successfully
+  Sample 28: P=25 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.6857
+      Asymmetric energy: 5.2762
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.001487 - 0.664556
+      Persistence diagrams stored successfully
+  Sample 29: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1908
+      Asymmetric energy: 4.9864
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.000104 - 0.297407
+      Persistence diagrams stored successfully
+  Sample 30: P=32 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5592
+      Asymmetric energy: 4.1385
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.008209 - 0.072601
+      Persistence diagrams stored successfully
+  Sample 31: P=26 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.3250
+      Asymmetric energy: 3.8040
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.002723 - 0.426576
+      Persistence diagrams stored successfully
+  Sample 32: P=21 tokens, H=21 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8527
+      Asymmetric energy: 1.8660
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=33
+      Finite H1 features: 33
+      H1 lifespans: 0.001444 - 0.629489
+      Persistence diagrams stored successfully
+  Sample 33: P=30 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6564
+      Asymmetric energy: 5.0281
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.003830 - 0.615214
+      Persistence diagrams stored successfully
+  Sample 34: P=31 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4761
+      Asymmetric energy: 3.4178
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.001846 - 0.568088
+      Persistence diagrams stored successfully
+  Sample 35: P=33 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4910
+      Asymmetric energy: 2.6044
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=5
+      Finite H1 features: 5
+      H1 lifespans: 0.005859 - 0.045251
+      Persistence diagrams stored successfully
+  Sample 36: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.0500
+      Asymmetric energy: 2.4613
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.002172 - 0.577382
+      Persistence diagrams stored successfully
+  Sample 37: P=33 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.8289
+      Asymmetric energy: 1.9948
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.010940 - 0.398454
+      Persistence diagrams stored successfully
+  Sample 38: P=30 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 7.1158
+      Asymmetric energy: 3.1035
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.000021 - 0.194146
+      Persistence diagrams stored successfully
+  Sample 39: P=27 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.1316
+      Asymmetric energy: 2.3798
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=6
+      Finite H1 features: 6
+      H1 lifespans: 0.007933 - 0.106540
+      Persistence diagrams stored successfully
+  Sample 40: P=27 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5958
+      Asymmetric energy: 1.3602
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.011207 - 0.576583
+      Persistence diagrams stored successfully
+  Sample 41: P=34 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9949
+      Asymmetric energy: 2.6706
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.000559 - 0.332636
+      Persistence diagrams stored successfully
+  Sample 42: P=28 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1491
+      Asymmetric energy: 1.9434
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=28
+      Finite H1 features: 28
+      H1 lifespans: 0.000022 - 0.348913
+      Persistence diagrams stored successfully
+  Sample 43: P=25 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6049
+      Asymmetric energy: 2.0496
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=14
+      Finite H1 features: 14
+      H1 lifespans: 0.008818 - 0.360527
+      Persistence diagrams stored successfully
+  Sample 44: P=40 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 159 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.9027
+      Asymmetric energy: 2.1185
+    Computing persistence on full 159 point cloud...
+      Direct ripser: H0=159, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.000670 - 0.516807
+      Persistence diagrams stored successfully
+  Sample 45: P=37 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.0955
+      Asymmetric energy: 1.1376
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.002783 - 0.172659
+      Persistence diagrams stored successfully
+  Sample 46: P=27 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7869
+      Asymmetric energy: 2.3761
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.002754 - 0.616479
+      Persistence diagrams stored successfully
+  Sample 47: P=58 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 204 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8855
+      Asymmetric energy: 2.4749
+    Computing persistence on full 204 point cloud...
+      Direct ripser: H0=204, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.001715 - 0.360296
+      Persistence diagrams stored successfully
+  Sample 48: P=38 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4270
+      Asymmetric energy: 3.3798
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.000512 - 0.054896
+      Persistence diagrams stored successfully
+  Sample 49: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.4722
+      Asymmetric energy: 2.4398
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=4
+      Finite H1 features: 4
+      H1 lifespans: 0.010741 - 0.074060
+      Persistence diagrams stored successfully
+  Sample 50: P=25 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9887
+      Asymmetric energy: 2.2021
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.000872 - 0.683189
+      Persistence diagrams stored successfully
+  Sample 51: P=39 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3973
+      Asymmetric energy: 2.8383
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.002469 - 0.418213
+      Persistence diagrams stored successfully
+  Sample 52: P=31 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.5997
+      Asymmetric energy: 1.5903
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.001055 - 0.052958
+      Persistence diagrams stored successfully
+  Sample 53: P=31 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5623
+      Asymmetric energy: 2.4177
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.010056 - 0.454551
+      Persistence diagrams stored successfully
+  Sample 54: P=25 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.1872
+      Asymmetric energy: 2.1569
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.001747 - 0.112501
+      Persistence diagrams stored successfully
+  Sample 55: P=29 tokens, H=12 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.0148
+      Asymmetric energy: 1.9162
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.002561 - 0.169745
+      Persistence diagrams stored successfully
+  Sample 56: P=35 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5270
+      Asymmetric energy: 5.0119
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=9
+      Finite H1 features: 9
+      H1 lifespans: 0.002654 - 0.093312
+      Persistence diagrams stored successfully
+  Sample 57: P=39 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.1606
+      Asymmetric energy: 2.3055
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.006425 - 0.158139
+      Persistence diagrams stored successfully
+  Sample 58: P=32 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.6520
+      Asymmetric energy: 3.1358
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.003847 - 0.300473
+      Persistence diagrams stored successfully
+  Sample 59: P=40 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1020
+      Asymmetric energy: 6.1990
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.000953 - 0.606694
+      Persistence diagrams stored successfully
+  Sample 60: P=38 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5353
+      Asymmetric energy: 1.5251
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.005048 - 0.420367
+      Persistence diagrams stored successfully
+  Sample 61: P=27 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2663
+      Asymmetric energy: 3.3345
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=24
+      Finite H1 features: 24
+      H1 lifespans: 0.000695 - 0.616492
+      Persistence diagrams stored successfully
+  Sample 62: P=38 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 162 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.9005
+      Asymmetric energy: 2.1103
+    Computing persistence on full 162 point cloud...
+      Direct ripser: H0=162, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.004978 - 0.631315
+      Persistence diagrams stored successfully
+  Sample 63: P=27 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.4714
+      Asymmetric energy: 3.2908
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.005245 - 0.190428
+      Persistence diagrams stored successfully
+  Sample 64: P=38 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 162 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.0933
+      Asymmetric energy: 3.0545
+    Computing persistence on full 162 point cloud...
+      Direct ripser: H0=162, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.007196 - 0.146135
+      Persistence diagrams stored successfully
+  Sample 65: P=23 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5666
+      Asymmetric energy: 2.0046
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.000340 - 0.103233
+      Persistence diagrams stored successfully
+  Sample 66: P=22 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.6967
+      Asymmetric energy: 3.6989
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.014920 - 0.282187
+      Persistence diagrams stored successfully
+  Sample 67: P=29 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.3047
+      Asymmetric energy: 2.0465
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.008426 - 0.780457
+      Persistence diagrams stored successfully
+  Sample 68: P=31 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 147 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5633
+      Asymmetric energy: 1.9874
+    Computing persistence on full 147 point cloud...
+      Direct ripser: H0=147, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.000582 - 0.573027
+      Persistence diagrams stored successfully
+  Sample 69: P=23 tokens, H=23 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.5687
+      Asymmetric energy: 3.7406
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=4
+      Finite H1 features: 4
+      H1 lifespans: 0.094662 - 0.310851
+      Persistence diagrams stored successfully
+  Sample 70: P=48 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 192 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6148
+      Asymmetric energy: 5.5955
+    Computing persistence on full 192 point cloud...
+      Direct ripser: H0=192, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.000972 - 0.696454
+      Persistence diagrams stored successfully
+  Sample 71: P=29 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.3615
+      Asymmetric energy: 2.3400
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=7
+      Finite H1 features: 7
+      H1 lifespans: 0.002180 - 0.168664
+      Persistence diagrams stored successfully
+  Sample 72: P=30 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.3137
+      Asymmetric energy: 5.1482
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.001642 - 0.298986
+      Persistence diagrams stored successfully
+  Sample 73: P=29 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5390
+      Asymmetric energy: 2.8315
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=16
+      Finite H1 features: 16
+      H1 lifespans: 0.000252 - 0.698445
+      Persistence diagrams stored successfully
+  Sample 74: P=41 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2671
+      Asymmetric energy: 2.9404
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.000098 - 0.086200
+      Persistence diagrams stored successfully
+  Sample 75: P=55 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 195 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1535
+      Asymmetric energy: 5.1841
+    Computing persistence on full 195 point cloud...
+      Direct ripser: H0=195, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.002950 - 0.572612
+      Persistence diagrams stored successfully
+  Sample 76: P=37 tokens, H=15 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9198
+      Asymmetric energy: 2.2786
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.002064 - 0.556825
+      Persistence diagrams stored successfully
+  Sample 77: P=43 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.4922
+      Asymmetric energy: 1.8938
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=19
+      Finite H1 features: 19
+      H1 lifespans: 0.000083 - 0.624777
+      Persistence diagrams stored successfully
+  Sample 78: P=38 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.1841
+      Asymmetric energy: 6.4568
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.000703 - 0.257389
+      Persistence diagrams stored successfully
+  Sample 79: P=24 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.0723
+      Asymmetric energy: 2.5537
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.000328 - 0.354197
+      Persistence diagrams stored successfully
+  Sample 80: P=45 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 168 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2501
+      Asymmetric energy: 5.9037
+    Computing persistence on full 168 point cloud...
+      Direct ripser: H0=168, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.002454 - 0.305338
+      Persistence diagrams stored successfully
+  Sample 81: P=25 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 132 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.3122
+      Asymmetric energy: 2.1866
+    Computing persistence on full 132 point cloud...
+      Direct ripser: H0=132, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.010098 - 0.251824
+      Persistence diagrams stored successfully
+  Sample 82: P=27 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.5323
+      Asymmetric energy: 1.7023
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=20
+      Finite H1 features: 20
+      H1 lifespans: 0.008673 - 0.556620
+      Persistence diagrams stored successfully
+  Sample 83: P=34 tokens, H=11 tokens
+    Point cloud breakdown:
+      Combined: 135 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.6320
+      Asymmetric energy: 2.2419
+    Computing persistence on full 135 point cloud...
+      Direct ripser: H0=135, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.001759 - 0.098503
+      Persistence diagrams stored successfully
+  Sample 84: P=34 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.7169
+      Asymmetric energy: 2.4108
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.011280 - 0.505190
+      Persistence diagrams stored successfully
+  Sample 85: P=22 tokens, H=20 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 4.2117
+      Asymmetric energy: 2.9977
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.005004 - 0.382606
+      Persistence diagrams stored successfully
+  Sample 86: P=25 tokens, H=18 tokens
+    Point cloud breakdown:
+      Combined: 129 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.8391
+      Asymmetric energy: 1.7006
+    Computing persistence on full 129 point cloud...
+      Direct ripser: H0=129, H1=36
+      Finite H1 features: 36
+      H1 lifespans: 0.003188 - 0.543874
+      Persistence diagrams stored successfully
+  Sample 87: P=28 tokens, H=24 tokens
+    Point cloud breakdown:
+      Combined: 156 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 5.6166
+      Asymmetric energy: 7.3274
+    Computing persistence on full 156 point cloud...
+      Direct ripser: H0=156, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.008718 - 0.347725
+      Persistence diagrams stored successfully
+  Sample 88: P=30 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 138 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.5557
+      Asymmetric energy: 1.7176
+    Computing persistence on full 138 point cloud...
+      Direct ripser: H0=138, H1=22
+      Finite H1 features: 22
+      H1 lifespans: 0.001201 - 0.709480
+      Persistence diagrams stored successfully
+  Sample 89: P=39 tokens, H=9 tokens
+    Point cloud breakdown:
+      Combined: 144 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.6986
+      Asymmetric energy: 6.9928
+    Computing persistence on full 144 point cloud...
+      Direct ripser: H0=144, H1=8
+      Finite H1 features: 8
+      H1 lifespans: 0.001585 - 0.851409
+      Persistence diagrams stored successfully
+  Sample 90: P=25 tokens, H=17 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.1909
+      Asymmetric energy: 2.4211
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=18
+      Finite H1 features: 18
+      H1 lifespans: 0.005086 - 0.219125
+      Persistence diagrams stored successfully
+  Sample 91: P=28 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.9375
+      Asymmetric energy: 2.5670
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=11
+      Finite H1 features: 11
+      H1 lifespans: 0.015367 - 0.615719
+      Persistence diagrams stored successfully
+  Sample 92: P=22 tokens, H=19 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.5235
+      Asymmetric energy: 2.0620
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=15
+      Finite H1 features: 15
+      H1 lifespans: 0.010800 - 0.137504
+      Persistence diagrams stored successfully
+  Sample 93: P=41 tokens, H=10 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.2020
+      Asymmetric energy: 3.8362
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=10
+      Finite H1 features: 10
+      H1 lifespans: 0.004361 - 0.235724
+      Persistence diagrams stored successfully
+  Sample 94: P=33 tokens, H=14 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 3.3625
+      Asymmetric energy: 1.8314
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=13
+      Finite H1 features: 13
+      H1 lifespans: 0.000861 - 0.092614
+      Persistence diagrams stored successfully
+  Sample 95: P=24 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 120 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 0.2097
+      Asymmetric energy: 1.3197
+    Computing persistence on full 120 point cloud...
+      Direct ripser: H0=120, H1=26
+      Finite H1 features: 26
+      H1 lifespans: 0.005706 - 0.319815
+      Persistence diagrams stored successfully
+  Sample 96: P=43 tokens, H=8 tokens
+    Point cloud breakdown:
+      Combined: 153 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.1173
+      Asymmetric energy: 2.8729
+    Computing persistence on full 153 point cloud...
+      Direct ripser: H0=153, H1=23
+      Finite H1 features: 23
+      H1 lifespans: 0.000256 - 0.581934
+      Persistence diagrams stored successfully
+  Sample 97: P=28 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 123 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.2705
+      Asymmetric energy: 1.3392
+    Computing persistence on full 123 point cloud...
+      Direct ripser: H0=123, H1=12
+      Finite H1 features: 12
+      H1 lifespans: 0.004638 - 0.116500
+      Persistence diagrams stored successfully
+  Sample 98: P=34 tokens, H=13 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1250
+      Asymmetric energy: 1.8954
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.000907 - 0.168960
+      Persistence diagrams stored successfully
+  Sample 99: P=26 tokens, H=16 tokens
+    Point cloud breakdown:
+      Combined: 126 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 1.1177
+      Asymmetric energy: 1.7548
+    Computing persistence on full 126 point cloud...
+      Direct ripser: H0=126, H1=25
+      Finite H1 features: 25
+      H1 lifespans: 0.006685 - 0.632704
+      Persistence diagrams stored successfully
+  Sample 100: P=21 tokens, H=26 tokens
+    Point cloud breakdown:
+      Combined: 141 points
+      Sufficient for PHD: ✅
+    Model analysis:
+      Order violation energy: 2.4228
+      Asymmetric energy: 2.4030
+    Computing persistence on full 141 point cloud...
+      Direct ripser: H0=141, H1=17
+      Finite H1 features: 17
+      H1 lifespans: 0.002310 - 0.434196
+      Persistence diagrams stored successfully
+
+Collected 300 persistence diagrams from 300 total samples
+
+Converting 300 diagrams to persistence images...
+Analyzing persistence diagram ranges...
+  Diagram 0, dim 0: 134 finite features
+  Diagram 0, dim 1: 28 finite features
+  Diagram 1, dim 0: 137 finite features
+  Diagram 1, dim 1: 33 finite features
+  Diagram 2, dim 0: 137 finite features
+  Diagram 2, dim 1: 22 finite features
+  Diagram 3, dim 0: 203 finite features
+  Diagram 3, dim 1: 33 finite features
+  Diagram 4, dim 0: 119 finite features
+  Diagram 4, dim 1: 12 finite features
+  Diagram 5, dim 0: 119 finite features
+  Diagram 5, dim 1: 27 finite features
+  Diagram 6, dim 0: 137 finite features
+  Diagram 6, dim 1: 19 finite features
+  Diagram 7, dim 0: 167 finite features
+  Diagram 7, dim 1: 28 finite features
+  Diagram 8, dim 0: 176 finite features
+  Diagram 8, dim 1: 13 finite features
+  Diagram 9, dim 0: 158 finite features
+  Diagram 9, dim 1: 26 finite features
+  Diagram 10, dim 0: 143 finite features
+  Diagram 10, dim 1: 15 finite features
+  Diagram 11, dim 0: 128 finite features
+  Diagram 11, dim 1: 20 finite features
+  Diagram 12, dim 0: 197 finite features
+  Diagram 12, dim 1: 35 finite features
+  Diagram 13, dim 0: 119 finite features
+  Diagram 13, dim 1: 17 finite features
+  Diagram 14, dim 0: 128 finite features
+  Diagram 14, dim 1: 23 finite features
+  Diagram 15, dim 0: 143 finite features
+  Diagram 15, dim 1: 30 finite features
+  Diagram 16, dim 0: 134 finite features
+  Diagram 16, dim 1: 21 finite features
+  Diagram 17, dim 0: 134 finite features
+  Diagram 17, dim 1: 15 finite features
+  Diagram 18, dim 0: 152 finite features
+  Diagram 18, dim 1: 28 finite features
+  Diagram 19, dim 0: 140 finite features
+  Diagram 19, dim 1: 21 finite features
+  Diagram 20, dim 0: 119 finite features
+  Diagram 20, dim 1: 14 finite features
+  Diagram 21, dim 0: 125 finite features
+  Diagram 21, dim 1: 30 finite features
+  Diagram 22, dim 0: 119 finite features
+  Diagram 22, dim 1: 9 finite features
+  Diagram 23, dim 0: 119 finite features
+  Diagram 23, dim 1: 20 finite features
+  Diagram 24, dim 0: 131 finite features
+  Diagram 24, dim 1: 28 finite features
+  Diagram 25, dim 0: 164 finite features
+  Diagram 25, dim 1: 24 finite features
+  Diagram 26, dim 0: 176 finite features
+  Diagram 26, dim 1: 20 finite features
+  Diagram 27, dim 0: 119 finite features
+  Diagram 27, dim 1: 19 finite features
+  Diagram 28, dim 0: 131 finite features
+  Diagram 28, dim 1: 14 finite features
+  Diagram 29, dim 0: 125 finite features
+  Diagram 29, dim 1: 17 finite features
+  Diagram 30, dim 0: 125 finite features
+  Diagram 30, dim 1: 35 finite features
+  Diagram 31, dim 0: 131 finite features
+  Diagram 31, dim 1: 9 finite features
+  Diagram 32, dim 0: 131 finite features
+  Diagram 32, dim 1: 22 finite features
+  Diagram 33, dim 0: 119 finite features
+  Diagram 33, dim 1: 15 finite features
+  Diagram 34, dim 0: 119 finite features
+  Diagram 34, dim 1: 15 finite features
+  Diagram 35, dim 0: 128 finite features
+  Diagram 35, dim 1: 24 finite features
+  Diagram 36, dim 0: 134 finite features
+  Diagram 36, dim 1: 23 finite features
+  Diagram 37, dim 0: 119 finite features
+  Diagram 37, dim 1: 21 finite features
+  Diagram 38, dim 0: 164 finite features
+  Diagram 38, dim 1: 24 finite features
+  Diagram 39, dim 0: 125 finite features
+  Diagram 39, dim 1: 15 finite features
+  Diagram 40, dim 0: 191 finite features
+  Diagram 40, dim 1: 35 finite features
+  Diagram 41, dim 0: 149 finite features
+  Diagram 41, dim 1: 32 finite features
+  Diagram 42, dim 0: 125 finite features
+  Diagram 42, dim 1: 28 finite features
+  Diagram 43, dim 0: 131 finite features
+  Diagram 43, dim 1: 27 finite features
+  Diagram 44, dim 0: 122 finite features
+  Diagram 44, dim 1: 21 finite features
+  Diagram 45, dim 0: 125 finite features
+  Diagram 45, dim 1: 14 finite features
+  Diagram 46, dim 0: 149 finite features
+  Diagram 46, dim 1: 43 finite features
+  Diagram 47, dim 0: 128 finite features
+  Diagram 47, dim 1: 10 finite features
+  Diagram 48, dim 0: 125 finite features
+  Diagram 48, dim 1: 32 finite features
+  Diagram 49, dim 0: 125 finite features
+  Diagram 49, dim 1: 20 finite features
+  Diagram 50, dim 0: 134 finite features
+  Diagram 50, dim 1: 10 finite features
+  Diagram 51, dim 0: 146 finite features
+  Diagram 51, dim 1: 15 finite features
+  Diagram 52, dim 0: 170 finite features
+  Diagram 52, dim 1: 40 finite features
+  Diagram 53, dim 0: 149 finite features
+  Diagram 53, dim 1: 24 finite features
+  Diagram 54, dim 0: 119 finite features
+  Diagram 54, dim 1: 8 finite features
+  Diagram 55, dim 0: 143 finite features
+  Diagram 55, dim 1: 16 finite features
+  Diagram 56, dim 0: 128 finite features
+  Diagram 56, dim 1: 23 finite features
+  Diagram 57, dim 0: 137 finite features
+  Diagram 57, dim 1: 13 finite features
+  Diagram 58, dim 0: 155 finite features
+  Diagram 58, dim 1: 29 finite features
+  Diagram 59, dim 0: 128 finite features
+  Diagram 59, dim 1: 21 finite features
+  Diagram 60, dim 0: 122 finite features
+  Diagram 60, dim 1: 11 finite features
+  Diagram 61, dim 0: 119 finite features
+  Diagram 61, dim 1: 11 finite features
+  Diagram 62, dim 0: 131 finite features
+  Diagram 62, dim 1: 22 finite features
+  Diagram 63, dim 0: 155 finite features
+  Diagram 63, dim 1: 26 finite features
+  Diagram 64, dim 0: 161 finite features
+  Diagram 64, dim 1: 36 finite features
+  Diagram 65, dim 0: 131 finite features
+  Diagram 65, dim 1: 13 finite features
+  Diagram 66, dim 0: 131 finite features
+  Diagram 66, dim 1: 14 finite features
+  Diagram 67, dim 0: 149 finite features
+  Diagram 67, dim 1: 19 finite features
+  Diagram 68, dim 0: 119 finite features
+  Diagram 68, dim 1: 12 finite features
+  Diagram 69, dim 0: 140 finite features
+  Diagram 69, dim 1: 28 finite features
+  Diagram 70, dim 0: 128 finite features
+  Diagram 70, dim 1: 29 finite features
+  Diagram 71, dim 0: 122 finite features
+  Diagram 71, dim 1: 32 finite features
+  Diagram 72, dim 0: 146 finite features
+  Diagram 72, dim 1: 12 finite features
+  Diagram 73, dim 0: 176 finite features
+  Diagram 73, dim 1: 35 finite features
+  Diagram 74, dim 0: 149 finite features
+  Diagram 74, dim 1: 20 finite features
+  Diagram 75, dim 0: 122 finite features
+  Diagram 75, dim 1: 17 finite features
+  Diagram 76, dim 0: 137 finite features
+  Diagram 76, dim 1: 15 finite features
+  Diagram 77, dim 0: 152 finite features
+  Diagram 77, dim 1: 34 finite features
+  Diagram 78, dim 0: 167 finite features
+  Diagram 78, dim 1: 29 finite features
+  Diagram 79, dim 0: 134 finite features
+  Diagram 79, dim 1: 32 finite features
+  Diagram 80, dim 0: 194 finite features
+  Diagram 80, dim 1: 23 finite features
+  Diagram 81, dim 0: 137 finite features
+  Diagram 81, dim 1: 13 finite features
+  Diagram 82, dim 0: 236 finite features
+  Diagram 82, dim 1: 42 finite features
+  Diagram 83, dim 0: 128 finite features
+  Diagram 83, dim 1: 31 finite features
+  Diagram 84, dim 0: 134 finite features
+  Diagram 84, dim 1: 9 finite features
+  Diagram 85, dim 0: 131 finite features
+  Diagram 85, dim 1: 17 finite features
+  Diagram 86, dim 0: 149 finite features
+  Diagram 86, dim 1: 18 finite features
+  Diagram 87, dim 0: 125 finite features
+  Diagram 87, dim 1: 27 finite features
+  Diagram 88, dim 0: 119 finite features
+  Diagram 88, dim 1: 14 finite features
+  Diagram 89, dim 0: 119 finite features
+  Diagram 89, dim 1: 16 finite features
+  Diagram 90, dim 0: 131 finite features
+  Diagram 90, dim 1: 15 finite features
+  Diagram 91, dim 0: 137 finite features
+  Diagram 91, dim 1: 17 finite features
+  Diagram 92, dim 0: 122 finite features
+  Diagram 92, dim 1: 8 finite features
+  Diagram 93, dim 0: 119 finite features
+  Diagram 93, dim 1: 10 finite features
+  Diagram 94, dim 0: 143 finite features
+  Diagram 94, dim 1: 18 finite features
+  Diagram 95, dim 0: 140 finite features
+  Diagram 95, dim 1: 36 finite features
+  Diagram 96, dim 0: 119 finite features
+  Diagram 96, dim 1: 18 finite features
+  Diagram 97, dim 0: 146 finite features
+  Diagram 97, dim 1: 16 finite features
+  Diagram 98, dim 0: 161 finite features
+  Diagram 98, dim 1: 22 finite features
+  Diagram 99, dim 0: 131 finite features
+  Diagram 99, dim 1: 14 finite features
+  Diagram 100, dim 0: 131 finite features
+  Diagram 100, dim 1: 18 finite features
+  Diagram 101, dim 0: 122 finite features
+  Diagram 101, dim 1: 16 finite features
+  Diagram 102, dim 0: 158 finite features
+  Diagram 102, dim 1: 25 finite features
+  Diagram 103, dim 0: 206 finite features
+  Diagram 103, dim 1: 25 finite features
+  Diagram 104, dim 0: 128 finite features
+  Diagram 104, dim 1: 16 finite features
+  Diagram 105, dim 0: 125 finite features
+  Diagram 105, dim 1: 12 finite features
+  Diagram 106, dim 0: 137 finite features
+  Diagram 106, dim 1: 12 finite features
+  Diagram 107, dim 0: 128 finite features
+  Diagram 107, dim 1: 6 finite features
+  Diagram 108, dim 0: 155 finite features
+  Diagram 108, dim 1: 18 finite features
+  Diagram 109, dim 0: 143 finite features
+  Diagram 109, dim 1: 30 finite features
+  Diagram 110, dim 0: 140 finite features
+  Diagram 110, dim 1: 14 finite features
+  Diagram 111, dim 0: 119 finite features
+  Diagram 111, dim 1: 15 finite features
+  Diagram 112, dim 0: 125 finite features
+  Diagram 112, dim 1: 12 finite features
+  Diagram 113, dim 0: 122 finite features
+  Diagram 113, dim 1: 14 finite features
+  Diagram 114, dim 0: 161 finite features
+  Diagram 114, dim 1: 21 finite features
+  Diagram 115, dim 0: 131 finite features
+  Diagram 115, dim 1: 9 finite features
+  Diagram 116, dim 0: 176 finite features
+  Diagram 116, dim 1: 15 finite features
+  Diagram 117, dim 0: 119 finite features
+  Diagram 117, dim 1: 11 finite features
+  Diagram 118, dim 0: 125 finite features
+  Diagram 118, dim 1: 21 finite features
+  Diagram 119, dim 0: 119 finite features
+  Diagram 119, dim 1: 24 finite features
+  Diagram 120, dim 0: 119 finite features
+  Diagram 120, dim 1: 18 finite features
+  Diagram 121, dim 0: 131 finite features
+  Diagram 121, dim 1: 15 finite features
+  Diagram 122, dim 0: 137 finite features
+  Diagram 122, dim 1: 19 finite features
+  Diagram 123, dim 0: 119 finite features
+  Diagram 123, dim 1: 14 finite features
+  Diagram 124, dim 0: 119 finite features
+  Diagram 124, dim 1: 14 finite features
+  Diagram 125, dim 0: 152 finite features
+  Diagram 125, dim 1: 23 finite features
+  Diagram 126, dim 0: 131 finite features
+  Diagram 126, dim 1: 12 finite features
+  Diagram 127, dim 0: 128 finite features
+  Diagram 127, dim 1: 8 finite features
+  Diagram 128, dim 0: 206 finite features
+  Diagram 128, dim 1: 25 finite features
+  Diagram 129, dim 0: 122 finite features
+  Diagram 129, dim 1: 11 finite features
+  Diagram 130, dim 0: 185 finite features
+  Diagram 130, dim 1: 22 finite features
+  Diagram 131, dim 0: 128 finite features
+  Diagram 131, dim 1: 14 finite features
+  Diagram 132, dim 0: 119 finite features
+  Diagram 132, dim 1: 15 finite features
+  Diagram 133, dim 0: 140 finite features
+  Diagram 133, dim 1: 15 finite features
+  Diagram 134, dim 0: 167 finite features
+  Diagram 134, dim 1: 23 finite features
+  Diagram 135, dim 0: 119 finite features
+  Diagram 135, dim 1: 18 finite features
+  Diagram 136, dim 0: 182 finite features
+  Diagram 136, dim 1: 20 finite features
+  Diagram 137, dim 0: 125 finite features
+  Diagram 137, dim 1: 18 finite features
+  Diagram 138, dim 0: 119 finite features
+  Diagram 138, dim 1: 15 finite features
+  Diagram 139, dim 0: 134 finite features
+  Diagram 139, dim 1: 27 finite features
+  Diagram 140, dim 0: 119 finite features
+  Diagram 140, dim 1: 13 finite features
+  Diagram 141, dim 0: 119 finite features
+  Diagram 141, dim 1: 19 finite features
+  Diagram 142, dim 0: 149 finite features
+  Diagram 142, dim 1: 24 finite features
+  Diagram 143, dim 0: 131 finite features
+  Diagram 143, dim 1: 18 finite features
+  Diagram 144, dim 0: 146 finite features
+  Diagram 144, dim 1: 17 finite features
+  Diagram 145, dim 0: 122 finite features
+  Diagram 145, dim 1: 21 finite features
+  Diagram 146, dim 0: 119 finite features
+  Diagram 146, dim 1: 19 finite features
+  Diagram 147, dim 0: 140 finite features
+  Diagram 147, dim 1: 22 finite features
+  Diagram 148, dim 0: 131 finite features
+  Diagram 148, dim 1: 25 finite features
+  Diagram 149, dim 0: 197 finite features
+  Diagram 149, dim 1: 21 finite features
+  Diagram 150, dim 0: 152 finite features
+  Diagram 150, dim 1: 20 finite features
+  Diagram 151, dim 0: 146 finite features
+  Diagram 151, dim 1: 15 finite features
+  Diagram 152, dim 0: 137 finite features
+  Diagram 152, dim 1: 10 finite features
+  Diagram 153, dim 0: 134 finite features
+  Diagram 153, dim 1: 19 finite features
+  Diagram 154, dim 0: 119 finite features
+  Diagram 154, dim 1: 13 finite features
+  Diagram 155, dim 0: 125 finite features
+  Diagram 155, dim 1: 19 finite features
+  Diagram 156, dim 0: 131 finite features
+  Diagram 156, dim 1: 18 finite features
+  Diagram 157, dim 0: 131 finite features
+  Diagram 157, dim 1: 11 finite features
+  Diagram 158, dim 0: 122 finite features
+  Diagram 158, dim 1: 15 finite features
+  Diagram 159, dim 0: 134 finite features
+  Diagram 159, dim 1: 14 finite features
+  Diagram 160, dim 0: 125 finite features
+  Diagram 160, dim 1: 28 finite features
+  Diagram 161, dim 0: 215 finite features
+  Diagram 161, dim 1: 28 finite features
+  Diagram 162, dim 0: 119 finite features
+  Diagram 162, dim 1: 17 finite features
+  Diagram 163, dim 0: 119 finite features
+  Diagram 163, dim 1: 16 finite features
+  Diagram 164, dim 0: 143 finite features
+  Diagram 164, dim 1: 19 finite features
+  Diagram 165, dim 0: 143 finite features
+  Diagram 165, dim 1: 8 finite features
+  Diagram 166, dim 0: 146 finite features
+  Diagram 166, dim 1: 26 finite features
+  Diagram 167, dim 0: 119 finite features
+  Diagram 167, dim 1: 10 finite features
+  Diagram 168, dim 0: 125 finite features
+  Diagram 168, dim 1: 19 finite features
+  Diagram 169, dim 0: 209 finite features
+  Diagram 169, dim 1: 27 finite features
+  Diagram 170, dim 0: 131 finite features
+  Diagram 170, dim 1: 11 finite features
+  Diagram 171, dim 0: 176 finite features
+  Diagram 171, dim 1: 19 finite features
+  Diagram 172, dim 0: 137 finite features
+  Diagram 172, dim 1: 25 finite features
+  Diagram 173, dim 0: 146 finite features
+  Diagram 173, dim 1: 16 finite features
+  Diagram 174, dim 0: 119 finite features
+  Diagram 174, dim 1: 11 finite features
+  Diagram 175, dim 0: 119 finite features
+  Diagram 175, dim 1: 6 finite features
+  Diagram 176, dim 0: 122 finite features
+  Diagram 176, dim 1: 15 finite features
+  Diagram 177, dim 0: 122 finite features
+  Diagram 177, dim 1: 13 finite features
+  Diagram 178, dim 0: 158 finite features
+  Diagram 178, dim 1: 16 finite features
+  Diagram 179, dim 0: 119 finite features
+  Diagram 179, dim 1: 24 finite features
+  Diagram 180, dim 0: 137 finite features
+  Diagram 180, dim 1: 19 finite features
+  Diagram 181, dim 0: 155 finite features
+  Diagram 181, dim 1: 20 finite features
+  Diagram 182, dim 0: 119 finite features
+  Diagram 182, dim 1: 16 finite features
+  Diagram 183, dim 0: 119 finite features
+  Diagram 183, dim 1: 14 finite features
+  Diagram 184, dim 0: 140 finite features
+  Diagram 184, dim 1: 25 finite features
+  Diagram 185, dim 0: 140 finite features
+  Diagram 185, dim 1: 19 finite features
+  Diagram 186, dim 0: 128 finite features
+  Diagram 186, dim 1: 14 finite features
+  Diagram 187, dim 0: 134 finite features
+  Diagram 187, dim 1: 11 finite features
+  Diagram 188, dim 0: 128 finite features
+  Diagram 188, dim 1: 32 finite features
+  Diagram 189, dim 0: 119 finite features
+  Diagram 189, dim 1: 4 finite features
+  Diagram 190, dim 0: 155 finite features
+  Diagram 190, dim 1: 27 finite features
+  Diagram 191, dim 0: 134 finite features
+  Diagram 191, dim 1: 20 finite features
+  Diagram 192, dim 0: 152 finite features
+  Diagram 192, dim 1: 16 finite features
+  Diagram 193, dim 0: 128 finite features
+  Diagram 193, dim 1: 20 finite features
+  Diagram 194, dim 0: 125 finite features
+  Diagram 194, dim 1: 19 finite features
+  Diagram 195, dim 0: 125 finite features
+  Diagram 195, dim 1: 23 finite features
+  Diagram 196, dim 0: 125 finite features
+  Diagram 196, dim 1: 15 finite features
+  Diagram 197, dim 0: 125 finite features
+  Diagram 197, dim 1: 22 finite features
+  Diagram 198, dim 0: 122 finite features
+  Diagram 198, dim 1: 13 finite features
+  Diagram 199, dim 0: 119 finite features
+  Diagram 199, dim 1: 12 finite features
+  Diagram 200, dim 0: 119 finite features
+  Diagram 200, dim 1: 26 finite features
+  Diagram 201, dim 0: 122 finite features
+  Diagram 201, dim 1: 18 finite features
+  Diagram 202, dim 0: 155 finite features
+  Diagram 202, dim 1: 15 finite features
+  Diagram 203, dim 0: 137 finite features
+  Diagram 203, dim 1: 18 finite features
+  Diagram 204, dim 0: 137 finite features
+  Diagram 204, dim 1: 6 finite features
+  Diagram 205, dim 0: 149 finite features
+  Diagram 205, dim 1: 36 finite features
+  Diagram 206, dim 0: 122 finite features
+  Diagram 206, dim 1: 7 finite features
+  Diagram 207, dim 0: 155 finite features
+  Diagram 207, dim 1: 17 finite features
+  Diagram 208, dim 0: 152 finite features
+  Diagram 208, dim 1: 13 finite features
+  Diagram 209, dim 0: 119 finite features
+  Diagram 209, dim 1: 17 finite features
+  Diagram 210, dim 0: 149 finite features
+  Diagram 210, dim 1: 22 finite features
+  Diagram 211, dim 0: 128 finite features
+  Diagram 211, dim 1: 13 finite features
+  Diagram 212, dim 0: 131 finite features
+  Diagram 212, dim 1: 18 finite features
+  Diagram 213, dim 0: 125 finite features
+  Diagram 213, dim 1: 6 finite features
+  Diagram 214, dim 0: 152 finite features
+  Diagram 214, dim 1: 18 finite features
+  Diagram 215, dim 0: 122 finite features
+  Diagram 215, dim 1: 25 finite features
+  Diagram 216, dim 0: 122 finite features
+  Diagram 216, dim 1: 11 finite features
+  Diagram 217, dim 0: 191 finite features
+  Diagram 217, dim 1: 22 finite features
+  Diagram 218, dim 0: 185 finite features
+  Diagram 218, dim 1: 18 finite features
+  Diagram 219, dim 0: 146 finite features
+  Diagram 219, dim 1: 21 finite features
+  Diagram 220, dim 0: 146 finite features
+  Diagram 220, dim 1: 27 finite features
+  Diagram 221, dim 0: 128 finite features
+  Diagram 221, dim 1: 8 finite features
+  Diagram 222, dim 0: 128 finite features
+  Diagram 222, dim 1: 12 finite features
+  Diagram 223, dim 0: 140 finite features
+  Diagram 223, dim 1: 16 finite features
+  Diagram 224, dim 0: 125 finite features
+  Diagram 224, dim 1: 8 finite features
+  Diagram 225, dim 0: 149 finite features
+  Diagram 225, dim 1: 12 finite features
+  Diagram 226, dim 0: 143 finite features
+  Diagram 226, dim 1: 17 finite features
+  Diagram 227, dim 0: 134 finite features
+  Diagram 227, dim 1: 15 finite features
+  Diagram 228, dim 0: 119 finite features
+  Diagram 228, dim 1: 10 finite features
+  Diagram 229, dim 0: 125 finite features
+  Diagram 229, dim 1: 10 finite features
+  Diagram 230, dim 0: 125 finite features
+  Diagram 230, dim 1: 13 finite features
+  Diagram 231, dim 0: 125 finite features
+  Diagram 231, dim 1: 33 finite features
+  Diagram 232, dim 0: 119 finite features
+  Diagram 232, dim 1: 10 finite features
+  Diagram 233, dim 0: 131 finite features
+  Diagram 233, dim 1: 13 finite features
+  Diagram 234, dim 0: 125 finite features
+  Diagram 234, dim 1: 5 finite features
+  Diagram 235, dim 0: 119 finite features
+  Diagram 235, dim 1: 28 finite features
+  Diagram 236, dim 0: 134 finite features
+  Diagram 236, dim 1: 10 finite features
+  Diagram 237, dim 0: 134 finite features
+  Diagram 237, dim 1: 13 finite features
+  Diagram 238, dim 0: 119 finite features
+  Diagram 238, dim 1: 6 finite features
+  Diagram 239, dim 0: 125 finite features
+  Diagram 239, dim 1: 10 finite features
+  Diagram 240, dim 0: 137 finite features
+  Diagram 240, dim 1: 12 finite features
+  Diagram 241, dim 0: 131 finite features
+  Diagram 241, dim 1: 28 finite features
+  Diagram 242, dim 0: 122 finite features
+  Diagram 242, dim 1: 14 finite features
+  Diagram 243, dim 0: 158 finite features
+  Diagram 243, dim 1: 20 finite features
+  Diagram 244, dim 0: 137 finite features
+  Diagram 244, dim 1: 15 finite features
+  Diagram 245, dim 0: 119 finite features
+  Diagram 245, dim 1: 17 finite features
+  Diagram 246, dim 0: 203 finite features
+  Diagram 246, dim 1: 26 finite features
+  Diagram 247, dim 0: 137 finite features
+  Diagram 247, dim 1: 12 finite features
+  Diagram 248, dim 0: 119 finite features
+  Diagram 248, dim 1: 4 finite features
+  Diagram 249, dim 0: 122 finite features
+  Diagram 249, dim 1: 13 finite features
+  Diagram 250, dim 0: 152 finite features
+  Diagram 250, dim 1: 16 finite features
+  Diagram 251, dim 0: 128 finite features
+  Diagram 251, dim 1: 9 finite features
+  Diagram 252, dim 0: 128 finite features
+  Diagram 252, dim 1: 16 finite features
+  Diagram 253, dim 0: 128 finite features
+  Diagram 253, dim 1: 13 finite features
+  Diagram 254, dim 0: 122 finite features
+  Diagram 254, dim 1: 9 finite features
+  Diagram 255, dim 0: 128 finite features
+  Diagram 255, dim 1: 9 finite features
+  Diagram 256, dim 0: 146 finite features
+  Diagram 256, dim 1: 8 finite features
+  Diagram 257, dim 0: 119 finite features
+  Diagram 257, dim 1: 12 finite features
+  Diagram 258, dim 0: 143 finite features
+  Diagram 258, dim 1: 22 finite features
+  Diagram 259, dim 0: 152 finite features
+  Diagram 259, dim 1: 15 finite features
+  Diagram 260, dim 0: 137 finite features
+  Diagram 260, dim 1: 24 finite features
+  Diagram 261, dim 0: 161 finite features
+  Diagram 261, dim 1: 20 finite features
+  Diagram 262, dim 0: 119 finite features
+  Diagram 262, dim 1: 11 finite features
+  Diagram 263, dim 0: 161 finite features
+  Diagram 263, dim 1: 15 finite features
+  Diagram 264, dim 0: 119 finite features
+  Diagram 264, dim 1: 10 finite features
+  Diagram 265, dim 0: 119 finite features
+  Diagram 265, dim 1: 8 finite features
+  Diagram 266, dim 0: 131 finite features
+  Diagram 266, dim 1: 17 finite features
+  Diagram 267, dim 0: 146 finite features
+  Diagram 267, dim 1: 23 finite features
+  Diagram 268, dim 0: 137 finite features
+  Diagram 268, dim 1: 4 finite features
+  Diagram 269, dim 0: 191 finite features
+  Diagram 269, dim 1: 26 finite features
+  Diagram 270, dim 0: 119 finite features
+  Diagram 270, dim 1: 7 finite features
+  Diagram 271, dim 0: 134 finite features
+  Diagram 271, dim 1: 19 finite features
+  Diagram 272, dim 0: 119 finite features
+  Diagram 272, dim 1: 16 finite features
+  Diagram 273, dim 0: 152 finite features
+  Diagram 273, dim 1: 11 finite features
+  Diagram 274, dim 0: 194 finite features
+  Diagram 274, dim 1: 26 finite features
+  Diagram 275, dim 0: 155 finite features
+  Diagram 275, dim 1: 15 finite features
+  Diagram 276, dim 0: 155 finite features
+  Diagram 276, dim 1: 19 finite features
+  Diagram 277, dim 0: 143 finite features
+  Diagram 277, dim 1: 15 finite features
+  Diagram 278, dim 0: 125 finite features
+  Diagram 278, dim 1: 20 finite features
+  Diagram 279, dim 0: 167 finite features
+  Diagram 279, dim 1: 17 finite features
+  Diagram 280, dim 0: 131 finite features
+  Diagram 280, dim 1: 12 finite features
+  Diagram 281, dim 0: 134 finite features
+  Diagram 281, dim 1: 20 finite features
+  Diagram 282, dim 0: 134 finite features
+  Diagram 282, dim 1: 10 finite features
+  Diagram 283, dim 0: 143 finite features
+  Diagram 283, dim 1: 17 finite features
+  Diagram 284, dim 0: 125 finite features
+  Diagram 284, dim 1: 13 finite features
+  Diagram 285, dim 0: 128 finite features
+  Diagram 285, dim 1: 36 finite features
+  Diagram 286, dim 0: 155 finite features
+  Diagram 286, dim 1: 13 finite features
+  Diagram 287, dim 0: 137 finite features
+  Diagram 287, dim 1: 22 finite features
+  Diagram 288, dim 0: 143 finite features
+  Diagram 288, dim 1: 8 finite features
+  Diagram 289, dim 0: 125 finite features
+  Diagram 289, dim 1: 18 finite features
+  Diagram 290, dim 0: 125 finite features
+  Diagram 290, dim 1: 11 finite features
+  Diagram 291, dim 0: 122 finite features
+  Diagram 291, dim 1: 15 finite features
+  Diagram 292, dim 0: 152 finite features
+  Diagram 292, dim 1: 10 finite features
+  Diagram 293, dim 0: 140 finite features
+  Diagram 293, dim 1: 13 finite features
+  Diagram 294, dim 0: 119 finite features
+  Diagram 294, dim 1: 26 finite features
+  Diagram 295, dim 0: 152 finite features
+  Diagram 295, dim 1: 23 finite features
+  Diagram 296, dim 0: 122 finite features
+  Diagram 296, dim 1: 12 finite features
+  Diagram 297, dim 0: 140 finite features
+  Diagram 297, dim 1: 17 finite features
+  Diagram 298, dim 0: 125 finite features
+  Diagram 298, dim 1: 25 finite features
+  Diagram 299, dim 0: 140 finite features
+  Diagram 299, dim 1: 17 finite features
+Found 600 valid diagrams with 46812 total finite features
+Actual persistence ranges:
+  Birth times: 0.0000 - 3.9994
+  Lifespans: 0.0000 - 11.3262
+Adjusted persistence image parameters:
+  birth_range: (0.0000, 4.3994)
+  pers_range: (0.0010, 12.4588)
+PersistenceImager config: pixel_size=0.2492, sigma=0.4153
+
+Persistence image conversion results:
+  Successful: 300/300
+  Success rate: 100.0%
+Generated 300 persistence images
+
+Final counts: 300 images, 300 labels
+Performing clustering analysis...
+Clustering 300 persistence images...
+Feature matrix shape: (300, 400)
+True labels distribution: [100 100 100]
+Performing k-means with 3 clusters...
+Predicted labels distribution: [149  88  63]
+Clustering results:
+  Best accuracy: 0.393
+  Silhouette score: 0.202
+  Adjusted Rand Index: 0.011
+  Best permutation: (1, 0, 2)
+
+Confusion analysis:
+  True entailment: predicted as [41 42 17]
+  True neutral: predicted as [27 52 21]
+  True contradiction: predicted as [20 55 25]
+
+================================================================================
+SEPARATE MODEL CLUSTERING RESULTS
+================================================================================
+Clustering Accuracy: 0.393
+Silhouette Score: 0.202
+Adjusted Rand Index: 0.011
+Success (>70%): ❌ NO
+
+Processed 300 total samples
+Generated 300 persistence images
+
+============================================================
+SEPARATE MODEL PERFORMANCE ANALYSIS
+============================================================
+Order Model (Vendrov Max-Margin Loss):
+  entailment: 0.3696 ± 0.3568
+  neutral: 1.6007 ± 1.1236
+  contradiction: 1.9038 ± 1.3810
+  ✅ ORDER MODEL SUCCESS: Correct energy ranking!
+
+Asymmetry Model (Directional Pattern Loss):
+  entailment:
+    Asymmetric energy: 3.7617 ± 2.4767
+    Forward energy: 0.3696
+    Backward energy: 2.2595
+  neutral:
+    Asymmetric energy: 2.6779 ± 1.0480
+    Forward energy: 1.6007
+    Backward energy: 1.5139
+  contradiction:
+    Asymmetric energy: 3.0594 ± 1.4243
+    Forward energy: 1.9038
+    Backward energy: 2.3521
+
+Asymmetry Pattern Analysis:
+  ✅ Forward energy: Entailment < Contradiction
+  ✅ Asymmetric energy: Contradiction > Neutral
+
+Comprehensive results saved to:
+  JSON: MSc_Topology_Codebase/phd_method/clustering_results/separate_model_clustering_results_20250731_190312.json
+  Summary: MSc_Topology_Codebase/phd_method/clustering_results/separate_model_clustering_summary_20250731_190312.txt
+
+================================================================================
+SEPARATE MODEL CLUSTERING VALIDATION COMPLETED!
+❌ Did not achieve 70% clustering threshold
+Analysis points to consider:
+  - Check if models trained to convergence
+  - Verify point cloud generation produces sufficient points
+  - Review energy ranking patterns in training plots
+  - Consider alternative aggregation strategies
+
+Detailed analysis available in: MSc_Topology_Codebase/phd_method/clustering_results/
+================================================================================
+
+Analysis completed with exit code: 0
+Time: Thu 31 Jul 19:03:13 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+Clustering successful!
+
+
+Job finished.

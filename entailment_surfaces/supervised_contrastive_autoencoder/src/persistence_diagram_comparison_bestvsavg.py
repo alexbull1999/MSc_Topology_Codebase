@@ -227,7 +227,7 @@ class BestModelDiagnostic:
             
             try:
                 # Compute distance matrix using cosine distance (as used in project)
-                distance_matrix = pairwise_distances(features, metric='euclidean')
+                distance_matrix = pairwise_distances(features, metric='cosine')
                 
                 # Use the CORRECT method from the project
                 phd_score, diagrams = ph_dim_and_diagrams_from_distance_matrix(
@@ -472,7 +472,7 @@ class BestModelDiagnostic:
 # Usage example:
 if __name__ == "__main__":
     # Set up paths (adjust these to your actual paths)
-    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/signature_moor_lifted_autoencoder_no_attention_20250728_143530/checkpoints/best_model.pt"
+    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/global_concat_pure_reconstruction_20250724_123815_no_attention/checkpoints/best_model.pt"
     
     data_paths = {
         'train': "data/processed/snli_full_standard_SBERT.pt",
@@ -480,7 +480,7 @@ if __name__ == "__main__":
         'test': "data/processed/snli_full_standard_SBERT_test.pt"
     }
     
-    prototype_path = "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_bottleneck.pkl"
+    prototype_path = "entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_bottleneck_COSINE.pkl"
     
     # Run diagnostic
     diagnostic = BestModelDiagnostic(
