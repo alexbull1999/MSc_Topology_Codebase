@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=order_asymmetry_training
+#SBATCH --job-name=point_cloud_clustering
 #SBATCH --partition=gpgpuC
 #SBATCH --time=6:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/order_asymmetry_training_all_roberta_large_v1_%j.out
-#SBATCH --error=../logs/order_asymmetry_training_all_roberta_large_v1_%j.err
+#SBATCH --output=../logs/adaptive_PERSIM_JOINT_point_cloud_clustering_%j.out
+#SBATCH --error=../logs/adaptive_PERSIM_JOINT_point_cloud_clustering_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/order_asymmetry_models.py
+python MSc_Topology_Codebase/phd_method/src_phd/point_cloud_clustering_test_base_roberta_distil.py
 
 
 # Capture exit code
@@ -67,7 +67,7 @@ echo "Time: $(date)"
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
     echo "=== ANALYSIS SUCCESSFUL ==="
-    echo "Training successful!"
+    echo "Clustering successful!"
     echo ""
 
 else

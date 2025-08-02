@@ -64,11 +64,11 @@ class SeparateModelPointCloudGenerator:
         self.asymmetry_model.to(self.device)
         self.asymmetry_model.eval()
 
-        hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
-        self.hyperbolic_model = TokenLevelHyperbolicProjector()
-        self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
-        self.hyperbolic_model.to(self.device)
-        self.hyperbolic_model.eval()
+        # hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
+        # self.hyperbolic_model = TokenLevelHyperbolicProjector()
+        # self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
+        # self.hyperbolic_model.to(self.device)
+        # self.hyperbolic_model.eval()
         
         print(f"Both models loaded on {self.device}")
         print(f"Order model training stats: Best val loss = {order_checkpoint.get('best_val_loss', 'N/A')}")
@@ -100,9 +100,9 @@ class SeparateModelPointCloudGenerator:
             asymmetric_features = self.asymmetry_model(order_embeddings)  # Takes order embeddings as input
             point_clouds.append(asymmetric_features.cpu().clone())
 
-            #4. Hyperbolic features            
-            hyperbolic_features = self.hyperbolic_model(order_embeddings)
-            point_clouds.append(hyperbolic_features.cpu().clone())
+            # #4. Hyperbolic features            
+            # hyperbolic_features = self.hyperbolic_model(order_embeddings)
+            # point_clouds.append(hyperbolic_features.cpu().clone())
         
         return point_clouds
     
@@ -124,12 +124,12 @@ class SeparateModelPointCloudGenerator:
         directional_cloud = self._generate_enhanced_directional_separation(premise_tokens, hypothesis_tokens)
 
         #COSINE ONLY HELPS
-        angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
+        # angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
         
         # Combine all point clouds
         all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud]
 
-        all_clouds = all_clouds + [angular_features_cloud]
+        # all_clouds = all_clouds + [angular_features_cloud]
 
         combined_cloud = torch.cat(all_clouds, dim=0)
 
@@ -582,7 +582,7 @@ class SeparateModelClusteringValidator:
         return persistence_images
 
 
-    def compute_distance_matrix(self, point_cloud: torch.Tensor, metric: str = 'cosine') -> np.ndarray:
+    def compute_distance_matrix(self, point_cloud: torch.Tensor, metric: str = 'braycurtis') -> np.ndarray:
         """Compute distance matrix for point cloud"""
         
         point_cloud_np = point_cloud.numpy()
@@ -883,6 +883,7 @@ class SeparateModelClusteringValidator:
         # Convert to numpy array
         X = np.array(persistence_images)
         y_true = np.array(sample_labels)
+        y_true_int = y_true.astype(int)
         
         print(f"Feature matrix shape: {X.shape}")
         print(f"True labels distribution: {np.bincount(y_true)}")
@@ -1254,11 +1255,11 @@ def main():
     """Run separate model point cloud clustering validation"""
     
     # Paths for separate models
-    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model.pt"
-    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model.pt"
+    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_all_distilroberta_v1.pt"
+    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model_all_distilroberta_v1.pt"
     hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/best_hyperbolic_projector.pt"
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
-    output_dir = "MSc_Topology_Codebase/phd_method/clustering_results/"
+    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens_all_distilroberta_v1.pkl"
+    output_dir = "MSc_Topology_Codebase/phd_method/clustering_results_all_distilroberta_v1/"
     os.makedirs(output_dir, exist_ok=True)
 
     
@@ -1325,8 +1326,8 @@ def test_separate_model_point_generation():
     print("="*80)
     
     # Test with sample data
-    order_model_path = "phd_method/models/separate_models/order_embedding_model.pt"
-    asymmetry_model_path = "phd_method/models/separate_models/asymmetry_transform_model.pt"
+    order_model_path = "phd_method/models/separate_models/order_embedding_model_all_distilroberta_v1.pt"
+    asymmetry_model_path = "phd_method/models/separate_models/asymmetry_transform_model_all_distilroberta_v1.pt"
     
     if not (Path(order_model_path).exists() and Path(asymmetry_model_path).exists()):
         print("Models not found - please train them first")

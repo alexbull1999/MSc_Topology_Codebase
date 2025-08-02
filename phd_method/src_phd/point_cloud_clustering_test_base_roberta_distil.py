@@ -43,7 +43,8 @@ class ClusteringResult:
 class SeparateModelPointCloudGenerator:
     """Generate point clouds using separate trained order embedding and asymmetry models"""
     
-    def __init__(self, order_model_path: str, asymmetry_model_path: str, hyperbolic_model_path: str, device: str = None):
+    def __init__(self, order_model_path: str, asymmetry_model_path: str, hyperbolic_model_path: str, 
+        distil_order_path: str, distil_asymmetry_path: str, device: str = None):
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
         
         print(f"Loading separate models...")
@@ -64,17 +65,30 @@ class SeparateModelPointCloudGenerator:
         self.asymmetry_model.to(self.device)
         self.asymmetry_model.eval()
 
-        hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
-        self.hyperbolic_model = TokenLevelHyperbolicProjector()
-        self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
-        self.hyperbolic_model.to(self.device)
-        self.hyperbolic_model.eval()
+        # hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
+        # self.hyperbolic_model = TokenLevelHyperbolicProjector()
+        # self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
+        # self.hyperbolic_model.to(self.device)
+        # self.hyperbolic_model.eval()
+
+        #distil order
+        distil_order_checkpoint = torch.load(distil_order_path, map_location=self.device)
+        self.distil_order_model = OrderEmbeddingModel(hidden_size=768)
+        self.distil_order_model.load_state_dict(distil_order_checkpoint['model_state_dict'])
+        self.distil_order_model.to(self.device)
+        self.distil_order_model.eval()
+
+        distil_asymmetry_checkpoint = torch.load(distil_asymmetry_path, map_location=self.device)
+        self.distil_asymmetry_model = AsymmetryTransformModel(hidden_size=768)
+        self.distil_asymmetry_model.load_state_dict(distil_asymmetry_checkpoint['model_state_dict'])
+        self.distil_asymmetry_model.to(self.device)
+        self.distil_asymmetry_model.eval()
         
         print(f"Both models loaded on {self.device}")
         print(f"Order model training stats: Best val loss = {order_checkpoint.get('best_val_loss', 'N/A')}")
         print(f"Asymmetry model training stats: Best val loss = {asymmetry_checkpoint.get('best_val_loss', 'N/A')}")
     
-    def generate_point_cloud_variations(self, tokens: torch.Tensor) -> List[torch.Tensor]:
+    def generate_point_cloud_variations(self, base_tokens: torch.Tensor, distil_tokens: torch.Tensor) -> List[torch.Tensor]:
         """
         Generate point cloud variations using separate models
         
@@ -87,54 +101,67 @@ class SeparateModelPointCloudGenerator:
         point_clouds = []
         
         with torch.no_grad():
-            tokens = tokens.to(self.device)
+            base_tokens = base_tokens.to(self.device)
             
             # 1. Original SBERT tokens (semantic baseline)
-            point_clouds.append(tokens.cpu().clone())
+            point_clouds.append(base_tokens.cpu().clone())
             
             # 2. Order embeddings (hierarchical structure)
-            order_embeddings = self.order_model(tokens)
+            order_embeddings = self.order_model(base_tokens)
             point_clouds.append(order_embeddings.cpu().clone())
             
             # 3. Asymmetric features (directional relationships)
             asymmetric_features = self.asymmetry_model(order_embeddings)  # Takes order embeddings as input
             point_clouds.append(asymmetric_features.cpu().clone())
 
-            #4. Hyperbolic features            
-            hyperbolic_features = self.hyperbolic_model(order_embeddings)
-            point_clouds.append(hyperbolic_features.cpu().clone())
+            # #4. Hyperbolic features            
+            # hyperbolic_features = self.hyperbolic_model(order_embeddings)
+            # point_clouds.append(hyperbolic_features.cpu().clone())
+
+            distil_tokens = distil_tokens.to(self.device)
+
+            point_clouds.append(distil_tokens.cpu().clone())
+            
+            distil_order_embeddings = self.distil_order_model(distil_tokens)
+            point_clouds.append(distil_order_embeddings.cpu().clone())
+
+            distil_asymmetric_features = self.distil_asymmetry_model(distil_order_embeddings)
+            point_clouds.append(distil_asymmetric_features.cpu().clone())
         
         return point_clouds
     
-    def generate_premise_hypothesis_point_cloud(self, premise_tokens: torch.Tensor, 
-                                               hypothesis_tokens: torch.Tensor) -> Tuple[torch.Tensor, Dict]:
+    def generate_premise_hypothesis_point_cloud(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor, 
+        distil_premise_tokens: torch.Tensor, distil_hypothesis_tokens: torch.Tensor) -> Tuple[torch.Tensor, Dict]:
         """
         Generate combined point cloud from premise-hypothesis pair with detailed statistics
         """
         # Generate premise point clouds
-        premise_clouds = self.generate_point_cloud_variations(premise_tokens)
+        premise_clouds = self.generate_point_cloud_variations(premise_tokens, distil_premise_tokens)
         
         # Generate hypothesis point clouds
-        hypothesis_clouds = self.generate_point_cloud_variations(hypothesis_tokens)
+        hypothesis_clouds = self.generate_point_cloud_variations(hypothesis_tokens, distil_hypothesis_tokens)
 
         #ENERGY WEIGHTED
         energy_weighted_cloud = self._generate_energy_weighted_features(premise_tokens, hypothesis_tokens)
+        distil_energy_weighted_cloud = self._generate_energy_weighted_features(distil_premise_tokens, distil_hypothesis_tokens)
 
         #DIRECTIONAL
         directional_cloud = self._generate_enhanced_directional_separation(premise_tokens, hypothesis_tokens)
+        distil_directional_cloud = self._generate_enhanced_directional_separation(distil_premise_tokens, distil_hypothesis_tokens)
+
 
         #COSINE ONLY HELPS
-        angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
+        # angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
         
         # Combine all point clouds
-        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud]
+        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, distil_energy_weighted_cloud, distil_directional_cloud]
 
-        all_clouds = all_clouds + [angular_features_cloud]
+        # all_clouds = all_clouds + [angular_features_cloud]
 
         combined_cloud = torch.cat(all_clouds, dim=0)
 
-        has_hyperbolic = len(premise_clouds) == 4  # Check if hyperbolic was added
-        print(f"Has hyperbolic is {has_hyperbolic}")
+        # has_hyperbolic = len(premise_clouds) == 4  # Check if hyperbolic was added
+        # print(f"Has hyperbolic is {has_hyperbolic}")
         
         # Generate detailed statistics
         stats = {
@@ -152,9 +179,9 @@ class SeparateModelPointCloudGenerator:
             'sufficient_for_phd': combined_cloud.shape[0] >= 100
         }
 
-        if has_hyperbolic:
-            stats['premise_hyperbolic_points'] = premise_clouds[3].shape[0]
-            stats['hypothesis_hyperbolic_points'] = hypothesis_clouds[3].shape[0]
+        # if has_hyperbolic:
+        #     stats['premise_hyperbolic_points'] = premise_clouds[3].shape[0]
+        #     stats['hypothesis_hyperbolic_points'] = hypothesis_clouds[3].shape[0]
         
         return combined_cloud, stats
 
@@ -342,7 +369,10 @@ class SeparateModelClusteringValidator:
                  order_model_path: str,
                  asymmetry_model_path: str,
                  hyperbolic_model_path: str,
+                 distil_order_path: str,
+                 distil_asymmetry_path: str,
                  val_data_path: str,
+                 distil_val_path: str,
                  output_dir: str = "phd_method/individual_phd_clustering_results/",
                  seed: int = 42):
         
@@ -359,12 +389,18 @@ class SeparateModelClusteringValidator:
         print(f"Loading validation data: {val_data_path}")
         with open(val_data_path, 'rb') as f:
             self.val_data = pickle.load(f)
+
+        print(f"Loading DISTIL validation data: {distil_val_path}")
+        with open(distil_val_path, 'rb') as f:
+            self.distil_val_data = pickle.load(f)
         
-        print(f"Loaded {len(self.val_data['labels'])} validation samples")
+        print(f"Loaded {len(self.distil_val_data['labels'])} validation samples")
+
+        assert len(self.val_data['labels']) == len(self.distil_val_data['labels']), "Dataset sizes don't match!"
         
         # Initialize point cloud generator with separate models
         self.point_cloud_generator = SeparateModelPointCloudGenerator(
-            order_model_path, asymmetry_model_path, hyperbolic_model_path
+            order_model_path, asymmetry_model_path, hyperbolic_model_path, distil_order_path, distil_asymmetry_path
         )
         
         # Clustering parameters
@@ -433,9 +469,11 @@ class SeparateModelClusteringValidator:
         # Return FULL topology diagrams (not subsampled ones!)
         return ph_dimension, full_diagrams
     
-    def persistence_diagrams_to_images(self, all_diagrams: List) -> List[np.ndarray]:
+    def persistence_diagrams_to_images(self, all_diagrams: List, track_indices: bool = False):
         """Convert persistence diagrams to standardized images with robust error handling"""
         
+        successful_indices = [] if track_indices else None
+
         # First, analyze the actual range of data that exists
         all_birth_times = []
         all_death_times = []
@@ -571,6 +609,8 @@ class SeparateModelClusteringValidator:
             if has_content and combined_image.max() > 0:
                 combined_image = combined_image / combined_image.max()
                 persistence_images.append(combined_image.flatten())
+                if track_indices:
+                    successful_indices.append(diagram_idx)
                 successful_conversions += 1
             else:
                 print(f"    Diagram {diagram_idx}: No content after processing")
@@ -579,10 +619,12 @@ class SeparateModelClusteringValidator:
         print(f"  Successful: {successful_conversions}/{len(all_diagrams)}")
         print(f"  Success rate: {successful_conversions/len(all_diagrams)*100:.1f}%" if all_diagrams else "N/A")
         
-        return persistence_images
+        if track_indices:
+            return persistence_images, successful_indices
+        else:
+            return persistence_images
 
-
-    def compute_distance_matrix(self, point_cloud: torch.Tensor, metric: str = 'cosine') -> np.ndarray:
+    def compute_distance_matrix(self, point_cloud: torch.Tensor, metric: str = 'braycurtis') -> np.ndarray:
         """Compute distance matrix for point cloud"""
         
         point_cloud_np = point_cloud.numpy()
@@ -609,8 +651,12 @@ class SeparateModelClusteringValidator:
             premise_tokens = sample['premise_tokens'].shape[0]
             hypothesis_tokens = sample['hypothesis_tokens'].shape[0]
             combined_tokens = premise_tokens + hypothesis_tokens
+
+            distil_premise_tokens = sample['distil_premise_tokens'].shape[0]
+            distil_hypothesis_tokens = sample['distil_hypothesis_tokens'].shape[0]
+            distil_combined = distil_premise_tokens + distil_hypothesis_tokens
             
-            if combined_tokens >= min_combined_tokens:
+            if combined_tokens >= min_combined_tokens and distil_combined >= min_combined_tokens:
                 filtered_samples.append(sample)
         
         print(f"Token filtering: {len(filtered_samples)}/{len(samples)} samples have ≥{min_combined_tokens} tokens")
@@ -626,10 +672,14 @@ class SeparateModelClusteringValidator:
         class_data = {'entailment': [], 'neutral': [], 'contradiction': []}
         
         for i, label in enumerate(self.val_data['labels']):
+            assert label == self.distil_val_data['labels'][i], f"Label mismatch at index {i}"
+
             class_data[label].append({
                 'index': i,
                 'premise_tokens': self.val_data['premise_tokens'][i],
                 'hypothesis_tokens': self.val_data['hypothesis_tokens'][i],
+                'distil_premise_tokens': self.distil_val_data['premise_tokens'][i],  # NEW
+                'distil_hypothesis_tokens': self.distil_val_data['hypothesis_tokens'][i],
                 'label': label
             })
         
@@ -665,6 +715,23 @@ class SeparateModelClusteringValidator:
         
         return fixed_samples
 
+    def convert_diagrams_with_label_tracking(self, diagram_label_pairs):
+        """Convert diagrams to images while tracking successful conversions"""
+    
+        # Extract diagrams and labels from pairs
+        all_diagrams = [pair[0] for pair in diagram_label_pairs]
+        all_labels = [pair[1] for pair in diagram_label_pairs]
+    
+        # Convert diagrams and track which ones succeed
+        persistence_images, successful_indices = self.persistence_diagrams_to_images(all_diagrams, track_indices=True)
+    
+        # Get labels for successful conversions only
+        successful_labels = [all_labels[i] for i in successful_indices]
+    
+        print(f"Label tracking: {len(all_diagrams)} diagrams → {len(persistence_images)} images → {len(successful_labels)} labels")
+    
+        return persistence_images, successful_labels
+
     
     def validate_separate_model_clustering(self) -> ClusteringResult:
         """
@@ -689,9 +756,11 @@ class SeparateModelClusteringValidator:
                     sample = samples[i]
                     premise_tokens = sample['premise_tokens'] 
                     hypothesis_tokens = sample['hypothesis_tokens']
+                    distil_premise_tokens = sample['distil_premise_tokens']
+                    distil_hypothesis_tokens = sample['distil_hypothesis_tokens']
                     
                     point_cloud, stats = self.point_cloud_generator.generate_premise_hypothesis_point_cloud(
-                        premise_tokens, hypothesis_tokens
+                        premise_tokens, hypothesis_tokens, distil_premise_tokens, distil_hypothesis_tokens
                     )
                     
                     self.diagnose_topological_complexity(
@@ -719,12 +788,14 @@ class SeparateModelClusteringValidator:
             for sample_idx, sample_data in enumerate(class_samples):
                 premise_tokens = sample_data['premise_tokens']
                 hypothesis_tokens = sample_data['hypothesis_tokens']
+                distil_premise_tokens = sample_data['distil_premise_tokens']  # NEW
+                distil_hypothesis_tokens = sample_data['distil_hypothesis_tokens']
                 
                 print(f"  Sample {sample_idx+1}: P={premise_tokens.shape[0]} tokens, H={hypothesis_tokens.shape[0]} tokens")
                 
                 # Generate point cloud using separate models
                 point_cloud, stats = self.point_cloud_generator.generate_premise_hypothesis_point_cloud(
-                    premise_tokens, hypothesis_tokens
+                    premise_tokens, hypothesis_tokens, distil_premise_tokens, distil_hypothesis_tokens
                 )
                 
                 # Analyze model outputs for this sample
@@ -756,7 +827,7 @@ class SeparateModelClusteringValidator:
                 ph_dim, diagrams = self.ph_dim_and_diagrams_from_distance_matrix(
                     distance_matrix,
                     min_points=50,  # ← CHANGED: Use same params as debug
-                    max_points=min(200, point_cloud.shape[0]),  # ← CHANGED: Same as debug
+                    max_points=min(1000, point_cloud.shape[0]),  # ← CHANGED: Same as debug
                     point_jump=25   # ← CHANGED: Same as debug
                 )
                 
@@ -765,25 +836,15 @@ class SeparateModelClusteringValidator:
                 print(f"    PH-dimension: {ph_dim:.2f}")
                 
                 # ← FIX: Actually collect the diagrams!
-                all_persistence_diagrams.append(diagrams)
-                sample_labels.append(class_idx)
+                all_persistence_diagrams.append((diagrams, class_idx))
                 print(f"    ✅ Added diagrams to collection (total: {len(all_persistence_diagrams)})")
 
         # ← FIX: Move this OUTSIDE the loops
         print(f"\nCollected {len(all_persistence_diagrams)} diagram sets for clustering")
 
         # Convert all diagrams to persistence images
-        persistence_images = self.persistence_diagrams_to_images(all_persistence_diagrams)
-                
-        # Use persistence images for clustering
-        if len(persistence_images) > 0:
-            # Expand labels to match number of images generated
-            images_per_sample = len(persistence_images) // len(all_persistence_diagrams) if all_persistence_diagrams else 1
-            expanded_labels = []
-            for label in sample_labels:
-                expanded_labels.extend([label] * images_per_sample)
-            sample_labels = expanded_labels
-        
+        persistence_images, sample_labels = self.convert_diagrams_with_label_tracking(all_persistence_diagrams)
+
         print(f"Generated {len(persistence_images)} persistence images for clustering")
         
         # Perform clustering analysis
@@ -883,6 +944,7 @@ class SeparateModelClusteringValidator:
         # Convert to numpy array
         X = np.array(persistence_images)
         y_true = np.array(sample_labels)
+        y_true = y_true.astype(int)
         
         print(f"Feature matrix shape: {X.shape}")
         print(f"True labels distribution: {np.bincount(y_true)}")
@@ -1257,8 +1319,11 @@ def main():
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model.pt"
     hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/best_hyperbolic_projector.pt"
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
-    output_dir = "MSc_Topology_Codebase/phd_method/clustering_results/"
+    val_data_path="/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
+    distil_order_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_all_distilroberta_v1.pt"
+    distil_asymmetry_path = "MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model_all_distilroberta_v1.pt"
+    distil_val_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens_all_distilroberta_v1.pkl"
+    output_dir = "MSc_Topology_Codebase/phd_method/clustering_results_base_distil/"
     os.makedirs(output_dir, exist_ok=True)
 
     
@@ -1284,12 +1349,15 @@ def main():
         asymmetry_model_path=asymmetry_model_path,
         hyperbolic_model_path=hyperbolic_model_path,
         val_data_path=val_data_path,
+        distil_order_path=distil_order_path,
+        distil_asymmetry_path=distil_asymmetry_path,
+        distil_val_path=distil_val_path,
         output_dir=output_dir,
         seed=42
     )
     
     # validator.debug_full_persistence_pipeline()
-    validator.debug_full_persistence_pipeline()
+    # validator.debug_full_persistence_pipeline()
 
     result = validator.validate_separate_model_clustering()
     validator.save_comprehensive_results(result)
@@ -1325,8 +1393,8 @@ def test_separate_model_point_generation():
     print("="*80)
     
     # Test with sample data
-    order_model_path = "phd_method/models/separate_models/order_embedding_model.pt"
-    asymmetry_model_path = "phd_method/models/separate_models/asymmetry_transform_model.pt"
+    order_model_path = "phd_method/models/separate_models/order_embedding_model_all_distilroberta_v1.pt"
+    asymmetry_model_path = "phd_method/models/separate_models/asymmetry_transform_model_all_distilroberta_v1.pt"
     
     if not (Path(order_model_path).exists() and Path(asymmetry_model_path).exists()):
         print("Models not found - please train them first")

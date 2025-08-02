@@ -15,7 +15,7 @@ import pickle
 class SBERTTokenExtractor:
     """Extract token-level embeddings from SBERT hidden layers"""
     
-    def __init__(self, model_name: str = "sentence-transformers/all-mpnet-base-v2"):
+    def __init__(self, model_name: str = "sentence-transformers/all-roberta-large-v1"):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model_name = model_name
         
@@ -171,7 +171,7 @@ def main():
     
     # Process training data (for order embedding training)
     train_data_path = "MSc_Topology_Codebase/data/raw/snli/train/snli_full_train.json"  # Adjust path as needed
-    train_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
+    train_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens_all_roberta_large_v1.pkl"
     
     if Path(train_data_path).exists():
         print("Processing SNLI training data...")
@@ -180,14 +180,14 @@ def main():
         print(f"Training data not found at: {train_data_path}")
     
     # Process validation data (for clustering tests)
-    # val_data_path = "MSc_Topology_Codebase/data/raw/snli/validation/snli_full_val.json"  # Adjust path as needed  
-    # val_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
+    val_data_path = "MSc_Topology_Codebase/data/raw/snli/validation/snli_full_val.json"  # Adjust path as needed  
+    val_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens_all_roberta_large_v1.pkl"
     
-    # if Path(val_data_path).exists():
-    #     print("\nProcessing SNLI validation data...")
-    #     extractor.process_dataset(val_data_path, val_output_path, max_samples=None)  # Smaller for clustering tests
-    # else:
-    #     print(f"Validation data not found at: {val_data_path}")
+    if Path(val_data_path).exists():
+        print("\nProcessing SNLI validation data...")
+        extractor.process_dataset(val_data_path, val_output_path, max_samples=None)  # Smaller for clustering tests
+    else:
+        print(f"Validation data not found at: {val_data_path}")
     
     print("\nSBERT token extraction completed!")
 

@@ -106,35 +106,40 @@ class AsymmetryTransformModel(nn.Module):
 
 
 class TokenLevelEntailmentDataset(Dataset):
-    """Dataset for training"""
+    """Dataset with lazy loading for memory efficiency"""
     
     def __init__(self, processed_data_path: str):
-        print(f"Loading processed dataset: {processed_data_path}")
+        print(f"Loading dataset metadata: {processed_data_path}")
         
+        # Only load metadata, not actual embeddings
         with open(processed_data_path, 'rb') as f:
-            self.data = pickle.load(f)
+            data = pickle.load(f)
         
-        self.premise_tokens = self.data['premise_tokens']
-        self.hypothesis_tokens = self.data['hypothesis_tokens']
-        self.labels = self.data['labels']
-        
+        self.data_path = processed_data_path
+        self.labels = data['labels']
         self.label_to_idx = {'entailment': 0, 'neutral': 1, 'contradiction': 2}
         self.numeric_labels = [self.label_to_idx[label] for label in self.labels]
         
-        print(f"Loaded {len(self.labels)} samples")
+        # Store only indices, not embeddings
+        self.indices = list(range(len(self.labels)))
+        
+        print(f"Loaded {len(self.labels)} samples (lazy loading)")
         print(f"Label distribution: {dict(zip(*np.unique(self.labels, return_counts=True)))}")
     
     def __len__(self):
         return len(self.labels)
     
     def __getitem__(self, idx):
+        # Load embeddings on-demand
+        with open(self.data_path, 'rb') as f:
+            data = pickle.load(f)
+        
         return {
-            'premise_tokens': self.premise_tokens[idx],
-            'hypothesis_tokens': self.hypothesis_tokens[idx],
+            'premise_tokens': data['premise_tokens'][idx],
+            'hypothesis_tokens': data['hypothesis_tokens'][idx], 
             'label': torch.tensor(self.numeric_labels[idx]),
             'label_str': self.labels[idx]
         }
-
 
 class OrderEmbeddingTrainer:
     """Trainer for OrderEmbeddingModel using pure Vendrov et al. loss"""
@@ -489,7 +494,7 @@ def train_order_embedding_model(processed_data_path: str, output_dir: str, epoch
             patience_counter = 0
             
             # Save order model
-            order_model_path = Path(output_dir) / "order_embedding_model.pt"
+            order_model_path = Path(output_dir) / "order_embedding_model_all_roberta_large_v1.pt"
             torch.save({
                 'model_state_dict': order_model.state_dict(),
                 'training_stats': {
@@ -575,7 +580,7 @@ def train_asymmetry_model(processed_data_path: str, order_model: OrderEmbeddingM
             patience_counter = 0
             
             # Save asymmetry model
-            asymmetry_model_path = Path(output_dir) / "asymmetry_transform_model.pt"
+            asymmetry_model_path = Path(output_dir) / "asymmetry_transform_model_all_roberta_large_v1.pt"
             torch.save({
                 'model_state_dict': asymmetry_model.state_dict(),
                 'training_stats': {
@@ -733,7 +738,7 @@ def plot_training_progress(order_trainer: OrderEmbeddingTrainer, asymmetry_train
     
     # Save comprehensive plot
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    plot_path = Path(output_dir) / f"comprehensive_training_progress_{timestamp}.png"
+    plot_path = Path(output_dir) / f"comprehensive_training_progress__all_roberta_large_v1_{timestamp}.png"
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -807,7 +812,7 @@ def plot_individual_model_progress(order_trainer: OrderEmbeddingTrainer, asymmet
         ax4.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    order_plot_path = Path(output_dir) / f"order_model_detailed_{timestamp}.png"
+    order_plot_path = Path(output_dir) / f"order_model_detailed__all_roberta_large_v1_{timestamp}.png"
     plt.savefig(order_plot_path, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -902,7 +907,7 @@ def plot_individual_model_progress(order_trainer: OrderEmbeddingTrainer, asymmet
                     verticalalignment='top', bbox=dict(boxstyle='round', facecolor=color, alpha=0.8))
     
     plt.tight_layout()
-    asymmetry_plot_path = Path(output_dir) / f"asymmetry_model_detailed_{timestamp}.png"
+    asymmetry_plot_path = Path(output_dir) / f"asymmetry_model_detailed__all_roberta_large_v1_{timestamp}.png"
     plt.savefig(asymmetry_plot_path, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -911,7 +916,7 @@ def plot_individual_model_progress(order_trainer: OrderEmbeddingTrainer, asymmet
     
     # ============= GENERATE TOKEN-LEVEL ANALYSIS SUMMARY =============
     
-    analysis_file = Path(output_dir) / f"token_level_analysis_{timestamp}.txt"
+    analysis_file = Path(output_dir) / f"token_level_analysis__all_roberta_large_v1_{timestamp}.txt"
     with open(analysis_file, 'w') as f:
         f.write("TOKEN-LEVEL ORDER EMBEDDING ANALYSIS\n")
         f.write("="*50 + "\n\n")
@@ -973,7 +978,7 @@ def plot_individual_model_progress(order_trainer: OrderEmbeddingTrainer, asymmet
 def main():
     """Train both models separately"""
     
-    processed_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
+    processed_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens_all_roberta_large_v1.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/models/separate_models/"
     os.makedirs(output_dir, exist_ok=True)
     
@@ -984,12 +989,12 @@ def main():
     
     # Step 1: Train OrderEmbeddingModel
     order_model, order_trainer = train_order_embedding_model(
-        processed_data_path, output_dir, epochs=20, batch_size=1000, random_seed=42
+        processed_data_path, output_dir, epochs=20, batch_size=1, random_seed=42
     )
     
     # Step 2: Train AsymmetryTransformModel (with frozen OrderEmbeddingModel)
     asymmetry_model, asymmetry_trainer = train_asymmetry_model(
-        processed_data_path, order_model, output_dir, epochs=15, batch_size=1000, random_seed=42
+        processed_data_path, order_model, output_dir, epochs=15, batch_size=1, random_seed=42
     )
 
     plot_training_progress(order_trainer, asymmetry_trainer, output_dir)

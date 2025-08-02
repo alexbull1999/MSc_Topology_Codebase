@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/order_asymmetry_training_all_roberta_large_v1_%j.out
-#SBATCH --error=../logs/order_asymmetry_training_all_roberta_large_v1_%j.err
+#SBATCH --output=../logs/hyperbolic_training_%j.out
+#SBATCH --error=../logs/hyperbolic_training_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/order_asymmetry_models.py
+python MSc_Topology_Codebase/phd_method/src_phd/hyperbolic_token_projector.py
 
 
 # Capture exit code
