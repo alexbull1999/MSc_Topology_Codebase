@@ -4,9 +4,9 @@
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=64G
-#SBATCH --output=../logs/order_asymmetry_training_all_roberta_large_v1_%j.out
-#SBATCH --error=../logs/order_asymmetry_training_all_roberta_large_v1_%j.err
+#SBATCH --mem=32G
+#SBATCH --output=../logs/separate_margin_order_model_%j.out
+#SBATCH --error=../logs/separate_margin_order_model_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/order_asymmetry_models.py
+python MSc_Topology_Codebase/phd_method/src_phd/independent_order_model.py
 
 
 # Capture exit code

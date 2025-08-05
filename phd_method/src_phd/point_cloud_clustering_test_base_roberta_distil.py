@@ -65,11 +65,12 @@ class SeparateModelPointCloudGenerator:
         self.asymmetry_model.to(self.device)
         self.asymmetry_model.eval()
 
-        # hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
-        # self.hyperbolic_model = TokenLevelHyperbolicProjector()
-        # self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
-        # self.hyperbolic_model.to(self.device)
-        # self.hyperbolic_model.eval()
+        #Load hyperbolic projector
+        hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
+        self.hyperbolic_model = TokenLevelHyperbolicProjector()
+        self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
+        self.hyperbolic_model.to(self.device)
+        self.hyperbolic_model.eval()
 
         #distil order
         distil_order_checkpoint = torch.load(distil_order_path, map_location=self.device)
@@ -115,8 +116,8 @@ class SeparateModelPointCloudGenerator:
             point_clouds.append(asymmetric_features.cpu().clone())
 
             # #4. Hyperbolic features            
-            # hyperbolic_features = self.hyperbolic_model(order_embeddings)
-            # point_clouds.append(hyperbolic_features.cpu().clone())
+            hyperbolic_features = self.hyperbolic_model(order_embeddings)
+            point_clouds.append(hyperbolic_features.cpu().clone())
 
             distil_tokens = distil_tokens.to(self.device)
 
@@ -141,23 +142,22 @@ class SeparateModelPointCloudGenerator:
         # Generate hypothesis point clouds
         hypothesis_clouds = self.generate_point_cloud_variations(hypothesis_tokens, distil_hypothesis_tokens)
 
-        #ENERGY WEIGHTED
-        energy_weighted_cloud = self._generate_energy_weighted_features(premise_tokens, hypothesis_tokens)
-        distil_energy_weighted_cloud = self._generate_energy_weighted_features(distil_premise_tokens, distil_hypothesis_tokens)
+        # #ENERGY WEIGHTED
+        # energy_weighted_cloud = self._generate_energy_weighted_features(premise_tokens, hypothesis_tokens)
+        # distil_energy_weighted_cloud = self._generate_energy_weighted_features(distil_premise_tokens, distil_hypothesis_tokens)
 
-        #DIRECTIONAL
-        directional_cloud = self._generate_enhanced_directional_separation(premise_tokens, hypothesis_tokens)
-        distil_directional_cloud = self._generate_enhanced_directional_separation(distil_premise_tokens, distil_hypothesis_tokens)
+        # #DIRECTIONAL
+        # directional_cloud = self._generate_enhanced_directional_separation(premise_tokens, hypothesis_tokens)
+        # distil_directional_cloud = self._generate_enhanced_directional_separation(distil_premise_tokens, distil_hypothesis_tokens)
 
 
         #COSINE ONLY HELPS
         # angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
         
         # Combine all point clouds
-        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, distil_energy_weighted_cloud, distil_directional_cloud]
+        # all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, distil_energy_weighted_cloud, distil_directional_cloud]
 
-        # all_clouds = all_clouds + [angular_features_cloud]
-
+        all_clouds = premise_clouds + hypothesis_clouds
         combined_cloud = torch.cat(all_clouds, dim=0)
 
         # has_hyperbolic = len(premise_clouds) == 4  # Check if hyperbolic was added
@@ -696,7 +696,8 @@ class SeparateModelClusteringValidator:
                 selected_samples = filtered_samples
             else:
                 # Set seed for reproducible sampling
-                np.random.seed(self.seed + hash(class_name) % 1000)
+                class_seeds = {'entailment': 42, 'neutral': 142, 'contradiction': 242}
+                np.random.seed(class_seeds[class_name])
                 selected_indices = np.random.choice(
                     len(filtered_samples), self.samples_per_class, replace=False
                 )
@@ -827,7 +828,7 @@ class SeparateModelClusteringValidator:
                 ph_dim, diagrams = self.ph_dim_and_diagrams_from_distance_matrix(
                     distance_matrix,
                     min_points=50,  # ← CHANGED: Use same params as debug
-                    max_points=min(1000, point_cloud.shape[0]),  # ← CHANGED: Same as debug
+                    max_points=min(200, point_cloud.shape[0]),  # ← CHANGED: Same as debug
                     point_jump=25   # ← CHANGED: Same as debug
                 )
                 
@@ -934,7 +935,7 @@ class SeparateModelClusteringValidator:
         Perform clustering analysis on persistence images
         Based on the successful methodology from phdim_clustering.py
         """
-        
+
         if len(persistence_images) == 0:
             print("No persistence images available for clustering")
             raise 
@@ -943,8 +944,8 @@ class SeparateModelClusteringValidator:
         
         # Convert to numpy array
         X = np.array(persistence_images)
-        y_true = np.array(sample_labels)
-        y_true = y_true.astype(int)
+        sample_labels = [int(label) for label in sample_labels]
+        y_true = np.array(sample_labels, dtype=int)
         
         print(f"Feature matrix shape: {X.shape}")
         print(f"True labels distribution: {np.bincount(y_true)}")
@@ -953,7 +954,7 @@ class SeparateModelClusteringValidator:
         n_clusters = len(np.unique(y_true))
         print(f"Performing k-means with {n_clusters} clusters...")
         
-        kmeans = KMeans(n_clusters=n_clusters, random_state=self.seed, n_init=10)
+        kmeans = KMeans(n_clusters=n_clusters, random_state=self.seed, n_init=10, init='k-means++', max_iter=300, tol=1e-4)
         y_pred = kmeans.fit_predict(X)
         
         print(f"Predicted labels distribution: {np.bincount(y_pred)}")

@@ -1,0 +1,77 @@
+Job ID: 190351
+Node: gpuvm36
+Time: Tue  5 Aug 08:41:58 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Tue Aug  5 08:42:03 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.133.07             Driver Version: 570.133.07     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:00:11.0 Off |                    0 |
+|  0%   40C    P8             15W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Starting Model training...
+
+================================================================================
+TRAINING NEW ASYMMETRY TRANSFORM MODEL
+================================================================================
+Loading processed dataset: /vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl
+Loaded 150000 samples
+Label distribution: {'contradiction': 49717, 'entailment': 50214, 'neutral': 50069}
+Loading order model from: MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt
+✅ Order model loaded and frozen
+AsymmetryTrainer initialized on cuda
+Training asymmetry model directly on SBERT tokens
+Training AsymmetryTransformModel directly on SBERT tokens
+Target: Entailment=HIGH asymmetric, Neutral=LOW asymmetric, Contradiction=MEDIUM
+Epochs: 80, Batch size: 1020
+
+Epoch 1/80
+Train Loss: 5.1661, Val Loss: 1.6031
+Asymmetry Stats:
+  entailment: fwd=0.864, bwd=0.881, asym=0.029
+  neutral: fwd=1.023, bwd=1.021, asym=0.034
+  contradiction: fwd=1.215, bwd=1.210, asym=0.043
+✅ New asymmetry model saved: MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v4.pt
+
+Epoch 2/80
+Train Loss: 1.6212, Val Loss: 1.5891
+Asymmetry Stats:
+  entailment: fwd=0.779, bwd=0.802, asym=0.041
+  neutral: fwd=0.934, bwd=0.923, asym=0.050
+  contradiction: fwd=1.136, bwd=1.094, asym=0.074
+✅ New asymmetry model saved: MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v4.pt
+
+Epoch 3/80
+Train Loss: 1.5552, Val Loss: 1.4352
+Asymmetry Stats:
+  entailment: fwd=0.840, bwd=0.880, asym=0.129
+  neutral: fwd=1.027, bwd=0.992, asym=0.156
+  contradiction: fwd=1.385, bwd=1.221, asym=0.285
+✅ New asymmetry model saved: MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v4.pt
+
+Epoch 4/80

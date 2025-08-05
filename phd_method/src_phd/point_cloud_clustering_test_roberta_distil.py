@@ -123,11 +123,13 @@ class SeparateModelPointCloudGenerator:
         #DIRECTIONAL
         directional_cloud = self._generate_enhanced_directional_separation(premise_tokens, hypothesis_tokens)
 
+        enhanced_stratified_cloud = self._generate_enhanced_distance_stratified_features(premise_tokens, hypothesis_tokens)
+
         #COSINE ONLY HELPS
         # angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
         
         # Combine all point clouds
-        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud]
+        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, enhanced_stratified_cloud]
 
         # all_clouds = all_clouds + [angular_features_cloud]
 
@@ -332,6 +334,54 @@ class SeparateModelPointCloudGenerator:
             
             return torch.stack(angular_points).cpu()
 
+    def _generate_enhanced_distance_stratified_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+        """
+        Enhanced version of the working stratified approach - more aggressive separation
+        """
+        with torch.no_grad():
+            premise_tokens = premise_tokens.to(self.device)
+            hypothesis_tokens = hypothesis_tokens.to(self.device)
+            
+            premise_order = self.order_model(premise_tokens)
+            hypothesis_order = self.order_model(hypothesis_tokens)
+            
+            # Use ONLY forward energy (what worked before)
+            forward_energy = self.order_model.order_violation_energy(
+                premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+            ).item()
+            
+            stratified_points = []
+            centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
+            
+            if forward_energy < 0.8:  # Entailment - MORE aggressive tight clustering
+                target_distances = [0.03, 0.06, 0.09, 0.12, 0.15]  # Even tighter than before
+                for dist in target_distances:
+                    for i in range(12):  # More points for stability
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+                        
+            elif forward_energy > 1.2:  # Contradiction - MORE aggressive spread
+                target_distances = [2.5, 3.0, 3.5, 4.0, 4.5]  # Even more spread than before
+                for dist in target_distances:
+                    for i in range(6):  # Keep sparse
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+                        
+            else:  # Neutral - optimize the middle range
+                target_distances = [0.4, 0.8, 1.2, 1.6, 2.0]  # Avoid overlap with extremes
+                for dist in target_distances:
+                    for i in range(8):  # Balanced
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+            
+            if stratified_points:
+                return torch.stack(stratified_points).cpu()
+            else:
+                return torch.empty(0, 768)
+
 
 class SeparateModelClusteringValidator:
     """
@@ -433,8 +483,10 @@ class SeparateModelClusteringValidator:
         # Return FULL topology diagrams (not subsampled ones!)
         return ph_dimension, full_diagrams
     
-    def persistence_diagrams_to_images(self, all_diagrams: List) -> List[np.ndarray]:
+    def persistence_diagrams_to_images(self, all_diagrams: List, track_indices: bool = False):
         """Convert persistence diagrams to standardized images with robust error handling"""
+        
+        successful_indices = [] if track_indices else None
         
         # First, analyze the actual range of data that exists
         all_birth_times = []
@@ -571,6 +623,8 @@ class SeparateModelClusteringValidator:
             if has_content and combined_image.max() > 0:
                 combined_image = combined_image / combined_image.max()
                 persistence_images.append(combined_image.flatten())
+                if track_indices:
+                    successful_indices.append(diagram_idx)
                 successful_conversions += 1
             else:
                 print(f"    Diagram {diagram_idx}: No content after processing")
@@ -664,6 +718,23 @@ class SeparateModelClusteringValidator:
                 f"(range: {np.min(token_counts)}-{np.max(token_counts)})")
         
         return fixed_samples
+
+    def convert_diagrams_with_label_tracking(self, diagram_label_pairs):
+        """Convert diagrams to images while tracking successful conversions"""
+    
+        # Extract diagrams and labels from pairs
+        all_diagrams = [pair[0] for pair in diagram_label_pairs]
+        all_labels = [pair[1] for pair in diagram_label_pairs]
+    
+        # Convert diagrams and track which ones succeed
+        persistence_images, successful_indices = self.persistence_diagrams_to_images(all_diagrams, track_indices=True)
+    
+        # Get labels for successful conversions only
+        successful_labels = [all_labels[i] for i in successful_indices]
+    
+        print(f"Label tracking: {len(all_diagrams)} diagrams → {len(persistence_images)} images → {len(successful_labels)} labels")
+    
+        return persistence_images, successful_labels
 
     
     def validate_separate_model_clustering(self) -> ClusteringResult:
@@ -773,16 +844,7 @@ class SeparateModelClusteringValidator:
         print(f"\nCollected {len(all_persistence_diagrams)} diagram sets for clustering")
 
         # Convert all diagrams to persistence images
-        persistence_images = self.persistence_diagrams_to_images(all_persistence_diagrams)
-                
-        # Use persistence images for clustering
-        if len(persistence_images) > 0:
-            # Expand labels to match number of images generated
-            images_per_sample = len(persistence_images) // len(all_persistence_diagrams) if all_persistence_diagrams else 1
-            expanded_labels = []
-            for label in sample_labels:
-                expanded_labels.extend([label] * images_per_sample)
-            sample_labels = expanded_labels
+        persistence_images, sample_labels = self.convert_diagrams_with_label_tracking(all_persistence_diagrams)
         
         print(f"Generated {len(persistence_images)} persistence images for clustering")
         

@@ -106,37 +106,31 @@ class AsymmetryTransformModel(nn.Module):
 
 
 class TokenLevelEntailmentDataset(Dataset):
-    """Dataset with lazy loading for memory efficiency"""
+    """Dataset for training"""
     
     def __init__(self, processed_data_path: str):
-        print(f"Loading dataset metadata: {processed_data_path}")
+        print(f"Loading processed dataset: {processed_data_path}")
         
-        # Only load metadata, not actual embeddings
         with open(processed_data_path, 'rb') as f:
-            data = pickle.load(f)
+            self.data = pickle.load(f)
         
-        self.data_path = processed_data_path
-        self.labels = data['labels']
+        self.premise_tokens = self.data['premise_tokens']
+        self.hypothesis_tokens = self.data['hypothesis_tokens']
+        self.labels = self.data['labels']
+        
         self.label_to_idx = {'entailment': 0, 'neutral': 1, 'contradiction': 2}
         self.numeric_labels = [self.label_to_idx[label] for label in self.labels]
         
-        # Store only indices, not embeddings
-        self.indices = list(range(len(self.labels)))
-        
-        print(f"Loaded {len(self.labels)} samples (lazy loading)")
+        print(f"Loaded {len(self.labels)} samples")
         print(f"Label distribution: {dict(zip(*np.unique(self.labels, return_counts=True)))}")
     
     def __len__(self):
         return len(self.labels)
     
     def __getitem__(self, idx):
-        # Load embeddings on-demand
-        with open(self.data_path, 'rb') as f:
-            data = pickle.load(f)
-        
         return {
-            'premise_tokens': data['premise_tokens'][idx],
-            'hypothesis_tokens': data['hypothesis_tokens'][idx], 
+            'premise_tokens': self.premise_tokens[idx],
+            'hypothesis_tokens': self.hypothesis_tokens[idx],
             'label': torch.tensor(self.numeric_labels[idx]),
             'label_str': self.labels[idx]
         }
@@ -208,6 +202,11 @@ class OrderEmbeddingTrainer:
                 sample_loss, _ = self.compute_vendrov_loss(premise_tokens, hypothesis_tokens, label)
                 batch_loss += sample_loss
                 batch_samples += 1
+
+                #MEMMGMT
+                del premise_tokens, hypothesis_tokens, sample_loss
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
             
             if batch_samples > 0:
                 batch_loss = batch_loss / batch_samples
@@ -218,6 +217,16 @@ class OrderEmbeddingTrainer:
                 
                 total_loss += batch_loss.item()
                 num_samples += batch_samples
+
+                # ← CLEANUP AFTER EACH BATCH
+                del batch_loss
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+
+            # ← CLEANUP EVERY 10 BATCHES
+            if batch_idx % 10 == 0:
+                import gc
+                gc.collect()
         
         avg_loss = total_loss / len(dataloader) if len(dataloader) > 0 else 0
         self.train_losses.append(avg_loss)

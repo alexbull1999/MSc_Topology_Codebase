@@ -22,7 +22,9 @@ from gph.python import ripser_parallel
 from sklearn.metrics.pairwise import pairwise_distances
 
 # Import the separate models
-from order_asymmetry_models import OrderEmbeddingModel, AsymmetryTransformModel
+from order_asymmetry_models import OrderEmbeddingModel
+#from order_asymmetry_models import AsymmetryTransformModel
+from independent_asymmetry_model import AsymmetryTransformModel
 from hyperbolic_token_projector import TokenLevelHyperbolicProjector
 
 @dataclass
@@ -100,7 +102,7 @@ class SeparateModelPointCloudGenerator:
             asymmetric_features = self.asymmetry_model(order_embeddings)  # Takes order embeddings as input
             point_clouds.append(asymmetric_features.cpu().clone())
 
-            #4. Hyperbolic features            
+            #4. Hyperbolic features - Don't seem to help       
             hyperbolic_features = self.hyperbolic_model(order_embeddings)
             point_clouds.append(hyperbolic_features.cpu().clone())
         
@@ -118,18 +120,26 @@ class SeparateModelPointCloudGenerator:
         hypothesis_clouds = self.generate_point_cloud_variations(hypothesis_tokens)
 
         #ENERGY WEIGHTED
-        energy_weighted_cloud = self._generate_energy_weighted_features(premise_tokens, hypothesis_tokens)
+        energy_weighted_cloud = self._generate_refined_energy_weighted_features(premise_tokens, hypothesis_tokens)
 
         #DIRECTIONAL
         directional_cloud = self._generate_enhanced_directional_separation(premise_tokens, hypothesis_tokens)
+                
+        # Use the existing successful general stratification
+        separation_stratified_cloud = self._generate_perfect_separation_stratified_features(premise_tokens, hypothesis_tokens)
 
-        #COSINE ONLY HELPS
-        angular_features_cloud = self._generate_normalized_angular_features(premise_tokens, hypothesis_tokens)
-        
+        multi_boundary_cloud = self._generate_multi_signal_stratified_features(premise_tokens, hypothesis_tokens)
+   
         # Combine all point clouds
-        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud]
+        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, separation_stratified_cloud, multi_boundary_cloud]
 
-        all_clouds = all_clouds + [angular_features_cloud]
+        # Check total size and optimize if needed
+        total_points = sum(cloud.shape[0] for cloud in all_clouds)
+        target_max = 500  # Sweet spot from handover docs
+        
+        if total_points > target_max:
+            print(f"Point cloud optimization: {total_points} -> {target_max}")
+            all_clouds = self._optimize_point_cloud_size(all_clouds, target_max)
 
         combined_cloud = torch.cat(all_clouds, dim=0)
 
@@ -293,44 +303,278 @@ class SeparateModelPointCloudGenerator:
             
             return torch.stack(directional_points).cpu()
 
-
-
-    def _generate_normalized_angular_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+    def _generate_enhanced_distance_stratified_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
         """
-        Generate normalized angular features optimized for cosine distance (Only benefit COSINE not Braycurtis)
+        Enhanced version of the working stratified approach - more aggressive separation
         """
         with torch.no_grad():
             premise_tokens = premise_tokens.to(self.device)
             hypothesis_tokens = hypothesis_tokens.to(self.device)
             
-            # Get order embeddings
             premise_order = self.order_model(premise_tokens)
             hypothesis_order = self.order_model(hypothesis_tokens)
             
-            # L2 normalize all embeddings for cosine optimization
-            premise_normalized = torch.nn.functional.normalize(premise_order, p=2, dim=-1)
-            hypothesis_normalized = torch.nn.functional.normalize(hypothesis_order, p=2, dim=-1)
+            # Use ONLY forward energy (what worked before)
+            forward_energy = self.order_model.order_violation_energy(
+                premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+            ).item()
             
-            angular_points = []
+            stratified_points = []
+            centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
             
-            # Create angular relationship features between normalized premise/hypothesis tokens
-            for i in range(premise_normalized.shape[0]):
-                for j in range(hypothesis_normalized.shape[0]):
-                    # Cosine similarity between normalized embeddings
-                    cosine_sim = torch.cosine_similarity(
-                        premise_normalized[i:i+1], hypothesis_normalized[j:j+1], dim=-1
+            if forward_energy < 0.8:  # Entailment - MORE aggressive tight clustering
+                target_distances = [0.03, 0.06, 0.09, 0.12, 0.15]  # Even tighter than before
+                for dist in target_distances:
+                    for i in range(12):  # More points for stability
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+                        
+            elif forward_energy > 1.2:  # Contradiction - MORE aggressive spread
+                target_distances = [2.5, 3.0, 3.5, 4.0, 4.5]  # Even more spread than before
+                for dist in target_distances:
+                    for i in range(6):  # Keep sparse
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+                        
+            else:  # Neutral - optimize the middle range
+                target_distances = [0.4, 0.8, 1.2, 1.6, 2.0]  # Avoid overlap with extremes
+                for dist in target_distances:
+                    for i in range(8):  # Balanced
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+            
+            if stratified_points:
+                return torch.stack(stratified_points).cpu()
+            else:
+                return torch.empty(0, 768)
+
+
+    def _generate_perfect_separation_stratified_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+        """
+        Stratified features optimized for the PERFECT energy separation achieved by new order model
+        
+        New Energy Zones:
+        - Entailment: ~0.4
+        - Neutral: ~0.8-1.5 
+        - Contradiction: ~1.8+
+        """
+        with torch.no_grad():
+            premise_tokens = premise_tokens.to(self.device)
+            hypothesis_tokens = hypothesis_tokens.to(self.device)
+            
+            premise_order = self.order_model(premise_tokens)
+            hypothesis_order = self.order_model(hypothesis_tokens)
+            
+            # Use forward energy to determine exact zone
+            forward_energy = self.order_model.order_violation_energy(
+                premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+            ).item()
+            
+            stratified_points = []
+            centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
+            
+            # ZONE 1: Entailment (< 1.0) - ULTRA TIGHT clusters WAS 0.5
+            if forward_energy < 0.5:
+                print(f"    ENTAILMENT zone detected (energy={forward_energy:.3f})")
+                target_distances = [0.01, 0.02, 0.03, 0.04, 0.05]  # Extremely tight
+                for dist in target_distances:
+                    for i in range(15):  # Dense for maximum cohesion
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+            
+            # ZONE 2: Neutral ([1.0, 1.5]) - DISTINCTIVE middle pattern. WAS 0.5 to 1.5
+            elif 0.5 <= forward_energy <= 1.5:
+                print(f"    NEUTRAL zone detected (energy={forward_energy:.3f})")
+                # Create STRUCTURED neutral signature instead of random
+                
+                # Ring pattern at moderate distance (unique to neutral)
+                ring_radius = 0.8
+                num_ring_points = 16
+                
+                for i in range(num_ring_points):
+                    angle = 2 * np.pi * i / num_ring_points
+                    
+                    # Create two orthogonal directions in 768D space
+                    direction1 = hypothesis_order.mean(0) - premise_order.mean(0)
+                    direction1 = direction1 / torch.norm(direction1)
+                    
+                    # Random orthogonal direction
+                    direction2 = torch.randn(768, device=self.device)
+                    direction2 = direction2 - torch.dot(direction2, direction1) * direction1
+                    direction2 = direction2 / torch.norm(direction2)
+                    
+                    # Point on ring
+                    ring_point = centroid + ring_radius * (np.cos(angle) * direction1 + np.sin(angle) * direction2)
+                    stratified_points.append(ring_point)
+                
+                # Add central cluster for stability
+                for i in range(8):
+                    noise = torch.randn(768, device=self.device) * 0.1
+                    stratified_points.append(centroid + noise)
+            
+            # ZONE 3: Contradiction (> 2.0) - MAXIMUM spread WAS 1.5
+            elif forward_energy > 1.6:
+                print(f"    CONTRADICTION zone detected (energy={forward_energy:.3f})")
+                target_distances = [3.5, 4.0, 4.5, 5.0, 5.5]  # Even more spread
+                for dist in target_distances:
+                    for i in range(5):  # Sparse for maximum spread
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+            
+            # EDGE CASE: Energy in gap zones (shouldn't happen with perfect separation)
+            else:
+                print(f"    EDGE CASE: energy={forward_energy:.3f} in gap zone")
+                # Default moderate pattern
+                target_distances = [1.0, 1.5, 2.0]
+                for dist in target_distances:
+                    for i in range(6):
+                        direction = torch.randn(768, device=self.device)
+                        direction = direction / torch.norm(direction) * dist
+                        stratified_points.append(centroid + direction)
+            
+            if stratified_points:
+                return torch.stack(stratified_points).cpu()
+            else:
+                return torch.empty(0, 768)
+
+
+    def _generate_multi_signal_stratified_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+        """
+        Use BOTH forward energy AND asymmetric energy - with ORIGINAL boundaries
+        """
+        with torch.no_grad():
+            premise_tokens = premise_tokens.to(self.device)
+            hypothesis_tokens = hypothesis_tokens.to(self.device)
+            
+            premise_order = self.order_model(premise_tokens)
+            hypothesis_order = self.order_model(hypothesis_tokens)
+            
+            forward_energy = self.order_model.order_violation_energy(
+                premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+            ).item()
+            
+            asymmetric_energy = self.asymmetry_model.compute_asymmetric_energy(premise_order, hypothesis_order).item()
+            
+            stratified_points = []
+            centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
+            
+            # Multi-signal classification with ORIGINAL 0.5/1.5 boundaries
+            if forward_energy < 0.5 and asymmetric_energy > 0.3:  # Strong entailment
+                target_distances = [0.01, 0.02, 0.03]
+                point_count = 25
+            elif forward_energy < 0.5:  # Weak entailment (low asymmetric)
+                target_distances = [0.05, 0.1, 0.15]
+                point_count = 15
+            elif forward_energy > 1.5 and asymmetric_energy > 0.8:  # Strong contradiction
+                target_distances = [5.0, 6.0, 7.0]
+                point_count = 8
+            elif forward_energy > 1.5:  # Weak contradiction
+                target_distances = [3.0, 4.0, 5.0]
+                point_count = 10
+            else:  # Neutral (0.5 ≤ forward_energy ≤ 1.5)
+                target_distances = [0.4, 0.6, 0.8, 1.0]
+                point_count = 12
+            
+            for dist in target_distances:
+                for i in range(point_count):
+                    direction = torch.randn(768, device=self.device)
+                    direction = direction / torch.norm(direction) * dist
+                    stratified_points.append(centroid + direction)
+            
+            if stratified_points:
+                return torch.stack(stratified_points).cpu()
+            else:
+                return torch.empty(0, 768)
+
+    def _generate_refined_energy_weighted_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+        """
+        Refined version of energy weighting - only use high-confidence energy predictions
+        """
+        with torch.no_grad():
+            premise_tokens = premise_tokens.to(self.device)
+            hypothesis_tokens = hypothesis_tokens.to(self.device)
+            
+            premise_order = self.order_model(premise_tokens)
+            hypothesis_order = self.order_model(hypothesis_tokens)
+            
+            energy_weighted_points = []
+            
+            for i in range(premise_order.shape[0]):
+                for j in range(hypothesis_order.shape[0]):
+                    energy = self.order_model.order_violation_energy(
+                        premise_order[i:i+1], hypothesis_order[j:j+1]
                     )
                     
-                    # Angular difference vector (optimized for cosine space)
-                    angular_diff = premise_normalized[i] - hypothesis_normalized[j]
-                    angular_diff_normalized = torch.nn.functional.normalize(angular_diff.unsqueeze(0), p=2, dim=-1).squeeze(0)
+                    # REFINEMENT: Only use tokens with "confident" energy predictions
+                    energy_confidence = abs(energy.item() - 0.8)  # Distance from neutral zone
                     
-                    # Cosine-weighted angular feature (scales by similarity)
-                    cosine_weighted_feature = cosine_sim.item() * angular_diff_normalized
-                    
-                    angular_points.append(cosine_weighted_feature)
+                    if energy_confidence > 0.3:  # Only confident predictions
+                        energy_weight = torch.sigmoid(energy)
+                        weighted_point = energy_weight * hypothesis_order[j] + (1 - energy_weight) * premise_order[i]
+                        energy_weighted_points.append(weighted_point)
             
-            return torch.stack(angular_points).cpu()
+            # Ensure minimum points if filtering was too aggressive
+            if len(energy_weighted_points) < 20:
+                # Fall back to top-K most confident pairs
+                all_pairs = []
+                for i in range(premise_order.shape[0]):
+                    for j in range(hypothesis_order.shape[0]):
+                        energy = self.order_model.order_violation_energy(
+                            premise_order[i:i+1], hypothesis_order[j:j+1]
+                        )
+                        confidence = abs(energy.item() - 0.8)
+                        all_pairs.append((i, j, energy.item(), confidence))
+                
+                # Sort by confidence and take top 30
+                all_pairs.sort(key=lambda x: x[3], reverse=True)
+                energy_weighted_points = []
+                
+                for i, j, energy, _ in all_pairs[:30]:
+                    energy_weight = torch.sigmoid(torch.tensor(energy))
+                    weighted_point = energy_weight * hypothesis_order[j] + (1 - energy_weight) * premise_order[i]
+                    energy_weighted_points.append(weighted_point)
+            
+            return torch.stack(energy_weighted_points).cpu()
+
+
+
+    def _optimize_point_cloud_size(self, all_clouds: List[torch.Tensor], target_max: int) -> List[torch.Tensor]:
+        """
+        Intelligent point cloud size optimization preserving most important points
+        """
+        total_points = sum(cloud.shape[0] for cloud in all_clouds)
+        reduction_needed = total_points - target_max
+        
+        # Priority order (based on your success rates)
+        # Keep original 6 clouds intact, reduce enhancement clouds proportionally
+        cloud_priorities = [1.0] * 6 + [0.9, 0.8, 0.7, 0.6]  # Original clouds + enhancements
+        
+        optimized_clouds = []
+        
+        for i, cloud in enumerate(all_clouds):
+            if i < 6:  # Keep original premise/hypothesis clouds intact
+                optimized_clouds.append(cloud)
+            else:
+                # Reduce enhancement clouds if needed
+                priority = cloud_priorities[min(i, len(cloud_priorities)-1)]
+                reduction_factor = max(0.7, 1.0 - (reduction_needed / total_points) / priority)
+                
+                keep_points = int(cloud.shape[0] * reduction_factor)
+                if keep_points < cloud.shape[0]:
+                    indices = torch.randperm(cloud.shape[0])[:keep_points]
+                    optimized_clouds.append(cloud[indices])
+                    reduction_needed -= (cloud.shape[0] - keep_points)
+                else:
+                    optimized_clouds.append(cloud)
+        
+        return optimized_clouds
+
+ 
 
 
 class SeparateModelClusteringValidator:
@@ -406,8 +650,8 @@ class SeparateModelClusteringValidator:
             sample_indices = np.random.choice(dm.shape[0], points_number, replace=False)
             dist_matrix = dm[sample_indices, :][:, sample_indices]
             
-            # Compute persistence diagrams
-            sub_diagrams = ripser_parallel(dist_matrix, maxdim=1, n_threads=-1, metric="precomputed")['dgms']
+            # Compute persistence diagrams - this is for PH-DIM calculation
+            sub_diagrams = ripser_parallel(dist_matrix, maxdim=0, n_threads=-1, metric="precomputed")['dgms']
             
             # Extract specific dimension for PH-dim calculation
             d = sub_diagrams[h_dim]
@@ -452,7 +696,7 @@ class SeparateModelClusteringValidator:
             if isinstance(diagrams, np.ndarray) and diagrams.size == 0:
                 continue
 
-                
+            #IF not including H2 reduce back to 2    
             for dim in range(min(2, len(diagrams))):
                 diagram = diagrams[dim]
                 
@@ -509,8 +753,13 @@ class SeparateModelClusteringValidator:
         print(f"  pers_range: ({pers_range[0]:.4f}, {pers_range[1]:.4f})")
         
         # Create persistence imager with correct scale
-        pixel_size = max(0.005, (pers_range[1] - pers_range[0]) / 50)
-        sigma = max(0.005, (pers_range[1] - pers_range[0]) / 30)
+        # pixel_size = max(0.005, (pers_range[1] - pers_range[0]) / 50)
+        # sigma = max(0.005, (pers_range[1] - pers_range[0]) / 30)
+
+        #USING BEST CONFIGS FROM PARAMETER SEARCH
+        pixel_size = max(0.001, (pers_range[1] - pers_range[0]) / 138.9)  # Changed from /50 to /100
+        sigma = max(0.001, (pers_range[1] - pers_range[0]) / 82.6)        # Changed from /30 to /60
+        target_resolution = 30  # Changed from 20 to 25
         
         pimgr = PersistenceImager(
             pixel_size=pixel_size,
@@ -533,10 +782,11 @@ class SeparateModelClusteringValidator:
                 continue
 
                 
-            combined_image = np.zeros((20, 20))
+            # combined_image = np.zeros((20, 20))
+            combined_image = np.zeros((target_resolution, target_resolution))
             has_content = False
             
-            # Process H0 and H1 diagrams with robust handling
+            # Process H0 and H1 diagrams with robust handling -- reduce to 2 if not including H2
             for dim in range(min(2, len(diagrams))):
                 diagram = diagrams[dim]
                 
@@ -555,9 +805,11 @@ class SeparateModelClusteringValidator:
                                 img = pimgr.transform([finite_diagram])[0]
                                 
                                 # Resize if needed
-                                if img.shape != (20, 20):
+                                # if img.shape != (20, 20):
+                                if img.shape != (target_resolution, target_resolution):
                                     from scipy.ndimage import zoom
-                                    zoom_factors = (20 / img.shape[0], 20 / img.shape[1])
+                                    # zoom_factors = (20 / img.shape[0], 20 / img.shape[1])
+                                    zoom_factors = (target_resolution / img.shape[0], target_resolution / img.shape[1])
                                     img = zoom(img, zoom_factors)
                                 
                                 combined_image += img
@@ -582,7 +834,7 @@ class SeparateModelClusteringValidator:
         return persistence_images
 
 
-    def compute_distance_matrix(self, point_cloud: torch.Tensor, metric: str = 'cosine') -> np.ndarray:
+    def compute_distance_matrix(self, point_cloud: torch.Tensor, metric: str = 'braycurtis') -> np.ndarray:
         """Compute distance matrix for point cloud"""
         
         point_cloud_np = point_cloud.numpy()
@@ -646,7 +898,8 @@ class SeparateModelClusteringValidator:
                 selected_samples = filtered_samples
             else:
                 # Set seed for reproducible sampling
-                np.random.seed(self.seed + hash(class_name) % 1000)
+                class_seeds = {'entailment': 42, 'neutral': 142, 'contradiction': 242}
+                np.random.seed(class_seeds[class_name])
                 selected_indices = np.random.choice(
                     len(filtered_samples), self.samples_per_class, replace=False
                 )
@@ -665,6 +918,45 @@ class SeparateModelClusteringValidator:
         
         return fixed_samples
 
+    def generate_maximum_samples_by_class(self) -> Dict[str, List[Dict]]:
+        """Generate maximum available samples for each class for more robust clustering"""
+        
+        print("Generating maximum sample indices...")
+        
+        # Organize data by class
+        class_data = {'entailment': [], 'neutral': [], 'contradiction': []}
+        
+        for i, label in enumerate(self.val_data['labels']):
+            class_data[label].append({
+                'index': i,
+                'premise_tokens': self.val_data['premise_tokens'][i],
+                'hypothesis_tokens': self.val_data['hypothesis_tokens'][i],
+                'label': label
+            })
+        
+        # Use ALL filtered samples for each class
+        max_samples = {}
+        
+        for class_name, class_samples in class_data.items():
+            print(f"  {class_name}: {len(class_samples)} total samples available")
+
+            filtered_samples = self.filter_samples_by_token_count(class_samples)
+            
+            # Use ALL filtered samples (no subsampling)
+            max_samples[class_name] = filtered_samples
+            
+            print(f"    Using ALL {len(filtered_samples)} samples after token filtering")
+
+            # Show token statistics for all samples
+            token_counts = [
+                s['premise_tokens'].shape[0] + s['hypothesis_tokens'].shape[0] 
+                for s in filtered_samples
+            ]
+            print(f"Token count stats: {np.mean(token_counts):.0f} ± {np.std(token_counts):.0f} "
+                f"(range: {np.min(token_counts)}-{np.max(token_counts)})")
+        
+        return max_samples
+
     
     def validate_separate_model_clustering(self) -> ClusteringResult:
         """
@@ -675,10 +967,14 @@ class SeparateModelClusteringValidator:
         print("="*80)
         
         # Generate fixed samples
-        fixed_samples = self.generate_fixed_samples_by_class()
+        # fixed_samples = self.generate_fixed_samples_by_class()
+
+        #Generate max samples
+        max_samples = self.generate_maximum_samples_by_class()
 
         # Diagnose a few samples from each class
-        for class_name, samples in fixed_samples.items():
+        # for class_name, samples in fixed_samples.items():
+        for class_name, samples in max_samples.items():
             if samples:
                 print(f"\n{'='*60}")
                 print(f"DIAGNOSING {class_name.upper()} TOPOLOGY")
@@ -714,8 +1010,9 @@ class SeparateModelClusteringValidator:
         for class_idx, class_name in enumerate(['entailment', 'neutral', 'contradiction']):
             print(f"\nProcessing {class_name} samples...")
             
-            class_samples = fixed_samples[class_name]
-            
+            # class_samples = fixed_samples[class_name]
+            class_samples = max_samples[class_name]
+
             for sample_idx, sample_data in enumerate(class_samples):
                 premise_tokens = sample_data['premise_tokens']
                 hypothesis_tokens = sample_data['hypothesis_tokens']
@@ -830,11 +1127,12 @@ class SeparateModelClusteringValidator:
         # Create result
         result = ClusteringResult(
             order_model_name="order_embedding_model.pt",
-            asymmetry_model_name="asymmetry_transform_model.pt",
+            asymmetry_model_name="new_independent_asymmetry_transform_model_v2.pt",
             clustering_accuracy=accuracy,
             silhouette_score=sil_score,
             adjusted_rand_score=ari_score,
-            num_samples=sum(len(samples) for samples in fixed_samples.values()),
+            # num_samples=sum(len(samples) for samples in fixed_samples.values()),
+            num_samples=sum(len(samples) for samples in max_samples.values()),
             success=(accuracy > 0.7),
             ph_dim_values=ph_dim_values,
             ph_dim_stats=ph_dim_stats,
@@ -863,6 +1161,10 @@ class SeparateModelClusteringValidator:
         
         # Analyze model performance patterns
         self.analyze_model_performance_patterns(model_analysis)
+
+        self.debug_neutral_detection()
+
+        self.debug_discover_optimal_three_energy_patterns()
         
         return result
 
@@ -891,7 +1193,7 @@ class SeparateModelClusteringValidator:
         n_clusters = len(np.unique(y_true))
         print(f"Performing k-means with {n_clusters} clusters...")
         
-        kmeans = KMeans(n_clusters=n_clusters, random_state=self.seed, n_init=10)
+        kmeans = KMeans(n_clusters=n_clusters, random_state=self.seed, n_init=10, init='k-means++', max_iter=300, tol=1e-4)
         y_pred = kmeans.fit_predict(X)
         
         print(f"Predicted labels distribution: {np.bincount(y_pred)}")
@@ -913,6 +1215,12 @@ class SeparateModelClusteringValidator:
         
         # Use best permutation for final predicted labels
         final_pred = np.array([best_permutation[label] for label in y_pred])
+
+        # ADD THE FAILURE ANALYSIS HERE
+        print("\n" + "="*50)
+        print("CLUSTERING FAILURE ANALYSIS")
+        print("="*50)
+        confusion_analysis = self.analyze_clustering_failures(persistence_images, y_true, final_pred)
         
         # Calculate additional metrics
         try:
@@ -1249,13 +1557,565 @@ class SeparateModelClusteringValidator:
             return False
 
 
+    def analyze_clustering_failures(self, persistence_images, sample_labels, y_pred_final):
+        """
+        Analyze which samples are being misclassified to guide next optimizations
+        """
+        misclassified_indices = np.where(sample_labels != y_pred_final)[0]
+        
+        print(f"Misclassified samples: {len(misclassified_indices)}/{len(sample_labels)}")
+        
+        # Group misclassifications by type
+        confusion_analysis = {}
+        class_names = ['entailment', 'neutral', 'contradiction']
+        
+        for true_class in range(3):
+            for pred_class in range(3):
+                if true_class != pred_class:
+                    mask = (sample_labels == true_class) & (y_pred_final == pred_class)
+                    count = np.sum(mask)
+                    if count > 0:
+                        confusion_analysis[f"{class_names[true_class]}_as_{class_names[pred_class]}"] = count
+        
+        print("Confusion breakdown:")
+        for error_type, count in confusion_analysis.items():
+            print(f"  {error_type}: {count}")
+        
+        return confusion_analysis
+
+
+    def debug_neutral_detection(self):
+        """
+        Debug the neutral detection logic to see if it's working correctly
+        """
+        print("\n" + "="*60)
+        print("DEBUGGING NEUTRAL DETECTION LOGIC")
+        print("="*60)
+        
+        # Test on a few samples from each class
+        fixed_samples = self.generate_maximum_samples_by_class()
+        
+        detection_stats = {
+            'entailment': {'detected_as_neutral': 0, 'total': 0},
+            'neutral': {'detected_as_neutral': 0, 'total': 0},
+            'contradiction': {'detected_as_neutral': 0, 'total': 0}
+        }
+        
+        energy_stats = {
+            'entailment': {'forward': [], 'backward': [], 'gap': [], 'asymm': []},
+            'neutral': {'forward': [], 'backward': [], 'gap': [], 'asymm': []},
+            'contradiction': {'forward': [], 'backward': [], 'gap': [], 'asymm': []}
+        }
+        
+        for class_name, samples in fixed_samples.items():
+            for i, sample in enumerate(samples):  # Test first 20 of each class
+                premise_tokens = sample['premise_tokens']
+                hypothesis_tokens = sample['hypothesis_tokens']
+                        
+                # Get actual energies
+                with torch.no_grad():
+                    premise_tokens_gpu = premise_tokens.to(self.point_cloud_generator.device)
+                    hypothesis_tokens_gpu = hypothesis_tokens.to(self.point_cloud_generator.device)
+                    
+                    premise_order = self.point_cloud_generator.order_model(premise_tokens_gpu)
+                    hypothesis_order = self.point_cloud_generator.order_model(hypothesis_tokens_gpu)
+                    
+                    forward_energy = self.point_cloud_generator.order_model.order_violation_energy(
+                        premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+                    ).item()
+                    
+                    backward_energy = self.point_cloud_generator.order_model.order_violation_energy(
+                        hypothesis_order.mean(0, keepdim=True), premise_order.mean(0, keepdim=True)
+                    ).item()
+                    
+                    energy_gap = abs(forward_energy - backward_energy)
+
+                    asymm_energy = self.point_cloud_generator.asymmetry_model.compute_asymmetric_energy(
+                        premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+                    ).item()
+                
+                energy_stats[class_name]['forward'].append(forward_energy)
+                energy_stats[class_name]['backward'].append(backward_energy)
+                energy_stats[class_name]['gap'].append(energy_gap)
+                energy_stats[class_name]['asymm'].append(asymm_energy)
+        
+        # Print energy analysis
+        print("\nEnergy Analysis:")
+        for class_name, energies in energy_stats.items():
+            avg_forward = np.mean(energies['forward'])
+            avg_backward = np.mean(energies['backward'])
+            avg_gap = np.mean(energies['gap'])
+            avg_asymm = np.mean(energies['asymm'])
+            
+            print("FROM ORDER MODEL")
+            print(f"  {class_name}:")
+            print(f"    Forward: {avg_forward:.3f}")
+            print(f"    Backward: {avg_backward:.3f}")
+            print(f"    Gap: {avg_gap:.3f}")
+            print(f"    Low forward (<0.6): {np.sum(np.array(energies['forward']) < 0.6)}/{len(energies['forward'])}")
+            print(f"    Low backward (<0.8): {np.sum(np.array(energies['backward']) < 0.8)}/{len(energies['backward'])}")
+            forward_array = np.array(energies['forward'])
+            mid_forward_mask = (forward_array > 0.6) & (forward_array <= 1.4)
+            print(f"    Mid forward (0.6< x <=1.4): {np.sum(mid_forward_mask)}/{len(energies['forward'])}")
+            backward_array = np.array(energies['backward'])
+            gap_array = np.array(energies['gap'])
+            low_backward_low_gap_mask = (backward_array < 0.8) & (gap_array <= 0.5)
+            print(f"    Low backward and low gap (<0.8 backward, < 0.5 gap): {np.sum(low_backward_low_gap_mask)}/{len(energies['gap'])}")
+            print(f"    Symmetric (<0.2): {np.sum(np.array(energies['gap']) < 0.2)}/{len(energies['gap'])}")
+            print("FROM ASYMMETRY MODEL")
+            print(f"    Asymmetric: {avg_asymm:.3f}")
+            print(f"    Asymmetric (<0.4): {np.sum(np.array(energies['asymm']) < 0.4)}/{len(energies['asymm'])}")
+            asymm_array = np.array(energies['asymm'])
+
+
+    def debug_discover_optimal_three_energy_patterns(self):
+        """
+        Discover optimal patterns using forward, backward, AND asymmetric energies
+        """
+        fixed_samples = self.generate_maximum_samples_by_class()
+        
+        all_data = []
+        
+        # Collect data from all samples
+        for class_name, samples in fixed_samples.items():
+            print(f"\n=== COLLECTING {class_name.upper()} DATA ===")
+            
+            for i in range(min(100, len(samples))):
+                sample = samples[i]
+                premise_tokens = sample['premise_tokens']
+                hypothesis_tokens = sample['hypothesis_tokens']
+
+                with torch.no_grad():
+                    premise_tokens_gpu = premise_tokens.to(self.point_cloud_generator.device)
+                    hypothesis_tokens_gpu = hypothesis_tokens.to(self.point_cloud_generator.device)
+                    
+                    premise_order = self.point_cloud_generator.order_model(premise_tokens_gpu)
+                    hypothesis_order = self.point_cloud_generator.order_model(hypothesis_tokens_gpu)
+                    
+                    forward_energy = self.point_cloud_generator.order_model.order_violation_energy(
+                        premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+                        ).item()
+                    
+                    backward_energy = self.point_cloud_generator.order_model.order_violation_energy(
+                        hypothesis_order.mean(0, keepdim=True), premise_order.mean(0, keepdim=True)
+                        ).item()
+                    
+                    gap_energy = abs(forward_energy - backward_energy)
+
+                    asymmetric_energy = self.point_cloud_generator.asymmetry_model.compute_asymmetric_energy(
+                        premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+                        ).item()
+                    
+                    all_data.append({
+                        'class': class_name,
+                        'forward': forward_energy,
+                        'backward': backward_energy,
+                        'gap': gap_energy,
+                        'asymmetric': asymmetric_energy
+                    })
+        
+        # Statistical analysis
+        print(f"\n=== COMPREHENSIVE ENERGY STATISTICS ===")
+        
+        entailment_data = [d for d in all_data if d['class'] == 'entailment']
+        neutral_data = [d for d in all_data if d['class'] == 'neutral']
+        contradiction_data = [d for d in all_data if d['class'] == 'contradiction']
+        
+        for energy_type in ['forward', 'backward', 'gap', 'asymmetric']:
+            print(f"\n{energy_type.upper()} Energy Statistics:")
+            for class_name, class_data in [('entailment', entailment_data), ('neutral', neutral_data), ('contradiction', contradiction_data)]:
+                values = [d[energy_type] for d in class_data]
+                print(f"{class_name}: mean={np.mean(values):.3f}, std={np.std(values):.3f}, median={np.median(values):.3f}")
+                print(f"  25%={np.percentile(values, 25):.3f}, 75%={np.percentile(values, 75):.3f}, range=[{np.min(values):.3f}, {np.max(values):.3f}]")
+        
+        # Test different combinations of energy boundaries
+        print(f"\n=== MULTI-ENERGY BOUNDARY OPTIMIZATION ===")
+        
+        best_accuracy = 0
+        best_params = None
+        
+        # Simpler grid search with key boundaries
+        forward_boundaries = [(0.4, 1.4), (0.5, 1.5), (0.6, 1.6)]
+        backward_boundaries = [(0.8, 1.2), (0.9, 1.3), (1.0, 1.4)]
+        gap_boundaries = [(0.4, 0.8), (0.5, 0.9), (0.6, 1.0)]
+        asymmetric_boundaries = [(0.4, 0.8), (0.5, 0.9), (0.6, 1.0)]
+        
+        for f_low, f_high in forward_boundaries:
+            for b_low, b_high in backward_boundaries:
+                for g_low, g_high in gap_boundaries:
+                    for a_low, a_high in asymmetric_boundaries:
+                        
+                        correct_predictions = 0
+                        class_correct = {'entailment': 0, 'neutral': 0, 'contradiction': 0}
+                        class_total = {'entailment': 0, 'neutral': 0, 'contradiction': 0}
+                        
+                        for sample in all_data:
+                            f = sample['forward']
+                            b = sample['backward']
+                            g = sample['gap']
+                            a = sample['asymmetric']
+                            true_class = sample['class']
+                            
+                            class_total[true_class] += 1
+                            
+                            # Multi-energy classification logic
+                            if f < f_low and g > g_low and a > a_low:  # Entailment
+                                predicted = 'entailment'
+                            elif f > f_high and b > b_high and a > a_high:  # Contradiction
+                                predicted = 'contradiction'
+                            elif f_low <= f <= f_high and b < b_high and a < a_low:  # Neutral
+                                predicted = 'neutral'
+                            else:
+                                predicted = 'unknown'
+                            
+                            if predicted == true_class:
+                                correct_predictions += 1
+                                class_correct[true_class] += 1
+                        
+                        accuracy = correct_predictions / len(all_data)
+                        
+                        # Only consider if all classes have reasonable performance (>30%)
+                        neutral_acc = class_correct['neutral'] / class_total['neutral']
+                        entail_acc = class_correct['entailment'] / class_total['entailment'] 
+                        contra_acc = class_correct['contradiction'] / class_total['contradiction']
+                        
+                        if accuracy > best_accuracy and min(neutral_acc, entail_acc, contra_acc) > 0.3:
+                            best_accuracy = accuracy
+                            best_params = {
+                                'f_low': f_low, 'f_high': f_high,
+                                'b_low': b_low, 'b_high': b_high,
+                                'g_low': g_low, 'g_high': g_high,
+                                'a_low': a_low, 'a_high': a_high,
+                                'accuracy': accuracy,
+                                'neutral_acc': neutral_acc,
+                                'entail_acc': entail_acc,
+                                'contra_acc': contra_acc
+                            }
+        
+        print(f"\n=== OPTIMAL MULTI-ENERGY BOUNDARIES ===")
+        if best_params:
+            print(f"Best overall accuracy: {best_params['accuracy']:.3f}")
+            print(f"Per-class accuracy: Entail={best_params['entail_acc']:.3f}, Neutral={best_params['neutral_acc']:.3f}, Contra={best_params['contra_acc']:.3f}")
+            print(f"\nOptimal Rules:")
+            print(f"Entailment: forward < {best_params['f_low']} AND gap > {best_params['g_low']} AND asymmetric > {best_params['a_low']}")
+            print(f"Neutral: {best_params['f_low']} ≤ forward ≤ {best_params['f_high']} AND backward < {best_params['b_high']} AND asymmetric < {best_params['a_low']}")
+            print(f"Contradiction: forward > {best_params['f_high']} AND backward > {best_params['b_high']} AND asymmetric > {best_params['a_high']}")
+        
+        return best_params, all_data
+
+
+    def optimize_persistence_image_parameters(self, all_diagrams: List, sample_labels: List[int]) -> Dict:
+        """
+        Systematic optimization of persistence image parameters
+        Tests different combinations to find optimal clustering performance
+        """
+        
+        print("\n" + "="*80)
+        print("PERSISTENCE IMAGE PARAMETER OPTIMIZATION")
+        print("="*80)
+        
+        # Calculate data ranges once (same as your original method)
+        all_birth_times = []
+        all_death_times = []
+        all_lifespans = []
+        
+        for diagrams in all_diagrams:
+            if diagrams is None:
+                continue
+            for dim in range(min(3, len(diagrams))):
+                diagram = diagrams[dim]
+                if isinstance(diagram, np.ndarray) and diagram.size > 0:
+                    if diagram.ndim == 2 and diagram.shape[1] >= 2:
+                        finite_mask = np.isfinite(diagram).all(axis=1)
+                        finite_diagram = diagram[finite_mask]
+                        if len(finite_diagram) > 0:
+                            all_birth_times.extend(finite_diagram[:, 0])
+                            all_death_times.extend(finite_diagram[:, 1])
+                            lifespans = finite_diagram[:, 1] - finite_diagram[:, 0]
+                            all_lifespans.extend(lifespans)
+        
+        if len(all_lifespans) == 0:
+            print("No valid features found for optimization")
+            return {}
+        
+        min_birth = np.min(all_birth_times)
+        max_birth = np.max(all_birth_times)
+        min_life = np.min(all_lifespans)
+        max_life = np.max(all_lifespans)
+        
+        birth_padding = max(0.01, (max_birth - min_birth) * 0.1)
+        life_padding = max(0.001, (max_life - min_life) * 0.1)
+        
+        birth_range = (max(0, min_birth - birth_padding), max_birth + birth_padding)
+        pers_range = (max(0.001, min_life - life_padding), max_life + life_padding)
+        
+        print(f"Data ranges: birth={birth_range}, persistence={pers_range}")
+        
+        # Define parameter search space
+        base_pixel_size = (pers_range[1] - pers_range[0]) / 50
+        base_sigma = (pers_range[1] - pers_range[0]) / 30
+        
+        # Parameter combinations to test
+        param_configs = [
+            # Current default
+            {"name": "current_default", "pixel_divisor": 138.9, "sigma_divisor": 82.6, "resolution": 30},
+            
+            # Finer resolution
+            {"name": "fine_resolution", "pixel_divisor": 100, "sigma_divisor": 60, "resolution": 25},
+            {"name": "very_fine", "pixel_divisor": 150, "sigma_divisor": 90, "resolution": 35},
+            
+            # Coarser resolution  
+            {"name": "coarse_resolution", "pixel_divisor": 25, "sigma_divisor": 15, "resolution": 15},
+            
+            # Different sigma values (smoothing)
+            {"name": "sharp_features", "pixel_divisor": 50, "sigma_divisor": 60, "resolution": 20},
+            {"name": "smooth_features", "pixel_divisor": 50, "sigma_divisor": 20, "resolution": 20},
+            
+            # High resolution
+            {"name": "high_res", "pixel_divisor": 75, "sigma_divisor": 45, "resolution": 35},
+            
+            # Literature-inspired (common Persim settings)
+            {"name": "literature_std", "pixel_divisor": 40, "sigma_divisor": 25, "resolution": 20},
+            {"name": "literature_fine", "pixel_divisor": 80, "sigma_divisor": 50, "resolution": 25},
+        ]
+        
+        results = []
+        
+        for config in param_configs:
+            print(f"\nTesting configuration: {config['name']}")
+            
+            # Calculate parameters
+            pixel_size = max(0.001, (pers_range[1] - pers_range[0]) / config["pixel_divisor"])
+            sigma = max(0.001, (pers_range[1] - pers_range[0]) / config["sigma_divisor"])
+            resolution = config["resolution"]
+            
+            print(f"  pixel_size: {pixel_size:.4f}")
+            print(f"  sigma: {sigma:.4f}")
+            print(f"  resolution: {resolution}x{resolution}")
+            
+            try:
+                # Generate persistence images with these parameters
+                persistence_images = self.generate_persistence_images_with_params(
+                    all_diagrams, birth_range, pers_range, pixel_size, sigma, resolution
+                )
+                
+                if len(persistence_images) == 0:
+                    print(f"  ❌ No images generated")
+                    continue
+                
+                # Test clustering performance
+                accuracy, sil_score, ari_score = self.test_clustering_performance(
+                    persistence_images, sample_labels
+                )
+                
+                result = {
+                    "config_name": config['name'],
+                    "pixel_size": pixel_size,
+                    "sigma": sigma,
+                    "resolution": resolution,
+                    "accuracy": accuracy,
+                    "silhouette": sil_score,
+                    "ari": ari_score,
+                    "num_images": len(persistence_images)
+                }
+                
+                results.append(result)
+                
+                print(f"  Results: Acc={accuracy:.3f}, Sil={sil_score:.3f}, ARI={ari_score:.3f}")
+                
+            except Exception as e:
+                print(f"  ❌ Failed: {e}")
+                continue
+        
+        # Analyze results
+        if results:
+            print(f"\n" + "="*60)
+            print("PARAMETER OPTIMIZATION RESULTS")
+            print("="*60)
+            
+            # Sort by accuracy
+            results.sort(key=lambda x: x['accuracy'], reverse=True)
+            
+            print(f"{'Config':<20} {'Accuracy':<10} {'Silhouette':<12} {'ARI':<8} {'Images':<8}")
+            print("-" * 70)
+            
+            for result in results:
+                print(f"{result['config_name']:<20} {result['accuracy']:<10.3f} "
+                    f"{result['silhouette']:<12.3f} {result['ari']:<8.3f} {result['num_images']:<8}")
+            
+            best_result = results[0]
+            print(f"\n🏆 BEST CONFIGURATION: {best_result['config_name']}")
+            print(f"   Accuracy: {best_result['accuracy']:.3f}")
+            print(f"   Pixel size: {best_result['pixel_size']:.4f}")
+            print(f"   Sigma: {best_result['sigma']:.4f}")
+            print(f"   Resolution: {best_result['resolution']}x{best_result['resolution']}")
+            
+            # Check for improvement
+            current_accuracy = next((r['accuracy'] for r in results if r['config_name'] == 'current_default'), 0)
+            improvement = best_result['accuracy'] - current_accuracy
+            
+            if improvement > 0.01:  # 1% improvement threshold
+                print(f"🎉 IMPROVEMENT FOUND: +{improvement:.3f} ({improvement*100:.1f}%)")
+            else:
+                print(f"📊 Marginal change: {improvement:+.3f}")
+        
+        return results
+
+
+    def generate_persistence_images_with_params(self, all_diagrams: List, birth_range: tuple, 
+                                            pers_range: tuple, pixel_size: float, 
+                                            sigma: float, resolution: int) -> List[np.ndarray]:
+        """Generate persistence images with specific parameters"""
+        
+        pimgr = PersistenceImager(
+            pixel_size=pixel_size,
+            birth_range=birth_range,
+            pers_range=pers_range,
+            kernel_params={'sigma': sigma}
+        )
+        
+        persistence_images = []
+        
+        for diagrams in all_diagrams:
+            if diagrams is None:
+                continue
+            
+            combined_image = np.zeros((resolution, resolution))
+            has_content = False
+            
+            # Process H0, H1, H2 diagrams
+            for dim in range(min(3, len(diagrams))):
+                diagram = diagrams[dim]
+                
+                if isinstance(diagram, np.ndarray) and diagram.size > 0:
+                    if diagram.ndim == 2 and diagram.shape[1] >= 2:
+                        finite_mask = np.isfinite(diagram).all(axis=1)
+                        finite_diagram = diagram[finite_mask]
+                        
+                        if len(finite_diagram) > 0:
+                            try:
+                                img = pimgr.transform([finite_diagram])[0]
+                                
+                                # Resize to target resolution
+                                if img.shape != (resolution, resolution):
+                                    from scipy.ndimage import zoom
+                                    zoom_factors = (resolution / img.shape[0], resolution / img.shape[1])
+                                    img = zoom(img, zoom_factors)
+                                
+                                combined_image += img
+                                has_content = True
+                                
+                            except Exception as e:
+                                continue
+            
+            if has_content and combined_image.max() > 0:
+                combined_image = combined_image / combined_image.max()
+                persistence_images.append(combined_image.flatten())
+        
+        return persistence_images
+
+
+    def test_clustering_performance(self, persistence_images: List[np.ndarray], 
+                                sample_labels: List[int]) -> Tuple[float, float, float]:
+        """Test clustering performance with given persistence images"""
+        
+        if len(persistence_images) == 0:
+            return 0.0, 0.0, 0.0
+        
+        X = np.array(persistence_images)
+        y_true = np.array(sample_labels)
+        
+        # Ensure we have same number of labels as images
+        if len(y_true) != len(X):
+            # Adjust labels if needed (same logic as main function)
+            images_per_sample = len(X) // len(y_true) if len(y_true) > 0 else 1
+            expanded_labels = []
+            for label in y_true:
+                expanded_labels.extend([label] * images_per_sample)
+            y_true = np.array(expanded_labels[:len(X)])
+        
+        n_clusters = len(np.unique(y_true))
+        
+        # K-means clustering
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+        y_pred = kmeans.fit_predict(X)
+        
+        # Find best label permutation
+        best_accuracy = 0.0
+        for perm in permutations(range(n_clusters)):
+            mapped_pred = np.array([perm[label] for label in y_pred])
+            accuracy = np.mean(mapped_pred == y_true)
+            if accuracy > best_accuracy:
+                best_accuracy = accuracy
+                best_permutation = perm
+        
+        final_pred = np.array([best_permutation[label] for label in y_pred])
+        
+        try:
+            silhouette = silhouette_score(X, final_pred)
+        except:
+            silhouette = 0.0
+        
+        try:
+            ari = adjusted_rand_score(y_true, final_pred)
+        except:
+            ari = 0.0
+        
+        return best_accuracy, silhouette, ari
+
+
+    def run_persistence_optimization(self):
+        """
+        Main function to run persistence image parameter optimization
+        Add this to your existing clustering validation workflow
+        """
+        
+        print("Running persistence image parameter optimization...")
+        
+        # Generate samples (same as existing method)
+        # fixed_samples = self.generate_fixed_samples_by_class()
+        max_samples = self.generate_maximum_samples_by_class()
+        
+        # Collect diagrams
+        all_persistence_diagrams = []
+        sample_labels = []
+        
+        for class_idx, class_name in enumerate(['entailment', 'neutral', 'contradiction']):
+            # class_samples = fixed_samples[class_name]
+            class_samples = max_samples[class_name]
+
+            for sample_data in class_samples:
+                premise_tokens = sample_data['premise_tokens']
+                hypothesis_tokens = sample_data['hypothesis_tokens']
+                
+                point_cloud, stats = self.point_cloud_generator.generate_premise_hypothesis_point_cloud(
+                    premise_tokens, hypothesis_tokens
+                )
+                
+                if not stats['sufficient_for_phd']:
+                    continue
+                
+                distance_matrix = self.compute_distance_matrix(point_cloud)
+                ph_dim, diagrams = self.ph_dim_and_diagrams_from_distance_matrix(distance_matrix)
+                
+                all_persistence_diagrams.append(diagrams)
+                sample_labels.append(class_idx)
+        
+        # Run optimization
+        optimization_results = self.optimize_persistence_image_parameters(
+            all_persistence_diagrams, sample_labels
+        )
+        
+        return optimization_results
+
+
 
 def main():
     """Run separate model point cloud clustering validation"""
     
     # Paths for separate models
-    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model.pt"
-    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model.pt"
+    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
+    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
     hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/best_hyperbolic_projector.pt"
     val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/clustering_results/"
@@ -1288,7 +2148,6 @@ def main():
         seed=42
     )
     
-    # validator.debug_full_persistence_pipeline()
     validator.debug_full_persistence_pipeline()
 
     result = validator.validate_separate_model_clustering()
@@ -1315,6 +2174,9 @@ def main():
     
     print(f"\nDetailed analysis available in: {output_dir}")
     print("="*80)
+
+    # optimization_results = validator.run_persistence_optimization()
+
 
 
 def test_separate_model_point_generation():
