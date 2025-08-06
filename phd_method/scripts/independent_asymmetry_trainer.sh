@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=order_asymmetry_training
 #SBATCH --partition=gpgpuC
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/independent_asymmetry_model.py
+python MSc_Topology_Codebase/phd_method/src_phd/independent_asymmetry_model_off_order.py
 
 
 # Capture exit code

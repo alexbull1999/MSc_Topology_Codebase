@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=point_cloud_clustering
 #SBATCH --partition=gpgpuC
-#SBATCH --time=6:00:00
+#SBATCH --time=20:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/adaptive_PERSIM_point_cloud_clustering_%j.out
-#SBATCH --error=../logs/adaptive_PERSIM_point_cloud_clustering_%j.err
+#SBATCH --output=../logs/point_cloud_classification_%j.out
+#SBATCH --error=../logs/point_cloud_classification_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/point_cloud_clustering_test.py
+python MSc_Topology_Codebase/phd_method/src_phd/point_cloud_clustering_test.py --classification
 
 
 # Capture exit code

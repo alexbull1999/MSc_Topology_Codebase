@@ -47,41 +47,15 @@ class AsymmetryTransformModel(nn.Module):
         
         #FOR V4
         self.asymmetric_transform = nn.Sequential(
-            nn.Linear(hidden_size, hidden_size * 2),
-            nn.LayerNorm(hidden_size * 2),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            
-            nn.Linear(hidden_size * 2, hidden_size * 2),
-            nn.LayerNorm(hidden_size * 2),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            
-            nn.Linear(hidden_size * 2, hidden_size),
+            nn.Linear(hidden_size, hidden_size),
             nn.LayerNorm(hidden_size),
-            nn.Tanh()  # Bounded output for stability
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(hidden_size, hidden_size),
+            nn.LayerNorm(hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, hidden_size)
         )
-
-        #FOR V3
-        # self.asymmetric_transform = nn.Sequential(
-        #     nn.Linear(hidden_size, hidden_size),
-        #     nn.ReLU(),
-        #     nn.Dropout(0.2),
-        #     nn.Linear(hidden_size, hidden_size),
-        #     nn.ReLU()
-        # )
-
-        # Process SBERT tokens directly instead of order embeddings (FOR V2)
-        # self.asymmetric_transform = nn.Sequential(
-        #     nn.Linear(hidden_size, hidden_size),
-        #     nn.LayerNorm(hidden_size),
-        #     nn.ReLU(),
-        #     nn.Dropout(0.1),
-        #     nn.Linear(hidden_size, hidden_size),
-        #     nn.LayerNorm(hidden_size),
-        #     nn.ReLU(),
-        #     nn.Linear(hidden_size, hidden_size)
-        # )
         
         self._init_weights()
     
@@ -113,34 +87,7 @@ class AsymmetryTransformModel(nn.Module):
         
         # Residual connection with order embeddings for stability
         return order_embeddings + asymmetric_features
-
-        #V2/V3 just use this
-        # return self.asymmetric_transform(sbert_tokens)
     
-    def compute_asymmetric_energy(self, premise_sbert: torch.Tensor, hypothesis_sbert: torch.Tensor) -> torch.Tensor:
-        """
-        Compute asymmetric energy between premise and hypothesis SBERT embeddings
-        """
-        premise_asym = self.forward(premise_sbert)
-        hypothesis_asym = self.forward(hypothesis_sbert)
-        
-        # Simple asymmetric energy: difference in norms
-        premise_energy = torch.norm(premise_asym, dim=1).mean()
-        hypothesis_energy = torch.norm(hypothesis_asym, dim=1).mean()
-        
-        return torch.abs(premise_energy - hypothesis_energy)
-
-    def order_violation_energy(self, u_tokens: torch.Tensor, v_tokens: torch.Tensor) -> torch.Tensor:
-        """
-        Compute order violation energy in asymmetric space (needed for forward/backward energies)
-        """
-        u_asym = self.forward(u_tokens).mean(0, keepdim=True)  # [1, 768]
-        v_asym = self.forward(v_tokens).mean(0, keepdim=True)  # [1, 768]
-        
-        # Order violation: max(0, v - u) components
-        violation = torch.clamp(v_asym - u_asym, min=0)
-        return torch.norm(violation, dim=-1)
-
 
 
 class AsymmetryTrainer:
@@ -164,6 +111,24 @@ class AsymmetryTrainer:
         
         print(f"AsymmetryTrainer initialized on {self.device}")
         print("Training asymmetry model directly on SBERT tokens")
+
+    def _calculate_order_violation_energy(self, u_asym_emb: torch.Tensor, v_asym_emb: torch.Tensor) -> torch.Tensor:
+        """
+        Calculates the order violation energy E(u,v) = ||max(0, v-u)||^2.
+        This method is crucial because it applies the order-theoretic formula
+        to the *output* of the AsymmetryTransformModel, which is what we are training.
+        
+        Args:
+            u_asym_emb: The transformed embeddings for the premise.
+            v_asym_emb: The transformed embeddings for the hypothesis.
+        """
+        min_len = min(u_asym_emb.shape[0], v_asym_emb.shape[0])
+        u_truncated = u_asym_emb[:min_len]
+        v_truncated = v_asym_emb[:min_len]
+        
+        violation = torch.clamp(v_truncated - u_truncated, min=0)
+        energy = torch.norm(violation, dim=-1, p=2) ** 2
+        return energy.mean()
     
     def compute_asymmetric_loss(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor,
                               label_str: str) -> Tuple[torch.Tensor, Dict]:
@@ -172,11 +137,14 @@ class AsymmetryTrainer:
         """
         premise_tokens = premise_tokens.to(self.device)
         hypothesis_tokens = hypothesis_tokens.to(self.device)
+
+        premise_asym = self.asymmetry_model(premise_tokens)
+        hypothesis_asym = self.asymmetry_model(hypothesis_tokens)
         
         # Compute all energies from asymmetric space
-        forward_energy = self.asymmetry_model.order_violation_energy(premise_tokens, hypothesis_tokens).squeeze()
-        backward_energy = self.asymmetry_model.order_violation_energy(hypothesis_tokens, premise_tokens).squeeze()
-        asymmetric_energy = self.asymmetry_model.compute_asymmetric_energy(premise_tokens, hypothesis_tokens).squeeze()
+        forward_energy = self._calculate_order_violation_energy(premise_asym, hypothesis_asym)
+        backward_energy = self._calculate_order_violation_energy(hypothesis_asym, premise_asym)
+        asymmetric_energy = torch.abs(forward_energy - backward_energy)
 
         asymmetric_loss = torch.tensor(0.0, device=self.device)  # Initialize as tensor
         

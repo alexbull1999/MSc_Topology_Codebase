@@ -28,25 +28,6 @@ from order_asymmetry_models import OrderEmbeddingModel
 from independent_asymmetry_model import AsymmetryTransformModel
 from hyperbolic_token_projector import TokenLevelHyperbolicProjector
 
-#For classification:
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-
-#For topological nn classifier:
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-
-#For feature importance analysis:
-from scipy.stats import f_oneway
-import pandas as pd
-
-
 
 @dataclass
 class ClusteringResult:
@@ -516,741 +497,16 @@ class SeparateModelPointCloudGenerator:
         
         return optimized_clouds
 
-    #INTO CLASSIFICATION FUNCTIONS
-
-    def extract_interpretable_topological_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> np.ndarray:
-        """
-        Extract interpretable topological + energy features
-        """
-        # Generate point cloud using your current best method
-        combined_cloud, stats = self.generate_premise_hypothesis_point_cloud(premise_tokens, hypothesis_tokens)
-        
-        # Create distance matrix
-        distance_matrix = pairwise_distances(combined_cloud.numpy(), metric='braycurtis')
-        
-        # Compute persistence diagrams
-        dgms = ripser_parallel(distance_matrix, maxdim=2, n_threads=-1, metric="precomputed")['dgms']
-        
-        features = []
-        
-        # H0 features (connected components)
-        h0_dgm = dgms[0]
-        if len(h0_dgm) > 0 and h0_dgm.ndim == 2:
-            finite_mask = np.isfinite(h0_dgm).all(axis=1)
-            finite_h0 = h0_dgm[finite_mask]
-            if len(finite_h0) > 0:
-                lifespans_h0 = finite_h0[:, 1] - finite_h0[:, 0]
-                features.extend([
-                    len(finite_h0),                             # h0_count
-                    np.mean(lifespans_h0),                       # h0_mean_lifespan
-                    np.max(lifespans_h0),                        # h0_max_lifespan
-                    np.sum(lifespans_h0),                        # h0_total_persistence
-                    np.std(lifespans_h0),                        # h0_lifespan_std
-                ])
-            else:
-                features.extend([0, 0, 0, 0, 0])
-        else:
-            features.extend([0, 0, 0, 0, 0])
-        
-        # H1 features (loops/holes)
-        h1_dgm = dgms[1]
-        if len(h1_dgm) > 0 and h1_dgm.ndim == 2:
-            finite_mask = np.isfinite(h1_dgm).all(axis=1)
-            finite_h1 = h1_dgm[finite_mask]
-            if len(finite_h1) > 0:
-                lifespans_h1 = finite_h1[:, 1] - finite_h1[:, 0]
-                features.extend([
-                    len(finite_h1),                             # h1_count
-                    np.mean(lifespans_h1),                       # h1_mean_lifespan
-                    np.max(lifespans_h1),                        # h1_max_lifespan
-                    np.sum(lifespans_h1),                        # h1_total_persistence
-                    np.std(lifespans_h1),                        # h1_lifespan_std
-                    np.mean(finite_h1[:, 0]),                    # h1_mean_birth
-                    np.mean(finite_h1[:, 1]),                    # h1_mean_death
-                ])
-            else:
-                features.extend([0, 0, 0, 0, 0, 0, 0])
-        else:
-            features.extend([0, 0, 0, 0, 0, 0, 0])
-        
-        # Cross-dimensional features
-        h0_count = len(h0_dgm) if len(h0_dgm) > 0 and h0_dgm.ndim == 2 else 0
-        h1_count = len(h1_dgm) if len(h1_dgm) > 0 and h1_dgm.ndim == 2 else 0
-        total_features = h0_count + h1_count
-        h1_h0_ratio = h1_count / max(1, h0_count)
-        features.extend([total_features, h1_h0_ratio])
-        
-        # Energy features (your proven discriminators)
-        with torch.no_grad():
-            premise_tokens = premise_tokens.to(self.device)
-            hypothesis_tokens = hypothesis_tokens.to(self.device)
-            
-            premise_order = self.order_model(premise_tokens)
-            hypothesis_order = self.order_model(hypothesis_tokens)
-            
-            forward_energy = self.order_model.order_violation_energy(
-                premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
-                ).item()
-            
-            backward_energy = self.order_model.order_violation_energy(
-                hypothesis_order.mean(0, keepdim=True), premise_order.mean(0, keepdim=True)
-                ).item()
-            
-            gap_energy = backward_energy - forward_energy
-            
-            asymmetric_energy = self.asymmetry_model.compute_asymmetric_energy(
-                premise_order, hypothesis_order
-                ).item()
-            
-            features.extend([forward_energy, backward_energy, gap_energy, asymmetric_energy])
-        
-        # Point cloud statistics
-        features.extend([
-            stats['combined_total_points'],                     # point_cloud_size
-            stats['premise_total_points'],                      # premise_size
-            stats['hypothesis_total_points'],                   # hypothesis_size
-        ])
-        
-        return np.array(features)
-
-
-    def get_interpretable_feature_names(self):
-        """Get feature names for interpretable approach"""
-        return [
-            # H0 features (5)
-            'h0_count', 'h0_mean_lifespan', 'h0_max_lifespan', 'h0_total_persistence', 'h0_lifespan_std',
-            # H1 features (7)
-            'h1_count', 'h1_mean_lifespan', 'h1_max_lifespan', 'h1_total_persistence', 
-            'h1_lifespan_std', 'h1_mean_birth', 'h1_mean_death',
-            # Cross-dimensional (2)
-            'total_features', 'h1_h0_ratio',
-            # Energy features (4)
-            'forward_energy', 'backward_energy', 'gap_energy', 'asymmetric_energy',
-            # Point cloud stats (3)
-            'point_cloud_size', 'premise_size', 'hypothesis_size'
-        ]
-        # Total: 21 features
-
-
-    def test_interpretable_classification(self, train_data_path: str, val_data_path: str):
-        """
-        Test classification using interpretable features with proper train/validation split
-        """
-        print("=" * 80)
-        print("INTERPRETABLE TOPOLOGICAL FEATURE CLASSIFICATION")
-        print("=" * 80)
-        
-        # Load train and validation data separately
-        print("Loading training data...")
-        train_samples = self.load_samples_from_path(train_data_path, sample_size=1000)
-        print("Loading validation data...")
-        val_samples = self.load_samples_from_path(val_data_path)
-        
-        label_to_idx = {'entailment': 0, 'neutral': 1, 'contradiction': 2}
-        
-        # Extract features from training data
-        print("\nExtracting features from training data...")
-        X_train, y_train = self.extract_features_from_samples(train_samples, label_to_idx)
-        
-        # Extract features from validation data
-        print("Extracting features from validation data...")
-        X_val, y_val = self.extract_features_from_samples(val_samples, label_to_idx)
-        
-        print(f"\nTraining set: {X_train.shape[0]} samples, {X_train.shape[1]} features")
-        print(f"Validation set: {X_val.shape[0]} samples, {X_val.shape[1]} features")
-        
-        # Feature scaling (fit on train, transform both)
-        scaler = StandardScaler()
-        X_train_scaled = scaler.fit_transform(X_train)
-        X_val_scaled = scaler.transform(X_val)
-        
-        # Test multiple classifiers
-        classifiers = {
-            'Random Forest': RandomForestClassifier(n_estimators=200, random_state=42),
-            'SVM': SVC(probability=True, random_state=42),
-            'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000)
-        }
-        
-        results = {}
-        
-        print("\n" + "=" * 60)
-        print("CLASSIFICATION RESULTS (21 Interpretable Features)")
-        print("=" * 60)
-        
-        for name, clf in classifiers.items():
-            print(f"\nTraining {name}...")
-            
-            # Train on training data
-            clf.fit(X_train_scaled, y_train)
-            
-            # Test on validation data
-            y_pred = clf.predict(X_val_scaled)
-            accuracy = accuracy_score(y_val, y_pred)
-            
-            results[name] = {
-                'accuracy': accuracy,
-                'predictions': y_pred,
-                'model': clf
-            }
-            
-            print(f"{name} Validation Accuracy: {accuracy:.3f}")
-        
-        # Test PyTorch neural network
-        print(f"\nTraining PyTorch Neural Network...")
-        pytorch_model, pytorch_acc = train_pytorch_classifier(X_train_scaled, y_train, X_val_scaled, y_val)
-        
-        # Get PyTorch predictions for comparison
-        with torch.no_grad():
-            X_val_tensor = torch.FloatTensor(X_val_scaled)
-            logits = pytorch_model(X_val_tensor)
-            probabilities = torch.softmax(logits, dim=1)  # Get softmax probabilities
-            pytorch_predictions = torch.argmax(logits, dim=1).numpy()
-        
-        results['PyTorch NN'] = {
-            'accuracy': pytorch_acc,
-            'predictions': pytorch_predictions,
-            'model': pytorch_model,
-            'probabilities': probabilities.numpy(),  # Save probabilities for ChaosNLI later
-            'type': 'pytorch'
-        }
-        print(f"PyTorch NN Validation Accuracy: {pytorch_acc:.3f}")
-        
-        # Detailed analysis for best performer
-        best_classifier = max(results.keys(), key=lambda k: results[k]['accuracy'])
-        best_accuracy = results[best_classifier]['accuracy']
-        
-        print(f"\n" + "=" * 60)
-        print(f"BEST CLASSIFIER: {best_classifier}")
-        print("=" * 60)
-        
-        y_pred_best = results[best_classifier]['predictions']
-        
-        print(f"\n{best_classifier} Classification Report:")
-        print(classification_report(y_val, y_pred_best, target_names=['entailment', 'neutral', 'contradiction']))
-        
-        print(f"\n{best_classifier} Confusion Matrix:")
-        cm = confusion_matrix(y_val, y_pred_best)
-        print(cm)
-        
-        # Feature importance analysis
-        self.analyze_feature_importance(results, X_train, y_train)
-        
-        # Compare with clustering baseline
-        print("\n" + "=" * 60)  
-        print("COMPARISON WITH CLUSTERING BASELINE")
-        print("=" * 60)
-        print(f"Clustering Baseline: 66.9%")
-        print(f"Best Classification: {best_accuracy:.3f} ({best_classifier})")
-        improvement = best_accuracy - 0.669
-        print(f"Improvement: {improvement:+.3f} ({improvement/0.669*100:+.1f}%)")
-        
-        if best_accuracy > 0.75:
-            print("🎉 EXCELLENT: Classification significantly outperforms clustering!")
-        elif best_accuracy > 0.669:
-            print("✅ SUCCESS: Classification improves over clustering baseline")
-        else:
-            print("⚠️ INVESTIGATION NEEDED: Classification underperforms clustering")
-
-
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-        # Save human-readable results immediately
-        results_file = f"topological_classification_results_{timestamp}.txt"
-        
-        with open(results_file, 'w') as f:
-            f.write("TOPOLOGICAL ENTAILMENT CLASSIFICATION RESULTS\n")
-            f.write("=" * 60 + "\n")
-            f.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write(f"Training samples: {X_train.shape[0]}\n")
-            f.write(f"Validation samples: {X_val.shape[0]}\n")
-            f.write(f"Features: {X_train.shape[1]}\n\n")
-            
-            f.write("CLASSIFIER PERFORMANCE:\n")
-            f.write("-" * 30 + "\n")
-            f.write(f"{'Classifier':<20} {'Accuracy':<10} {'vs Clustering':<15}\n")
-            f.write("-" * 50 + "\n")
-            
-            clustering_baseline = 0.669
-            
-            # Sort results by accuracy
-            sorted_results = sorted(results.items(), key=lambda x: x[1]['accuracy'], reverse=True)
-            
-            for name, result in sorted_results:
-                improvement = result['accuracy'] - clustering_baseline
-                f.write(f"{name:<20} {result['accuracy']:<10.3f} {improvement:+.3f} ({improvement/clustering_baseline*100:+.1f}%)\n")
-            
-            f.write(f"\nClustering Baseline: {clustering_baseline:.3f}\n")
-            
-            # Best classifier details
-            best_name = sorted_results[0][0]
-            best_result = sorted_results[0][1]
-            
-            f.write(f"\nBEST CLASSIFIER: {best_name}\n")
-            f.write("-" * 30 + "\n")
-            f.write(f"Accuracy: {best_result['accuracy']:.3f}\n")
-            f.write(f"Improvement over clustering: {best_result['accuracy'] - clustering_baseline:+.3f}\n")
-            
-            # Classification report for best classifier
-            y_pred_best = best_result['predictions']
-            
-            f.write(f"\nCLASSIFICATION REPORT ({best_name}):\n")
-            f.write("-" * 40 + "\n")
-            class_report = classification_report(y_val, y_pred_best, 
-                                            target_names=['entailment', 'neutral', 'contradiction'])
-            f.write(class_report)
-            
-            f.write(f"\nCONFUSION MATRIX ({best_name}):\n")
-            f.write("-" * 35 + "\n")
-            f.write("Predicted:    Ent  Neu  Con\n")
-            cm = confusion_matrix(y_val, y_pred_best)
-            for i, (true_label, row) in enumerate(zip(['Entailment', 'Neutral', 'Contradiction'], cm)):
-                f.write(f"True {true_label:<12} {row[0]:>3} {row[1]:>4} {row[2]:>4}\n")
-            
-            # Feature importance analysis (if Random Forest available)
-            if 'Random Forest' in results:
-                rf_model = results['Random Forest']['model']
-                feature_names = self.get_interpretable_feature_names()
-                
-                importance_data = list(zip(feature_names, rf_model.feature_importances_))
-                importance_data.sort(key=lambda x: x[1], reverse=True)
-                
-                f.write(f"\nFEATURE IMPORTANCE (Random Forest):\n")
-                f.write("-" * 40 + "\n")
-                f.write(f"{'Feature':<25} {'Importance':<12}\n")
-                f.write("-" * 40 + "\n")
-                
-                for feature, importance in importance_data[:15]:  # Top 15 features
-                    f.write(f"{feature:<25} {importance:<12.4f}\n")
-                
-                # Statistical analysis of top features  
-                f.write(f"\nSTATISTICAL ANALYSIS OF TOP 5 FEATURES:\n")
-                f.write("-" * 45 + "\n")
-                
-                from scipy.stats import f_oneway
-                
-                for feature, importance in importance_data[:5]:
-                    feature_idx = feature_names.index(feature)
-                    feature_values = X_val[:, feature_idx]
-                    
-                    entail_vals = feature_values[y_val == 0]
-                    neutral_vals = feature_values[y_val == 1]
-                    contra_vals = feature_values[y_val == 2]
-                    
-                    f_stat, p_value = f_oneway(entail_vals, neutral_vals, contra_vals)
-                    
-                    f.write(f"\n{feature}:\n")
-                    f.write(f"  F-statistic: {f_stat:.2f}, p-value: {p_value:.4f}\n")
-                    f.write(f"  Entailment:    {np.mean(entail_vals):>8.3f} ± {np.std(entail_vals):.3f}\n")
-                    f.write(f"  Neutral:       {np.mean(neutral_vals):>8.3f} ± {np.std(neutral_vals):.3f}\n")
-                    f.write(f"  Contradiction: {np.mean(contra_vals):>8.3f} ± {np.std(contra_vals):.3f}\n")
-            
-            # PyTorch model details (if included)
-            if 'PyTorch NN' in results:
-                f.write(f"\nPYTORCH NEURAL NETWORK DETAILS:\n")
-                f.write("-" * 35 + "\n")
-                f.write(f"Architecture: 21 → 64 → 32 → 3 (with BatchNorm, Dropout)\n")
-                f.write(f"Loss function: CrossEntropyLoss (softmax + NLL)\n")
-                f.write(f"Optimizer: Adam with weight decay\n")
-                f.write(f"Softmax probabilities: Available for uncertainty analysis\n")
-            
-            # Summary and next steps
-            f.write(f"\nSUMMARY:\n")
-            f.write("-" * 15 + "\n")
-            best_improvement = best_result['accuracy'] - clustering_baseline
-            if best_improvement > 0.05:
-                f.write("🎉 EXCELLENT: Classification significantly outperforms clustering!\n")
-                f.write("✅ Ready for ChaosNLI uncertainty quantification\n")
-                f.write("✅ Ready for MNLI robustness testing\n")
-            elif best_improvement > 0:
-                f.write("✅ SUCCESS: Classification improves over clustering baseline\n")
-                f.write("→ Proceed with ChaosNLI and MNLI validation\n")
-            else:
-                f.write("⚠️ INVESTIGATION NEEDED: Classification underperforms clustering\n")
-                f.write("→ Analyze feature importance and consider feature engineering\n")
-            
-            f.write(f"\nNEXT STEPS:\n")
-            f.write("-" * 12 + "\n")
-            f.write("1. ChaosNLI uncertainty quantification using PyTorch softmax probabilities\n")
-            f.write("2. MNLI cross-dataset robustness testing\n")
-            f.write("3. Binary classification for LLM regularization\n")
-            f.write("4. Feature ablation study to identify key topological signatures\n")
-        
-        print(f"\n✅ Human-readable results saved to: {results_file}")
-        
-        return results, X_train, y_train, X_val, y_val, scaler
-
-
-    def load_samples_from_path(self, data_path: str, sample_size: int = None, random_seed: int = 42):
-        """
-        Load samples from a data path (train or validation)
-        """
-        # This depends on your data format - adjust as needed
-        with open(data_path, 'rb') as f:
-            data = pickle.load(f)
-        
-        samples_by_class = {'entailment': [], 'neutral': [], 'contradiction': []}
-        
-        premise_tokens = data['premise_tokens']
-        hypothesis_tokens = data['hypothesis_tokens']
-        labels = data['labels']
-        
-        for i, label in enumerate(labels):
-            if label in samples_by_class:
-                samples_by_class[label].append({
-                    'premise_tokens': premise_tokens[i],
-                    'hypothesis_tokens': hypothesis_tokens[i]
-                })
-
-
-        # Apply the SAME filtering as clustering pipeline
-        filtered_samples_by_class = {}
-        
-        for class_name, class_samples in samples_by_class.items():
-            print(f"  {class_name}: {len(class_samples)} total samples available")
-
-            # CRITICAL: Apply token count filtering (same as clustering)
-            filtered_samples = self.filter_samples_by_token_count(class_samples)
-            
-            print(f"    After token filtering: {len(filtered_samples)} samples")
-            
-            # Apply sample size limit if specified
-            if sample_size and len(filtered_samples) > sample_size:
-                print(f"    Sampling down to {sample_size} samples with random_seed={random_seed}...")
-                random.seed(random_seed) 
-                filtered_samples = random.sample(filtered_samples, sample_size)
-            
-            filtered_samples_by_class[class_name] = filtered_samples
-            
-            # Show token statistics (same as clustering)
-            if filtered_samples:
-                token_counts = [
-                    s['premise_tokens'].shape[0] + s['hypothesis_tokens'].shape[0] 
-                    for s in filtered_samples
-                ]
-                print(f"    Token count stats: {np.mean(token_counts):.0f} ± {np.std(token_counts):.0f} "
-                    f"(range: {np.min(token_counts)}-{np.max(token_counts)})")
-        
-        print(f"Final loaded samples: {dict(zip(filtered_samples_by_class.keys(), [len(v) for v in filtered_samples_by_class.values()]))}")
-        return filtered_samples_by_class
-
-    def extract_features_from_samples(self, samples_by_class: dict, label_to_idx: dict):
-        """
-        Extract features from samples organized by class
-        """
-        all_features = []
-        all_labels_numeric = []
-        
-        for class_name, samples in samples_by_class.items():
-            print(f"Processing {class_name}: {len(samples)} samples")
-            
-            for i, sample in enumerate(samples):
-                if i % 50 == 0:
-                    print(f"  Processed {i}/{len(samples)} {class_name} samples")
-                
-                try:
-                    features = self.extract_interpretable_topological_features(
-                        sample['premise_tokens'], sample['hypothesis_tokens']
-                    )
-                    
-                    all_features.append(features)
-                    all_labels_numeric.append(label_to_idx[class_name])
-                    
-                except Exception as e:
-                    print(f"  Error processing sample {i} in {class_name}: {e}")
-                    continue
-        
-        X = np.array(all_features)
-        y = np.array(all_labels_numeric)
-        
-        return X, y
-
-    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 40) -> List[Dict]:
-        """
-        Filter samples to ensure sufficient tokens for meaningful point cloud generation
-        (Same function as clustering pipeline)
-        """
-        filtered_samples = []
-        
-        for sample in samples:
-            premise_tokens = sample['premise_tokens'].shape[0]
-            hypothesis_tokens = sample['hypothesis_tokens'].shape[0]
-            combined_tokens = premise_tokens + hypothesis_tokens
-            
-            if combined_tokens >= min_combined_tokens:
-                filtered_samples.append(sample)
-        
-        print(f"    Token filtering: {len(filtered_samples)}/{len(samples)} samples have ≥{min_combined_tokens} tokens")
-        
-        return filtered_samples
-
-
-    def analyze_feature_importance(self, results, X_train, y_train):
-        """
-        Analyze which interpretable features matter most
-        """
-        print("\n" + "=" * 60)
-        print("FEATURE IMPORTANCE ANALYSIS") 
-        print("=" * 60)
-        
-        # Use Random Forest for feature importance
-        if 'Random Forest' not in results:
-            print("⚠️ Random Forest not available for feature importance analysis")
-            return None
-            
-        rf_model = results['Random Forest']['model']
-        feature_names = self.get_interpretable_feature_names()
-        
-        # Feature importance ranking
-        importance_df = pd.DataFrame({
-            'feature': feature_names,
-            'importance': rf_model.feature_importances_
-        }).sort_values('importance', ascending=False)
-        
-        print("Top 15 Most Important Features:")
-        print("-" * 45)
-        for i, (_, row) in enumerate(importance_df.head(15).iterrows()):
-            print(f"{i+1:2d}. {row['feature']:<25} {row['importance']:.4f}")
-        
-        # Statistical significance analysis
-        print(f"\nStatistical Analysis of Top 5 Features:")
-        print("-" * 40)
-                
-        for _, row in importance_df.head(5).iterrows():
-            feature_idx = feature_names.index(row['feature'])
-            feature_values = X_train[:, feature_idx]  # Use training data for analysis
-            
-            # Split by class (assuming same label encoding)
-            entail_vals = feature_values[y_train == 0]
-            neutral_vals = feature_values[y_train == 1] 
-            contra_vals = feature_values[y_train == 2]
-            
-            # Skip if any class has no samples
-            if len(entail_vals) == 0 or len(neutral_vals) == 0 or len(contra_vals) == 0:
-                print(f"\n{row['feature']}: Skipped (missing class data)")
-                continue
-                
-            try:
-                f_stat, p_value = f_oneway(entail_vals, neutral_vals, contra_vals)
-                
-                print(f"\n{row['feature']}:")
-                print(f"  Importance: {row['importance']:.4f}")
-                print(f"  F-statistic: {f_stat:.2f}, p-value: {p_value:.4f}")
-                print(f"  Entailment:    {np.mean(entail_vals):>8.3f} ± {np.std(entail_vals):.3f} (n={len(entail_vals)})")
-                print(f"  Neutral:       {np.mean(neutral_vals):>8.3f} ± {np.std(neutral_vals):.3f} (n={len(neutral_vals)})")
-                print(f"  Contradiction: {np.mean(contra_vals):>8.3f} ± {np.std(contra_vals):.3f} (n={len(contra_vals)})")
-                
-            except Exception as e:
-                print(f"\n{row['feature']}: Statistical analysis failed - {e}")
-        
-        return importance_df
-
-
-    def test_sbert_baseline_comparison(self, train_data_path: str, val_data_path: str):
-        """
-        Test baseline using raw SBERT embeddings (no topological processing)
-        for fair comparison with topological approach
-        """
-        print("=" * 80)
-        print("SBERT BASELINE COMPARISON (NO TOPOLOGICAL PROCESSING)")
-        print("=" * 80)
-        
-        # Load same filtered data as topological approach
-        print("Loading training data...")
-        train_samples = self.load_samples_from_path(train_data_path, sample_size=1000)
-        print("Loading validation data...")
-        val_samples = self.load_samples_from_path(val_data_path)
-        
-        label_to_idx = {'entailment': 0, 'neutral': 1, 'contradiction': 2}
-        
-        # Extract SBERT features (no topological processing)
-        print("\nExtracting SBERT baseline features...")
-        X_train_sbert, y_train = self.extract_sbert_baseline_features(train_samples, label_to_idx)
-        
-        print("Extracting SBERT validation features...")
-        X_val_sbert, y_val = self.extract_sbert_baseline_features(val_samples, label_to_idx)
-        
-        print(f"\nSBERT Training set: {X_train_sbert.shape[0]} samples, {X_train_sbert.shape[1]} features")
-        print(f"SBERT Validation set: {X_val_sbert.shape[0]} samples, {X_val_sbert.shape[1]} features")
-        
-        # Feature scaling (same as topological approach)
-        scaler_sbert = StandardScaler()
-        X_train_sbert_scaled = scaler_sbert.fit_transform(X_train_sbert)
-        X_val_sbert_scaled = scaler_sbert.transform(X_val_sbert)
-        
-        # Test same classifiers as topological approach
-        classifiers = {
-            'Random Forest': RandomForestClassifier(n_estimators=200, random_state=42),
-            'SVM': SVC(probability=True, random_state=42),
-            'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000)
-        }
-        
-        sbert_results = {}
-        
-        print("\n" + "=" * 60)
-        print("SBERT BASELINE RESULTS")
-        print("=" * 60)
-        
-        for name, clf in classifiers.items():
-            print(f"\nTraining {name} on SBERT features...")
-            
-            # Train on training data
-            clf.fit(X_train_sbert_scaled, y_train)
-            
-            # Test on validation data
-            y_pred = clf.predict(X_val_sbert_scaled)
-            accuracy = accuracy_score(y_val, y_pred)
-            
-            sbert_results[name] = {
-                'accuracy': accuracy,
-                'predictions': y_pred,
-                'model': clf
-            }
-            
-            print(f"{name} SBERT Validation Accuracy: {accuracy:.3f}")
-        
-        # Train PyTorch NN on SBERT features
-        print(f"\nTraining PyTorch Neural Network on SBERT features...")
-        sbert_pytorch_model, sbert_pytorch_acc = train_pytorch_classifier(X_train_sbert_scaled, y_train, X_val_sbert_scaled, y_val)
-        
-        sbert_results['PyTorch NN'] = {
-            'accuracy': sbert_pytorch_acc,
-            'model': sbert_pytorch_model,
-            'type': 'pytorch'
-        }
-        print(f"PyTorch NN SBERT Validation Accuracy: {sbert_pytorch_acc:.3f}")
-        
-        # Find best SBERT performer
-        best_sbert_classifier = max(sbert_results.keys(), key=lambda k: sbert_results[k]['accuracy'])
-        best_sbert_accuracy = sbert_results[best_sbert_classifier]['accuracy']
-        
-        print(f"\n" + "=" * 60)
-        print("SBERT BASELINE SUMMARY")
-        print("=" * 60)
-        print(f"Best SBERT Classifier: {best_sbert_classifier}")
-        print(f"Best SBERT Accuracy: {best_sbert_accuracy:.3f}")
-        
-        return sbert_results, X_train_sbert, y_train, X_val_sbert, y_val, scaler_sbert
-
-    def extract_sbert_baseline_features(self, samples_by_class: dict, label_to_idx: dict):
-        """
-        Extract baseline features using raw SBERT embeddings
-        (Mean pooling of premise and hypothesis embeddings + simple concatenation/difference)
-        """
-        all_features = []
-        all_labels_numeric = []
-        
-        total_samples = sum(len(samples) for samples in samples_by_class.values())
-        print(f"Processing {total_samples} samples for SBERT baseline...")
-        
-        processed_count = 0
-        
-        for class_name, samples in samples_by_class.items():
-            print(f"Processing {class_name}: {len(samples)} samples")
-            
-            for i, sample in enumerate(samples):
-                if i % 50 == 0 and i > 0:
-                    print(f"  Processed {i}/{len(samples)} {class_name} samples")
-                
-                try:
-                    premise_tokens = sample['premise_tokens']  # Shape: [n_tokens, 768]
-                    hypothesis_tokens = sample['hypothesis_tokens']  # Shape: [m_tokens, 768]
-                    
-                    # Simple baseline features from SBERT embeddings
-                    premise_mean = torch.mean(premise_tokens, dim=0)  # [768]
-                    hypothesis_mean = torch.mean(hypothesis_tokens, dim=0)  # [768]
-                    
-                    # Create baseline feature set
-                    baseline_features = torch.cat([
-                        premise_mean,                                          # Premise representation [768]
-                        hypothesis_mean,                                       # Hypothesis representation [768]
-                        premise_mean - hypothesis_mean,                        # Difference [768]
-                        premise_mean * hypothesis_mean,                        # Element-wise product [768]
-                    ]).numpy()  # Total: 3072 features
-                    
-                    all_features.append(baseline_features)
-                    all_labels_numeric.append(label_to_idx[class_name])
-                    processed_count += 1
-                    
-                except Exception as e:
-                    print(f"  Error processing sample {i} in {class_name}: {e}")
-                    continue
-        
-        print(f"Successfully processed {processed_count} samples for SBERT baseline")
-        
-        X = np.array(all_features)
-        y = np.array(all_labels_numeric)
-        
-        return X, y
-
-    def run_comprehensive_comparison(self, train_data_path: str, val_data_path: str):
-        """
-        Run both topological and SBERT baseline approaches for direct comparison
-        """
-        print("=" * 100)
-        print("COMPREHENSIVE TOPOLOGICAL vs SBERT BASELINE COMPARISON")
-        print("=" * 100)
-        
-        # Run topological approach
-        print("\n🔬 RUNNING TOPOLOGICAL APPROACH...")
-        topo_results, X_train_topo, y_train, X_val_topo, y_val, scaler_topo = self.test_interpretable_classification(
-            train_data_path, val_data_path
-        )
-        
-        # Run SBERT baseline
-        print("\n📊 RUNNING SBERT BASELINE...")
-        sbert_results, X_train_sbert, y_train_sbert, X_val_sbert, y_val_sbert, scaler_sbert = self.test_sbert_baseline_comparison(
-            train_data_path, val_data_path
-        )
-        
-        # Compare results
-        print("\n" + "=" * 80)
-        print("FINAL COMPARISON RESULTS")
-        print("=" * 80)
-        
-        # Find best performers
-        best_topo_name = max(topo_results.keys(), key=lambda k: topo_results[k]['accuracy'])
-        best_topo_acc = topo_results[best_topo_name]['accuracy']
-        
-        best_sbert_name = max(sbert_results.keys(), key=lambda k: sbert_results[k]['accuracy'])
-        best_sbert_acc = sbert_results[best_sbert_name]['accuracy']
-        
-        print(f"{'Method':<25} {'Best Classifier':<15} {'Accuracy':<10} {'Features':<10}")
-        print("-" * 70)
-        print(f"{'Topological':<25} {best_topo_name:<15} {best_topo_acc:<10.3f} {X_train_topo.shape[1]:<10}")
-        print(f"{'SBERT Baseline':<25} {best_sbert_name:<15} {best_sbert_acc:<10.3f} {X_train_sbert.shape[1]:<10}")
-        
-        improvement = best_topo_acc - best_sbert_acc
-        print(f"\nTopological vs SBERT Improvement: {improvement:+.3f} ({improvement/best_sbert_acc*100:+.1f}%)")
-        
-        if improvement > 0:
-            print("🎉 TOPOLOGICAL FEATURES WIN! Geometric structure adds discriminative power!")
-        elif abs(improvement) < 0.01:
-            print("🤝 TIE: Both approaches perform similarly")
-        else:
-            print("📊 SBERT BASELINE WINS: Raw embeddings more discriminative")
-        
-        return {
-            'topological': {'results': topo_results, 'best_accuracy': best_topo_acc, 'best_model': best_topo_name},
-            'sbert': {'results': sbert_results, 'best_accuracy': best_sbert_acc, 'best_model': best_sbert_name},
-            'improvement': improvement
-        }
-
-
-
-
- 
-
 
 class SeparateModelClusteringValidator:
     """
     Validator for point cloud clustering using separate trained models
     """
     
-    def __init__(self, 
-                 order_model_path: str,
-                 asymmetry_model_path: str,
-                 hyperbolic_model_path: str,
-                 val_data_path: str,
+    def __init__(self, val_data_path: str,
+                 order_model_path: str=None,
+                 asymmetry_model_path: str=None,
+                 hyperbolic_model_path: str=None,
                  output_dir: str = "phd_method/individual_phd_clustering_results/",
                  seed: int = 42):
         
@@ -1271,9 +527,10 @@ class SeparateModelClusteringValidator:
         print(f"Loaded {len(self.val_data['labels'])} validation samples")
         
         # Initialize point cloud generator with separate models
-        self.point_cloud_generator = SeparateModelPointCloudGenerator(
-            order_model_path, asymmetry_model_path, hyperbolic_model_path
-        )
+        if order_model_path:
+            self.point_cloud_generator = SeparateModelPointCloudGenerator(
+                order_model_path, asymmetry_model_path, hyperbolic_model_path
+            )
         
         # Clustering parameters
         self.samples_per_class = 100  # 100 samples per class for robust clustering
@@ -2773,116 +2030,6 @@ class SeparateModelClusteringValidator:
         return optimization_results
 
 
-class TopologicalClassifier(nn.Module):
-    """
-    Proper neural network for topological classification with softmax logits
-    """
-    def __init__(self, input_size: int = 21, hidden_sizes: list = [64, 32], num_classes: int = 3):
-        super().__init__()
-        
-        layers = []
-        prev_size = input_size
-        
-        for hidden_size in hidden_sizes:
-            layers.extend([
-                nn.Linear(prev_size, hidden_size),
-                nn.BatchNorm1d(hidden_size),
-                nn.ReLU(),
-                nn.Dropout(0.2)
-            ])
-            prev_size = hidden_size
-        
-        # Output layer (no activation - raw logits)
-        layers.append(nn.Linear(prev_size, num_classes))
-        
-        self.network = nn.Sequential(*layers)
-    
-    def forward(self, x):
-        logits = self.network(x)
-        return logits  # Return raw logits for flexibility
-    
-    def predict_proba(self, x):
-        """Get softmax probabilities"""
-        with torch.no_grad():
-            logits = self.forward(x)
-            probabilities = torch.softmax(logits, dim=1)
-            return probabilities
-
-class TopologicalDataset(Dataset):
-    def __init__(self, X, y):
-        self.X = torch.FloatTensor(X)
-        self.y = torch.LongTensor(y)
-    
-    def __len__(self):
-        return len(self.X)
-    
-    def __getitem__(self, idx):
-        return self.X[idx], self.y[idx]
-
-
-def train_pytorch_classifier(X_train, y_train, X_val, y_val, epochs=100):
-    """
-    Train PyTorch classifier with proper softmax and cross-entropy
-    """
-    # Create datasets
-    train_dataset = TopologicalDataset(X_train, y_train)
-    val_dataset = TopologicalDataset(X_val, y_val)
-    
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
-    
-    # Model, loss, optimizer
-    model = TopologicalClassifier(input_size=X_train.shape[1])
-    criterion = nn.CrossEntropyLoss()  # Uses softmax internally
-    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10)
-    
-    best_val_acc = 0
-    
-    for epoch in range(epochs):
-        # Training
-        model.train()
-        train_loss = 0
-        for X_batch, y_batch in train_loader:
-            optimizer.zero_grad()
-            logits = model(X_batch)
-            loss = criterion(logits, y_batch)
-            loss.backward()
-            optimizer.step()
-            train_loss += loss.item()
-        
-        # Validation
-        model.eval()
-        val_loss = 0
-        correct = 0
-        total = 0
-        
-        with torch.no_grad():
-            for X_batch, y_batch in val_loader:
-                logits = model(X_batch)
-                loss = criterion(logits, y_batch)
-                val_loss += loss.item()
-                
-                predictions = torch.argmax(logits, dim=1)
-                correct += (predictions == y_batch).sum().item()
-                total += y_batch.size(0)
-        
-        val_acc = correct / total
-        scheduler.step(val_loss)
-        
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            best_model_state = model.state_dict().copy()
-        
-        if epoch % 20 == 0:
-            print(f"Epoch {epoch}: Train Loss {train_loss/len(train_loader):.4f}, "
-                  f"Val Loss {val_loss/len(val_loader):.4f}, Val Acc {val_acc:.4f}")
-    
-    # Load best model
-    model.load_state_dict(best_model_state)
-    
-    return model, best_val_acc
-
 
 
 def main():
@@ -2953,37 +2100,120 @@ def main():
     # optimization_results = validator.run_persistence_optimization()
 
 
+def test_sbert_clustering_comparison():
+    """
+    Test clustering using raw SBERT embeddings for comparison with topological approach
+    """
+    print("=" * 80)
+    print("SBERT CLUSTERING COMPARISON")
+    print("=" * 80)
 
-def test_classification_accuracy():
-    """Test classification accuracy (rather than clustering)"""
-    
-    print("="*80)
-    print("TESTING POINT CLOUD CLASSIFICATION ACCURACY  ")
-    print("="*80)
-    
-    # Test with sample data
-    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
-    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
-    hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/best_hyperbolic_projector.pt"
-    train_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
     val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
-    
-    # Create generator
-    generator = SeparateModelPointCloudGenerator(order_model_path, asymmetry_model_path, hyperbolic_model_path)
-    
-    # Run classification with proper train/val split
-    classification_results, X_train, y_train, X_val, y_val, scaler = generator.test_interpretable_classification(
-        train_data_path, val_data_path
-    )
 
-    comparison_results = generator.run_comprehensive_comparison(train_data_path, val_data_path)
     
-    return classification_results, comparison_results
+    # Load same data as topological clustering
+    validator = SeparateModelClusteringValidator(
+        val_data_path=val_data_path,
+        order_model_path=None,  # Won't be used
+        asymmetry_model_path=None, 
+        hyperbolic_model_path=None,
+        seed=42
+    )
+    
+    # Generate samples (using existing filtering)
+    max_samples = validator.generate_maximum_samples_by_class()
+    
+    print("Extracting SBERT embeddings for clustering...")
+    all_embeddings = []
+    sample_labels = []
+    
+    for class_idx, class_name in enumerate(['entailment', 'neutral', 'contradiction']):
+        class_samples = max_samples[class_name]
+        print(f"Processing {class_name}: {len(class_samples)} samples")
+        
+        for sample_data in class_samples:
+            premise_tokens = sample_data['premise_tokens']
+            hypothesis_tokens = sample_data['hypothesis_tokens']
+            
+            # Create embedding representation
+            premise_mean = torch.mean(premise_tokens, dim=0)  # [768]
+            hypothesis_mean = torch.mean(hypothesis_tokens, dim=0)  # [768]
+            
+            # Different strategies for combining premise/hypothesis:
+            
+            # Strategy 1: Concatenation
+            # combined_embedding = torch.cat([premise_mean, hypothesis_mean])  # [1536]
+            
+            # Strategy 2: Difference + Product (richer representation)  
+            combined_embedding = torch.cat([
+                premise_mean, 
+                hypothesis_mean,
+                premise_mean - hypothesis_mean,
+                premise_mean * hypothesis_mean
+            ])  # [3072]
+            
+            all_embeddings.append(combined_embedding.numpy())
+            sample_labels.append(class_idx)
+    
+    # Convert to clustering format
+    X_embeddings = np.array(all_embeddings)
+    y_true = np.array(sample_labels)
+    
+    print(f"SBERT clustering data: {X_embeddings.shape[0]} samples, {X_embeddings.shape[1]} dimensions")
+    
+    n_clusters = 3
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    y_pred = kmeans.fit_predict(X_embeddings)
+    
+    # Find best label permutation
+    best_accuracy = 0.0
+    for perm in permutations(range(n_clusters)):
+        mapped_pred = np.array([perm[label] for label in y_pred])
+        accuracy = np.mean(mapped_pred == y_true)
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_permutation = perm
+    
+    final_pred = np.array([best_permutation[label] for label in y_pred])
+    
+    # Calculate metrics
+    try:
+        silhouette = silhouette_score(X_embeddings, final_pred)
+        ari = adjusted_rand_score(y_true, final_pred)
+    except:
+        silhouette, ari = 0.0, 0.0
+    
+    print(f"\n" + "=" * 60)
+    print("SBERT CLUSTERING RESULTS")
+    print("=" * 60)
+    print(f"SBERT Clustering Accuracy: {best_accuracy:.3f}")
+    print(f"Silhouette Score: {silhouette:.3f}")
+    print(f"Adjusted Rand Index: {ari:.3f}")
+    
+    # Compare with topological clustering
+    print(f"\nComparison:")
+    print(f"Topological Clustering: 66.9%")
+    print(f"SBERT Clustering: {best_accuracy:.1%}")
+    improvement = best_accuracy - 0.669
+    print(f"Difference: {improvement:+.3f}")
+    
+    if best_accuracy > 0.669:
+        print("📊 SBERT embeddings cluster better than topological features")
+    else:
+        print("🔬 Topological features provide better clustering structure")
+    
+    return {
+        'sbert_clustering_accuracy': best_accuracy,
+        'sbert_silhouette': silhouette,
+        'sbert_ari': ari,
+        'vs_topological_improvement': improvement
+    }
+
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--classification":
-        test_classification_accuracy()
+    if len(sys.argv) > 1 and sys.argv[1] == "--sbert_baseline":
+        test_sbert_clustering_comparison()
     else:
         main()
 
