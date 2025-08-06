@@ -87,6 +87,55 @@ class AsymmetryTransformModel(nn.Module):
         
         # Residual connection with order embeddings for stability
         return order_embeddings + asymmetric_features
+
+
+    def _calculate_order_violation_energy(self, u_asym_emb: torch.Tensor, v_asym_emb: torch.Tensor) -> torch.Tensor:
+        """
+        Calculates the order violation energy E(u,v) = ||max(0, v-u)||^2.
+        This method is crucial because it applies the order-theoretic formula
+        to the *output* of the AsymmetryTransformModel, which is what we are training.
+        
+        Args:
+            u_asym_emb: The transformed embeddings for the premise.
+            v_asym_emb: The transformed embeddings for the hypothesis.
+        """
+        min_len = min(u_asym_emb.shape[0], v_asym_emb.shape[0])
+        u_truncated = u_asym_emb[:min_len]
+        v_truncated = v_asym_emb[:min_len]
+        
+        violation = torch.clamp(v_truncated - u_truncated, min=0)
+        energy = torch.norm(violation, dim=-1, p=2) ** 2
+        return energy.mean()
+    
+
+    def compute_asymmetric_energy(self, premise_order: torch.Tensor, hypothesis_order: torch.Tensor) -> torch.Tensor:
+        """
+        Compute asymmetric energy between premise and hypothesis order embeddings
+        This method maintains compatibility with the clustering pipeline
+        
+        Args:
+            premise_order: Order embeddings for premise [num_tokens, 768]
+            hypothesis_order: Order embeddings for hypothesis [num_tokens, 768]
+            
+        Returns:
+            asymmetric_energy: Scalar tensor representing asymmetric energy
+        """
+        # Transform order embeddings to asymmetric space
+        premise_asym = self.asymmetric_transform(premise_order)
+        hypothesis_asym = self.asymmetric_transform(hypothesis_order)
+        
+        # Add residual connections (like in forward method)
+        premise_asym = premise_order + premise_asym
+        hypothesis_asym = hypothesis_order + hypothesis_asym
+        
+        # Compute forward and backward energies using the asymmetric embeddings
+        forward_energy = self._calculate_order_violation_energy(premise_asym, hypothesis_asym)
+        backward_energy = self._calculate_order_violation_energy(hypothesis_asym, premise_asym)
+        
+        # Asymmetric energy is the absolute difference
+        asymmetric_energy = torch.abs(forward_energy - backward_energy)
+        
+        return asymmetric_energy
     
 
 

@@ -38,20 +38,20 @@ class StatisticalValidation:
         
         # Top performers to test with more samples
         self.top_combinations = [
-            ('sbert_concat', 'euclidean'),
-            ('sbert_concat', 'chebyshev'),
-            ('sbert_concat', 'cosine'),
-            ('sbert_concat', 'minkowski_3'),
-            ('sbert_concat', 'minkowski_4'),
-            # ('sbert_concat', 'canberra'),
-            ('sbert_concat', 'braycurtis'),
-            # ('lattice_containment', 'euclidean'),
-            # ('lattice_containment', 'chebyshev'),
-            # ('lattice_containment', 'cosine'),
-            # ('lattice_containment', 'minkowski_3'),
-            # ('lattice_containment', 'minkowski_4'),
+            # ('sbert_concat', 'euclidean'),
+            # ('sbert_concat', 'chebyshev'),
+            # ('sbert_concat', 'cosine'),
+            # ('sbert_concat', 'minkowski_3'),
+            # ('sbert_concat', 'minkowski_4'),
+            # # ('sbert_concat', 'canberra'),
+            # ('sbert_concat', 'braycurtis'),
+            ('lattice_containment', 'euclidean'),
+            ('lattice_containment', 'chebyshev'),
+            ('lattice_containment', 'cosine'),
+            ('lattice_containment', 'minkowski_3'),
+            ('lattice_containment', 'minkowski_4'),
             # ('lattice_containment', 'canberra'),
-            # ('lattice_containment', 'braycurtis')
+            ('lattice_containment', 'braycurtis')
         ]
         
         # Sample size for statistical validation

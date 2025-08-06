@@ -151,13 +151,16 @@ class SeparateModelPointCloudGenerator:
         separation_stratified_cloud = self._generate_perfect_separation_stratified_features(premise_tokens, hypothesis_tokens)
 
         multi_boundary_cloud = self._generate_multi_signal_stratified_features(premise_tokens, hypothesis_tokens)
+
+        #Lattice containment
+        lattice_containment_cloud = self._generate_lattice_containment_features(premise_tokens, hypothesis_tokens)
    
         # Combine all point clouds
-        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, separation_stratified_cloud, multi_boundary_cloud]
+        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, separation_stratified_cloud, multi_boundary_cloud, lattice_containment_cloud]
 
         # Check total size and optimize if needed
         total_points = sum(cloud.shape[0] for cloud in all_clouds)
-        target_max = 500  # Sweet spot from handover docs
+        target_max = 550  # Sweet spot from handover docs
         
         if total_points > target_max:
             print(f"Point cloud optimization: {total_points} -> {target_max}")
@@ -485,6 +488,34 @@ class SeparateModelPointCloudGenerator:
             return torch.stack(energy_weighted_points).cpu()
 
 
+    def _generate_lattice_containment_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+        """
+        Generate lattice containment point cloud features
+        Based on the highly successful lattice_containment embedding from your PhD experiments
+        that achieved 6/8 perfect clustering results on MNLI with braycurtis/cosine distance
+        """
+        with torch.no_grad():
+            premise_tokens = premise_tokens.to(self.device)
+            hypothesis_tokens = hypothesis_tokens.to(self.device)
+            
+            # Apply lattice containment formula to token-level embeddings
+            epsilon = 1e-8
+            
+            # Method 1: Token-by-token lattice containment (creates rich point cloud)
+            lattice_points = []
+            
+            # Compute containment for each premise token with each hypothesis token
+            for i, premise_token in enumerate(premise_tokens):
+                for j, hypothesis_token in enumerate(hypothesis_tokens):
+                    # Apply lattice containment formula
+                    containment_vector = (premise_token * hypothesis_token) / (
+                        torch.abs(premise_token) + torch.abs(hypothesis_token) + epsilon
+                    )
+                    lattice_points.append(containment_vector)          
+                   
+            return torch.stack(lattice_points).cpu()
+
+
 
     def _optimize_point_cloud_size(self, all_clouds: List[torch.Tensor], target_max: int) -> List[torch.Tensor]:
         """
@@ -495,7 +526,7 @@ class SeparateModelPointCloudGenerator:
         
         # Priority order (based on your success rates)
         # Keep original 6 clouds intact, reduce enhancement clouds proportionally
-        cloud_priorities = [1.0] * 6 + [0.9, 0.8, 0.7, 0.6]  # Original clouds + enhancements
+        cloud_priorities = [1.0] * 6 + [0.9, 0.8, 0.7, 0.6] + [1.0] # Original clouds + enhancements + lattice
         
         optimized_clouds = []
         
@@ -3025,7 +3056,7 @@ def train_pytorch_classifier(X_train, y_train, X_val, y_val, epochs=100):
     return model, best_val_acc
 
 
-def train_pytorch_classifier_custom(model, X_train, y_train, X_val, y_val, epochs=100):
+def train_pytorch_classifier_custom(self, model, X_train, y_train, X_val, y_val, epochs=100):
     """
     Custom PyTorch training for different architectures
     """    
@@ -3181,7 +3212,7 @@ def test_classification_accuracy():
 
     # comparison_results = generator.run_comprehensive_comparison(train_data_path, val_data_path)
 
-    hybrid_results, _, _ = generator.test_hybrid_classification(train_data_path, val_data_path)
+    hybrid_results = generator.test_hybrid_classification(train_data_path, val_data_path)
 
     # return classification_results, comparison_results
 

@@ -128,7 +128,8 @@ class ClusteringValidator:
         
         # Target embedding spaces from Revised Next Steps
         self.target_spaces = [
-            'sbert_concat'
+            'sbert_concat',
+            'lattice_containment'
         ]
         
         # All distance metrics

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/remaining_sbert_concat_lattice_clustering_validation_SEEDFIXED_%j.out
-#SBATCH --error=../logs/remaining_sbert_concat_lattice_clustering_validation_SEEDFIXED_%j.err
+#SBATCH --output=../logs/MNLI_latticeC_clustering_validation_SEEDFIXED_%j.out
+#SBATCH --error=../logs/MNLI_latticeC_clustering_validation_SEEDFIXED_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

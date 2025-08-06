@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/point_cloud_classification_%j.out
-#SBATCH --error=../logs/point_cloud_classification_%j.err
+#SBATCH --output=../logs/hybrid_model_point_cloud_classification_%j.out
+#SBATCH --error=../logs/hybrid_model_point_cloud_classification_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
