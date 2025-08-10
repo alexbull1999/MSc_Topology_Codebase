@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=order_asymmetry_training
 #SBATCH --partition=a16gpu
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
-#SBATCH --output=../logs/separate_margin_order_model_%j.out
-#SBATCH --error=../logs/separate_margin_order_model_%j.err
+#SBATCH --mem=64G
+#SBATCH --output=../logs/mnli_separate_margin_order_model_%j.out
+#SBATCH --error=../logs/mnli_separate_margin_order_model_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

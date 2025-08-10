@@ -8,8 +8,8 @@ import random
 import pickle
 from pathlib import Path
 from tqdm import tqdm # For progress bars
-from order_asymmetry_models import OrderEmbeddingModel, AsymmetryTransformModel
-
+from independent_order_model import OrderEmbeddingModel
+from independent_asymmetry_model import AsymmetryTransformModel
 
 def set_random_seed(seed: int = 42):
     """Set random seed for reproducibility"""
@@ -274,7 +274,7 @@ class HyperbolicProjectorTrainer:
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
                 patience_counter = 0
-                self.save_model(save_dir, 'best_hyperbolic_projector.pt', epoch+1, avg_val_loss)
+                self.save_model(save_dir, 'mnli_best_hyperbolic_projector.pt', epoch+1, avg_val_loss)
             else:
                 patience_counter += 1
             
@@ -309,9 +309,9 @@ def main():
     print("=" * 50)
     
     config = {
-        'order_model_path': "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model.pt",
-        'asymmetry_model_path': "MSc_Topology_Codebase/phd_method/models/separate_models/asymmetry_transform_model.pt",
-        'train_data_path': "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl",
+        'order_model_path': "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_order_embedding_model_separate_margins.pt",
+        'asymmetry_model_path': "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_asymmetry_transform_model_(match_SNLI_v2).pt",
+        'train_data_path': "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens.pkl",
         'save_dir': "MSc_Topology_Codebase/phd_method/models/separate_models/",
         'hyperbolic_dim': 768,
         'compression_ratio': 1.0,

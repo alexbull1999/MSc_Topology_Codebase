@@ -125,8 +125,8 @@ class SeparateModelPointCloudGenerator:
             point_clouds.append(asymmetric_features.cpu().clone())
 
             #4. Hyperbolic features - Don't seem to help       
-            hyperbolic_features = self.hyperbolic_model(order_embeddings)
-            point_clouds.append(hyperbolic_features.cpu().clone())
+            # hyperbolic_features = self.hyperbolic_model(order_embeddings)
+            # point_clouds.append(hyperbolic_features.cpu().clone())
         
         return point_clouds
     
@@ -530,7 +530,7 @@ class SeparateModelPointCloudGenerator:
         distance_matrix = pairwise_distances(combined_cloud.numpy(), metric='braycurtis')
         
         # Compute persistence diagrams
-        dgms = ripser_parallel(distance_matrix, maxdim=2, n_threads=-1, metric="precomputed")['dgms']
+        dgms = ripser_parallel(distance_matrix, maxdim=1, n_threads=-1, metric="precomputed")['dgms']
         
         features = []
         
@@ -643,7 +643,7 @@ class SeparateModelPointCloudGenerator:
         
         # Load train and validation data separately
         print("Loading training data...")
-        train_samples = self.load_samples_from_path(train_data_path, sample_size=1000)
+        train_samples = self.load_samples_from_path(train_data_path, sample_size=2000)
         print("Loading validation data...")
         val_samples = self.load_samples_from_path(val_data_path)
         
@@ -1057,7 +1057,7 @@ class SeparateModelPointCloudGenerator:
         
         # Load same filtered data as topological approach
         print("Loading training data...")
-        train_samples = self.load_samples_from_path(train_data_path, sample_size=1000)
+        train_samples = self.load_samples_from_path(train_data_path, sample_size=2000)
         print("Loading validation data...")
         val_samples = self.load_samples_from_path(val_data_path)
         
@@ -1253,7 +1253,7 @@ class SeparateModelPointCloudGenerator:
         
         # Load same filtered data
         print("Loading training data...")
-        train_samples = self.load_samples_from_path(train_data_path, sample_size=1000)
+        train_samples = self.load_samples_from_path(train_data_path, sample_size=2000)
         print("Loading validation data...")
         val_samples = self.load_samples_from_path(val_data_path)
         
@@ -2961,42 +2961,83 @@ class TopologicalDataset(Dataset):
         return self.X[idx], self.y[idx]
 
 
-def train_pytorch_classifier(X_train, y_train, X_val, y_val, epochs=100):
+def train_pytorch_classifier(X_train, y_train, X_val, y_val, epochs=200):
     """
-    Train PyTorch classifier with proper softmax and cross-entropy
+    Fixed PyTorch training with proper regularization and early stopping
     """
+    print(f"Training on {X_train.shape[0]} samples with {X_train.shape[1]} features")
+    
     # Create datasets
     train_dataset = TopologicalDataset(X_train, y_train)
     val_dataset = TopologicalDataset(X_val, y_val)
     
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+    # Adaptive batch size based on dataset size
+    batch_size = min(32, max(8, X_train.shape[0] // 50))
+    print(f"Using batch size: {batch_size}")
     
-    # Model, loss, optimizer
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    
+    # Create model with adaptive architecture
     model = TopologicalClassifier(input_size=X_train.shape[1])
-    criterion = nn.CrossEntropyLoss()  # Uses softmax internally
-    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10)
     
+    # Loss and optimizer with weight decay
+    criterion = nn.CrossEntropyLoss()
+    
+    # Adaptive learning rate and weight decay
+    if X_train.shape[1] > 1000:  # High-dimensional (hybrid)
+        lr = 0.0001  # Much lower learning rate
+        weight_decay = 1e-3  # Higher weight decay
+    else:  # Low-dimensional (pure topological)
+        lr = 0.001
+        weight_decay = 1e-4
+    
+    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='min', factor=0.5, patience=15, verbose=True
+    )
+    
+    # Early stopping parameters
     best_val_acc = 0
+    best_val_loss = float('inf')
+    patience = 25  # Increased patience
+    patience_counter = 0
+    
+    train_losses = []
+    val_losses = []
+    val_accuracies = []
     
     for epoch in range(epochs):
         # Training
         model.train()
         train_loss = 0
+        train_correct = 0
+        train_total = 0
+        
         for X_batch, y_batch in train_loader:
             optimizer.zero_grad()
             logits = model(X_batch)
             loss = criterion(logits, y_batch)
             loss.backward()
+            
+            # Gradient clipping to prevent exploding gradients
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            
             optimizer.step()
+            
             train_loss += loss.item()
+            predictions = torch.argmax(logits, dim=1)
+            train_correct += (predictions == y_batch).sum().item()
+            train_total += y_batch.size(0)
+        
+        avg_train_loss = train_loss / len(train_loader)
+        train_acc = train_correct / train_total
         
         # Validation
         model.eval()
         val_loss = 0
-        correct = 0
-        total = 0
+        val_correct = 0
+        val_total = 0
         
         with torch.no_grad():
             for X_batch, y_batch in val_loader:
@@ -3005,61 +3046,140 @@ def train_pytorch_classifier(X_train, y_train, X_val, y_val, epochs=100):
                 val_loss += loss.item()
                 
                 predictions = torch.argmax(logits, dim=1)
-                correct += (predictions == y_batch).sum().item()
-                total += y_batch.size(0)
+                val_correct += (predictions == y_batch).sum().item()
+                val_total += y_batch.size(0)
         
-        val_acc = correct / total
-        scheduler.step(val_loss)
+        avg_val_loss = val_loss / len(val_loader)
+        val_acc = val_correct / val_total
         
-        if val_acc > best_val_acc:
+        # Learning rate scheduling
+        scheduler.step(avg_val_loss)
+        
+        # Track metrics
+        train_losses.append(avg_train_loss)
+        val_losses.append(avg_val_loss)
+        val_accuracies.append(val_acc)
+        
+        # Early stopping logic - use validation loss, not accuracy
+        if avg_val_loss < best_val_loss:
+            best_val_loss = avg_val_loss
             best_val_acc = val_acc
             best_model_state = model.state_dict().copy()
+            patience_counter = 0
+        else:
+            patience_counter += 1
         
-        if epoch % 20 == 0:
-            print(f"Epoch {epoch}: Train Loss {train_loss/len(train_loader):.4f}, "
-                  f"Val Loss {val_loss/len(val_loader):.4f}, Val Acc {val_acc:.4f}")
+        # Logging
+        if epoch % 20 == 0 or epoch < 10:
+            print(f"Epoch {epoch:3d}: Train Loss {avg_train_loss:.4f} (Acc {train_acc:.3f}), "
+                  f"Val Loss {avg_val_loss:.4f} (Acc {val_acc:.3f}), "
+                  f"Best Val {best_val_acc:.3f}")
+        
+        # Early stopping
+        if patience_counter >= patience:
+            print(f"Early stopping at epoch {epoch} (patience={patience})")
+            break
     
     # Load best model
     model.load_state_dict(best_model_state)
     
+    # Final validation metrics
+    model.eval()
+    final_val_correct = 0
+    final_val_total = 0
+    
+    with torch.no_grad():
+        for X_batch, y_batch in val_loader:
+            logits = model(X_batch)
+            predictions = torch.argmax(logits, dim=1)
+            final_val_correct += (predictions == y_batch).sum().item()
+            final_val_total += y_batch.size(0)
+    
+    final_val_acc = final_val_correct / final_val_total
+    
+    print(f"\nFinal Results:")
+    print(f"  Best validation accuracy: {best_val_acc:.4f}")
+    print(f"  Final validation accuracy: {final_val_acc:.4f}")
+    print(f"  Total epochs: {epoch + 1}")
+    
+    # Check for overfitting
+    final_train_loss = train_losses[-1]
+    final_val_loss = val_losses[-1]
+    
+    if final_val_loss > 2 * final_train_loss:
+        print(f"  ⚠️ Warning: Possible overfitting (val_loss/train_loss = {final_val_loss/final_train_loss:.2f})")
+    
     return model, best_val_acc
 
 
-def train_pytorch_classifier_custom(model, X_train, y_train, X_val, y_val, epochs=100):
+def train_pytorch_classifier_custom(model, X_train, y_train, X_val, y_val, epochs=200):
     """
-    Custom PyTorch training for different architectures
-    """    
+    Fixed custom training for different architectures
+    """
+    print(f"Custom training on {X_train.shape[0]} samples with {X_train.shape[1]} features")
+    
     # Create datasets
     train_dataset = TopologicalDataset(X_train, y_train)
     val_dataset = TopologicalDataset(X_val, y_val)
     
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+    # Adaptive batch size
+    batch_size = min(32, max(8, X_train.shape[0] // 50))
     
-    # Training setup
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    
+    # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10)
+    
+    # Adaptive parameters based on input size
+    if X_train.shape[1] > 1000:
+        lr = 0.0001
+        weight_decay = 1e-3
+    else:
+        lr = 0.001
+        weight_decay = 1e-4
+    
+    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='min', factor=0.5, patience=15
+    )
     
     best_val_acc = 0
+    best_val_loss = float('inf')
+    patience = 25
+    patience_counter = 0
     
     for epoch in range(epochs):
         # Training
         model.train()
         train_loss = 0
+        train_correct = 0
+        train_total = 0
+        
         for X_batch, y_batch in train_loader:
             optimizer.zero_grad()
             logits = model(X_batch)
             loss = criterion(logits, y_batch)
             loss.backward()
+            
+            # Gradient clipping
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            
             optimizer.step()
+            
             train_loss += loss.item()
+            predictions = torch.argmax(logits, dim=1)
+            train_correct += (predictions == y_batch).sum().item()
+            train_total += y_batch.size(0)
+        
+        avg_train_loss = train_loss / len(train_loader)
+        train_acc = train_correct / train_total
         
         # Validation
         model.eval()
         val_loss = 0
-        correct = 0
-        total = 0
+        val_correct = 0
+        val_total = 0
         
         with torch.no_grad():
             for X_batch, y_batch in val_loader:
@@ -3068,19 +3188,30 @@ def train_pytorch_classifier_custom(model, X_train, y_train, X_val, y_val, epoch
                 val_loss += loss.item()
                 
                 predictions = torch.argmax(logits, dim=1)
-                correct += (predictions == y_batch).sum().item()
-                total += y_batch.size(0)
+                val_correct += (predictions == y_batch).sum().item()
+                val_total += y_batch.size(0)
         
-        val_acc = correct / total
-        scheduler.step(val_loss)
+        avg_val_loss = val_loss / len(val_loader)
+        val_acc = val_correct / val_total
         
-        if val_acc > best_val_acc:
+        scheduler.step(avg_val_loss)
+        
+        # Early stopping based on validation loss
+        if avg_val_loss < best_val_loss:
+            best_val_loss = avg_val_loss
             best_val_acc = val_acc
             best_model_state = model.state_dict().copy()
+            patience_counter = 0
+        else:
+            patience_counter += 1
         
-        if epoch % 20 == 0:
-            print(f"Epoch {epoch}: Train Loss {train_loss/len(train_loader):.4f}, "
-                  f"Val Loss {val_loss/len(val_loader):.4f}, Val Acc {val_acc:.4f}")
+        if epoch % 20 == 0 or epoch < 10:
+            print(f"Epoch {epoch:3d}: Train Loss {avg_train_loss:.4f} (Acc {train_acc:.3f}), "
+                  f"Val Loss {avg_val_loss:.4f} (Acc {val_acc:.3f})")
+        
+        if patience_counter >= patience:
+            print(f"Early stopping at epoch {epoch}")
+            break
     
     # Load best model
     model.load_state_dict(best_model_state)
@@ -3094,7 +3225,7 @@ def main():
     # Paths for separate models
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
-    hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/best_hyperbolic_projector.pt"
+    hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/snli_best_hyperbolic_projector_updated.pt"
     val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/clustering_results/"
     os.makedirs(output_dir, exist_ok=True)
@@ -3167,7 +3298,7 @@ def test_classification_accuracy():
     # Test with sample data
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
-    hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/best_hyperbolic_projector.pt"
+    hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/snli_best_hyperbolic_projector_updated.pt"
     train_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
     val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
     
@@ -3179,7 +3310,7 @@ def test_classification_accuracy():
     #     train_data_path, val_data_path
     # )
 
-    # comparison_results = generator.run_comprehensive_comparison(train_data_path, val_data_path)
+    comparison_results = generator.run_comprehensive_comparison(train_data_path, val_data_path)
 
     hybrid_results, _, _ = generator.test_hybrid_classification(train_data_path, val_data_path)
 

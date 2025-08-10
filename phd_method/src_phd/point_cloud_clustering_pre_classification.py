@@ -2108,7 +2108,7 @@ def test_sbert_clustering_comparison():
     print("SBERT CLUSTERING COMPARISON")
     print("=" * 80)
 
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
+    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_mismatched_sbert_tokens.pkl"
 
     
     # Load same data as topological clustering

@@ -15,35 +15,35 @@ Asymmetry Model: new_independent_asymmetry_transform_model_v2.pt
 
 CLUSTERING PERFORMANCE:
 ----------------------
-Accuracy: 0.670
-Silhouette Score: 0.522
-Adjusted Rand Index: 0.261
+Accuracy: 0.583
+Silhouette Score: 0.505
+Adjusted Rand Index: 0.183
 Success (>70%): NO
 
 PH-DIMENSION STATISTICS:
 ------------------------
-entailment: 3.14 ± 0.98 (range: 1.80-8.83)
-neutral: 3.25 ± 1.36 (range: 1.75-14.04)
-contradiction: 3.41 ± 1.49 (range: 1.44-14.34)
+entailment: 3.26 ± 26.09 (range: -1021.50-60.45)
+neutral: 3.88 ± 3.76 (range: -49.43-67.88)
+contradiction: 3.62 ± 12.25 (range: -356.93-143.05)
 
 POINT CLOUD STATISTICS:
 -----------------------
 entailment:
-  Combined: 564 ± 118 points
-  Premise: 131 points
-  Hypothesis: 59 points
+  Combined: 609 ± 170 points
+  Premise: 118 points
+  Hypothesis: 52 points
   Sufficient for PHD: 100%
 
 neutral:
-  Combined: 535 ± 82 points
-  Premise: 121 points
-  Hypothesis: 63 points
+  Combined: 614 ± 218 points
+  Premise: 117 points
+  Hypothesis: 52 points
   Sufficient for PHD: 100%
 
 contradiction:
-  Combined: 549 ± 129 points
-  Premise: 128 points
-  Hypothesis: 58 points
+  Combined: 643 ± 208 points
+  Premise: 120 points
+  Hypothesis: 49 points
   Sufficient for PHD: 100%
 
 NEXT STEPS:

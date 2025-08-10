@@ -24,7 +24,7 @@ from independent_order_model import OrderEmbeddingModel
 class AsymmetryTransformModel(nn.Module):
     """Asymmetry transformation model"""
     
-    def __init__(self, hidden_size: int = 768, order_model_path: str=None):
+    def __init__(self, hidden_size: int = 768):
         super().__init__()
         self.hidden_size = hidden_size
 
@@ -143,8 +143,8 @@ class AsymmetryTrainer:
             # For neutral: enforce symmetric relationship (similar forward/backward energies)
             # Target medium energy levels
             target_energy = torch.tensor(1.0, device=self.device)
-            asymmetric_loss += F.mse_loss(forward_energy, target_forward)
-            asymmetric_loss += F.mse_loss(backward_energy, target_backward)
+            asymmetric_loss += F.mse_loss(forward_energy, target_energy)
+            asymmetric_loss += F.mse_loss(backward_energy, target_energy)
             # Penalty for high asymmetry
             asymmetric_loss += 0.5 * torch.abs(forward_energy - backward_energy)
             
@@ -329,7 +329,7 @@ def train_asymmetry_model_only(processed_data_path: str, output_dir: str,
             patience_counter = 0
             
             # Save asymmetry model
-            asymmetry_model_path = Path(output_dir) / "new_independent_asymmetry_transform_model_v3.pt"
+            asymmetry_model_path = Path(output_dir) / "mnli_asymmetry_transform_model_(match_SNLI_v2).pt"
             torch.save({
                 'model_state_dict': asymmetry_model.state_dict(),
                 'training_stats': {
@@ -461,7 +461,7 @@ def plot_new_asymmetry_training(asymmetry_trainer: AsymmetryTrainer, output_dir:
     
     # Save plot
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    plot_path = Path(output_dir) / f"new_independent_asymmetry_v4_training_progress_{timestamp}.png"
+    plot_path = Path(output_dir) / f"mnli__asymmetry_(match_SNLI_v2)_training_progress_{timestamp}.png"
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -473,7 +473,7 @@ def plot_new_asymmetry_training(asymmetry_trainer: AsymmetryTrainer, output_dir:
 def generate_training_summary(asymmetry_trainer: AsymmetryTrainer, output_dir: str, timestamp: str):
     """Generate detailed training summary"""
     
-    summary_file = Path(output_dir) / f"new_asymmetry_training_v4_summary_{timestamp}.txt"
+    summary_file = Path(output_dir) / f"mnli_asymmetry_training_(match_SNLI_v2)_summary_{timestamp}.txt"
     with open(summary_file, 'w') as f:
         f.write("NEW ASYMMETRY MODEL TRAINING SUMMARY\n")
         f.write("="*50 + "\n\n")
@@ -537,7 +537,7 @@ def generate_training_summary(asymmetry_trainer: AsymmetryTrainer, output_dir: s
 def main():
     """Train new asymmetry model only"""
     
-    processed_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
+    processed_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/models/separate_models/"
     os.makedirs(output_dir, exist_ok=True)
     
@@ -547,7 +547,7 @@ def main():
     
     # Train new asymmetry model with longer training
     asymmetry_model, asymmetry_trainer = train_asymmetry_model_only(
-        processed_data_path, output_dir, order_model_path, epochs=80, batch_size=1020, random_seed=42
+        processed_data_path, output_dir, epochs=80, batch_size=1020, random_seed=42
     )
     
     print("\n" + "="*80)

@@ -357,7 +357,7 @@ def plot_order_embedding_training_progress(trainer: OrderEmbeddingTrainerSeparat
     # Save plot
     from datetime import datetime
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    plot_path = Path(output_dir) / f"order_embedding_separate_margins_training_{timestamp}.png"
+    plot_path = Path(output_dir) / f"mnli_order_embedding_separate_margins_training_{timestamp}.png"
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -447,7 +447,7 @@ def train_order_embedding_separate_margins(processed_data_path: str, output_dir:
             patience_counter = 0
             
             # Save order model
-            order_model_path = Path(output_dir) / "order_embedding_model_separate_margins.pt"
+            order_model_path = Path(output_dir) / "mnli_order_embedding_model_separate_margins.pt"
             torch.save({
                 'model_state_dict': order_model.state_dict(),
                 'training_stats': {
@@ -476,7 +476,7 @@ def train_order_embedding_separate_margins(processed_data_path: str, output_dir:
     timestamp = plot_order_embedding_training_progress(order_trainer, output_dir)
     
     # Generate analysis summary
-    analysis_file = Path(output_dir) / f"separate_margins_analysis_{timestamp}.txt"
+    analysis_file = Path(output_dir) / f"mnli_separate_margins_analysis_{timestamp}.txt"
     with open(analysis_file, 'w') as f:
         f.write("ORDER EMBEDDING MODEL WITH SEPARATE MARGINS ANALYSIS\n")
         f.write("="*60 + "\n\n")
@@ -535,7 +535,7 @@ def train_order_embedding_separate_margins(processed_data_path: str, output_dir:
 def main():
     """Train both models separately"""
     
-    processed_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
+    processed_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/models/separate_models/"
     os.makedirs(output_dir, exist_ok=True)
     

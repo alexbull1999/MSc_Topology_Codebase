@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=order_asymmetry_training
-#SBATCH --partition=gpgpuC
-#SBATCH --time=6:00:00
+#SBATCH --partition=gpgpuB
+#SBATCH --time=16:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
-#SBATCH --output=../logs/hyperbolic_training_%j.out
-#SBATCH --error=../logs/hyperbolic_training_%j.err
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --output=../logs/mnli_hyperbolic_training_%j.out
+#SBATCH --error=../logs/mnli_hyperbolic_training_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
