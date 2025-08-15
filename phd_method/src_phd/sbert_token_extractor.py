@@ -171,17 +171,17 @@ def main():
     
     # Process training data (for order embedding training)
     train_data_path = "MSc_Topology_Codebase/data/raw/mnli/train/mnli_full_train.json"  # Adjust path as needed
-    train_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens.pkl"
+    train_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens_ALL_SAMPLES.pkl"
     
     if Path(train_data_path).exists():
         print("Processing SNLI training data...")
-        extractor.process_dataset(train_data_path, train_output_path, max_samples=150000)  # Limit for memory
+        extractor.process_dataset(train_data_path, train_output_path, max_samples=None)  # Limit for memory
     else:
         print(f"Training data not found at: {train_data_path}")
     
     # Process validation data (for clustering tests)
-    val_data_path = "MSc_Topology_Codebase/data/raw/mnli/validation_mismatched/mnli_full_validation_mismatched.json"  # Adjust path as needed  
-    val_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_mismatched_sbert_tokens.pkl"
+    val_data_path = "MSc_Topology_Codebase/data/raw/snli/train/snli_full_train.json"  # Adjust path as needed  
+    val_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens_ALL_SAMPLES.pkl"
     
     if Path(val_data_path).exists():
         print("\nProcessing SNLI validation data...")

@@ -1,0 +1,425 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 194593
+Node: gpuvm02
+Time: Thu 14 Aug 21:15:41 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Thu Aug 14 21:15:46 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.133.07             Driver Version: 570.133.07     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A30                     Off |   00000000:02:00.0 Off |                    0 |
+| N/A   34C    P0             30W /  165W |       0MiB /  24576MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A30
+GPU memory: 25.3 GB
+PyTorch setup verified!
+
+Starting AutoEncoder Pipeline...
+
+============================================================
+INFONCE + ORDER EMBEDDINGS AUTOENCODER TRAINING
+============================================================
+Experiment setup: experiments/infonce_order_autoencoder_20250814_211632
+Using device: cuda
+
+Loading data...
+Creating data loaders...
+Loading SNLI dataset from data/processed/snli_full_standard_SBERT.pt
+  Loaded data with keys: ['premise_embeddings', 'hypothesis_embeddings', 'labels', 'texts', 'metadata']
+  Converted string labels to integers using: {'entailment': 0, 'neutral': 1, 'contradiction': 2}
+  Dataset loaded successfully:
+    Total samples: 549367
+    Premise embeddings shape: torch.Size([549367, 768])
+    Hypothesis embeddings shape: torch.Size([549367, 768])
+    Labels shape: torch.Size([549367])
+    entailment: 183416 samples
+    neutral: 182764 samples
+    contradiction: 183187 samples
+Loading SNLI dataset from data/processed/snli_full_standard_SBERT_validation.pt
+  Loaded data with keys: ['premise_embeddings', 'hypothesis_embeddings', 'labels', 'texts', 'metadata']
+  Converted string labels to integers using: {'entailment': 0, 'neutral': 1, 'contradiction': 2}
+  Dataset loaded successfully:
+    Total samples: 9842
+    Premise embeddings shape: torch.Size([9842, 768])
+    Hypothesis embeddings shape: torch.Size([9842, 768])
+    Labels shape: torch.Size([9842])
+    entailment: 3329 samples
+    neutral: 3235 samples
+    contradiction: 3278 samples
+Loading SNLI dataset from data/processed/snli_full_standard_SBERT_test.pt
+  Loaded data with keys: ['premise_embeddings', 'hypothesis_embeddings', 'labels', 'texts', 'metadata']
+  Converted string labels to integers using: {'entailment': 0, 'neutral': 1, 'contradiction': 2}
+  Dataset loaded successfully:
+    Total samples: 9824
+    Premise embeddings shape: torch.Size([9824, 768])
+    Hypothesis embeddings shape: torch.Size([9824, 768])
+    Labels shape: torch.Size([9824])
+    entailment: 3368 samples
+    neutral: 3219 samples
+    contradiction: 3237 samples
+Creating DataLoader objects...
+✅ Data loaders created successfully!
+
+Creating model...
+InfoNCEOrderAutoencoder initialized:
+  Input dim: 1536
+  Latent dim: 75
+  Hidden dims: [1024, 768, 512, 256]
+  Total parameters: 3,022,155
+
+Creating loss function...
+Order Embedding Loss initialized:
+  Entailment target: ~0.3
+  Neutral range: [1.0, 1.5]
+  Contradiction minimum: 2.0
+MoorTopologicalLoss Initialized: Using 0-dimensional persistence pairings (MST edges).
+CombinedLoss initialized:
+  InfoNCE weight: 1.0
+  Order weight: 0.5
+  Topological weight: 0.5
+  Reconstruction weight: 0.3
+  Topological frequency: 1000 iterations
+
+Creating trainer...
+InfoNCEOrderTrainer initialized on cuda
+
+Training configuration:
+  InfoNCE weight: 1.0
+  Order weight: 0.5
+  Topological weight: 0.5
+  Reconstruction weight: 0.3
+  Temperature: 0.07
+  Topological frequency: 1000 iterations
+  Learning rate: 0.0001
+  Batch size: 1020
+
+Expected improvements over distance-based contrastive:
+  ✅ InfoNCE preserves topological structure (no representation collapse)
+  ✅ Order embeddings add asymmetric entailment constraints
+  ✅ Moor topological loss preserves input→latent topology (applied sparsely)
+  ✅ Target performance: 81.67% → 88-93% accuracy
+
+Starting training...
+Starting training for 100 epochs...
+
+Epoch 1/100
+--------------------------------------------------
+  Batch 0/539: Loss = 1.598474
+  Batch 50/539: Loss = 0.550203
+  Batch 100/539: Loss = 0.503413
+  Batch 150/539: Loss = 0.521651
+  Batch 200/539: Loss = 0.495317
+  Batch 250/539: Loss = 0.485933
+  Batch 300/539: Loss = 0.507301
+  Batch 350/539: Loss = 0.516132
+  Batch 400/539: Loss = 0.518746
+  Batch 450/539: Loss = 0.524357
+  Batch 500/539: Loss = 0.510365
+Train - Total: 0.574069, InfoNCE: 0.070405, Order: 0.999601, Topo: 0.000000, Recon: 0.012878
+Val   - Total: 1.038901, InfoNCE: 0.537701, Order: 0.995742, Topo: 0.000000, Recon: 0.011095
+Model saved to experiments/infonce_order_autoencoder_20250814_211632/checkpoints/best_model.pt
+
+Epoch 2/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.505352
+  Batch 50/539: Loss = 0.510302
+  Batch 100/539: Loss = 0.529044
+  Batch 150/539: Loss = 0.508742
+  Batch 200/539: Loss = 0.483778
+  Batch 250/539: Loss = 0.489443
+  Batch 300/539: Loss = 0.474645
+  Batch 350/539: Loss = 0.484360
+  Batch 400/539: Loss = 0.499954
+  Batch 450/539: Loss = 6.352447 [TOPO]
+  Batch 500/539: Loss = 0.526289
+Train - Total: 0.517496, InfoNCE: 0.003557, Order: 0.999613, Topo: 0.021700, Recon: 0.010945
+Val   - Total: 1.181098, InfoNCE: 0.680258, Order: 0.995742, Topo: 0.000000, Recon: 0.009897
+Topological regularization applied 1 times this epoch
+
+Epoch 3/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.498945
+  Batch 50/539: Loss = 0.483951
+  Batch 100/539: Loss = 0.506932
+  Batch 150/539: Loss = 0.495882
+  Batch 200/539: Loss = 0.509552
+  Batch 250/539: Loss = 0.504153
+  Batch 300/539: Loss = 0.500188
+  Batch 350/539: Loss = 0.488249
+  Batch 400/539: Loss = 0.507437
+  Batch 450/539: Loss = 0.517141
+  Batch 500/539: Loss = 0.497959
+Train - Total: 0.505908, InfoNCE: 0.003028, Order: 0.999614, Topo: 0.000000, Recon: 0.010240
+Val   - Total: 1.145261, InfoNCE: 0.644547, Order: 0.995742, Topo: 0.000000, Recon: 0.009477
+
+Epoch 4/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.525427
+  Batch 50/539: Loss = 0.526241
+  Batch 100/539: Loss = 0.516948
+  Batch 150/539: Loss = 0.498361
+  Batch 200/539: Loss = 0.492455
+  Batch 250/539: Loss = 0.501231
+  Batch 300/539: Loss = 0.511039
+  Batch 350/539: Loss = 0.514358
+  Batch 400/539: Loss = 0.517720
+  Batch 450/539: Loss = 0.504308
+  Batch 500/539: Loss = 0.519746
+Train - Total: 0.514172, InfoNCE: 0.002897, Order: 0.999575, Topo: 0.016789, Recon: 0.010311
+Val   - Total: 1.276913, InfoNCE: 0.776213, Order: 0.995742, Topo: 0.000000, Recon: 0.009430
+Topological regularization applied 1 times this epoch
+
+Epoch 5/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.490272
+  Batch 50/539: Loss = 0.489225
+  Batch 100/539: Loss = 0.480846
+  Batch 150/539: Loss = 0.510702
+  Batch 200/539: Loss = 0.499253
+  Batch 250/539: Loss = 0.503639
+  Batch 300/539: Loss = 0.506593
+  Batch 350/539: Loss = 0.492784
+  Batch 400/539: Loss = 0.486846
+  Batch 450/539: Loss = 0.509898
+  Batch 500/539: Loss = 0.520259
+Train - Total: 0.505442, InfoNCE: 0.002734, Order: 0.999611, Topo: 0.000000, Recon: 0.009675
+Val   - Total: 1.225908, InfoNCE: 0.725264, Order: 0.995742, Topo: 0.000000, Recon: 0.009244
+
+Epoch 6/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.500090
+  Batch 50/539: Loss = 0.498168
+  Batch 100/539: Loss = 0.505349
+  Batch 150/539: Loss = 0.517115
+  Batch 200/539: Loss = 0.526914
+  Batch 250/539: Loss = 0.517683
+  Batch 300/539: Loss = 0.497797
+  Batch 350/539: Loss = 0.505217
+  Batch 400/539: Loss = 0.504594
+  Batch 450/539: Loss = 0.488911
+  Batch 500/539: Loss = 0.504580
+Train - Total: 0.512187, InfoNCE: 0.002743, Order: 0.999575, Topo: 0.013511, Recon: 0.009669
+Val   - Total: 1.152640, InfoNCE: 0.651842, Order: 0.995742, Topo: 0.000000, Recon: 0.009756
+Topological regularization applied 1 times this epoch
+
+Epoch 7/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.505087
+  Batch 50/539: Loss = 0.503007
+  Batch 100/539: Loss = 0.493632
+  Batch 150/539: Loss = 0.510760
+  Batch 200/539: Loss = 0.492123
+  Batch 250/539: Loss = 0.509200
+  Batch 300/539: Loss = 0.506831
+  Batch 350/539: Loss = 0.503878
+  Batch 400/539: Loss = 0.511599
+  Batch 450/539: Loss = 0.519941
+  Batch 500/539: Loss = 0.487114
+Train - Total: 0.505119, InfoNCE: 0.002395, Order: 0.999574, Topo: 0.000000, Recon: 0.009793
+Val   - Total: 1.113872, InfoNCE: 0.613103, Order: 0.995742, Topo: 0.000000, Recon: 0.009660
+
+Epoch 8/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.498505
+  Batch 50/539: Loss = 0.494817
+  Batch 100/539: Loss = 0.487620
+  Batch 150/539: Loss = 0.494953
+  Batch 200/539: Loss = 0.524920
+  Batch 250/539: Loss = 0.503773
+  Batch 300/539: Loss = 0.508141
+  Batch 350/539: Loss = 0.509639
+  Batch 400/539: Loss = 0.513921
+  Batch 450/539: Loss = 0.505166
+  Batch 500/539: Loss = 0.530073
+Train - Total: 0.515439, InfoNCE: 0.002392, Order: 0.999534, Topo: 0.020830, Recon: 0.009550
+Val   - Total: 1.172970, InfoNCE: 0.672341, Order: 0.995742, Topo: 0.000000, Recon: 0.009193
+Topological regularization applied 1 times this epoch
+
+Epoch 9/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.514883
+  Batch 50/539: Loss = 0.507525
+  Batch 100/539: Loss = 0.494754
+  Batch 150/539: Loss = 0.491442
+  Batch 200/539: Loss = 0.515823
+  Batch 250/539: Loss = 0.510916
+  Batch 300/539: Loss = 0.510434
+  Batch 350/539: Loss = 0.487408
+  Batch 400/539: Loss = 0.520688
+  Batch 450/539: Loss = 0.518778
+  Batch 500/539: Loss = 0.504496
+Train - Total: 0.504844, InfoNCE: 0.002260, Order: 0.999580, Topo: 0.000000, Recon: 0.009313
+Val   - Total: 1.149887, InfoNCE: 0.649308, Order: 0.995742, Topo: 0.000000, Recon: 0.009026
+
+Epoch 10/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.527499
+  Batch 50/539: Loss = 0.485411
+  Batch 100/539: Loss = 0.495417
+  Batch 150/539: Loss = 0.514660
+  Batch 200/539: Loss = 0.511133
+  Batch 250/539: Loss = 0.494890
+  Batch 300/539: Loss = 0.518335
+  Batch 350/539: Loss = 0.538406
+  Batch 400/539: Loss = 0.512907
+  Batch 450/539: Loss = 0.508464
+  Batch 500/539: Loss = 0.500600
+Train - Total: 0.512316, InfoNCE: 0.002327, Order: 0.999532, Topo: 0.014696, Recon: 0.009582
+Val   - Total: 1.178303, InfoNCE: 0.677743, Order: 0.995742, Topo: 0.000000, Recon: 0.008962
+Topological regularization applied 1 times this epoch
+
+Epoch 11/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.495744
+  Batch 50/539: Loss = 0.498089
+  Batch 100/539: Loss = 0.492781
+  Batch 150/539: Loss = 0.494248
+  Batch 200/539: Loss = 0.505958
+  Batch 250/539: Loss = 0.496172
+  Batch 300/539: Loss = 0.491727
+  Batch 350/539: Loss = 0.504912
+  Batch 400/539: Loss = 0.502673
+  Batch 450/539: Loss = 0.506463
+  Batch 500/539: Loss = 0.514761
+Train - Total: 0.509050, InfoNCE: 0.002263, Order: 0.999553, Topo: 0.008473, Recon: 0.009249
+Val   - Total: 1.191806, InfoNCE: 0.691057, Order: 0.995742, Topo: 0.000000, Recon: 0.009590
+Topological regularization applied 1 times this epoch
+
+Epoch 12/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.512986
+  Batch 50/539: Loss = 0.498351
+  Batch 100/539: Loss = 0.512044
+  Batch 150/539: Loss = 0.494254
+  Batch 200/539: Loss = 0.500124
+  Batch 250/539: Loss = 0.504557
+  Batch 300/539: Loss = 0.497615
+  Batch 350/539: Loss = 0.508972
+  Batch 400/539: Loss = 0.509422
+  Batch 450/539: Loss = 0.518173
+  Batch 500/539: Loss = 0.496166
+Train - Total: 0.504850, InfoNCE: 0.002152, Order: 0.999598, Topo: 0.000000, Recon: 0.009666
+Val   - Total: 1.090758, InfoNCE: 0.590042, Order: 0.995742, Topo: 0.000000, Recon: 0.009482
+
+Epoch 13/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.513187
+  Batch 50/539: Loss = 0.488230
+  Batch 100/539: Loss = 0.511374
+  Batch 150/539: Loss = 0.508842
+  Batch 200/539: Loss = 0.511238
+  Batch 250/539: Loss = 0.510803
+  Batch 300/539: Loss = 0.514259
+  Batch 350/539: Loss = 0.531838
+  Batch 400/539: Loss = 0.511692
+  Batch 450/539: Loss = 0.517387
+  Batch 500/539: Loss = 0.497090
+Train - Total: 0.514112, InfoNCE: 0.002091, Order: 0.999566, Topo: 0.018789, Recon: 0.009476
+Val   - Total: 1.115389, InfoNCE: 0.614850, Order: 0.995742, Topo: 0.000000, Recon: 0.008891
+Topological regularization applied 1 times this epoch
+
+Epoch 14/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.487769
+  Batch 50/539: Loss = 0.514252
+  Batch 100/539: Loss = 0.474023
+  Batch 150/539: Loss = 0.474464
+  Batch 200/539: Loss = 0.516995
+  Batch 250/539: Loss = 0.493548
+  Batch 300/539: Loss = 0.503285
+  Batch 350/539: Loss = 0.529156
+  Batch 400/539: Loss = 0.490048
+  Batch 450/539: Loss = 0.518969
+  Batch 500/539: Loss = 0.513582
+Train - Total: 0.504615, InfoNCE: 0.002061, Order: 0.999595, Topo: 0.000000, Recon: 0.009190
+Val   - Total: 1.100156, InfoNCE: 0.599631, Order: 0.995742, Topo: 0.000000, Recon: 0.008847
+
+Epoch 15/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.515593
+  Batch 50/539: Loss = 0.519482
+  Batch 100/539: Loss = 0.523795
+  Batch 150/539: Loss = 0.533598
+  Batch 200/539: Loss = 0.490543
+  Batch 250/539: Loss = 0.482824
+  Batch 300/539: Loss = 0.489988
+  Batch 350/539: Loss = 0.526900
+  Batch 400/539: Loss = 0.510426
+  Batch 450/539: Loss = 0.524519
+  Batch 500/539: Loss = 0.501523
+Train - Total: 0.508876, InfoNCE: 0.002086, Order: 0.999546, Topo: 0.008423, Recon: 0.009351
+Val   - Total: 1.101376, InfoNCE: 0.600818, Order: 0.995742, Topo: 0.000000, Recon: 0.008957
+Topological regularization applied 1 times this epoch
+
+Epoch 16/100
+--------------------------------------------------
+  Batch 0/539: Loss = 0.520593
+  Batch 50/539: Loss = 0.513210
+  Batch 100/539: Loss = 0.519984
+  Batch 150/539: Loss = 0.499915
+  Batch 200/539: Loss = 0.510747
+  Batch 250/539: Loss = 0.507265
+  Batch 300/539: Loss = 0.508698
+  Batch 350/539: Loss = 0.513141
+  Batch 400/539: Loss = 0.503817
+  Batch 450/539: Loss = 0.513517
+  Batch 500/539: Loss = 0.496925
+Train - Total: 0.504615, InfoNCE: 0.002061, Order: 0.999581, Topo: 0.000000, Recon: 0.009212
+Val   - Total: 1.102351, InfoNCE: 0.601822, Order: 0.995742, Topo: 0.000000, Recon: 0.008858
+
+Early stopping triggered after 15 epochs without improvement
+
+Training completed!
+Best validation loss: 1.038901 at epoch 1
+✅ Training completed successfully!
+
+Generating training plots...
+Training history plot saved to: experiments/infonce_order_autoencoder_20250814_211632/results/training_history.png
+
+==================================================
+FINAL EVALUATION
+==================================================
+Evaluating on test set...
+
+Final Test Results:
+  Clustering Accuracy: 0.5225
+  Silhouette Score: 0.0169
+  Separation Ratio: 1.2906
+  Positive Distance Mean: 1.6409
+  Negative Distance Mean: 2.1177
+
+Comparison to baseline (0.8167):
+  Improvement: -0.2942 (-29.42%)
+❌ Training failed with error: Object of type float32 is not JSON serializable
+
+❌ Training failed!
+
+Analysis completed with exit code: 0
+Time: Thu 14 Aug 23:51:34 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+Autoencoder pipeline successful!
+
+
+Job finished.

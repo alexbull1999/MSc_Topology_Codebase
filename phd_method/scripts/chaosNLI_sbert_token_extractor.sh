@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=sbert_token_extraction
+#SBATCH --job-name=chaosNLI_sbert_token_extraction
 #SBATCH --partition=a16gpu
-#SBATCH --time=24:00:00
+#SBATCH --time=6:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/Token_Extractor_SNLI+MNLI_Train_ALL_SAMPLES_%j.out
-#SBATCH --error=../logs/Token_Extractor_SNLI+MNLI_Train_ALL_SAMPLES_%j.err
+#SBATCH --output=../logs/chaosNLI_sbert_token_extractor_%j.out
+#SBATCH --error=../logs/chaosNLI_sbert_token_extractor_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -54,7 +54,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/sbert_token_extractor.py
+python MSc_Topology_Codebase/phd_method/src_phd/chaosNLI_sbert_token_extractor.py
 
 
 # Capture exit code

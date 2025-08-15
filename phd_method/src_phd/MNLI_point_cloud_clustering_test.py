@@ -67,7 +67,7 @@ class ClusteringResult:
 class SeparateModelPointCloudGenerator:
     """Generate point clouds using separate trained order embedding and asymmetry models"""
     
-    def __init__(self, order_model_path: str, asymmetry_model_path: str, hyperbolic_model_path: str, device: str = None):
+    def __init__(self, order_model_path: str, asymmetry_model_path: str, hyperbolic_model_path: str = None, device: str = None):
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
         
         print(f"Loading separate models...")
@@ -88,11 +88,12 @@ class SeparateModelPointCloudGenerator:
         self.asymmetry_model.to(self.device)
         self.asymmetry_model.eval()
 
-        hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
-        self.hyperbolic_model = TokenLevelHyperbolicProjector()
-        self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
-        self.hyperbolic_model.to(self.device)
-        self.hyperbolic_model.eval()
+        if hyperbolic_model_path:
+            hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
+            self.hyperbolic_model = TokenLevelHyperbolicProjector()
+            self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
+            self.hyperbolic_model.to(self.device)
+            self.hyperbolic_model.eval()
         
         print(f"Both models loaded on {self.device}")
         print(f"Order model training stats: Best val loss = {order_checkpoint.get('best_val_loss', 'N/A')}")
@@ -151,9 +152,11 @@ class SeparateModelPointCloudGenerator:
         separation_stratified_cloud = self._generate_perfect_separation_stratified_features(premise_tokens, hypothesis_tokens)
 
         multi_boundary_cloud = self._generate_multi_signal_stratified_features(premise_tokens, hypothesis_tokens)
+
+        gap_stratification_cloud = self._generate_gap_energy_stratified_features(premise_tokens, hypothesis_tokens)
    
         # Combine all point clouds
-        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, separation_stratified_cloud, multi_boundary_cloud]
+        all_clouds = premise_clouds + hypothesis_clouds + [energy_weighted_cloud, directional_cloud, separation_stratified_cloud, multi_boundary_cloud, gap_stratification_cloud]
 
         # Check total size and optimize if needed
         total_points = sum(cloud.shape[0] for cloud in all_clouds)
@@ -264,7 +267,7 @@ class SeparateModelPointCloudGenerator:
             asymmetric_energy = self.asymmetry_model.compute_asymmetric_energy(premise_order, hypothesis_order)
             
             # 3. Create multiple directional points with different asymmetric scalings
-            for scale_factor in [0.4, 0.8, 1.2, 1.6]:  # Multiple scales for topological richness
+            for scale_factor in [0.3, 0.6, 1.0, 1.4, 1.8]:  # Multiple scales for topological richness
                 # Scale directional vector by asymmetric energy
                 scaled_direction = global_direction * (asymmetric_energy.item() * scale_factor)
                 
@@ -319,8 +322,8 @@ class SeparateModelPointCloudGenerator:
             stratified_points = []
             centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
             
-            # ZONE 1: Entailment (< 1.0) - ULTRA TIGHT clusters WAS 0.5
-            if forward_energy < 0.6:
+            # ZONE 1: Entailment (< 1.0) - WAS 0.45 for 59.4% acc
+            if forward_energy < 0.42:
                 # print(f"    ENTAILMENT zone detected (energy={forward_energy:.3f})")
                 target_distances = [0.01, 0.02, 0.03, 0.04, 0.05]  # Extremely tight
                 for dist in target_distances:
@@ -329,8 +332,8 @@ class SeparateModelPointCloudGenerator:
                         direction = direction / torch.norm(direction) * dist
                         stratified_points.append(centroid + direction)
             
-            # ZONE 2: Neutral ([1.0, 1.5]) - DISTINCTIVE middle pattern. WAS 0.5 to 1.5
-            elif 0.6 <= forward_energy <= 1.0:
+            # ZONE 2: Neutral ([1.0, 1.5]) - DISTINCTIVE middle pattern. WAS 0.45 to 1.25 for 59.4% acc
+            elif 0.42 <= forward_energy <= 1.15:
                 # print(f"    NEUTRAL zone detected (energy={forward_energy:.3f})")
                 # Create STRUCTURED neutral signature instead of random
                 
@@ -359,8 +362,8 @@ class SeparateModelPointCloudGenerator:
                     noise = torch.randn(768, device=self.device) * 0.1
                     stratified_points.append(centroid + noise)
             
-            # ZONE 3: Contradiction (> 2.0) - MAXIMUM spread WAS 1.5
-            elif forward_energy > 1.0:
+            # ZONE 3: Contradiction (> 2.0) - MAXIMUM spread WAS 1.25 for 59.4% acc
+            elif forward_energy > 1.15:
                 # print(f"    CONTRADICTION zone detected (energy={forward_energy:.3f})")
                 target_distances = [3.5, 4.0, 4.5, 5.0, 5.5]  # Even more spread
                 for dist in target_distances:
@@ -407,19 +410,23 @@ class SeparateModelPointCloudGenerator:
             centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
             
             # Multi-signal classification with ORIGINAL 0.5/1.5 boundaries
-            if forward_energy < 0.6 and asymmetric_energy > 0.25:  # Strong entailment
+            #WAS 0.45 and 0.20 for 59.4% acc
+            if forward_energy < 0.42 and asymmetric_energy > 0.18:  # Strong entailment
                 target_distances = [0.01, 0.02, 0.03]
-                point_count = 25
-            elif forward_energy < 0.6:  # Weak entailment (low asymmetric)
+                point_count = 30
+            elif forward_energy < 0.42 and asymmetric_energy > 0.12:  # Weak entailment (low asymmetric) WAS 0.45 for 59.4% acc without asymm condition
+                target_distances = [0.02, 0.04, 0.06]
+                point_count = 20
+            elif forward_energy < 0.42:  # Weak entailment (Entirely new)
                 target_distances = [0.05, 0.1, 0.15]
                 point_count = 15
-            elif forward_energy > 1.0 and asymmetric_energy > 0.35:  # Strong contradiction
+            elif forward_energy > 1.2 and asymmetric_energy > 0.30:  # Strong contradiction (>1.3 forward energy for 59.4% acc)
                 target_distances = [3.0, 4.0, 5.0]
                 point_count = 8
-            elif forward_energy > 1.0:  # Weak contradiction
+            elif forward_energy > 1.15:  # Weak contradiction -- WAS 1.3 for 59.4% acc
                 target_distances = [2.0, 3.0, 4.0]
                 point_count = 10
-            else:  # Neutral (0.5 ≤ forward_energy ≤ 1.5)
+            else:  # Neutral (0.42 ≤ forward_energy ≤ 1.15)
                 target_distances = [0.3, 0.5, 0.7, 0.9]
                 point_count = 12
             
@@ -454,9 +461,9 @@ class SeparateModelPointCloudGenerator:
                     )
                     
                     # REFINEMENT: Only use tokens with "confident" energy predictions
-                    energy_confidence = abs(energy.item() - 0.7)  # Distance from neutral zone
+                    energy_confidence = abs(energy.item() - 0.65)  # Distance from neutral zone
                     
-                    if energy_confidence > 0.25:  # Only confident predictions
+                    if energy_confidence > 0.2:  # Only confident predictions
                         energy_weight = torch.sigmoid(energy)
                         weighted_point = energy_weight * hypothesis_order[j] + (1 - energy_weight) * premise_order[i]
                         energy_weighted_points.append(weighted_point)
@@ -470,7 +477,7 @@ class SeparateModelPointCloudGenerator:
                         energy = self.order_model.order_violation_energy(
                             premise_order[i:i+1], hypothesis_order[j:j+1]
                         )
-                        confidence = abs(energy.item() - 0.7)
+                        confidence = abs(energy.item() - 0.65)
                         all_pairs.append((i, j, energy.item(), confidence))
                 
                 # Sort by confidence and take top 30
@@ -484,6 +491,99 @@ class SeparateModelPointCloudGenerator:
             
             return torch.stack(energy_weighted_points).cpu()
 
+    
+    def _generate_gap_energy_stratified_features(self, premise_tokens: torch.Tensor, hypothesis_tokens: torch.Tensor) -> torch.Tensor:
+        """
+        NEW: Gap energy stratified features for enhanced directional discrimination
+        
+        Gap Energy = Forward Energy - Backward Energy
+        - High positive gap: Strong directional relationship (entailment/contradiction)
+        - Low gap: Bidirectional/symmetric relationship (neutral)
+        
+        Based on your debug stats:
+        - Entailment: gap_mean=0.187, gap_median=0.140, gap_75th=0.283
+        - Neutral: gap_mean=0.333, gap_median=0.249, gap_75th=0.473  
+        - Contradiction: gap_mean=0.497, gap_median=0.392, gap_75th=0.701
+        """
+        with torch.no_grad():
+            premise_tokens = premise_tokens.to(self.device)
+            hypothesis_tokens = hypothesis_tokens.to(self.device)
+            
+            premise_order = self.order_model(premise_tokens)
+            hypothesis_order = self.order_model(hypothesis_tokens)
+            
+            # Calculate forward and backward energies
+            forward_energy = self.order_model.order_violation_energy(
+                premise_order.mean(0, keepdim=True), hypothesis_order.mean(0, keepdim=True)
+            ).item()
+            
+            backward_energy = self.order_model.order_violation_energy(
+                hypothesis_order.mean(0, keepdim=True), premise_order.mean(0, keepdim=True)
+            ).item()
+            
+            gap_energy = forward_energy - backward_energy
+            
+            stratified_points = []
+            centroid = (premise_order.mean(0) + hypothesis_order.mean(0)) / 2
+            
+            # GAP-BASED CLASSIFICATION (complementary to forward energy)
+            
+            # ZONE 1: Low Gap Energy (< 0.25) - Strong Entailment Candidates
+            if gap_energy < 0.25 and forward_energy < 0.5:  # Low gap + low forward = Strong entailment
+                target_distances = [0.005, 0.01, 0.02]  # Ultra-tight clustering
+                point_count = 25
+                
+            # ZONE 2: Medium Gap Energy (0.25-0.45) - Neutral/Weak patterns  
+            elif 0.25 <= gap_energy <= 0.45:
+                if forward_energy < 0.6:  # Medium gap + low forward = Weak entailment
+                    target_distances = [0.1, 0.2, 0.3]
+                    point_count = 15
+                elif forward_energy > 1.2:  # Medium gap + high forward = Weak contradiction
+                    target_distances = [2.0, 3.0, 4.0] 
+                    point_count = 12
+                else:  # Medium gap + medium forward = Classic neutral
+                    # Ring pattern for neutral (preserved from your existing logic)
+                    ring_radius = 1.0
+                    num_ring_points = 18
+                    
+                    for i in range(num_ring_points):
+                        angle = 2 * np.pi * i / num_ring_points
+                        direction1 = hypothesis_order.mean(0) - premise_order.mean(0)
+                        direction1 = direction1 / torch.norm(direction1)
+                        
+                        direction2 = torch.randn(768, device=self.device)
+                        direction2 = direction2 - torch.dot(direction2, direction1) * direction1
+                        direction2 = direction2 / torch.norm(direction2)
+                        
+                        ring_point = centroid + ring_radius * (np.cos(angle) * direction1 + np.sin(angle) * direction2)
+                        stratified_points.append(ring_point)
+                    
+                    # Add central stability points
+                    for i in range(8):
+                        noise = torch.randn(768, device=self.device) * 0.15
+                        stratified_points.append(centroid + noise)
+                        
+                    return torch.stack(stratified_points).cpu() if stratified_points else torch.empty(0, 768)
+            
+            # ZONE 3: High Gap Energy (> 0.45) - Strong Contradiction Candidates
+            elif gap_energy > 0.45 and forward_energy > 1.0:  # High gap + high forward = Strong contradiction
+                target_distances = [4.0, 5.0, 6.0, 7.0]  # Maximum spread
+                point_count = 10
+                
+            # ZONE 4: Edge cases - Mixed signals
+            else:
+                target_distances = [0.5, 1.0, 1.5]  # Moderate pattern
+                point_count = 12
+            
+            # Generate stratified points based on gap energy zones
+            for dist in target_distances:
+                for i in range(point_count):
+                    direction = torch.randn(768, device=self.device)
+                    direction = direction / torch.norm(direction) * dist
+                    stratified_points.append(centroid + direction)
+            
+            return torch.stack(stratified_points).cpu() if stratified_points else torch.empty(0, 768)
+
 
 
     def _optimize_point_cloud_size(self, all_clouds: List[torch.Tensor], target_max: int) -> List[torch.Tensor]:
@@ -495,7 +595,7 @@ class SeparateModelPointCloudGenerator:
         
         # Priority order (based on your success rates)
         # Keep original 6 clouds intact, reduce enhancement clouds proportionally
-        cloud_priorities = [1.0] * 6 + [0.9, 0.8, 0.7, 0.6]  # Original clouds + enhancements
+        cloud_priorities = [1.0] * 6 + [0.9, 0.8, 0.7, 0.6, 0.9]  # Original clouds + enhancements
         
         optimized_clouds = []
         
@@ -965,7 +1065,8 @@ class SeparateModelPointCloudGenerator:
         
         return X, y
 
-    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 40) -> List[Dict]:
+    #WAS 40!!!!! Changed for precomputed_tda_features_classification.py
+    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 0) -> List[Dict]:
         """
         Filter samples to ensure sufficient tokens for meaningful point cloud generation
         (Same function as clustering pipeline)
@@ -1647,8 +1748,8 @@ class SeparateModelClusteringValidator:
         distance_matrix = pairwise_distances(point_cloud_np, metric=metric)
         return distance_matrix
 
-
-    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 40) -> List[Dict]:
+    #WAS min_combined_token=40!!!!
+    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 0) -> List[Dict]:
         """
         Pre-filter samples to ensure sufficient tokens for 200+ point clouds
         

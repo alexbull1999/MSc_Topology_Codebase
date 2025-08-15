@@ -763,8 +763,8 @@ class SeparateModelClusteringValidator:
         distance_matrix = pairwise_distances(point_cloud_np, metric=metric)
         return distance_matrix
 
-
-    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 40) -> List[Dict]:
+    #WAS 40
+    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 0) -> List[Dict]:
         """
         Pre-filter samples to ensure sufficient tokens for 200+ point clouds
         
@@ -2192,9 +2192,9 @@ def test_sbert_clustering_comparison():
     
     # Compare with topological clustering
     print(f"\nComparison:")
-    print(f"Topological Clustering: 66.9%")
+    print(f"Topological Clustering: 70.2%")
     print(f"SBERT Clustering: {best_accuracy:.1%}")
-    improvement = best_accuracy - 0.669
+    improvement = best_accuracy - 0.702
     print(f"Difference: {improvement:+.3f}")
     
     if best_accuracy > 0.669:

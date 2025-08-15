@@ -1,0 +1,38 @@
+================================================================================
+SBERT CLUSTERING COMPARISON
+================================================================================
+Loading validation data: /vol/bitbucket/ahb24/tda_entailment_new/mnli_val_mismatched_sbert_tokens.pkl
+Loaded 9832 validation samples
+Separate model clustering validator initialized
+Samples per class: 100
+Generating maximum sample indices...
+  entailment: 3463 total samples available
+Token filtering: 3463/3463 samples have ≥0 tokens
+    Using ALL 3463 samples after token filtering
+Token count stats: 42 ± 20 (range: 9-209)
+  neutral: 3129 total samples available
+Token filtering: 3129/3129 samples have ≥0 tokens
+    Using ALL 3129 samples after token filtering
+Token count stats: 42 ± 18 (range: 10-212)
+  contradiction: 3240 total samples available
+Token filtering: 3240/3240 samples have ≥0 tokens
+    Using ALL 3240 samples after token filtering
+Token count stats: 41 ± 19 (range: 9-207)
+Extracting SBERT embeddings for clustering...
+Processing entailment: 3463 samples
+Processing neutral: 3129 samples
+Processing contradiction: 3240 samples
+SBERT clustering data: 9832 samples, 3072 dimensions
+
+============================================================
+SBERT CLUSTERING RESULTS
+============================================================
+SBERT Clustering Accuracy: 0.341
+Silhouette Score: 0.023
+Adjusted Rand Index: -0.000
+
+Comparison:
+Topological Clustering: ...%
+SBERT Clustering: 34.1%
+Difference: -...
+🔬 Topological features provide better clustering structure

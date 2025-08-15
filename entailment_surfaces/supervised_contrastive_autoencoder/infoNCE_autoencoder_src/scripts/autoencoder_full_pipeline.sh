@@ -1,15 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=point_cloud_clustering
-#SBATCH --partition=gpgpuB
-#SBATCH --time=20:00:00
+#SBATCH --job-name=infoNCE_autoencoder_pipeline
+#SBATCH --partition=gpgpuALL
+#SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/MNLI_fixedNN_nohyp_3000train_samples_point_cloud_classification_%j.out
-#SBATCH --error=../logs/MNLI_fixedNN_nohyp_3000train_samples_point_cloud_classification_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/infoNCE_autoencoder_pipeline_%j.out
+#SBATCH --error=../logs/infoNCE_autoencoder_pipeline_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
+echo "Starting Surface Distance Metric Analysis job..."
 echo "Job ID: $SLURM_JOB_ID"
 echo "Node: $SLURM_NODELIST"
 echo "Time: $(date)"
@@ -45,15 +46,15 @@ print('PyTorch setup verified!')
 
 
 # Change to your project directory
-cd ~
+cd ~/MSc_Topology_Codebase
 
 echo ""
-echo "Starting Model training..."
+echo "Starting AutoEncoder Pipeline..."
 echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/MNLI_point_cloud_clustering_test.py --classification
+python entailment_surfaces/supervised_contrastive_autoencoder/infoNCE_autoencoder_src/train_infoNCE_order_autoencoder.py
 
 
 # Capture exit code
@@ -67,7 +68,7 @@ echo "Time: $(date)"
 if [ $EXIT_CODE -eq 0 ]; then
     echo ""
     echo "=== ANALYSIS SUCCESSFUL ==="
-    echo "Clustering successful!"
+    echo "Autoencoder pipeline successful!"
     echo ""
 
 else

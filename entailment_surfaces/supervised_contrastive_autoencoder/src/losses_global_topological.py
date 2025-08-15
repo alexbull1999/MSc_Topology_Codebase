@@ -183,8 +183,6 @@ class FullDatasetContrastiveLoss(nn.Module):
         # pos_loss = pos_distances.mean()
         neg_loss = torch.clamp(self.negative_margin - neg_distances, min=0).mean()
         
-        # total_loss = pos_loss + neg_loss
-
         total_loss = pos_loss + neg_loss
         
         # Debug current batch separation
@@ -383,12 +381,14 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         #     num_directions=10    # Standard for sliced Wasserstein
         #     )
 
-        self.topological_loss_fn = MoorSignatureLossWithLifting(
-            max_dimension=0,        # H0 only to start
-            p=2,                   # L2 norm
-            normalise=True,        # Normalize distances
-            dimensions=0            # H0 only to start
-            )
+        # self.topological_loss_fn = MoorSignatureLossWithLifting(
+        #     max_dimension=0,        # H0 only to start
+        #     p=2,                   # L2 norm
+        #     normalise=True,        # Normalize distances
+        #     dimensions=0            # H0 only to start
+        #     )
+
+        self.topological_loss_fn = MoorTopologicalLoss()
 
 
         self.topological_weight = topological_weight

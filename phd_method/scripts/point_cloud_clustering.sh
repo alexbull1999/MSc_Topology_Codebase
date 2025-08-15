@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=point_cloud_clustering
 #SBATCH --partition=gpgpuB
-#SBATCH --time=20:00:00
+#SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/SNLI_nohyp_2000train_samples_point_cloud_classification_%j.out
-#SBATCH --error=../logs/SNLI_nohyp_2000train_samples_point_cloud_classification_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/all_MNLI_samples_point_cloud_clustering_v3_%j.out
+#SBATCH --error=../logs/all_MNLI_samples_point_cloud_clustering_v3_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/point_cloud_clustering_test.py --classification
+python MSc_Topology_Codebase/phd_method/src_phd/MNLI_point_cloud_clustering_test.py
 
 
 # Capture exit code

@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=sbert_token_extraction
-#SBATCH --partition=a16gpu
+#SBATCH --job-name=persistence_image_extraction
+#SBATCH --partition=gpgpuALL
 #SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/Token_Extractor_SNLI+MNLI_Train_ALL_SAMPLES_%j.out
-#SBATCH --error=../logs/Token_Extractor_SNLI+MNLI_Train_ALL_SAMPLES_%j.err
+#SBATCH --output=../logs/persistence_image_precomputation_SNLI_NO_THRESHOLD_%j.out
+#SBATCH --error=../logs/persistence_image_precomputation_SNLI_NO_THRESHOLD_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -54,7 +54,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/sbert_token_extractor.py
+python MSc_Topology_Codebase/phd_method/src_phd/precompute_persistence_images.py
 
 
 # Capture exit code

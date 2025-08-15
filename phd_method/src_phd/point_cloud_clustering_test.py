@@ -67,7 +67,7 @@ class ClusteringResult:
 class SeparateModelPointCloudGenerator:
     """Generate point clouds using separate trained order embedding and asymmetry models"""
     
-    def __init__(self, order_model_path: str, asymmetry_model_path: str, hyperbolic_model_path: str, device: str = None):
+    def __init__(self, order_model_path: str, asymmetry_model_path: str, hyperbolic_model_path: str = None, device: str = None):
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
         
         print(f"Loading separate models...")
@@ -88,11 +88,12 @@ class SeparateModelPointCloudGenerator:
         self.asymmetry_model.to(self.device)
         self.asymmetry_model.eval()
 
-        hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
-        self.hyperbolic_model = TokenLevelHyperbolicProjector()
-        self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
-        self.hyperbolic_model.to(self.device)
-        self.hyperbolic_model.eval()
+        if hyperbolic_model_path:
+            hyperbolic_checkpoint = torch.load(hyperbolic_model_path, map_location=self.device)
+            self.hyperbolic_model = TokenLevelHyperbolicProjector()
+            self.hyperbolic_model.load_state_dict(hyperbolic_checkpoint['projector_state_dict'])
+            self.hyperbolic_model.to(self.device)
+            self.hyperbolic_model.eval()
         
         print(f"Both models loaded on {self.device}")
         print(f"Order model training stats: Best val loss = {order_checkpoint.get('best_val_loss', 'N/A')}")
@@ -965,7 +966,8 @@ class SeparateModelPointCloudGenerator:
         
         return X, y
 
-    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 40) -> List[Dict]:
+    #WAS 40 -- changed for precomputed_tda_features_classification!!!
+    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 0) -> List[Dict]:
         """
         Filter samples to ensure sufficient tokens for meaningful point cloud generation
         (Same function as clustering pipeline)
@@ -1647,8 +1649,8 @@ class SeparateModelClusteringValidator:
         distance_matrix = pairwise_distances(point_cloud_np, metric=metric)
         return distance_matrix
 
-
-    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 40) -> List[Dict]:
+    #WAS 40!!!!
+    def filter_samples_by_token_count(self, samples: List[Dict], min_combined_tokens: int = 0) -> List[Dict]:
         """
         Pre-filter samples to ensure sufficient tokens for 200+ point clouds
         
@@ -3299,7 +3301,7 @@ def test_classification_accuracy():
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
     hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/snli_best_hyperbolic_projector_updated.pt"
-    train_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
+    train_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl" #change back to SNLI
     val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
     
     # Create generator
