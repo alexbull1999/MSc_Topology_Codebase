@@ -179,12 +179,17 @@ class InfoNCEOrderTrainer:
         return epoch_metrics
     
     def train(self, train_loader, val_loader, num_epochs, patience=15, save_dir=None):
-        """Full training loop"""
+        """Full training loop with global dataset updates"""
         print(f"Starting training for {num_epochs} epochs...")
         
         for epoch in range(num_epochs):
             print(f"\nEpoch {epoch+1}/{num_epochs}")
             print("-" * 50)
+            
+            # Update global dataset every 3 epochs
+            if epoch % 3 == 0:
+                print(f"🌍 Updating global dataset at epoch {epoch + 1}")
+                self.loss_function.update_global_dataset(train_loader, self.model, self.device)
             
             # Train
             train_metrics = self.train_epoch(train_loader, epoch)

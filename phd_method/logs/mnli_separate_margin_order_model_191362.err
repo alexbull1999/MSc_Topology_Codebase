@@ -1,4 +1,0 @@
-/homes/ahb24/MSc_Topology_Codebase/phd_method/src_phd/independent_order_model.py:355: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.tight_layout()
-/homes/ahb24/MSc_Topology_Codebase/phd_method/src_phd/independent_order_model.py:361: UserWarning: Glyph 9989 (\N{WHITE HEAVY CHECK MARK}) missing from font(s) DejaVu Sans.
-  plt.savefig(plot_path, dpi=300, bbox_inches='tight')

@@ -10,6 +10,7 @@ import numpy as np
 from typing import List, Tuple, Dict
 from pathlib import Path
 import pickle
+import gc
 
 
 class SBERTTokenExtractor:
@@ -175,7 +176,8 @@ def main():
     
     if Path(train_data_path).exists():
         print("Processing SNLI training data...")
-        extractor.process_dataset(train_data_path, train_output_path, max_samples=None)  # Limit for memory
+        processed_data = extractor.process_dataset(train_data_path, train_output_path, max_samples=None)  # Limit for memory
+        del processed_data
     else:
         print(f"Training data not found at: {train_data_path}")
     

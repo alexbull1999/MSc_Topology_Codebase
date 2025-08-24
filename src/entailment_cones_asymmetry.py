@@ -169,7 +169,7 @@ class HyperbolicEntailmentCones:
             'cone_asymmetries': []
         }
 
-        print(f"Computing enhanced cone violations for {n_samples} samples on {self.device}")
+        # print(f"Computing enhanced cone violations for {n_samples} samples on {self.device}")
 
         for i in range(0, n_samples, batch_size):
             end_idx = min(i + batch_size, n_samples)
@@ -278,7 +278,7 @@ class EnhancedHyperbolicConeEmbeddingPipeline:
 
         # Get enhanced hyperbolic results (includes asymmetric features)
         if self.hyperbolic_pipeline.device.type == 'cuda':
-            print("Using GPU batch processing for enhanced hyperbolic energies")
+            # print("Using GPU batch processing for enhanced hyperbolic energies")
             hyperbolic_results = self.hyperbolic_pipeline.compute_hyperbolic_energies_batch(premise_bert, hypothesis_bert)
         else:
             print("Using CPU single-pass processing for enhanced hyperbolic energies")
@@ -289,7 +289,7 @@ class EnhancedHyperbolicConeEmbeddingPipeline:
 
         # Compute enhanced cone violation energies
         if self.cone_computer.device.type == 'cuda':
-            print("Using GPU batch processing for enhanced cone energies")
+            # print("Using GPU batch processing for enhanced cone energies")
             cone_results = self.cone_computer.cone_violation_energy_batch(premises_hyp, hypotheses_hyp)
         else:
             print("Using CPU single-pass processing for enhanced cone energies")

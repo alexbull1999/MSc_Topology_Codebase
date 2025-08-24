@@ -80,8 +80,8 @@ class SurfaceDistanceMetricAnalyzer:
             'minkowski_4',     # L4 norm
             
             # Other metrics
-            'canberra',        # Weighted Manhattan
-            'braycurtis',      # Normalized Manhattan
+            'canberra',        
+            'braycurtis',      
             
         ]
 
@@ -89,15 +89,16 @@ class SurfaceDistanceMetricAnalyzer:
         self.embedding_spaces = [
             'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
             # 'sbert_difference',      # Premise - Hypothesis (relationship vector)
-            # 'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
+            'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
             # 'order_difference',     # Order premise - hypothesis (order relationship)
             # 'order_violations',     # Order violation energies (inherently relational)
-            # 'hyperbolic_concat',    # Concatenated hyperbolic embeddings
+            'hyperbolic_concat',    # Concatenated hyperbolic embeddings
             # 'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
             # 'cone_features',        # Multiple cone-related features
+            # 'cone_violations',
 
             # Lattice embedding spaces (All on SBERT raw embeddings)
-            'lattice_containment', # Element-wise containment relationships
+            'lattice_containment', # Element-wise containment relationships (RENAMED TO SEMANTIC COHERENCE IN PAPER)
             # 'lattice_order_violations', # Element-wise order violations  
             # 'lattice_height',          # Element-wise height differences
             # 'lattice_subsumption',     # Element-wise subsumption coverage
@@ -231,7 +232,7 @@ class SurfaceDistanceMetricAnalyzer:
             
             print(f"  {label}: {len(indices)} samples")
 
-        # STEP 1: Generate EUCLIDEAN order embeddings (before hyperbolic projection)
+        # # STEP 1: Generate EUCLIDEAN order embeddings (before hyperbolic projection)
         print("Computing EUCLIDEAN order embeddings...")
         with torch.no_grad():
             for label in data_by_class.keys():
@@ -402,6 +403,14 @@ class SurfaceDistanceMetricAnalyzer:
                         space_embeddings[label] = data_by_class[label]['enhanced_cone_features'].cpu()
                     else:
                         print(f"    Enhanced cone features not available for {space}")
+                        continue
+
+                elif space == 'cone_violations':
+                    if 'cone_energies' in data_by_class[label] and data_by_class[label]['cone_energies'] is not None:
+                        # Combined enhanced features (multi-dimensional)
+                        space_embeddings[label] = data_by_class[label]['cone_energies'].unsqueeze(1).cpu()
+                    else:
+                        print(f"    Cone violation energies not available for {space}")
                         continue
 
                 elif space == 'lattice_containment':
@@ -897,7 +906,7 @@ def main():
 
     # Initialize analyzer
     analyzer = SurfaceDistanceMetricAnalyzer(
-        bert_data_path="data/processed/mnli_full_SBERT_train.pt",
+        bert_data_path="data/processed/snli_10k_subset_train_SBERT_STSB_LARGE.pt",
         order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
         results_dir="entailment_surfaces/results",
         seed=333

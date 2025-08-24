@@ -1,5 +1,7 @@
+# FILE: losses.py
 """
 InfoNCE + Order Embeddings + Topological loss functions
+CORRECTED VERSION with proper Vendrov et al. order embedding loss
 """
 
 import torch
@@ -9,19 +11,70 @@ import torch.nn.functional as F
 
 class InfoNCELoss(nn.Module):
     """
-    InfoNCE contrastive loss - similarity-based instead of distance-based
+    InfoNCE contrastive loss with global dataset updates
     """
     
-    def __init__(self, temperature=0.07):
+    def __init__(self, temperature=0.07, max_global_samples=5000):
         super().__init__()
         self.temperature = temperature
+        self.max_global_samples = max_global_samples
+        
+        # Global dataset storage
+        self.global_features = None
+        self.global_labels = None
+        
+        print(f"InfoNCE Loss initialized with global updates:")
+        print(f"  Temperature: {temperature}")
+        print(f"  Max global samples: {max_global_samples}")
+    
+    def update_global_dataset(self, dataloader, model, device):
+        """
+        Extract features for the entire dataset using the current model
+        """
+        print("🌍 Extracting global features for InfoNCE...")
+        model.eval()
+        
+        all_features = []
+        all_labels = []
+        
+        with torch.no_grad():
+            for batch_idx, batch in enumerate(dataloader):
+                premise_embeddings = batch['premise_embedding'].to(device)
+                hypothesis_embeddings = batch['hypothesis_embedding'].to(device)
+                labels = batch['label'].to(device)
+                
+                # Concatenate premise and hypothesis for model input
+                combined_embeddings = torch.cat([premise_embeddings, hypothesis_embeddings], dim=1)
+                
+                # Get latent features
+                latent, _ = model(combined_embeddings)
+                
+                all_features.append(latent.cpu())
+                all_labels.append(labels.cpu())
+                
+                if batch_idx % 50 == 0:
+                    print(f"  Processed {batch_idx + 1}/{len(dataloader)} batches")
+        
+        # Combine all features
+        full_features = torch.cat(all_features, dim=0).to(device)
+        full_labels = torch.cat(all_labels, dim=0).to(device)
+        
+        # Subsample if too large
+        if len(full_features) > self.max_global_samples:
+            indices = torch.randperm(len(full_features))[:self.max_global_samples]
+            self.global_features = full_features[indices]
+            self.global_labels = full_labels[indices]
+            print(f"  Subsampled to {self.max_global_samples} samples")
+        else:
+            self.global_features = full_features
+            self.global_labels = full_labels
+        
+        print(f"  Global dataset updated: {self.global_features.shape[0]} samples")
+        model.train()
     
     def forward(self, features, labels):
         """
-        InfoNCE loss computation
-        Args:
-            features: [batch_size, feature_dim] normalized embeddings
-            labels: [batch_size] class labels
+        InfoNCE loss computation with global negatives
         """
         batch_size = features.shape[0]
         device = features.device
@@ -29,37 +82,66 @@ class InfoNCELoss(nn.Module):
         # Normalize features to unit sphere
         features = F.normalize(features, p=2, dim=1)
         
-        # Compute similarity matrix
-        similarity_matrix = torch.matmul(features, features.T) / self.temperature
-        
-        # Create masks
-        labels_expanded = labels.contiguous().view(-1, 1)
-        mask_positive = torch.eq(labels_expanded, labels_expanded.T).float().to(device)
-        mask_no_diagonal = 1 - torch.eye(batch_size, device=device)
-        mask_positive = mask_positive * mask_no_diagonal
-        
-        # For each anchor, compute InfoNCE loss
-        losses = []
-        for i in range(batch_size):
-            # Get positive similarities for anchor i
-            pos_similarities = similarity_matrix[i] * mask_positive[i]
+        # Use global features if available, otherwise fall back to batch
+        if self.global_features is not None and len(self.global_features) > batch_size:
+            # Combine batch features with global features
+            global_features_norm = F.normalize(self.global_features, p=2, dim=1)
             
-            # Get all similarities (excluding self)
-            all_similarities = similarity_matrix[i] * mask_no_diagonal[i]
-            
-            # Check if there are positive pairs
-            if pos_similarities.sum() > 0:
+            # For each sample in batch, compute InfoNCE against global dataset
+            losses = []
+            for i in range(batch_size):
+                anchor = features[i:i+1]  # [1, feature_dim]
+                anchor_label = labels[i]
+                
+                # Find global positives (same class as anchor)
+                pos_mask = (self.global_labels == anchor_label)
+                if pos_mask.sum() == 0:
+                    continue
+                
+                # Compute similarities: anchor vs all global samples
+                similarities = torch.matmul(anchor, global_features_norm.T) / self.temperature  # [1, global_size]
+                similarities = similarities.squeeze(0)  # [global_size]
+                
+                # Get positive and negative similarities
+                pos_similarities = similarities[pos_mask]
+                
                 # InfoNCE: -log(sum(exp(pos)) / sum(exp(all)))
                 pos_exp_sum = torch.sum(torch.exp(pos_similarities))
-                all_exp_sum = torch.sum(torch.exp(all_similarities))
+                all_exp_sum = torch.sum(torch.exp(similarities))
                 
                 loss_i = -torch.log(pos_exp_sum / (all_exp_sum + 1e-8) + 1e-8)
                 losses.append(loss_i)
+            
+            if len(losses) > 0:
+                return torch.stack(losses).mean()
+            else:
+                return torch.tensor(0.0, device=device, requires_grad=True)
         
-        if len(losses) > 0:
-            return torch.stack(losses).mean()
         else:
-            return torch.tensor(0.0, device=device, requires_grad=True)
+            # Fall back to batch-only InfoNCE (original implementation)
+            similarity_matrix = torch.matmul(features, features.T) / self.temperature
+            
+            labels_expanded = labels.contiguous().view(-1, 1)
+            mask_positive = torch.eq(labels_expanded, labels_expanded.T).float().to(device)
+            mask_no_diagonal = 1 - torch.eye(batch_size, device=device)
+            mask_positive = mask_positive * mask_no_diagonal
+            
+            losses = []
+            for i in range(batch_size):
+                pos_similarities = similarity_matrix[i] * mask_positive[i]
+                all_similarities = similarity_matrix[i] * mask_no_diagonal[i]
+                
+                if pos_similarities.sum() > 0:
+                    pos_exp_sum = torch.sum(torch.exp(pos_similarities))
+                    all_exp_sum = torch.sum(torch.exp(all_similarities))
+                    
+                    loss_i = -torch.log(pos_exp_sum / (all_exp_sum + 1e-8) + 1e-8)
+                    losses.append(loss_i)
+            
+            if len(losses) > 0:
+                return torch.stack(losses).mean()
+            else:
+                return torch.tensor(0.0, device=device, requires_grad=True)
 
 
 class OrderEmbeddingLoss(nn.Module):
@@ -81,24 +163,42 @@ class OrderEmbeddingLoss(nn.Module):
     
     def order_violation_energy(self, premise_embeddings, hypothesis_embeddings):
         """
-        Compute order violation energy: E(u,v) = ||max(0, v-u)||²
-        For entailment: premise ⊑ hypothesis, so energy should be low
+        Compute order violation energy: E(u,v) = ||max(0, u-v)||²
+        For entailment: premise ⊑ hypothesis, so violations should be premise - hypothesis
         """
-        violations = torch.clamp(hypothesis_embeddings - premise_embeddings, min=0)
+        # Correct order: premise should be ≤ hypothesis for entailment
+        # So we penalize when premise > hypothesis
+        violations = torch.clamp(premise_embeddings - hypothesis_embeddings, min=0)
         energy = torch.norm(violations, p=2, dim=1) ** 2
+        
+        # Normalize by dimension to keep energies reasonable
+        energy = energy / premise_embeddings.shape[1]
+        
         return energy
     
     def forward(self, premise_embeddings, hypothesis_embeddings, labels):
         """
         Separate margin loss with neutral sandwiching for better class separation
-        - Entailment: minimize energy (target ~0.3)
-        - Neutral: keep energy in [neutral_margin, neutral_upper_bound] (target ~1.3)
-        - Contradiction: ensure energy > contradiction_margin (target ~1.9)
         """
         device = premise_embeddings.device
         
         # Compute order violation energy for all pairs
         energy = self.order_violation_energy(premise_embeddings, hypothesis_embeddings)
+        
+        # Debug: print energy statistics occasionally
+        if hasattr(self, 'debug_counter'):
+            self.debug_counter += 1
+        else:
+            self.debug_counter = 1
+            
+        if self.debug_counter % 1000 == 0:  # Print every 1000 calls
+            print(f"Order Loss Debug - Energy stats: min={energy.min():.4f}, max={energy.max():.4f}, mean={energy.mean():.4f}")
+            for label_val in [0, 1, 2]:
+                mask = (labels == label_val)
+                if mask.sum() > 0:
+                    label_energies = energy[mask]
+                    label_name = ['entailment', 'neutral', 'contradiction'][label_val]
+                    print(f"  {label_name}: mean={label_energies.mean():.4f}, std={label_energies.std():.4f}")
         
         # Separate margin loss based on label
         losses = []
@@ -197,6 +297,7 @@ class CombinedLoss(nn.Module):
                  topological_weight=0.05,
                  reconstruction_weight=0.3,
                  temperature=0.07,
+                 max_global_samples=5000,
                  # Order embedding parameters
                  entailment_margin=0.3,
                  neutral_margin=1.0,
@@ -205,7 +306,7 @@ class CombinedLoss(nn.Module):
                  topo_frequency=1000):
         super().__init__()
         
-        self.infonce_loss = InfoNCELoss(temperature=temperature)
+        self.infonce_loss = InfoNCELoss(temperature=temperature, max_global_samples=max_global_samples)
         self.order_loss = OrderEmbeddingLoss(
             entailment_margin=entailment_margin,
             neutral_margin=neutral_margin,
@@ -230,6 +331,10 @@ class CombinedLoss(nn.Module):
         print(f"  Topological weight: {topological_weight}")
         print(f"  Reconstruction weight: {reconstruction_weight}")
         print(f"  Topological frequency: {topo_frequency} iterations")
+    
+    def update_global_dataset(self, dataloader, model, device):
+        """Update global dataset for InfoNCE loss"""
+        self.infonce_loss.update_global_dataset(dataloader, model, device)
     
     def forward(self, premise_latent, hypothesis_latent, 
                 premise_reconstructed, hypothesis_reconstructed,

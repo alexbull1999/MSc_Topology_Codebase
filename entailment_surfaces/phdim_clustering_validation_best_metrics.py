@@ -38,20 +38,34 @@ class StatisticalValidation:
         
         # Top performers to test with more samples
         self.top_combinations = [
-            # ('sbert_concat', 'euclidean'),
-            # ('sbert_concat', 'chebyshev'),
-            # ('sbert_concat', 'cosine'),
-            # ('sbert_concat', 'minkowski_3'),
-            # ('sbert_concat', 'minkowski_4'),
-            # # ('sbert_concat', 'canberra'),
-            # ('sbert_concat', 'braycurtis'),
+            ('sbert_concat', 'euclidean'),
+            ('sbert_concat', 'chebyshev'),
+            ('sbert_concat', 'cosine'),
+            ('sbert_concat', 'minkowski_3'),
+            ('sbert_concat', 'minkowski_4'),
+            ('sbert_concat', 'canberra'),
+            ('sbert_concat', 'braycurtis'),
             ('lattice_containment', 'euclidean'),
             ('lattice_containment', 'chebyshev'),
             ('lattice_containment', 'cosine'),
             ('lattice_containment', 'minkowski_3'),
             ('lattice_containment', 'minkowski_4'),
-            # ('lattice_containment', 'canberra'),
-            ('lattice_containment', 'braycurtis')
+            ('lattice_containment', 'canberra'),
+            ('lattice_containment', 'braycurtis'),
+            ('order_concat', 'euclidean'),
+            ('order_concat', 'chebyshev'),
+            ('order_concat', 'cosine'),
+            ('order_concat', 'minkowski_3'),
+            ('order_concat', 'minkowski_4'),
+            ('order_concat', 'canberra'),
+            ('order_concat', 'braycurtis'),
+            ('hyperbolic_concat', 'euclidean'),
+            ('hyperbolic_concat', 'chebyshev'),
+            ('hyperbolic_concat', 'cosine'),
+            ('hyperbolic_concat', 'minkowski_3'),
+            ('hyperbolic_concat', 'minkowski_4'),
+            ('hyperbolic_concat', 'canberra'),
+            ('hyperbolic_concat', 'braycurtis'),
         ]
         
         # Sample size for statistical validation
@@ -191,7 +205,7 @@ class StatisticalValidation:
                     ph_dim, all_diagrams = ph_dim_and_diagrams_from_distance_matrix(
                         distance_matrix,
                         min_points=200,
-                        max_points=800,
+                        max_points=1000,
                         point_jump=50,
                         h_dim=0,
                         alpha=1.0

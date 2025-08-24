@@ -39,20 +39,21 @@ def create_config():
         'loss': {
             'infonce_weight': 1.0,        # Main contrastive signal
             'order_weight': 0.5,          # Asymmetric entailment constraints
-            'topological_weight': 0.5,   # Moor topological regularization
-            'reconstruction_weight': 0.3, # Semantic preservation
-            'temperature': 0.07,          # InfoNCE temperature
+            'topological_weight': 1.0,   # Moor topological regularization
+            'reconstruction_weight': 10.0, # Semantic preservation
+            'temperature': 0.1,          # InfoNCE temperature
+            'max_global_samples': 5000,   # Global dataset size for InfoNCE
             # Order embedding margins (Vendrov et al.)
             'entailment_margin': 0.3,     # Target energy for entailment
             'neutral_margin': 1.0,        # Lower bound for neutral
             'neutral_upper_bound': 1.5,   # Upper bound for neutral  
             'contradiction_margin': 2.0,  # Minimum energy for contradiction
-            'topo_frequency': 1000        # Apply topology every 1000 iterations
+            'topo_frequency': 100        # Apply topology every 1000 iterations
         },
         
         'optimizer': {
             'lr': 0.0001,      # Your proven learning rate
-            'weight_decay': 0.0
+            'weight_decay': 1e-5
         },
         
         'training': {
@@ -70,7 +71,7 @@ def setup_experiment(config):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     exp_name = f"infonce_order_autoencoder_{timestamp}"
     
-    exp_dir = f"experiments/{exp_name}"
+    exp_dir = f"entailment_surfaces/supervised_contrastive_autoencoder/infoNCE_autoencoder_src/experiments/{exp_name}"
     checkpoints_dir = f"{exp_dir}/checkpoints"
     results_dir = f"{exp_dir}/results"
     
@@ -180,7 +181,7 @@ def main():
         
         # Evaluate on test set
         print("Evaluating on test set...")
-        test_results = evaluator.evaluate(test_loader)
+        test_results = evaluator.evaluate_detailed(test_loader)
         
         print(f"\nFinal Test Results:")
         print(f"  Clustering Accuracy: {test_results['clustering_accuracy']:.4f}")
@@ -198,13 +199,7 @@ def main():
         # Save results
         with open(f"{results_dir}/test_results.json", 'w') as f:
             json.dump(test_results, f, indent=2)
-        
-        # Generate comparison plot
-        print("\nGenerating comparison plots...")
-        try:
-            compare_with_baseline(f"{results_dir}/test_results.json", baseline_accuracy)
-        except Exception as e:
-            print(f"Warning: Could not generate comparison plots: {e}")
+
         
         # Also evaluate on validation set for comparison
         print("\nEvaluating on validation set...")

@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=persistence_image_classification
-#SBATCH --partition=gpgpuALL
+#SBATCH --partition=a16gpu
 #SBATCH --time=20:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
-#SBATCH --output=../logs/chaosNLI_Persistence_Image_Classification_SNLITRAIN_AllSamples_%j.out
-#SBATCH --error=../logs/chaosNLI_Persistence_Image_Classification_SNLITRAIN_AllSamples_%j.err
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --output=../logs/chaosNLI_CNN_VARIATIONS_Persistence_Image_Classification_SNLI150k+MNLI48kTRAIN_%j.out
+#SBATCH --error=../logs/chaosNLI_CNN_VARIATIONS_Persistence_Image_Classification_SNLI150k+MNLI48kTRAIN_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/chaosNLI_persistence_image_classification.py --include-hybrid
+python MSc_Topology_Codebase/phd_method/src_phd/snli+mnli_chaosNLI_persistence_image_classification.py 
 
 
 # Capture exit code

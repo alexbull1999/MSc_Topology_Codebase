@@ -129,7 +129,9 @@ class ClusteringValidator:
         # Target embedding spaces from Revised Next Steps
         self.target_spaces = [
             'sbert_concat',
-            'lattice_containment'
+            'lattice_containment',
+            'order_concat',
+            'hyperbolic_concat'
         ]
         
         # All distance metrics
@@ -699,7 +701,7 @@ class ClusteringValidator:
 
 def main():
     """Run Phase 1 clustering validation"""
-    bert_data_path = "data/processed/mnli_full_SBERT_train.pt"
+    bert_data_path = "data/processed/snli_10k_subset_train_SBERT_STSB_LARGE.pt"
     order_model_path = "models/enhanced_order_embeddings_snli_SBERT_full.pt"
     output_dir = "entailment_surfaces/clustering"
     

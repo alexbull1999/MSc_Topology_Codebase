@@ -100,6 +100,167 @@ class PersistenceImageCNN(nn.Module):
         
         return x
 
+class EnhancedPersistenceImageCNN(nn.Module):
+    """Enhanced CNN with deeper architecture and batch normalization"""
+    
+    def __init__(self, num_classes=3):
+        super().__init__()
+        
+        # Deeper CNN with batch normalization
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.conv2 = nn.Conv2d(32, 32, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(32)
+        
+        self.conv3 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(64)
+        self.conv4 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
+        self.bn4 = nn.BatchNorm2d(64)
+        
+        self.conv5 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn5 = nn.BatchNorm2d(128)
+        
+        self.pool = nn.MaxPool2d(2, 2)
+        self.adaptive_pool = nn.AdaptiveAvgPool2d((4, 4))  # Fixed output size
+        
+        # More sophisticated fully connected layers
+        self.fc1 = nn.Linear(128 * 4 * 4, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, num_classes)
+        
+        self.dropout = nn.Dropout(0.4)
+        
+    def forward(self, x):
+        # First block
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = F.relu(self.bn2(self.conv2(x)))
+        x = self.pool(x)  # 30x30 -> 15x15
+        
+        # Second block
+        x = F.relu(self.bn3(self.conv3(x)))
+        x = F.relu(self.bn4(self.conv4(x)))
+        x = self.pool(x)  # 15x15 -> 7x7
+        
+        # Third block
+        x = F.relu(self.bn5(self.conv5(x)))
+        x = self.adaptive_pool(x)  # -> 4x4
+        
+        # Fully connected layers
+        x = x.view(-1, 128 * 4 * 4)
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = F.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = F.relu(self.fc3(x))
+        x = self.dropout(x)
+        x = self.fc4(x)
+        
+        return x
+
+class AttentionPersistenceImageCNN(nn.Module):
+    """CNN with spatial attention for persistence images"""
+    
+    def __init__(self, num_classes=3):
+        super().__init__()
+        
+        # CNN backbone
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
+        
+        self.pool = nn.MaxPool2d(2, 2)
+        
+        # Spatial attention mechanism
+        self.attention_conv = nn.Conv2d(128, 1, kernel_size=1)
+        self.attention_sigmoid = nn.Sigmoid()
+        
+        # Global average pooling
+        self.global_pool = nn.AdaptiveAvgPool2d(1)
+        
+        # Classifier
+        self.fc1 = nn.Linear(128, 64)
+        self.fc2 = nn.Linear(64, num_classes)
+        self.dropout = nn.Dropout(0.3)
+        
+    def forward(self, x):
+        # Feature extraction
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))  # 30x30 -> 15x15
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))  # 15x15 -> 7x7
+        x = F.relu(self.bn3(self.conv3(x)))  # 7x7
+        
+        # Spatial attention
+        attention_weights = self.attention_sigmoid(self.attention_conv(x))
+        x = x * attention_weights  # Apply attention
+        
+        # Global pooling and classification
+        x = self.global_pool(x)  # -> (batch, 128, 1, 1)
+        x = x.view(-1, 128)
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = self.fc2(x)
+        
+        return x
+
+class MultiScalePersistenceImageCNN(nn.Module):
+    """Multi-scale CNN that processes different scales of persistence images"""
+    
+    def __init__(self, num_classes=3):
+        super().__init__()
+        
+        # Branch 1: Fine-grained features (3x3 kernels)
+        self.fine_conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.fine_conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        
+        # Branch 2: Medium-scale features (5x5 kernels)
+        self.medium_conv1 = nn.Conv2d(1, 32, kernel_size=5, padding=2)
+        self.medium_conv2 = nn.Conv2d(32, 64, kernel_size=5, padding=2)
+        
+        # Branch 3: Large-scale features (7x7 kernels)
+        self.large_conv1 = nn.Conv2d(1, 32, kernel_size=7, padding=3)
+        self.large_conv2 = nn.Conv2d(32, 64, kernel_size=7, padding=3)
+        
+        self.pool = nn.MaxPool2d(2, 2)
+        self.bn = nn.BatchNorm2d(64)
+        
+        # Combine all scales (64 features from each of 3 branches)
+        self.adaptive_pool = nn.AdaptiveAvgPool2d((4, 4))
+        self.fc1 = nn.Linear(64 * 3 * 4 * 4, 256)  # 3 branches
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, num_classes)
+        
+        self.dropout = nn.Dropout(0.4)
+        
+    def forward(self, x):
+        # Process at different scales
+        fine = self.pool(F.relu(self.fine_conv1(x)))
+        fine = self.pool(F.relu(self.bn(self.fine_conv2(fine))))
+        fine = self.adaptive_pool(fine)
+        
+        medium = self.pool(F.relu(self.medium_conv1(x)))
+        medium = self.pool(F.relu(self.bn(self.medium_conv2(medium))))
+        medium = self.adaptive_pool(medium)
+        
+        large = self.pool(F.relu(self.large_conv1(x)))
+        large = self.pool(F.relu(self.bn(self.large_conv2(large))))
+        large = self.adaptive_pool(large)
+        
+        # Concatenate all scales
+        x = torch.cat([fine, medium, large], dim=1)  # Combine along channel dimension
+        x = x.view(-1, 64 * 3 * 4 * 4)
+        
+        # Classification
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = F.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = self.fc3(x)
+        
+        return x
+
 class SBERTClassifier(nn.Module):
     """Standard NN for SBERT features"""
     
@@ -197,7 +358,7 @@ def apply_standardization(X, mean, std):
     X_scaled /= std
     return X_scaled
 
-def train_model(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=25, device='cuda'):
+def train_model(model, train_loader, val_loader, epochs=200, lr=1e-3, patience=25, device='cuda'):
     """Train any of the models with early stopping"""
     
     model = model.to(device)
@@ -592,8 +753,129 @@ def evaluate_chaosnli_uncertainty(model, X_chaos, label_distributions, entropies
         'kl': avg_kl,
         'accuracy': traditional_acc,
         'beats_random_jsd': avg_jsd < random_jsd,
-        'beats_random_kl': avg_kl < random_kl
+        'beats_random_kl': avg_kl < random_kl,
+        'beats_roberta_jsd': avg_jsd < roberta_jsd,
+        'beats_bart_kl': avg_kl < bart_kl
     }
+
+
+def run_complete_architecture_comparison(snli_persistence_train_path, snli_persistence_val_path,
+                                       snli_sbert_train_path, snli_sbert_val_path,
+                                       chaosnli_persistence_path, chaosnli_sbert_path, device='cuda'):
+    """Compare all architectures: CNN variants + SBERT + Hybrid"""
+    
+    print("=" * 80)
+    print("COMPLETE ARCHITECTURE COMPARISON")
+    print("=" * 80)
+    
+    # Load SNLI training data
+    X_train_persistence, y_train_persistence, X_val_persistence, y_val_persistence = load_snli_persistence_images(
+        snli_persistence_train_path, snli_persistence_val_path
+    )
+    
+    # Load ChaosNLI evaluation data
+    X_chaos_persistence, y_chaos_persistence, chaos_label_distributions, chaos_entropies = load_chaosnli_persistence_images(
+        chaosnli_persistence_path
+    )
+    
+    # Create datasets for persistence models
+    train_dataset_topo = PersistenceImageDataset(X_train_persistence, y_train_persistence, transform_to_image=True)
+    val_dataset_topo = PersistenceImageDataset(X_val_persistence, y_val_persistence, transform_to_image=True)
+    
+    train_loader_topo = DataLoader(train_dataset_topo, batch_size=128, shuffle=True)
+    val_loader_topo = DataLoader(val_dataset_topo, batch_size=256, shuffle=False)
+    
+    # Define all models to compare
+    models_to_test = {
+        'Original CNN': PersistenceImageCNN(),
+        'Enhanced CNN': EnhancedPersistenceImageCNN(),
+        'Attention CNN': AttentionPersistenceImageCNN(),
+        'Multi-Scale CNN': MultiScalePersistenceImageCNN(),
+    }
+    
+    results = {}
+    
+    # Train and evaluate each persistence CNN architecture
+    for model_name, model in models_to_test.items():
+        print(f"\n" + "=" * 60)
+        print(f"TRAINING {model_name.upper()}")
+        print("=" * 60)
+        
+        trained_model, val_acc = train_model(model, train_loader_topo, val_loader_topo, device=device)
+        
+        print(f"{model_name} SNLI validation accuracy: {val_acc:.3f}")
+        
+        # Evaluate on ChaosNLI uncertainty quantification
+        chaos_results = evaluate_chaosnli_uncertainty(
+            trained_model, X_chaos_persistence, chaos_label_distributions, chaos_entropies,
+            model_type='persistence', device=device
+        )
+        
+        results[model_name] = {
+            'model': trained_model,
+            'snli_accuracy': val_acc,
+            'chaosnli_jsd': chaos_results['jsd'],
+            'chaosnli_kl': chaos_results['kl'],
+            'chaosnli_accuracy': chaos_results['accuracy'],
+            'beats_random_jsd': chaos_results['beats_random_jsd'],
+            'beats_random_kl': chaos_results['beats_random_kl'],
+            'beats_roberta_jsd': chaos_results['beats_roberta_jsd'],
+            'beats_bart_kl': chaos_results['beats_bart_kl'],
+            'model_type': 'persistence'
+        }
+        
+        # Clear GPU memory
+        del trained_model
+        gc.collect()
+        torch.cuda.empty_cache()
+    
+    # Print comprehensive comparison
+    print("\n" + "=" * 80)
+    print("COMPLETE ARCHITECTURE COMPARISON RESULTS")
+    print("=" * 80)
+    
+    # Sort by ChaosNLI JSD (lower is better for uncertainty quantification)
+    sorted_by_jsd = sorted(results.items(), key=lambda x: x[1]['chaosnli_jsd'])
+    
+    print("📊 SNLI Validation Accuracies:")
+    snli_sorted = sorted(results.items(), key=lambda x: x[1]['snli_accuracy'], reverse=True)
+    for i, (model_name, result) in enumerate(snli_sorted):
+        print(f"  {i+1}. {model_name:<20}: {result['snli_accuracy']:.3f}")
+    
+    print("\n🎯 ChaosNLI Uncertainty Quantification (JSD - lower is better):")
+    for i, (model_name, result) in enumerate(sorted_by_jsd):
+        jsd_status = "✅" if result['beats_roberta_jsd'] else "❌" 
+        print(f"  {i+1}. {model_name:<20}: {result['chaosnli_jsd']:.4f} {jsd_status}")
+    
+    print("\n🎯 ChaosNLI Uncertainty Quantification (KL - lower is better):")
+    kl_sorted = sorted(results.items(), key=lambda x: x[1]['chaosnli_kl'])
+    for i, (model_name, result) in enumerate(kl_sorted):
+        kl_status = "✅" if result['beats_bart_kl'] else "❌"
+        print(f"  {i+1}. {model_name:<20}: {result['chaosnli_kl']:.4f} {kl_status}")
+    
+    # Determine overall winners
+    best_snli_model = snli_sorted[0][0]
+    best_jsd_model = sorted_by_jsd[0][0]
+    best_kl_model = kl_sorted[0][0]
+    
+    print(f"\n🏆 SUMMARY:")
+    print(f"  Best SNLI accuracy: {best_snli_model}")
+    print(f"  Best JSD (uncertainty): {best_jsd_model}")
+    print(f"  Best KL (uncertainty): {best_kl_model}")
+    
+    # Check if any model beats published baselines
+    beating_roberta = [name for name, result in results.items() if result['beats_roberta_jsd']]
+    beating_bart = [name for name, result in results.items() if result['beats_bart_kl']]
+    
+    if beating_roberta:
+        print(f"\n🎉 Models beating RoBERTa JSD (0.22): {', '.join(beating_roberta)}")
+    if beating_bart:
+        print(f"🎉 Models beating BART KL (0.47): {', '.join(beating_bart)}")
+    
+    if not beating_roberta and not beating_bart:
+        print(f"\n📈 None beat published baselines yet - try 900k training data next!")
+    
+    return results
 
 def run_snli_train_chaosnli_eval(snli_persistence_train_path, snli_persistence_val_path,
                                 snli_sbert_train_path, snli_sbert_val_path,
@@ -635,9 +917,9 @@ def run_snli_train_chaosnli_eval(snli_persistence_train_path, snli_persistence_v
     
     train_dataset_topo = PersistenceImageDataset(X_train_persistence_aligned, y_train_aligned, transform_to_image=True)
     val_dataset_topo = PersistenceImageDataset(X_val_persistence_aligned, y_val_aligned, transform_to_image=True)
-    
-    train_loader_topo = DataLoader(train_dataset_topo, batch_size=32, shuffle=True)
-    val_loader_topo = DataLoader(val_dataset_topo, batch_size=64, shuffle=False)
+    #was 32/64 for original run
+    train_loader_topo = DataLoader(train_dataset_topo, batch_size=128, shuffle=True)
+    val_loader_topo = DataLoader(val_dataset_topo, batch_size=256, shuffle=False)
     
     model_topo = PersistenceImageCNN()
     model_topo, topo_acc = train_model(model_topo, train_loader_topo, val_loader_topo, device=device)
@@ -657,8 +939,8 @@ def run_snli_train_chaosnli_eval(snli_persistence_train_path, snli_persistence_v
     train_dataset_sbert = PersistenceImageDataset(X_train_sbert_scaled, y_train_aligned, transform_to_image=False)
     val_dataset_sbert = PersistenceImageDataset(X_val_sbert_scaled, y_val_aligned, transform_to_image=False)
     
-    train_loader_sbert = DataLoader(train_dataset_sbert, batch_size=32, shuffle=True)
-    val_loader_sbert = DataLoader(val_dataset_sbert, batch_size=64, shuffle=False)
+    train_loader_sbert = DataLoader(train_dataset_sbert, batch_size=128, shuffle=True)
+    val_loader_sbert = DataLoader(val_dataset_sbert, batch_size=256, shuffle=False)
     
     model_sbert = SBERTClassifier()
     model_sbert, sbert_acc = train_model(model_sbert, train_loader_sbert, val_loader_sbert, device=device)
@@ -770,8 +1052,8 @@ def run_hybrid_snli_train_chaosnli_eval(snli_persistence_train_path, snli_persis
     train_dataset_hybrid = HybridDataset(X_train_persistence_aligned, X_train_sbert_scaled, y_train_aligned)
     val_dataset_hybrid = HybridDataset(X_val_persistence_aligned, X_val_sbert_scaled, y_val_aligned)
     
-    train_loader_hybrid = DataLoader(train_dataset_hybrid, batch_size=32, shuffle=True)
-    val_loader_hybrid = DataLoader(val_dataset_hybrid, batch_size=64, shuffle=False)
+    train_loader_hybrid = DataLoader(train_dataset_hybrid, batch_size=128, shuffle=True)
+    val_loader_hybrid = DataLoader(val_dataset_hybrid, batch_size=236, shuffle=False)
     
     model_hybrid = HybridClassifier()
     model_hybrid, hybrid_acc = train_model(model_hybrid, train_loader_hybrid, val_loader_hybrid, device=device)
@@ -793,7 +1075,7 @@ def run_hybrid_snli_train_chaosnli_eval(snli_persistence_train_path, snli_persis
     
     # Get hybrid model probabilities
     all_probs = []
-    batch_size = 64
+    batch_size = 128
     
     with torch.no_grad():
         for i in range(0, len(X_chaos_persistence), batch_size):
@@ -889,7 +1171,14 @@ if __name__ == "__main__":
         chaosnli_persistence_path, chaosnli_sbert_path,
         device=device
     )
-    
+
+    # results = run_complete_architecture_comparison(
+    #     snli_persistence_train_path, snli_persistence_val_path,
+    #     snli_sbert_train_path, snli_sbert_val_path,
+    #     chaosnli_persistence_path, chaosnli_sbert_path,
+    #     device=device
+    # )
+
     # Run hybrid experiment if requested
     if args.include_hybrid:
         hybrid_results = run_hybrid_snli_train_chaosnli_eval(

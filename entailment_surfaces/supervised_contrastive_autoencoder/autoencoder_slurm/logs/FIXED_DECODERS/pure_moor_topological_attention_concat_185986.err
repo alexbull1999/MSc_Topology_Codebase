@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/train_topological_autoencoder.py", line 255, in main_topological_training
-    create_and_save_topological_plots(train_history, exp_dir, config['output']['experiment_name'])
-  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/supervised_contrastive_autoencoder/src/train_topological_autoencoder.py", line 121, in create_and_save_topological_plots
-    from plot_utils_topological import plot_topological_training_losses, plot_curriculum_learning_analysis
-ModuleNotFoundError: No module named 'plot_utils_topological'

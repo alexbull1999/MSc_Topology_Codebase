@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/order_asymmetry_models.py
+python MSc_Topology_Codebase/phd_method/src_phd/order_asymmetry_models.py 
 
 
 # Capture exit code
