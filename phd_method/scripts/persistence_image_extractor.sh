@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=persistence_image_extraction
-#SBATCH --partition=gpgpuALL
+#SBATCH --partition=gpgpuC
 #SBATCH --time=10:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/persistence_image_precomputation_ChaosNLI_MNLI_NO_THRESHOLD_%j.out
-#SBATCH --error=../logs/persistence_image_precomputation_ChaosNLI_MNLI_NO_THRESHOLD_%j.err
+#SBATCH --output=../logs/persistence_image_precomputation_SNLI_TEST_%j.out
+#SBATCH --error=../logs/persistence_image_precomputation_SNLI_TEST_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -54,7 +54,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/chaosNLI_persistence_image_precompute.py
+python MSc_Topology_Codebase/phd_method/src_phd/precompute_persistence_images.py
 
 
 # Capture exit code

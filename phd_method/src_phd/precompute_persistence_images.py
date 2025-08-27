@@ -493,8 +493,8 @@ def precompute_snli_persistence_images():
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
     
-    train_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens.pkl"
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_matched_sbert_tokens.pkl"
+    train_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens.pkl"
+    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_test_sbert_tokens.pkl"
     
     # Create precomputer
     precomputer = PersistenceImagePrecomputer(order_model_path, asymmetry_model_path)
@@ -511,7 +511,7 @@ def precompute_snli_persistence_images():
     # Precompute validation persistence images
     precomputer.precompute_persistence_images(
         val_data_path,
-        "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_mnli_val_matched_persistence_images.pkl",
+        "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_snli_test_persistence_images.pkl",
         max_samples_per_class=None,
         batch_size=16,
         save_every=250

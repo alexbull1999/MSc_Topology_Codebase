@@ -46,9 +46,9 @@ class PersistencePrototypeCreator:
         
         return clean_diagram
 
-    def _compute_bottleneck_frechet_mean(self, diagrams: List[np.ndarray], max_diagrams: int = 10) -> np.ndarray:
+    def _compute_bottleneck_median(self, diagrams: List[np.ndarray], max_diagrams: int = 10) -> np.ndarray:
         """
-        Compute Fréchet mean using bottleneck distance.
+        Compute median Persistence Diagram using bottleneck distance.
         
         This finds the persistence diagram that minimizes the sum of bottleneck 
         distances to all other diagrams - the theoretically correct "average".
@@ -99,19 +99,19 @@ class PersistencePrototypeCreator:
                     min_total_distance = total_distance
                     best_diagram_idx = i
             
-            frechet_mean = non_empty_diagrams[best_diagram_idx]
+            bottleneck_median = non_empty_diagrams[best_diagram_idx]
             
-            print(f"      Selected diagram {best_diagram_idx} as Fréchet mean")
+            print(f"      Selected diagram {best_diagram_idx} as Bottleneck Median")
             print(f"      Total bottleneck distance: {min_total_distance:.6f}")
             print(f"      Mean bottleneck distance: {min_total_distance/(len(non_empty_diagrams)-1):.6f}")
             
-            if len(frechet_mean) > 0:
-                persistences = frechet_mean[:, 1] - frechet_mean[:, 0]
-                print(f"      Features: {len(frechet_mean)}")
+            if len(bottleneck_median) > 0:
+                persistences = bottleneck_median[:, 1] - bottleneck_median[:, 0]
+                print(f"      Features: {len(bottleneck_median)}")
                 print(f"      Total persistence: {np.sum(persistences):.4f}")
                 print(f"      Max persistence: {np.max(persistences):.6f}")
             
-            return frechet_mean
+            return bottleneck_median
             
         except Exception as e:
             print(f"      Bottleneck Fréchet mean computation failed: {e}")
@@ -313,7 +313,7 @@ class PersistencePrototypeCreator:
                 elif method == 'robust':
                     prototype = self._compute_robust_average_prototype(diagrams)
                 elif method == 'bottleneck':
-                    prototype = self._compute_bottleneck_frechet_mean(diagrams)
+                    prototype = self._compute_bottleneck_median(diagrams)
                 else:
                     raise ValueError(f"Unknown method: {method}")
                 

@@ -3,10 +3,10 @@
 #SBATCH --partition=a16gpu
 #SBATCH --time=72:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/CHUNKED_PERSISTENCE_IMAGE_EXTRACTION_%j.out
-#SBATCH --error=../logs/CHUNKED_PERSISTENCE_IMAGE_EXTRACTION_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/CHUNKED_PERSISTENCE_IMAGE_EXTRACTION_3of3%j.out
+#SBATCH --error=../logs/CHUNKED_PERSISTENCE_IMAGE_EXTRACTION_3of3%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

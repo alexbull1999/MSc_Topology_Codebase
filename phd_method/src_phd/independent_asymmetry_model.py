@@ -90,7 +90,7 @@ class AsymmetryTransformModel(nn.Module):
         u_asym = self.forward(u_tokens).mean(0, keepdim=True)  # [1, 768]
         v_asym = self.forward(v_tokens).mean(0, keepdim=True)  # [1, 768]
         
-        # Order violation: max(0, v - u) components
+        # Order violation: max(0, v - u) components (u=premise, v=hypothesis)
         violation = torch.clamp(v_asym - u_asym, min=0)
         return torch.norm(violation, dim=-1)
 

@@ -86,7 +86,7 @@ class PersistenceDiagramCollector:
     Collect persistence diagrams using the same methodology as phdim_clustering_validation_best_metrics.py
     """
     
-    def __init__(self, embedding_space='sbert_concat', distance_metric='cosine', 
+    def __init__(self, embedding_space='sbert_concat', distance_metric='euclidean', 
                  bert_data_path=None, device='cuda'):
         self.embedding_space = embedding_space
         self.distance_metric = distance_metric
@@ -267,7 +267,8 @@ class UltraFastPersistenceAnalyzer:
         
         # Basic persistence statistics
         persistences = diagram[:, 1] - diagram[:, 0]
-        persistences = persistences[persistences > 1e-10]  # Remove zero persistence
+        persistences = persistences[np.isfinite(persistences) & (persistences > 1e-10)]
+        # persistences = persistences[persistences > 1e-10]  # Remove zero persistence
         
         if len(persistences) == 0:
             return {
@@ -433,11 +434,27 @@ class UltraFastPersistenceAnalyzer:
             for key in stat_keys:
                 values = [s[key] for s in all_stats]
                 values = [v for v in values if not np.isnan(v)]  # Remove NaN values
+
+                if key == 'total_persistence' and h_dim == 0:  # Only for H0 total persistence
+                    print(f"DEBUG - {class_name} H0 total persistence values:")
+                    print(f"  Raw values (first 10): {values[:10]}")
+                    print(f"  All values count: {len(values)}")
+                    print(f"  Min: {np.min(values) if values else 'N/A'}")
+                    print(f"  Max: {np.max(values) if values else 'N/A'}")
+                    print(f"  Mean: {np.mean(values) if values else 'N/A'}")
+                    print(f"  Std: {np.std(values) if values else 'N/A'}")
                 
                 if len(values) > 0:
                     mean_val = np.mean(values)
                     std_val = np.std(values)
                     cv = (std_val / mean_val) if mean_val > 0 else 0
+
+                # ADD MORE DEBUG HERE
+                    if key == 'total_persistence' and h_dim == 0:
+                        print(f"  Final mean_val: {mean_val}")
+                        print(f"  Final std_val: {std_val}")
+                        print(f"  Final CV: {cv}")
+                        print()
                     
                     aggregated_stats[key] = {
                         'mean': mean_val,

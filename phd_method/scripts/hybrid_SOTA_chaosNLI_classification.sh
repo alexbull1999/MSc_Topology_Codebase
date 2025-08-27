@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --output=../logs/Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.out
-#SBATCH --error=../logs/Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.err
+#SBATCH --output=../logs/ALL_CHUNKS_Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.out
+#SBATCH --error=../logs/ALL_CHUNKS_Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/chaosNLI_hybrid_SOTA_PersimCNN_image_classification_SNLI_MNLI_separate_eval.py 
+python MSc_Topology_Codebase/phd_method/src_phd/ALL_TRAIN_CHUNKS_chaosNLI_hybrid_SOTA_PersimCNN_image_classification_SNLI_MNLI_separate_eval.py 
 
 
 # Capture exit code

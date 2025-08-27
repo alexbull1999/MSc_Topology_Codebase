@@ -170,26 +170,27 @@ def main():
     
     extractor = SBERTTokenExtractor()
     
-    # Process training data (for order embedding training)
-    train_data_path = "MSc_Topology_Codebase/data/raw/mnli/train/mnli_full_train.json"  # Adjust path as needed
-    train_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens_ALL_SAMPLES.pkl"
+    # # Process training data (for order embedding training)
+    # train_data_path = "MSc_Topology_Codebase/data/raw/mnli/train/mnli_full_train.json"  # Adjust path as needed
+    # train_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_train_sbert_tokens_ALL_SAMPLES.pkl"
     
-    if Path(train_data_path).exists():
-        print("Processing SNLI training data...")
-        processed_data = extractor.process_dataset(train_data_path, train_output_path, max_samples=None)  # Limit for memory
-        del processed_data
-    else:
-        print(f"Training data not found at: {train_data_path}")
+    # if Path(train_data_path).exists():
+    #     print("Processing SNLI training data...")
+    #     processed_data = extractor.process_dataset(train_data_path, train_output_path, max_samples=None)  # Limit for memory
+    #     del processed_data
+    # else:
+    #     print(f"Training data not found at: {train_data_path}")
     
     # Process validation data (for clustering tests)
-    val_data_path = "MSc_Topology_Codebase/data/raw/snli/train/snli_full_train.json"  # Adjust path as needed  
-    val_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_train_sbert_tokens_ALL_SAMPLES.pkl"
+    val_data_path = "MSc_Topology_Codebase/data/raw/snli/test/snli_full_test.json"  # Adjust path as needed  
+    val_output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_test_sbert_tokens.pkl"
     
     if Path(val_data_path).exists():
         print("\nProcessing SNLI validation data...")
         extractor.process_dataset(val_data_path, val_output_path, max_samples=None)  # Smaller for clustering tests
     else:
         print(f"Validation data not found at: {val_data_path}")
+
     
     print("\nSBERT token extraction completed!")
 

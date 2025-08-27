@@ -3321,12 +3321,15 @@ def train_pytorch_classifier_custom(model, X_train, y_train, X_val, y_val, epoch
 
 def main():
     """Run separate model point cloud clustering validation"""
+
+    #mnli_order_embedding_model_separate_margins.pt
+    #mnli_asymmetry_transform_model_(match_SNLI_v2).pt
     
     # Paths for separate models
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_order_embedding_model_separate_margins.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_asymmetry_transform_model_(match_SNLI_v2).pt"
     hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_best_hyperbolic_projector.pt"
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_matched_sbert_tokens.pkl"
+    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_mismatched_sbert_tokens.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/clustering_results/"
     os.makedirs(output_dir, exist_ok=True)
 

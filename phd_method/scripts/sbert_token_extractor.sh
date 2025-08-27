@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=sbert_token_extraction
-#SBATCH --partition=gpgpuALL
-#SBATCH --time=24:00:00
+#SBATCH --partition=a16gpu
+#SBATCH --time=2:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/Token_Extractor_SNLI+MNLI_Train_ALL_SAMPLES_%j.out
-#SBATCH --error=../logs/Token_Extractor_SNLI+MNLI_Train_ALL_SAMPLES_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/Token_Extractor_SNLI_TEST_%j.out
+#SBATCH --error=../logs/Token_Extractor_SNLI_TEST_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

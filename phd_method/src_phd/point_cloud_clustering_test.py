@@ -757,7 +757,7 @@ class SeparateModelPointCloudGenerator:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
         # Save human-readable results immediately
-        results_file = f"topological_classification_results_{timestamp}.txt"
+        results_file = f"MSc_Topology_Codebase/phd_method/topological_classification_results_{timestamp}.txt"
         
         with open(results_file, 'w', encoding='utf-8') as f:
             f.write("TOPOLOGICAL ENTAILMENT CLASSIFICATION RESULTS\n")
@@ -3228,7 +3228,7 @@ def main():
     order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
     asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
     hyperbolic_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/snli_best_hyperbolic_projector_updated.pt"
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_val_sbert_tokens.pkl"
+    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_test_sbert_tokens.pkl"
     output_dir = "MSc_Topology_Codebase/phd_method/clustering_results/"
     os.makedirs(output_dir, exist_ok=True)
 

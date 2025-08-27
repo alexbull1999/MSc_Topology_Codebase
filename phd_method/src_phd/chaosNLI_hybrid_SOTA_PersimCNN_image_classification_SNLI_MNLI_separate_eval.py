@@ -510,6 +510,8 @@ def print_table_format_summary(all_results):
     published_baselines = {
         'bert-base': {'snli': {'jsd': 0.2345, 'kl': 0.481}, 'mnli': {'jsd': 0.3055, 'kl': 0.7204}},
         'bert-large': {'snli': {'jsd': 0.2300, 'kl': 0.5017}, 'mnli': {'jsd': 0.3152, 'kl': 0.8449}},
+        'xlnet-base': {'snli': {'jsd': 0.2331, 'kl': 0.5121}, 'mnli': {'jsd': 0.3069, 'kl': 0.7927}},
+        'xlnet-large': {'snli': {'jsd': 0.2259, 'kl': 0.5054}, 'mnli': {'jsd': 0.3116, 'kl': 0.8818}},
         'roberta-base': {'snli': {'jsd': 0.2294, 'kl': 0.5045}, 'mnli': {'jsd': 0.3073, 'kl': 0.7807}},
         'roberta-large': {'snli': {'jsd': 0.2210, 'kl': 0.4937}, 'mnli': {'jsd': 0.3112, 'kl': 0.8701}},
         'bart-large': {'snli': {'jsd': 0.2203, 'kl': 0.4714}, 'mnli': {'jsd': 0.3165, 'kl': 0.8845}},
