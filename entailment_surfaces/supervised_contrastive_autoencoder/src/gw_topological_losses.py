@@ -73,8 +73,8 @@ class GromovWassersteinTopologicalLoss(nn.Module):
                 distance_matrix = torch.cdist(features, features, p=2)
         
 
-        if distance_matrix.max() > 0:
-            distance_matrix = distance_matrix / distance_matrix.max()
+        # if distance_matrix.max() > 0:
+        #     distance_matrix = distance_matrix / distance_matrix.max()
 
         # print(f"    Distance matrix: min={distance_matrix.min():.3f}, max={distance_matrix.max():.3f}, mean={distance_matrix.mean():.3f}")
 

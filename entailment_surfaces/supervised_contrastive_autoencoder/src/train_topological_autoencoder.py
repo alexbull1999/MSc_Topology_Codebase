@@ -222,7 +222,7 @@ def main_topological_training():
     train_loader, val_loader, test_loader = load_data(config)
     
     # Create model (reuse your existing model)
-    model = AttentionAutoencoder(**config['model'])
+    model = ContrastiveAutoencoder(**config['model'])
     
     # Create topological loss function
     loss_function = TopologicallyRegularizedCombinedLoss(**config['loss'])

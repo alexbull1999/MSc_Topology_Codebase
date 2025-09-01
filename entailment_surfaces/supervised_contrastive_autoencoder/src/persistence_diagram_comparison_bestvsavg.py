@@ -112,7 +112,7 @@ class BestModelDiagnostic:
             'dropout_rate': 0.2
         }
         # Create model instance
-        model = ContrastiveAutoencoder(**model_config)
+        model = AttentionAutoencoder(**model_config)
     
         # Load trained weights
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -472,7 +472,7 @@ class BestModelDiagnostic:
 # Usage example:
 if __name__ == "__main__":
     # Set up paths (adjust these to your actual paths)
-    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/global_concat_pure_reconstruction_20250724_123815_no_attention/checkpoints/best_model.pt"
+    model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/gw_topological_autoencoder_attention_20250727_180538/checkpoints/best_model.pt"
     
     data_paths = {
         'train': "data/processed/snli_full_standard_SBERT.pt",

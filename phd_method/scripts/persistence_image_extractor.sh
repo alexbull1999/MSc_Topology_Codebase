@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/persistence_image_precomputation_SNLI_TEST_%j.out
-#SBATCH --error=../logs/persistence_image_precomputation_SNLI_TEST_%j.err
+#SBATCH --output=../logs/MNLI_OWN_ORDER_ASYMM_MODEL_persistence_image_precomputation_BOTH_VAL_%j.out
+#SBATCH --error=../logs/MNLI_OWN_ORDER_ASYMM_MODEL_persistence_image_precomputation_BOTH_VAL_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

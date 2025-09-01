@@ -84,7 +84,7 @@ def load_training_data():
     
     # Load all 5 SNLI chunks
     for chunk_idx in range(1, 6):
-        chunk_path = f"/vol/bitbucket/ahb24/tda_entailment_new/chunked_snli_train_persistence_images_chunk_{chunk_idx}_of_5.pkl"
+        chunk_path = f"/vol/bitbucket/ahb24/tda_entailment_new/chunked_mnli_train_persistence_images_chunk_{chunk_idx}_of_5.pkl"
         
         if Path(chunk_path).exists():
             with open(chunk_path, 'rb') as f:
@@ -122,7 +122,7 @@ def load_validation_data():
     
     print("Loading SNLI validation data...")
     
-    val_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_snli_val_persistence_images.pkl"
+    val_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_mnli_val_matched_persistence_images.pkl"
     
     if not Path(val_path).exists():
         raise FileNotFoundError(f"Validation file not found: {val_path}")
@@ -144,9 +144,11 @@ def load_validation_data():
     
     return val_images, val_labels
 
-def load_test_data(test_path):
+def load_test_data():
     """Load test persistence images from specified path"""
     
+    test_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_mnli_val_mismatched_persistence_images.pkl"
+
     print(f"Loading test data from: {test_path}")
     
     if not Path(test_path).exists():
@@ -179,7 +181,7 @@ def train_model(model, train_loader, val_loader, device='cuda', epochs=50):
     model = model.to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5, factor=0.5)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10, factor=0.5)
     
     best_val_acc = 0.0
     patience_counter = 0
@@ -313,11 +315,9 @@ def main():
     """Main function"""
     
     parser = argparse.ArgumentParser(description="Simple SNLI Persistence CNN")
-    parser.add_argument('--test_path', required=True, 
-                       help='Path to test persistence images file')
     parser.add_argument('--device', default='cuda', help='Device to use (cuda/cpu)')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
-    parser.add_argument('--epochs', type=int, default=50, help='Training epochs')
+    parser.add_argument('--epochs', type=int, default=100, help='Training epochs')
     
     args = parser.parse_args()
     
@@ -332,7 +332,7 @@ def main():
     # Load data
     train_images, train_labels = load_training_data()
     val_images, val_labels = load_validation_data()
-    test_images, test_labels = load_test_data(args.test_path)
+    test_images, test_labels = load_test_data()
     
     # Create datasets and data loaders
     train_dataset = PersistenceDataset(train_images, train_labels)

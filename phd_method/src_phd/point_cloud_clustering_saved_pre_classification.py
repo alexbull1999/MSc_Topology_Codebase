@@ -2100,67 +2100,224 @@ def main():
     # optimization_results = validator.run_persistence_optimization()
 
 
+# def test_sbert_clustering_comparison():
+#     """
+#     Test clustering using raw SBERT embeddings for comparison with topological approach
+#     """
+#     print("=" * 80)
+#     print("SBERT CLUSTERING COMPARISON")
+#     print("=" * 80)
+
+#     val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_mismatched_sbert_tokens.pkl"
+
+    
+#     # Load same data as topological clustering
+#     validator = SeparateModelClusteringValidator(
+#         val_data_path=val_data_path,
+#         order_model_path=None,  # Won't be used
+#         asymmetry_model_path=None, 
+#         hyperbolic_model_path=None,
+#         seed=42
+#     )
+    
+#     # Generate samples (using existing filtering)
+#     max_samples = validator.generate_maximum_samples_by_class()
+    
+#     print("Extracting SBERT embeddings for clustering...")
+#     all_embeddings = []
+#     sample_labels = []
+    
+#     for class_idx, class_name in enumerate(['entailment', 'neutral', 'contradiction']):
+#         class_samples = max_samples[class_name]
+#         print(f"Processing {class_name}: {len(class_samples)} samples")
+        
+#         for sample_data in class_samples:
+#             premise_tokens = sample_data['premise_tokens']
+#             hypothesis_tokens = sample_data['hypothesis_tokens']
+            
+#             # Create embedding representation
+#             premise_mean = torch.mean(premise_tokens, dim=0)  # [768]
+#             hypothesis_mean = torch.mean(hypothesis_tokens, dim=0)  # [768]
+            
+#             # Different strategies for combining premise/hypothesis:
+            
+#             # Strategy 1: Concatenation
+#             # combined_embedding = torch.cat([premise_mean, hypothesis_mean])  # [1536]
+            
+#             # Strategy 2: Difference + Product (richer representation)  
+#             combined_embedding = torch.cat([
+#                 premise_mean, 
+#                 hypothesis_mean,
+#                 premise_mean - hypothesis_mean,
+#                 premise_mean * hypothesis_mean
+#             ])  # [3072]
+            
+#             all_embeddings.append(combined_embedding.numpy())
+#             sample_labels.append(class_idx)
+    
+#     # Convert to clustering format
+#     X_embeddings = np.array(all_embeddings)
+#     y_true = np.array(sample_labels)
+    
+#     print(f"SBERT clustering data: {X_embeddings.shape[0]} samples, {X_embeddings.shape[1]} dimensions")
+    
+#     n_clusters = 3
+#     kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+#     y_pred = kmeans.fit_predict(X_embeddings)
+    
+#     # Find best label permutation
+#     best_accuracy = 0.0
+#     for perm in permutations(range(n_clusters)):
+#         mapped_pred = np.array([perm[label] for label in y_pred])
+#         accuracy = np.mean(mapped_pred == y_true)
+#         if accuracy > best_accuracy:
+#             best_accuracy = accuracy
+#             best_permutation = perm
+    
+#     final_pred = np.array([best_permutation[label] for label in y_pred])
+    
+#     # Calculate metrics
+#     try:
+#         silhouette = silhouette_score(X_embeddings, final_pred)
+#         ari = adjusted_rand_score(y_true, final_pred)
+#     except:
+#         silhouette, ari = 0.0, 0.0
+    
+#     print(f"\n" + "=" * 60)
+#     print("SBERT CLUSTERING RESULTS")
+#     print("=" * 60)
+#     print(f"SBERT Clustering Accuracy: {best_accuracy:.3f}")
+#     print(f"Silhouette Score: {silhouette:.3f}")
+#     print(f"Adjusted Rand Index: {ari:.3f}")
+    
+#     # Compare with topological clustering
+#     print(f"\nComparison:")
+#     print(f"Topological Clustering: 70.2%")
+#     print(f"SBERT Clustering: {best_accuracy:.1%}")
+#     improvement = best_accuracy - 0.702
+#     print(f"Difference: {improvement:+.3f}")
+
+#     # Print detailed confusion matrix analysis
+#     print(f"\nDetailed confusion analysis:")
+#     class_names = ['entailment', 'neutral', 'contradiction']
+    
+#     for true_class in range(n_clusters):
+#         true_mask = y_true == true_class
+#         pred_for_true = final_pred[true_mask]
+#         pred_counts = np.bincount(pred_for_true, minlength=n_clusters)
+        
+#         print(f"  True {class_names[true_class]} ({np.sum(true_mask)} samples):")
+#         for pred_class in range(n_clusters):
+#             count = pred_counts[pred_class]
+#             percentage = (count / np.sum(true_mask)) * 100 if np.sum(true_mask) > 0 else 0
+#             print(f"    → predicted as {class_names[pred_class]}: {count} ({percentage:.1f}%)")
+    
+#     # Additional detailed breakdown
+#     print(f"\nPer-class accuracy breakdown:")
+#     for class_idx, class_name in enumerate(class_names):
+#         true_mask = y_true == class_idx
+#         correct_pred = final_pred[true_mask] == class_idx
+#         class_accuracy = np.mean(correct_pred) if np.sum(true_mask) > 0 else 0
+#         print(f"  {class_name}: {class_accuracy:.3f} ({np.sum(correct_pred)}/{np.sum(true_mask)})")
+    
+#     # Misclassification analysis
+#     misclassified_indices = np.where(y_true != final_pred)[0]
+#     print(f"\nMisclassification analysis:")
+#     print(f"  Total misclassified: {len(misclassified_indices)}/{len(y_true)} ({len(misclassified_indices)/len(y_true)*100:.1f}%)")
+    
+#     # Group misclassifications by type
+#     confusion_breakdown = {}
+#     for true_class in range(3):
+#         for pred_class in range(3):
+#             if true_class != pred_class:
+#                 mask = (y_true == true_class) & (final_pred == pred_class)
+#                 count = np.sum(mask)
+#                 if count > 0:
+#                     confusion_breakdown[f"{class_names[true_class]}_as_{class_names[pred_class]}"] = count
+    
+#     print("  Confusion breakdown:")
+#     for error_type, count in confusion_breakdown.items():
+#         print(f"    {error_type}: {count}")
+    
+#     # Compare with topological clustering
+#     print(f"\n" + "=" * 60)
+#     print("COMPARISON WITH TOPOLOGICAL CLUSTERING")
+#     print("=" * 60)
+#     print(f"Topological Clustering: 70.2%")
+#     print(f"SBERT Clustering: {best_accuracy:.1%}")
+#     improvement = best_accuracy - 0.702
+#     print(f"Difference: {improvement:+.3f} ({improvement*100:+.1f} percentage points)")
+    
+#     if best_accuracy > 0.702:
+#         print("📊 SBERT embeddings cluster better than topological features")
+#     else:
+#         print("🔬 Topological features provide better clustering structure")
+    
+#     return {
+#         'sbert_clustering_accuracy': best_accuracy,
+#         'sbert_silhouette': silhouette,
+#         'sbert_ari': ari,
+#         'vs_topological_improvement': improvement
+#     }
+
 def test_sbert_clustering_comparison():
     """
-    Test clustering using raw SBERT embeddings for comparison with topological approach
+    Test clustering using SBERT sentence embeddings with InferSent concatenation strategy
     """
     print("=" * 80)
-    print("SBERT CLUSTERING COMPARISON")
+    print("SBERT + INFERSENT CONCATENATION CLUSTERING COMPARISON")
     print("=" * 80)
 
-    val_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/mnli_val_mismatched_sbert_tokens.pkl"
-
+    # Load SBERT sentence embeddings
+    sbert_data_path = "MSc_Topology_Codebase/data/processed/mnli_full_SBERT_validation_mismatched.pt"
+    sbert_data = torch.load(sbert_data_path)
     
-    # Load same data as topological clustering
-    validator = SeparateModelClusteringValidator(
-        val_data_path=val_data_path,
-        order_model_path=None,  # Won't be used
-        asymmetry_model_path=None, 
-        hyperbolic_model_path=None,
-        seed=42
-    )
+    print(f"Loaded SBERT data with keys: {sbert_data.keys()}")
     
-    # Generate samples (using existing filtering)
-    max_samples = validator.generate_maximum_samples_by_class()
+    # Extract embeddings and labels
+    premise_embeddings = sbert_data['premise_embeddings']  # [N, 768]
+    hypothesis_embeddings = sbert_data['hypothesis_embeddings']  # [N, 768]
+    labels = sbert_data['labels']  # [N]
     
-    print("Extracting SBERT embeddings for clustering...")
+    print(f"Premise embeddings shape: {premise_embeddings.shape}")
+    print(f"Hypothesis embeddings shape: {hypothesis_embeddings.shape}")
+    print(f"Labels shape: {len(labels) if isinstance(labels, list) else labels.shape}")
+    
+    # Apply InferSent's concatenation strategy
+    print("Applying InferSent concatenation strategy...")
     all_embeddings = []
     sample_labels = []
     
-    for class_idx, class_name in enumerate(['entailment', 'neutral', 'contradiction']):
-        class_samples = max_samples[class_name]
-        print(f"Processing {class_name}: {len(class_samples)} samples")
+    # Convert labels to indices if they're strings
+    label_to_idx = {'entailment': 0, 'neutral': 1, 'contradiction': 2}
+    
+    for i in range(len(labels)):
+        premise_emb = premise_embeddings[i]  # [768]
+        hypothesis_emb = hypothesis_embeddings[i]  # [768]
         
-        for sample_data in class_samples:
-            premise_tokens = sample_data['premise_tokens']
-            hypothesis_tokens = sample_data['hypothesis_tokens']
-            
-            # Create embedding representation
-            premise_mean = torch.mean(premise_tokens, dim=0)  # [768]
-            hypothesis_mean = torch.mean(hypothesis_tokens, dim=0)  # [768]
-            
-            # Different strategies for combining premise/hypothesis:
-            
-            # Strategy 1: Concatenation
-            # combined_embedding = torch.cat([premise_mean, hypothesis_mean])  # [1536]
-            
-            # Strategy 2: Difference + Product (richer representation)  
-            combined_embedding = torch.cat([
-                premise_mean, 
-                hypothesis_mean,
-                premise_mean - hypothesis_mean,
-                premise_mean * hypothesis_mean
-            ])  # [3072]
-            
-            all_embeddings.append(combined_embedding.numpy())
-            sample_labels.append(class_idx)
+        # InferSent concatenation strategy: [u, v, |u-v|, u*v]
+        combined_embedding = torch.cat([
+            premise_emb,                           # [768]
+            hypothesis_emb,                        # [768]
+            torch.abs(premise_emb - hypothesis_emb),  # [768] - absolute difference
+            premise_emb * hypothesis_emb           # [768] - element-wise product
+        ])  # [3072]
+        
+        all_embeddings.append(combined_embedding.numpy())
+        
+        # Convert label to index
+        if isinstance(labels[i], str):
+            sample_labels.append(label_to_idx[labels[i]])
+        else:
+            sample_labels.append(labels[i])
     
     # Convert to clustering format
     X_embeddings = np.array(all_embeddings)
     y_true = np.array(sample_labels)
     
-    print(f"SBERT clustering data: {X_embeddings.shape[0]} samples, {X_embeddings.shape[1]} dimensions")
+    print(f"InferSent-style embeddings: {X_embeddings.shape[0]} samples, {X_embeddings.shape[1]} dimensions")
     
+    # Rest of clustering code remains the same...
     n_clusters = 3
     kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
     y_pred = kmeans.fit_predict(X_embeddings)
@@ -2184,79 +2341,25 @@ def test_sbert_clustering_comparison():
         silhouette, ari = 0.0, 0.0
     
     print(f"\n" + "=" * 60)
-    print("SBERT CLUSTERING RESULTS")
+    print("SBERT + INFERSENT CONCATENATION RESULTS")
     print("=" * 60)
-    print(f"SBERT Clustering Accuracy: {best_accuracy:.3f}")
+    print(f"Clustering Accuracy: {best_accuracy:.3f}")
     print(f"Silhouette Score: {silhouette:.3f}")
     print(f"Adjusted Rand Index: {ari:.3f}")
-    
-    # Compare with topological clustering
-    print(f"\nComparison:")
-    print(f"Topological Clustering: 70.2%")
-    print(f"SBERT Clustering: {best_accuracy:.1%}")
-    improvement = best_accuracy - 0.702
-    print(f"Difference: {improvement:+.3f}")
-
-    # Print detailed confusion matrix analysis
-    print(f"\nDetailed confusion analysis:")
-    class_names = ['entailment', 'neutral', 'contradiction']
-    
-    for true_class in range(n_clusters):
-        true_mask = y_true == true_class
-        pred_for_true = final_pred[true_mask]
-        pred_counts = np.bincount(pred_for_true, minlength=n_clusters)
-        
-        print(f"  True {class_names[true_class]} ({np.sum(true_mask)} samples):")
-        for pred_class in range(n_clusters):
-            count = pred_counts[pred_class]
-            percentage = (count / np.sum(true_mask)) * 100 if np.sum(true_mask) > 0 else 0
-            print(f"    → predicted as {class_names[pred_class]}: {count} ({percentage:.1f}%)")
-    
-    # Additional detailed breakdown
-    print(f"\nPer-class accuracy breakdown:")
-    for class_idx, class_name in enumerate(class_names):
-        true_mask = y_true == class_idx
-        correct_pred = final_pred[true_mask] == class_idx
-        class_accuracy = np.mean(correct_pred) if np.sum(true_mask) > 0 else 0
-        print(f"  {class_name}: {class_accuracy:.3f} ({np.sum(correct_pred)}/{np.sum(true_mask)})")
-    
-    # Misclassification analysis
-    misclassified_indices = np.where(y_true != final_pred)[0]
-    print(f"\nMisclassification analysis:")
-    print(f"  Total misclassified: {len(misclassified_indices)}/{len(y_true)} ({len(misclassified_indices)/len(y_true)*100:.1f}%)")
-    
-    # Group misclassifications by type
-    confusion_breakdown = {}
-    for true_class in range(3):
-        for pred_class in range(3):
-            if true_class != pred_class:
-                mask = (y_true == true_class) & (final_pred == pred_class)
-                count = np.sum(mask)
-                if count > 0:
-                    confusion_breakdown[f"{class_names[true_class]}_as_{class_names[pred_class]}"] = count
-    
-    print("  Confusion breakdown:")
-    for error_type, count in confusion_breakdown.items():
-        print(f"    {error_type}: {count}")
     
     # Compare with topological clustering
     print(f"\n" + "=" * 60)
     print("COMPARISON WITH TOPOLOGICAL CLUSTERING")
     print("=" * 60)
     print(f"Topological Clustering: 70.2%")
-    print(f"SBERT Clustering: {best_accuracy:.1%}")
+    print(f"SBERT + InferSent Strategy: {best_accuracy:.1%}")
     improvement = best_accuracy - 0.702
     print(f"Difference: {improvement:+.3f} ({improvement*100:+.1f} percentage points)")
     
-    if best_accuracy > 0.702:
-        print("📊 SBERT embeddings cluster better than topological features")
-    else:
-        print("🔬 Topological features provide better clustering structure")
-    
     return {
-        'sbert_clustering_accuracy': best_accuracy,
-        'sbert_silhouette': silhouette,
-        'sbert_ari': ari,
+        'sbert_infersent_accuracy': best_accuracy,
+        'sbert_infersent_silhouette': silhouette,
+        'sbert_infersent_ari': ari,
         'vs_topological_improvement': improvement
     }
 

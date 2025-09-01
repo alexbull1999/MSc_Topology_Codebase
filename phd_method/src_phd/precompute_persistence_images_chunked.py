@@ -554,15 +554,15 @@ def process_snli_chunks():
 def process_mnli_chunks():
     """Process MNLI chunk files"""
     
-    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
-    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
+    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_order_embedding_model_separate_margins.pt"
+    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_asymmetry_transform_model_(match_SNLI_v2).pt"
     
     # Create precomputer  
     precomputer = ChunkedPersistenceImagePrecomputer(order_model_path, asymmetry_model_path)
     
     # Process MNLI chunks
     mnli_chunk_base = "/vol/bitbucket/ahb24/tda_entailment_new/chunked_mnli_train_sbert_tokens.pkl"
-    mnli_output_base = "/vol/bitbucket/ahb24/tda_entailment_new/chunked_mnli_train_persistence_images.pkl"
+    mnli_output_base = "/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_chunked_mnli_train_persistence_images.pkl"
     
     precomputer.process_all_chunks(
         chunk_base_path=mnli_chunk_base,

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/Euclidean_H0H1_pure_moor_PERSIM_Clustering_%j.out
-#SBATCH --error=../logs/Euclidean_H0H1_pure_moor_PERSIM_Clustering_%j.err
+#SBATCH --output=../logs/Braycurtis_H0H1_multi_PERSIM_Clustering_%j.out
+#SBATCH --error=../logs/Braycurtis_H0H1_multi_PERSIM_Clustering_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

@@ -367,13 +367,13 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         )
         
         # Topological loss
-        # self.topological_loss_fn = GromovWassersteinTopologicalLoss(
-        #     gw_weight=0.1,
-        #     distance_weight=20,
-        #     distance_type='stress',
-        #     min_persistence=0.01,    # Filter out noise
-        #     significance_weight=0.01
-        # )
+        self.topological_loss_fn = GromovWassersteinTopologicalLoss(
+            gw_weight=0.1,
+            distance_weight=20,
+            distance_type='stress',
+            min_persistence=0.01,    # Filter out noise
+            significance_weight=0.01
+        )
 
         # self.topological_loss_fn = SlicedWassersteinTopologicalLoss(
         #     sw_weight=1.0,        # Start with same weight as before
@@ -388,7 +388,7 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
         #     dimensions=0            # H0 only to start
         #     )
 
-        self.topological_loss_fn = MoorTopologicalLoss()
+        # self.topological_loss_fn = MoorTopologicalLoss()
 
 
         self.topological_weight = topological_weight
@@ -445,11 +445,11 @@ class TopologicallyRegularizedCombinedLoss(nn.Module):
                     latent_subset = latent_features[class_mask]
                     
                     # Apply the loss to this class's subset
-                    class_loss = self.topological_loss_fn(input_subset, latent_subset)
+                    class_loss, gw_component, dist_component = self.topological_loss_fn(input_subset, latent_subset)
                     class_topo_losses.append(class_loss)
 
                     if self.current_epoch % 10 == 0:
-                        print(f"  Signature (Moor) Loss: {class_loss.item():.6f}")
+                        print(f"  Loss: {class_loss.item():.6f}")
                         # print(f"    Raw Summary loss: {summary_loss.item():.6f}")
                         # print(f"    Raw distance loss: {dist_loss.item():.6f}")
                         # print(f"    Weighted Summary: {(self.topological_loss_fn.summary_weight * summary_loss).item():.6f}")

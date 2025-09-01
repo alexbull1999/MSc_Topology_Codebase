@@ -227,10 +227,10 @@ class LatentPHDimensionClusteringValidator:
         checkpoint = torch.load(model_path, map_location=self.device)
         
         # Initialize model
-        model = ContrastiveAutoencoder(
+        model = AttentionAutoencoder(
             input_dim=1536,  # Adjust based on your embedding dimension
-            latent_dim=75,   # Adjust based on your latent dimension
-            hidden_dims=[1024, 768, 512, 256, 128]  # Adjust based on your architecture
+            latent_dim=75,   # Adjust based on your latent dimension (for others = 75)
+            hidden_dims=[1024, 768, 512, 256, 128]  # Adjust based on your architecture (for others = 1024, 768, 512, 256, 128)
         )
         
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -992,8 +992,8 @@ def main():
     
     if test_mode == "single":
         # Model to test
-        model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/pure_moor_topological_autoencoder_no_attention_20250724_224242/checkpoints/best_model.pt"
-        model_name = "moor_topological+reconstruction"
+        model_path = "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/gw_topological_autoencoder_attention_20250727_180538/checkpoints/best_model.pt"
+        model_name = "gromov-wasserstein_attention"
         
         # Test configuration
         output_dir = 'entailment_surfaces/supervised_contrastive_autoencoder/latent_clustering_PERSIM_validation_results'
@@ -1035,16 +1035,8 @@ def main():
                 'model_name': "contrastive+recon_no_attention"
             },
             {
-                'model_path': "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/H0H1_signature_moor_lifted_autoencoder_no_attention_20250728_152242/checkpoints/best_model.pt", 
-                'model_name': "moor_signatureh0h1_lifted_no_attention"
-            },
-            {
-                'model_path': "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/signature_moor_lifted_autoencoder_no_attention_20250728_143530/checkpoints/best_model.pt", 
-                'model_name': "moor_signatureh0only_lifted_no_attention"
-            },
-            {
-                'model_path': "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/signature_moor_lifted_autoencoder_no_attention_20250728_143530/checkpoints/best_model.pt", 
-                'model_name': "moor_signatureh0only_lifted_no_attention"
+                'model_path': "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/pure_moor_topological_autoencoder_no_attention_20250724_222029/checkpoints/best_model.pt",
+                'model_name': "moor+recon_no_attention"
             },
             {
                 'model_path': "entailment_surfaces/supervised_contrastive_autoencoder/experiments/FIXED_DECODERS/moor_topo-contrastive_autoencoder_noattention_20250725_170549_30%topo-acc_70%classi-acc/checkpoints/checkpoint_epoch_50.pt", 
@@ -1052,7 +1044,7 @@ def main():
             }
         ]
         
-        output_dir = 'entailment_surfaces/supervised_contrastive_autoencoder/latent_clustering_PERSIM_validation_results/euclidean_dmatrix_h0_only'
+        output_dir = 'entailment_surfaces/supervised_contrastive_autoencoder/latent_clustering_PERSIM_validation_results/cosine_dmatrix_h1h0'
         
         os.makedirs(output_dir, exist_ok=True)
 

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/COSINE_prototype_creator_persistence_diagrams_%j.out
-#SBATCH --error=../logs/COSINE_prototype_creator_persistence_diagrams_%j.err
+#SBATCH --output=../logs/COSINE_LATTICE_prototype_creator_persistence_diagrams_%j.out
+#SBATCH --error=../logs/COSINE_LATTICE_prototype_creator_persistence_diagrams_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

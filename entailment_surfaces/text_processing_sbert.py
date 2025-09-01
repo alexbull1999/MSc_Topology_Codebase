@@ -10,7 +10,7 @@ class TextToEmbedding:
 
 #all-mpnet-base-v2 is original model
 
-    def __init__(self, model_name="sentence-transformers/stsb-bert-large", device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model_name="sentence-transformers/all-mpnet-base-v2", device='cuda' if torch.cuda.is_available() else 'cpu'):
         """Initialize text processing pipeline"""
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
@@ -200,13 +200,13 @@ def test_text_processing():
     print(f"Single pair test - Premise shape: {premise_emb.shape}, Hypothesis shape: {hypothesis_emb.shape}")
 
     # Test dataset
-    data_path = "data/raw/snli/train/snli_10k_subset_balanced.json"
+    data_path = "data/raw/mnli/validation_mismatched/mnli_full_validation_mismatched.json"
     if os.path.exists(data_path):
         processed_data = processor.process_entailment_dataset(data_path)
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "data/processed/snli_10k_subset_train_SBERT_STSB_LARGE.pt"
+        output_path = "data/processed/mnli_full_SBERT_validation_mismatched.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")

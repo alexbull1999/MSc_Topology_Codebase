@@ -67,7 +67,7 @@ class ContrastiveAutoencoder(nn.Module):
         
         # self.decoder = nn.Sequential(*decoder_layers)
 
-        self.decoder = nn.Linear(latent_dim, input_dim)
+        self.decoder = nn.Linear(latent_dim, input_dim) 
         
         print(f"ContrastiveAutoencoder initialized:")
         print(f"  Input dim: {input_dim}")
