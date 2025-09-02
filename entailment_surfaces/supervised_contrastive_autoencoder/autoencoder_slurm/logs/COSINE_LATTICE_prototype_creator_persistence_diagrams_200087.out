@@ -125,3 +125,124 @@ Creating prototypes using bottleneck method...
         Diagram 2: total bottleneck distance = 0.306678
         Diagram 3: total bottleneck distance = 0.261310
         Diagram 4: total bottleneck distance = 0.294638
+        Diagram 5: total bottleneck distance = 0.263430
+        Diagram 6: total bottleneck distance = 0.267877
+        Diagram 7: total bottleneck distance = 0.310735
+        Diagram 8: total bottleneck distance = 0.267786
+        Diagram 9: total bottleneck distance = 0.244295
+      Selected diagram 9 as Bottleneck Median
+      Total bottleneck distance: 0.244295
+      Mean bottleneck distance: 0.027144
+      Features: 2038
+      Total persistence: 76.3136
+      Max persistence: 0.189779
+    H1 prototype: 2038 features
+    Total persistence: 76.3136
+    Max persistence: 0.1898
+
+--- Creating prototypes for CONTRADICTION ---
+  Processing H0...
+    Computing bottleneck distance Fréchet mean with 100 diagrams...
+      Subsampling to 10 diagrams for efficiency...
+      Computing pairwise bottleneck distances...
+        Diagram 0: total bottleneck distance = 0.604672
+        Diagram 1: total bottleneck distance = 0.766803
+        Diagram 2: total bottleneck distance = 0.471345
+        Diagram 3: total bottleneck distance = 0.792487
+        Diagram 4: total bottleneck distance = 0.516427
+        Diagram 5: total bottleneck distance = 0.583747
+        Diagram 6: total bottleneck distance = 0.718353
+        Diagram 7: total bottleneck distance = 0.563770
+        Diagram 8: total bottleneck distance = 0.489346
+        Diagram 9: total bottleneck distance = 0.513641
+      Selected diagram 2 as Bottleneck Median
+      Total bottleneck distance: 0.471345
+      Mean bottleneck distance: 0.052372
+      Features: 949
+      Total persistence: 551.3904
+      Max persistence: 0.753116
+    H0 prototype: 949 features
+    Total persistence: 551.3904
+    Max persistence: 0.7531
+  Processing H1...
+    Computing bottleneck distance Fréchet mean with 100 diagrams...
+      Subsampling to 10 diagrams for efficiency...
+      Computing pairwise bottleneck distances...
+        Diagram 0: total bottleneck distance = 0.277510
+        Diagram 1: total bottleneck distance = 0.298155
+        Diagram 2: total bottleneck distance = 0.291679
+        Diagram 3: total bottleneck distance = 0.282759
+        Diagram 4: total bottleneck distance = 0.287358
+        Diagram 5: total bottleneck distance = 0.331300
+        Diagram 6: total bottleneck distance = 0.321712
+        Diagram 7: total bottleneck distance = 0.267093
+        Diagram 8: total bottleneck distance = 0.272175
+        Diagram 9: total bottleneck distance = 0.297813
+      Selected diagram 7 as Bottleneck Median
+      Total bottleneck distance: 0.267093
+      Mean bottleneck distance: 0.029677
+      Features: 2793
+      Total persistence: 102.2732
+      Max persistence: 0.174402
+    H1 prototype: 2793 features
+    Total persistence: 102.2732
+    Max persistence: 0.1744
+
+Prototypes saved to entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_bottleneck_LATTICE_COSINE.pkl
+
+============================================================
+PERSISTENCE DIAGRAM PROTOTYPES SUMMARY
+============================================================
+
+ENTAILMENT CLASS PROTOTYPES:
+  H0:
+    Features: 949
+    Total persistence: 434.5062
+    Max persistence: 0.7267
+    Mean persistence: 0.4579
+  H1:
+    Features: 1529
+    Total persistence: 65.1319
+    Max persistence: 0.2296
+    Mean persistence: 0.0426
+
+NEUTRAL CLASS PROTOTYPES:
+  H0:
+    Features: 949
+    Total persistence: 511.9681
+    Max persistence: 0.7357
+    Mean persistence: 0.5395
+  H1:
+    Features: 2038
+    Total persistence: 76.3136
+    Max persistence: 0.1898
+    Mean persistence: 0.0374
+
+CONTRADICTION CLASS PROTOTYPES:
+  H0:
+    Features: 949
+    Total persistence: 551.3904
+    Max persistence: 0.7531
+    Mean persistence: 0.5810
+  H1:
+    Features: 2793
+    Total persistence: 102.2732
+    Max persistence: 0.1744
+    Mean persistence: 0.0366
+
+Prototype visualization saved to entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__bottleneck_visualizations_LATTICE_COSINE.png
+
+Prototype creation complete!
+Files created:
+  - Prototypes: entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototypes_bottleneck_LATTICE_COSINE.pkl
+  - Summary: entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__bottleneck_summary_LATTICE_COSINE.txt
+  - Visualizations: entailment_surfaces/supervised_contrastive_autoencoder/src/persistence_diagrams/prototype__bottleneck_visualizations_LATTICE_COSINE.png
+
+Analysis completed with exit code: 0
+Time: Tue  2 Sep 06:38:51 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+Persistence Diagram Prototypes successful!
+
+
+Job finished.
