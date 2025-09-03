@@ -75,16 +75,16 @@ class PersistenceDataset(Dataset):
         return p_image, label
 
 def load_training_data():
-    """Load ALL 5 chunks of SNLI training persistence images"""
+    """Load ALL 5 chunks of MNLI training persistence images"""
     
-    print("Loading SNLI training chunks...")
+    print("Loading MNLI training chunks...")
     
     all_train_images = []
     all_train_labels = []
     
     # Load all 5 SNLI chunks
     for chunk_idx in range(1, 6):
-        chunk_path = f"/vol/bitbucket/ahb24/tda_entailment_new/chunked_mnli_train_persistence_images_chunk_{chunk_idx}_of_5.pkl"
+        chunk_path = f"/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_chunked_mnli_train_persistence_images_chunk_{chunk_idx}_of_5.pkl"
         
         if Path(chunk_path).exists():
             with open(chunk_path, 'rb') as f:
@@ -118,11 +118,11 @@ def load_training_data():
     return train_persistence_images, train_labels
 
 def load_validation_data():
-    """Load SNLI validation persistence images"""
+    """Load MNLI validation persistence images"""
     
-    print("Loading SNLI validation data...")
+    print("Loading MNLI validation data...")
     
-    val_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_mnli_val_matched_persistence_images.pkl"
+    val_path = "/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_precomputed_mnli_val_mismatched_persistence_images.pkl"
     
     if not Path(val_path).exists():
         raise FileNotFoundError(f"Validation file not found: {val_path}")
@@ -147,7 +147,7 @@ def load_validation_data():
 def load_test_data():
     """Load test persistence images from specified path"""
     
-    test_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_mnli_val_mismatched_persistence_images.pkl"
+    test_path = "/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_precomputed_mnli_val_matched_persistence_images.pkl"
 
     print(f"Loading test data from: {test_path}")
     

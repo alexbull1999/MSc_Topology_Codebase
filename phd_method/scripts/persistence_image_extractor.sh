@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/MNLI_OWN_ORDER_ASYMM_MODEL_persistence_image_precomputation_BOTH_VAL_%j.out
-#SBATCH --error=../logs/MNLI_OWN_ORDER_ASYMM_MODEL_persistence_image_precomputation_BOTH_VAL_%j.err
+#SBATCH --output=../logs/ChaosNLI_MNLI_OWN_ORDER_ASYMM_MODEL_persistence_image_precomputation_%j.out
+#SBATCH --error=../logs/ChaosNLI_MNLI_OWN_ORDER_ASYMM_MODEL_persistence_image_precomputation_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -54,7 +54,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/precompute_persistence_images.py
+python MSc_Topology_Codebase/phd_method/src_phd/chaosNLI_persistence_image_precompute.py
 
 
 # Capture exit code

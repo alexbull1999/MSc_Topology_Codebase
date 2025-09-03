@@ -109,7 +109,7 @@ def load_separate_persistence_data():
         snli_data = pickle.load(f)
     
     # Load MNLI ChaosNLI data
-    mnli_persistence_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_chaosnli_mnli_matched_persistence_images.pkl"
+    mnli_persistence_path = "/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_precomputed_chaosnli_mnli_matched_persistence_images.pkl"
     with open(mnli_persistence_path, 'rb') as f:
         mnli_data = pickle.load(f)
     
@@ -210,7 +210,7 @@ def load_training_validation_data():
     # Load all 5 MNLI chunks
     print("Loading MNLI chunks...")
     for chunk_idx in range(1, 6):
-        chunk_path = f"/vol/bitbucket/ahb24/tda_entailment_new/chunked_mnli_train_persistence_images_chunk_{chunk_idx}_of_5.pkl"
+        chunk_path = f"/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_chunked_mnli_train_persistence_images_chunk_{chunk_idx}_of_5.pkl"
         
         if Path(chunk_path).exists():
             with open(chunk_path, 'rb') as f:
@@ -234,7 +234,7 @@ def load_training_validation_data():
     
     # Load validation data (these should exist as smaller files)
     snli_val_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_snli_val_persistence_images.pkl"
-    mnli_val_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_mnli_val_matched_persistence_images.pkl"
+    mnli_val_path = "/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_precomputed_mnli_val_matched_persistence_images.pkl"
     
     val_images_list = []
     val_labels_list = []

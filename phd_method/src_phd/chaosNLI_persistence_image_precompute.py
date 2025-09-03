@@ -571,11 +571,11 @@ def precompute_chaosnli_snli_persistence_images():
 def precompute_chaosnli_mnli_persistence_images():
     """Precompute ChaosNLI-MNLI persistence images"""
     
-    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/order_embedding_model_separate_margins.pt"
-    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/new_independent_asymmetry_transform_model_v2.pt"
+    order_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_order_embedding_model_separate_margins.pt"
+    asymmetry_model_path = "MSc_Topology_Codebase/phd_method/models/separate_models/mnli_asymmetry_transform_model_(match_SNLI_v2).pt"
     
     data_path = "/vol/bitbucket/ahb24/tda_entailment_new/chaosnli_mnli_matched_sbert_tokens.pkl"
-    output_path = "/vol/bitbucket/ahb24/tda_entailment_new/precomputed_chaosnli_mnli_matched_persistence_images.pkl"
+    output_path = "/vol/bitbucket/ahb24/tda_entailment_new/MNLI_ORDER_ASYMM_MODELS_precomputed_chaosnli_mnli_matched_persistence_images.pkl"
     
     # Create precomputer
     precomputer = ChaosNLIPersistenceImagePrecomputer(order_model_path, asymmetry_model_path)

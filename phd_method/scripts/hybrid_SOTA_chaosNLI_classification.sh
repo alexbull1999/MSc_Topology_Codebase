@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/ALL_CHUNKS_Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.out
-#SBATCH --error=../logs/ALL_CHUNKS_Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.err
+#SBATCH --output=../logs/ALL_CHUNKS_USING_MNLI_ASYMM_ORDER_MODELS_FOR_MNLI_DATA_Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.out
+#SBATCH --error=../logs/ALL_CHUNKS_USING_MNLI_ASYMM_ORDER_MODELS_FOR_MNLI_DATA_Hybrid_WITHKL_SOTA_ChaosNLI_classification_SEPARATE_SNLI_MNLI_EVAL_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
