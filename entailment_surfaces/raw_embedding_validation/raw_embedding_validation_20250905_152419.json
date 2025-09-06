@@ -1,0 +1,10 @@
+{
+  "sbert_concat_euclidean": {
+    "space": "sbert_concat",
+    "metric": "euclidean",
+    "sample_results": [
+      {
+        "accuracy": 0.3423333333333333,
+        "silhouette": 0.03910557180643082,
+        "ari": -0.00031962934105667887,
+        "perfect_clustering": 

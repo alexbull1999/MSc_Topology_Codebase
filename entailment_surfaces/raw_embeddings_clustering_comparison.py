@@ -502,7 +502,7 @@ class RawEmbeddingValidator:
 def main():
     """Run raw embedding validation"""
     
-    sbert_data_path = "data/processed/mnli_full_SBERT_train.pt"
+    sbert_data_path = "data/processed/snli_full_standard_SBERT.pt"
     
     validator = RawEmbeddingValidator(
         sbert_data_path=sbert_data_path,
