@@ -1,0 +1,78 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 203890
+Node: parrot
+Time: Tue 16 Sep 19:58:00 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Tue Sep 16 19:58:03 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.133.07             Driver Version: 570.133.07     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:98:00.0 Off |                    0 |
+|  0%   35C    P8             15W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PACMAP Analysis...
+
+Sample-Level Topological UMAP Analysis
+Single Chunk Analysis (~100k samples)
+==================================================
+============================================================
+SINGLE CHUNK SAMPLE-LEVEL ANALYSIS (Chunk 1)
+============================================================
+Loading SNLI chunk 1: /vol/bitbucket/ahb24/tda_entailment_new/chunked_snli_train_persistence_images_chunk_1_of_5.pkl
+Loaded 109873 samples from chunk 1
+  entailment: 36,679 samples (33.4%)
+  neutral: 36,788 samples (33.5%)
+  contradiction: 36,406 samples (33.1%)
+Creating UMAP visualization for 109873 samples...
+  Input shape: (109873, 900)
+  Computing UMAP embedding...
+  Creating visualization...
+  Visualization saved to: phd_method/sample_level_umap/sample_level_umap_chunk_1.png
+
+============================================================
+SINGLE CHUNK ANALYSIS COMPLETE
+============================================================
+Processed 109,873 individual samples
+This shows the topological distribution of individual premise-hypothesis pairs
+vs the class-level aggregated signatures from your earlier analysis.
+
+Sample-level UMAP analysis completed!
+Analyzed 109,873 individual persistence images
+This visualization shows individual sample topology vs your class-level analysis
+which showed aggregated topological signatures.
+
+Analysis completed with exit code: 0
+Time: Tue 16 Sep 20:00:32 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+PACMAP successful!
+
+
+Job finished.
