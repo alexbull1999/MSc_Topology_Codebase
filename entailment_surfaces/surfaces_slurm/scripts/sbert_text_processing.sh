@@ -4,9 +4,9 @@
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=16G
-#SBATCH --output=../logs/sbert_processing_mnli_train_%j.out
-#SBATCH --error=../logs/sbert_processing_mnli_train_%j.err
+#SBATCH --mem=32G
+#SBATCH --output=../logs/sbert_processing_snli_stsb_bert_large_%j.out
+#SBATCH --error=../logs/sbert_processing_snli_stsb_bert_large_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -48,7 +48,7 @@ echo ""
 echo "Checking for required input data and models..."
 
 # Change to your project directory
-cd ~/MSc_Topology_Codebase
+cd ~
 
 echo ""
 echo "Starting sbert processing..."

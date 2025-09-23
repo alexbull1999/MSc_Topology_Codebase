@@ -414,7 +414,7 @@ class PaCMAPTopologyVisualizer:
                     
                     if len(persistence_images) > 0:
                         # Create PaCMAP visualization
-                        save_path = f"{save_dir}/pacmap_{space_name}_{metric_name}_{timestamp}.png"
+                        save_path = f"{save_dir}/MNLI_pacmap_{space_name}_{metric_name}_{timestamp}.png"
                         embedding_2d = self.visualize_with_pacmap(
                             persistence_images, labels, space_name, metric_name, save_path
                         )
@@ -470,21 +470,21 @@ def main():
     """
     
     # These paths need to be updated to your actual file locations
-    bert_data_path = "data/processed/snli_full_standard_SBERT.pt"
+    bert_data_path = "data/processed/mnli_full_SBERT_train.pt"
     order_model_path = "models/enhanced_order_embeddings_snli_SBERT_full.pt"
     
     visualizer = PaCMAPTopologyVisualizer(
         bert_data_path=bert_data_path,
         order_model_path=order_model_path,
-        samples_per_class=100,
+        samples_per_class=100, 
         points_per_sample=1000,
         seed=42
     )
     
     # Test the best performing combinations from the thesis
     best_spaces = ['sbert_concat', 'lattice_containment']  # Start with these
-    # best_metrics = ['cosine', 'braycurtis']  # These worked well
-    best_metrics = ['euclidean']
+    best_metrics = ['cosine', 'braycurtis']  # These worked well
+    # best_metrics = ['euclidean']
     
     results = visualizer.run_visualization_pipeline(
         target_spaces=best_spaces,

@@ -1,0 +1,57 @@
+TOPOLOGICAL ANALYSIS SUMMARY
+============================================================
+
+ENTAILMENT STATISTICS (n=20)
+------------------------------
+Energy Statistics:
+  Forward:    0.246 ± 0.245
+  Backward:   2.745 ± 2.505
+  Asymmetric: 0.732 ± 0.659
+
+Topological Statistics:
+  H0 Features:     362.2 ± 57.9
+  H1 Features:     151.9 ± 45.7
+  H0 Persistence:  30.105 ± 6.998
+  H1 Persistence:  1.649 ± 0.594
+
+Point Cloud Statistics:
+  Total Points:    363 ± 58
+  Premise Tokens:  17 ± 4
+  Hypothesis Tokens: 9 ± 4
+
+NEUTRAL STATISTICS (n=20)
+------------------------------
+Energy Statistics:
+  Forward:    1.074 ± 0.549
+  Backward:   1.657 ± 0.807
+  Asymmetric: 0.687 ± 0.512
+
+Topological Statistics:
+  H0 Features:     317.5 ± 64.1
+  H1 Features:     98.0 ± 39.6
+  H0 Persistence:  40.366 ± 10.478
+  H1 Persistence:  1.364 ± 0.468
+
+Point Cloud Statistics:
+  Total Points:    318 ± 64
+  Premise Tokens:  15 ± 5
+  Hypothesis Tokens: 11 ± 3
+
+CONTRADICTION STATISTICS (n=20)
+------------------------------
+Energy Statistics:
+  Forward:    2.878 ± 1.064
+  Backward:   3.140 ± 1.289
+  Asymmetric: 1.638 ± 1.239
+
+Topological Statistics:
+  H0 Features:     347.4 ± 107.1
+  H1 Features:     87.5 ± 31.3
+  H0 Persistence:  59.080 ± 7.943
+  H1 Persistence:  0.902 ± 0.266
+
+Point Cloud Statistics:
+  Total Points:    348 ± 107
+  Premise Tokens:  20 ± 10
+  Hypothesis Tokens: 9 ± 2
+

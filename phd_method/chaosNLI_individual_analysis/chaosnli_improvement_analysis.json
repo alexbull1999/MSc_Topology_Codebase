@@ -1,0 +1,1670 @@
+{
+  "bert-base": {
+    "snli": [
+      {
+        "dataset": "snli",
+        "class": "entailment",
+        "rank": 1,
+        "uid": "6952893010.jpg#2r1e",
+        "jsd_improvement": 0.23856031667908956,
+        "kl_improvement": 0.6628018163655863,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 6952893010.jpg#2r1e]",
+        "hypothesis": "[Text not found for 6952893010.jpg#2r1e]",
+        "human_distribution": [
+          0.97,
+          0.01,
+          0.02
+        ],
+        "human_entropy": 0.2219407328532109,
+        "baseline_logits": [
+          0.78173828125,
+          -1.849609375,
+          1.3271484375
+        ],
+        "baseline_probs": [
+          0.35748791694641113,
+          0.025732478126883507,
+          0.6167795658111572
+        ],
+        "topological_logits": [
+          1.8270760774612427,
+          0.11795870959758759,
+          -2.064133882522583
+        ],
+        "topological_probs": [
+          0.8323302268981934,
+          0.15067298710346222,
+          0.016996700316667557
+        ],
+        "fused_probs": [
+          0.7160195112228394,
+          0.07453374564647675,
+          0.2094467580318451
+        ],
+        "baseline_jsd": 0.5014361648560296,
+        "fused_jsd": 0.2628758482976571,
+        "baseline_kl": 0.8902213966354879,
+        "fused_kl": 0.22741958013886732
+      },
+      {
+        "dataset": "snli",
+        "class": "entailment",
+        "rank": 2,
+        "uid": "435054077.jpg#1r1e",
+        "jsd_improvement": 0.21080515426650265,
+        "kl_improvement": 1.0889438050341382,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 435054077.jpg#1r1e]",
+        "hypothesis": "[Text not found for 435054077.jpg#1r1e]",
+        "human_distribution": [
+          0.81,
+          0.18,
+          0.01
+        ],
+        "human_entropy": 0.7579911871785623,
+        "baseline_logits": [
+          -0.474365234375,
+          -0.806640625,
+          1.61328125
+        ],
+        "baseline_probs": [
+          0.10221605747938156,
+          0.07331853359937668,
+          0.8244654536247253
+        ],
+        "topological_logits": [
+          0.6364681124687195,
+          0.7589836716651917,
+          -1.506698489189148
+        ],
+        "topological_probs": [
+          0.44491514563560486,
+          0.5029038786888123,
+          0.05218091607093811
+        ],
+        "fused_probs": [
+          0.29893043637275696,
+          0.2571994662284851,
+          0.4438701570034027
+        ],
+        "baseline_jsd": 0.6556346119949783,
+        "fused_jsd": 0.44482944292187826,
+        "baseline_kl": 1.7942001414560265,
+        "fused_kl": 0.7052564392201562
+      },
+      {
+        "dataset": "snli",
+        "class": "entailment",
+        "rank": 3,
+        "uid": "1425529973.jpg#2r1c",
+        "jsd_improvement": 0.20835428001948442,
+        "kl_improvement": 1.2411734514424382,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 1425529973.jpg#2r1c]",
+        "hypothesis": "[Text not found for 1425529973.jpg#2r1c]",
+        "human_distribution": [
+          0.49,
+          0.18,
+          0.33
+        ],
+        "human_entropy": 1.477411806510367,
+        "baseline_logits": [
+          -1.2275390625,
+          -1.3857421875,
+          2.65625
+        ],
+        "baseline_probs": [
+          0.01981700211763382,
+          0.016917305067181587,
+          0.9632657170295715
+        ],
+        "topological_logits": [
+          0.23188500106334686,
+          1.0714900493621826,
+          -1.4512137174606323
+        ],
+        "topological_probs": [
+          0.2856123149394989,
+          0.6613216400146484,
+          0.05306601524353027
+        ],
+        "fused_probs": [
+          0.13304677605628967,
+          0.16929131746292114,
+          0.6976619958877563
+        ],
+        "baseline_jsd": 0.5051338721447064,
+        "fused_jsd": 0.29677959214055855,
+        "baseline_kl": 1.6439773813878285,
+        "fused_kl": 0.40280392996152303
+      },
+      {
+        "dataset": "snli",
+        "class": "neutral",
+        "rank": 1,
+        "uid": "3064443326.jpg#2r1n",
+        "jsd_improvement": 0.3491007802532041,
+        "kl_improvement": 0.8081988351797437,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 3064443326.jpg#2r1n]",
+        "hypothesis": "[Text not found for 3064443326.jpg#2r1n]",
+        "human_distribution": [
+          0.3,
+          0.68,
+          0.02
+        ],
+        "human_entropy": 1.0123142790419384,
+        "baseline_logits": [
+          2.625,
+          0.763671875,
+          -3.15625
+        ],
+        "baseline_probs": [
+          0.8631471991539001,
+          0.13419005274772644,
+          0.002662685699760914
+        ],
+        "topological_logits": [
+          -2.302659273147583,
+          1.6062204837799072,
+          0.3769308626651764
+        ],
+        "topological_probs": [
+          0.015285332687199116,
+          0.7618680596351624,
+          0.2228466123342514
+        ],
+        "fused_probs": [
+          0.3767571449279785,
+          0.5889585614204407,
+          0.03428427875041962
+        ],
+        "baseline_jsd": 0.41813925520883216,
+        "fused_jsd": 0.06903845703279417,
+        "baseline_kl": 0.8268152659750094,
+        "fused_kl": 0.018616549565932353
+      },
+      {
+        "dataset": "snli",
+        "class": "neutral",
+        "rank": 2,
+        "uid": "2097489021.jpg#0r1e",
+        "jsd_improvement": 0.31450885479327895,
+        "kl_improvement": 0.9913207750070973,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 2097489021.jpg#0r1e]",
+        "hypothesis": "[Text not found for 2097489021.jpg#0r1e]",
+        "human_distribution": [
+          0.31,
+          0.56,
+          0.13
+        ],
+        "human_entropy": 1.374879413844193,
+        "baseline_logits": [
+          2.52734375,
+          0.298583984375,
+          -2.560546875
+        ],
+        "baseline_probs": [
+          0.8978008031845093,
+          0.09665891528129578,
+          0.005540349520742893
+        ],
+        "topological_logits": [
+          -1.997216820716858,
+          1.2721266746520996,
+          0.46562471985816956
+        ],
+        "topological_probs": [
+          0.025619883090257645,
+          0.6736509203910828,
+          0.3007291853427887
+        ],
+        "fused_probs": [
+          0.4767802953720093,
+          0.4629121720790863,
+          0.060307588428258896
+        ],
+        "baseline_jsd": 0.44771705147575575,
+        "fused_jsd": 0.13320820213315007,
+        "baseline_kl": 1.0643446641594783,
+        "fused_kl": 0.0730238779749144
+      },
+      {
+        "dataset": "snli",
+        "class": "neutral",
+        "rank": 3,
+        "uid": "7382482712.jpg#0r1n",
+        "jsd_improvement": 0.2971248459006787,
+        "kl_improvement": 0.602658777622061,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 7382482712.jpg#0r1n]",
+        "hypothesis": "[Text not found for 7382482712.jpg#0r1n]",
+        "human_distribution": [
+          0.22,
+          0.64,
+          0.14
+        ],
+        "human_entropy": 1.2897515445864547,
+        "baseline_logits": [
+          1.794921875,
+          0.5869140625,
+          -1.5390625
+        ],
+        "baseline_probs": [
+          0.7493765354156494,
+          0.2239076793193817,
+          0.026715854182839394
+        ],
+        "topological_logits": [
+          -1.819515347480774,
+          1.4403537511825562,
+          0.08995810151100159
+        ],
+        "topological_probs": [
+          0.02958959899842739,
+          0.7706944346427917,
+          0.1997160017490387
+        ],
+        "fused_probs": [
+          0.3252161741256714,
+          0.5803509950637817,
+          0.09443284571170807
+        ],
+        "baseline_jsd": 0.38693430439150905,
+        "fused_jsd": 0.08980945847337568,
+        "baseline_kl": 0.6344089575235302,
+        "fused_kl": 0.03175017985869979
+      },
+      {
+        "dataset": "snli",
+        "class": "contradiction",
+        "rank": 1,
+        "uid": "4734535884.jpg#0r1c",
+        "jsd_improvement": 0.25115805829881604,
+        "kl_improvement": 0.5387315316872963,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 4734535884.jpg#0r1c]",
+        "hypothesis": "[Text not found for 4734535884.jpg#0r1c]",
+        "human_distribution": [
+          0.0,
+          0.14,
+          0.86
+        ],
+        "human_entropy": 0.584238811642856,
+        "baseline_logits": [
+          -3.388671875,
+          1.9501953125,
+          1.2216796875
+        ],
+        "baseline_probs": [
+          0.0032279295846819878,
+          0.6723023056983948,
+          0.32446980476379395
+        ],
+        "topological_logits": [
+          -5.009856700897217,
+          0.708092987537384,
+          3.7941462993621826
+        ],
+        "topological_probs": [
+          0.0001435516751371324,
+          0.04367995262145996,
+          0.9561765789985657
+        ],
+        "fused_probs": [
+          0.0012798303505405784,
+          0.3102032542228699,
+          0.6885168552398682
+        ],
+        "baseline_jsd": 0.39844856522075967,
+        "fused_jsd": 0.1472905085098053,
+        "baseline_kl": 0.6186071270473159,
+        "fused_kl": 0.07987559510377526
+      },
+      {
+        "dataset": "snli",
+        "class": "contradiction",
+        "rank": 2,
+        "uid": "2879991421.jpg#3r1c",
+        "jsd_improvement": 0.20330002821885862,
+        "kl_improvement": 0.21098080354794718,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 2879991421.jpg#3r1c]",
+        "hypothesis": "[Text not found for 2879991421.jpg#3r1c]",
+        "human_distribution": [
+          0.01,
+          0.41,
+          0.58
+        ],
+        "human_entropy": 1.0496308907073186,
+        "baseline_logits": [
+          -3.87890625,
+          0.8134765625,
+          2.546875
+        ],
+        "baseline_probs": [
+          0.001374238170683384,
+          0.14994706213474274,
+          0.8486787676811218
+        ],
+        "topological_logits": [
+          -1.3771780729293823,
+          1.3734631538391113,
+          -0.24425147473812103
+        ],
+        "topological_probs": [
+          0.050613950937986374,
+          0.7922433614730835,
+          0.15714265406131744
+        ],
+        "fused_probs": [
+          0.007966681383550167,
+          0.3997959494590759,
+          0.5922374129295349
+        ],
+        "baseline_jsd": 0.21433342156337576,
+        "fused_jsd": 0.011033393911311312,
+        "baseline_kl": 0.21147713157588258,
+        "fused_kl": 0.0004962450292667255
+      },
+      {
+        "dataset": "snli",
+        "class": "contradiction",
+        "rank": 3,
+        "uid": "3078844565.jpg#0r1c",
+        "jsd_improvement": 0.19010824529387726,
+        "kl_improvement": 1.200240185074816,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 3078844565.jpg#0r1c]",
+        "hypothesis": "[Text not found for 3078844565.jpg#0r1c]",
+        "human_distribution": [
+          0.18,
+          0.35,
+          0.47
+        ],
+        "human_entropy": 1.4873638732958807,
+        "baseline_logits": [
+          -2.14453125,
+          -1.294921875,
+          3.150390625
+        ],
+        "baseline_probs": [
+          0.00493435375392437,
+          0.01154013630002737,
+          0.9835255146026611
+        ],
+        "topological_logits": [
+          0.8624683022499084,
+          0.3608548641204834,
+          -1.315502643585205
+        ],
+        "topological_probs": [
+          0.5817931890487671,
+          0.3523065149784088,
+          0.06590037047863007
+        ],
+        "fused_probs": [
+          0.08068373054265976,
+          0.10990948975086212,
+          0.8094068169593811
+        ],
+        "baseline_jsd": 0.4458897963842934,
+        "fused_jsd": 0.25578155109094947,
+        "baseline_kl": 1.494594937543286,
+        "fused_kl": 0.2943547525937279
+      }
+    ],
+    "mnli": [
+      {
+        "dataset": "mnli",
+        "class": "entailment",
+        "rank": 1,
+        "uid": "18428n",
+        "jsd_improvement": 0.42401242230301517,
+        "kl_improvement": 0.9910717217986332,
+        "best_alpha": 0.7000000000000001,
+        "premise": "Companies that were foreign had to accept Indian financial participation and management.",
+        "hypothesis": "Foreign companies had to take Indian money in order to operate their businesses.",
+        "human_distribution": [
+          0.81,
+          0.17,
+          0.02
+        ],
+        "human_entropy": 0.7937090044256209,
+        "baseline_logits": [
+          -0.61328125,
+          0.292724609375,
+          0.1519775390625
+        ],
+        "baseline_probs": [
+          0.17781032621860504,
+          0.43997734785079956,
+          0.3822122812271118
+        ],
+        "topological_logits": [
+          2.143251895904541,
+          0.04019995033740997,
+          -2.330507516860962
+        ],
+        "topological_probs": [
+          0.8822327852249146,
+          0.10770586133003235,
+          0.010061299428343773
+        ],
+        "fused_probs": [
+          0.7374610900878906,
+          0.2220447063446045,
+          0.04049422964453697
+        ],
+        "baseline_jsd": 0.48999235481036324,
+        "fused_jsd": 0.06597993254454794,
+        "baseline_kl": 1.0075544714735567,
+        "fused_kl": 0.016482749226985456
+      },
+      {
+        "dataset": "mnli",
+        "class": "entailment",
+        "rank": 2,
+        "uid": "37136n",
+        "jsd_improvement": 0.39613561296020494,
+        "kl_improvement": 1.320910557007252,
+        "best_alpha": 0.7000000000000001,
+        "premise": "The Kal tangled both of Adrin's arms, keeping the blades far away.",
+        "hypothesis": "Adrin's arms were tangled, keeping his rusty blades away from Kal.",
+        "human_distribution": [
+          0.67,
+          0.27,
+          0.06
+        ],
+        "human_entropy": 1.1406590565406112,
+        "baseline_logits": [
+          0.3125,
+          2.921875,
+          -2.724609375
+        ],
+        "baseline_probs": [
+          0.0683128833770752,
+          0.9284099340438843,
+          0.0032771986443549395
+        ],
+        "topological_logits": [
+          1.7290552854537964,
+          -0.009095072746276855,
+          -1.8154393434524536
+        ],
+        "topological_probs": [
+          0.8300624489784241,
+          0.14596262574195862,
+          0.02397487498819828
+        ],
+        "fused_probs": [
+          0.5946668982505798,
+          0.3853332996368408,
+          0.019999798387289047
+        ],
+        "baseline_jsd": 0.5031684218223375,
+        "fused_jsd": 0.10703280879535089,
+        "baseline_kl": 1.37070760642409,
+        "fused_kl": 0.049797049329892346
+      },
+      {
+        "dataset": "mnli",
+        "class": "entailment",
+        "rank": 3,
+        "uid": "122020n",
+        "jsd_improvement": 0.3954727262500183,
+        "kl_improvement": 1.2295555160880114,
+        "best_alpha": 0.7000000000000001,
+        "premise": "After four years, Clinton has learned how to avoid looking unpresidential.",
+        "hypothesis": "After four torturous years, Clinton finally gets how to avoid unpresidential behavior.",
+        "human_distribution": [
+          0.49,
+          0.48,
+          0.03
+        ],
+        "human_entropy": 1.164317490790483,
+        "baseline_logits": [
+          -1.171875,
+          2.662109375,
+          -1.4091796875
+        ],
+        "baseline_probs": [
+          0.02081807516515255,
+          0.9627617001533508,
+          0.01642027497291565
+        ],
+        "topological_logits": [
+          1.6355563402175903,
+          0.00529065728187561,
+          -1.7270556688308716
+        ],
+        "topological_probs": [
+          0.8126631379127502,
+          0.15918244421482086,
+          0.02815442904829979
+        ],
+        "fused_probs": [
+          0.47675207257270813,
+          0.48106667399406433,
+          0.042181290686130524
+        ],
+        "baseline_jsd": 0.41918092228244297,
+        "fused_jsd": 0.023708196222374776,
+        "baseline_kl": 1.2316969554772974,
+        "fused_kl": 0.002141439358502936
+      },
+      {
+        "dataset": "mnli",
+        "class": "neutral",
+        "rank": 1,
+        "uid": "62177n",
+        "jsd_improvement": 0.413985894425348,
+        "kl_improvement": 1.6175770339915398,
+        "best_alpha": 0.7000000000000001,
+        "premise": "There are no shares of a stock that might someday come back, just piles of options as worthless as those shares of Cook's American Business Alliance.",
+        "hypothesis": "No shares of a stock will come back because of  Cook's American Business Alliance.",
+        "human_distribution": [
+          0.28,
+          0.39,
+          0.33
+        ],
+        "human_entropy": 1.5718398868540293,
+        "baseline_logits": [
+          2.58203125,
+          -1.0224609375,
+          -1.376953125
+        ],
+        "baseline_probs": [
+          0.9557636976242065,
+          0.02599797025322914,
+          0.01823834702372551
+        ],
+        "topological_logits": [
+          -0.7023056745529175,
+          0.25886964797973633,
+          0.404589980840683
+        ],
+        "topological_probs": [
+          0.15060873329639435,
+          0.39380690455436707,
+          0.45558440685272217
+        ],
+        "fused_probs": [
+          0.42985251545906067,
+          0.28569281101226807,
+          0.2844546139240265
+        ],
+        "baseline_jsd": 0.5273650217782538,
+        "fused_jsd": 0.1133791273557283,
+        "baseline_kl": 1.6679449957234262,
+        "fused_kl": 0.050367961681101504
+      },
+      {
+        "dataset": "mnli",
+        "class": "neutral",
+        "rank": 2,
+        "uid": "117576c",
+        "jsd_improvement": 0.39995342004965856,
+        "kl_improvement": 1.2019864603788601,
+        "best_alpha": 0.7000000000000001,
+        "premise": "but i don't know you know  maybe you could do that for a certain period of time but i mean how long does that kind of a thing take you know to to um say to question the person or to get into their head",
+        "hypothesis": "I'm sure it wouldn't take very long to question the person.",
+        "human_distribution": [
+          0.3,
+          0.54,
+          0.16
+        ],
+        "human_entropy": 1.4241497599238961,
+        "baseline_logits": [
+          -1.6455078125,
+          -0.369384765625,
+          1.6669921875
+        ],
+        "baseline_probs": [
+          0.031214497983455658,
+          0.1118328794836998,
+          0.8569526076316833
+        ],
+        "topological_logits": [
+          0.885719358921051,
+          0.2832072973251343,
+          -1.2207748889923096
+        ],
+        "topological_probs": [
+          0.5991258025169373,
+          0.32798224687576294,
+          0.07289189100265503
+        ],
+        "fused_probs": [
+          0.3875792920589447,
+          0.37278392910957336,
+          0.23963682353496552
+        ],
+        "baseline_jsd": 0.5203365673285556,
+        "fused_jsd": 0.12038314728631043,
+        "baseline_kl": 1.2606208406497057,
+        "fused_kl": 0.0586343801551268
+      },
+      {
+        "dataset": "mnli",
+        "class": "neutral",
+        "rank": 3,
+        "uid": "104805e",
+        "jsd_improvement": 0.39274126280233546,
+        "kl_improvement": 1.7039030030124669,
+        "best_alpha": 0.7000000000000001,
+        "premise": "California is high",
+        "hypothesis": "California is hyped up!",
+        "human_distribution": [
+          0.12,
+          0.72,
+          0.16
+        ],
+        "human_entropy": 1.1313146886497212,
+        "baseline_logits": [
+          2.8984375,
+          0.81982421875,
+          -3.404296875
+        ],
+        "baseline_probs": [
+          0.8873627185821533,
+          0.11101225018501282,
+          0.0016250190092250705
+        ],
+        "topological_logits": [
+          -1.1265950202941895,
+          0.331513375043869,
+          0.7106170654296875
+        ],
+        "topological_probs": [
+          0.08637943118810654,
+          0.371243417263031,
+          0.5423771739006042
+        ],
+        "fused_probs": [
+          0.32963141798973083,
+          0.4903242886066437,
+          0.18004436790943146
+        ],
+        "baseline_jsd": 0.5842212966472657,
+        "fused_jsd": 0.1914800057813239,
+        "baseline_kl": 1.8403728418296557,
+        "fused_kl": 0.13647003090879462
+      },
+      {
+        "dataset": "mnli",
+        "class": "contradiction",
+        "rank": 1,
+        "uid": "126286e",
+        "jsd_improvement": 0.5805267748696257,
+        "kl_improvement": 2.2772065037018603,
+        "best_alpha": 0.7000000000000001,
+        "premise": "more than anything else in this day and age that's got to be a big factor in your decision's just the the cost of how much you're gonna pay",
+        "hypothesis": "In your decisions age is a big factor",
+        "human_distribution": [
+          0.11,
+          0.32,
+          0.57
+        ],
+        "human_entropy": 1.3385714036507192,
+        "baseline_logits": [
+          2.28515625,
+          0.09619140625,
+          -1.9052734375
+        ],
+        "baseline_probs": [
+          0.8871756792068481,
+          0.09939265251159668,
+          0.013431643135845661
+        ],
+        "topological_logits": [
+          -2.2093348503112793,
+          0.29013746976852417,
+          1.7172937393188477
+        ],
+        "topological_probs": [
+          0.01564658433198929,
+          0.19051389396190643,
+          0.7938394546508789
+        ],
+        "fused_probs": [
+          0.11866843700408936,
+          0.3539920747280121,
+          0.5273394584655762
+        ],
+        "baseline_jsd": 0.6109515595513392,
+        "fused_jsd": 0.03042478466673805,
+        "baseline_kl": 2.280898920263953,
+        "fused_kl": 0.003692416171803249
+      },
+      {
+        "dataset": "mnli",
+        "class": "contradiction",
+        "rank": 2,
+        "uid": "66260c",
+        "jsd_improvement": 0.42135047240952506,
+        "kl_improvement": 1.7431854038976087,
+        "best_alpha": 0.7000000000000001,
+        "premise": "Finish it, someone yelled.",
+        "hypothesis": "Keep going, someone yelled.",
+        "human_distribution": [
+          0.35,
+          0.18,
+          0.47
+        ],
+        "human_entropy": 1.4873638732958807,
+        "baseline_logits": [
+          -1.58203125,
+          -2.146484375,
+          3.451171875
+        ],
+        "baseline_probs": [
+          0.006451931782066822,
+          0.0036690267734229565,
+          0.9898790121078491
+        ],
+        "topological_logits": [
+          0.9833332300186157,
+          0.0703875720500946,
+          -1.0762767791748047
+        ],
+        "topological_probs": [
+          0.6540890336036682,
+          0.2625122666358948,
+          0.08339876681566238
+        ],
+        "fused_probs": [
+          0.3974267244338989,
+          0.17708195745944977,
+          0.4254913032054901
+        ],
+        "baseline_jsd": 0.4575733425583392,
+        "fused_jsd": 0.0362228701826253,
+        "baseline_kl": 1.7484097075464504,
+        "fused_kl": 0.005224303841183775
+      },
+      {
+        "dataset": "mnli",
+        "class": "contradiction",
+        "rank": 3,
+        "uid": "121172c",
+        "jsd_improvement": 0.3540353959689444,
+        "kl_improvement": 0.9322392395511436,
+        "best_alpha": 0.7000000000000001,
+        "premise": "He pulled his cloak tighter and wished for a moment that he had not shaved his head.",
+        "hypothesis": "The man pulled his super hero cape around himself to show off.",
+        "human_distribution": [
+          0.03,
+          0.28,
+          0.69
+        ],
+        "human_entropy": 1.0353660614000244,
+        "baseline_logits": [
+          -3.072265625,
+          2.5234375,
+          0.483154296875
+        ],
+        "baseline_probs": [
+          0.003275794442743063,
+          0.882063090801239,
+          0.11466104537248611
+        ],
+        "topological_logits": [
+          -3.559678554534912,
+          0.7537204623222351,
+          2.448681116104126
+        ],
+        "topological_probs": [
+          0.0020724977366626263,
+          0.1548030823469162,
+          0.8431243896484375
+        ],
+        "fused_probs": [
+          0.0032718682195991278,
+          0.35904642939567566,
+          0.6376816630363464
+        ],
+        "baseline_jsd": 0.4496927950175971,
+        "fused_jsd": 0.09565739891599365,
+        "baseline_kl": 0.9834970927004125,
+        "fused_kl": 0.05125785295118199
+      }
+    ]
+  },
+  "roberta-base": {
+    "snli": [
+      {
+        "dataset": "snli",
+        "class": "entailment",
+        "rank": 1,
+        "uid": "6952893010.jpg#2r1e",
+        "jsd_improvement": 0.21475020452739962,
+        "kl_improvement": 0.5651854623042887,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 6952893010.jpg#2r1e]",
+        "hypothesis": "[Text not found for 6952893010.jpg#2r1e]",
+        "human_distribution": [
+          0.97,
+          0.01,
+          0.02
+        ],
+        "human_entropy": 0.2219407328532109,
+        "baseline_logits": [
+          0.94677734375,
+          -1.3056640625,
+          1.298828125
+        ],
+        "baseline_probs": [
+          0.3957069218158722,
+          0.041605498641729355,
+          0.5626875758171082
+        ],
+        "topological_logits": [
+          1.8270760774612427,
+          0.11795870959758759,
+          -2.064133882522583
+        ],
+        "topological_probs": [
+          0.8323302268981934,
+          0.15067298710346222,
+          0.016996700316667557
+        ],
+        "fused_probs": [
+          0.718835175037384,
+          0.09392723441123962,
+          0.18723763525485992
+        ],
+        "baseline_jsd": 0.4752790200890456,
+        "fused_jsd": 0.2605288156727487,
+        "baseline_kl": 0.7887272458484769,
+        "fused_kl": 0.22354178340572256
+      },
+      {
+        "dataset": "snli",
+        "class": "entailment",
+        "rank": 2,
+        "uid": "98492339.jpg#3r1e",
+        "jsd_improvement": 0.20988145225372512,
+        "kl_improvement": 0.35294923941197354,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 98492339.jpg#3r1e]",
+        "hypothesis": "[Text not found for 98492339.jpg#3r1e]",
+        "human_distribution": [
+          0.6,
+          0.39,
+          0.01
+        ],
+        "human_entropy": 1.038414967053337,
+        "baseline_logits": [
+          0.6513671875,
+          2.017578125,
+          -2.345703125
+        ],
+        "baseline_probs": [
+          0.2011910080909729,
+          0.7887628674507141,
+          0.010046099312603474
+        ],
+        "topological_logits": [
+          1.8627363443374634,
+          -0.11158256232738495,
+          -1.8484313488006592
+        ],
+        "topological_probs": [
+          0.8596199154853821,
+          0.11936326324939728,
+          0.021016808226704597
+        ],
+        "fused_probs": [
+          0.48356369137763977,
+          0.49828991293907166,
+          0.01814643107354641
+        ],
+        "baseline_jsd": 0.29378958555722157,
+        "fused_jsd": 0.08390813339827209,
+        "baseline_kl": 0.3808745468046095,
+        "fused_kl": 0.027925307387644375
+      },
+      {
+        "dataset": "snli",
+        "class": "entailment",
+        "rank": 3,
+        "uid": "1425529973.jpg#2r1c",
+        "jsd_improvement": 0.20819121052548545,
+        "kl_improvement": 1.2645392017082395,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 1425529973.jpg#2r1c]",
+        "hypothesis": "[Text not found for 1425529973.jpg#2r1c]",
+        "human_distribution": [
+          0.49,
+          0.18,
+          0.33
+        ],
+        "human_entropy": 1.477411806510367,
+        "baseline_logits": [
+          -0.87548828125,
+          -1.12890625,
+          3.029296875
+        ],
+        "baseline_probs": [
+          0.019449366256594658,
+          0.015095497481524944,
+          0.9654551148414612
+        ],
+        "topological_logits": [
+          0.23188500106334686,
+          1.0714900493621826,
+          -1.4512137174606323
+        ],
+        "topological_probs": [
+          0.2856123149394989,
+          0.6613216400146484,
+          0.05306601524353027
+        ],
+        "fused_probs": [
+          0.13312076032161713,
+          0.15997986495494843,
+          0.7068993449211121
+        ],
+        "baseline_jsd": 0.5076604013194129,
+        "fused_jsd": 0.29946919080827716,
+        "baseline_kl": 1.6729131071156238,
+        "fused_kl": 0.408373905425261
+      },
+      {
+        "dataset": "snli",
+        "class": "neutral",
+        "rank": 1,
+        "uid": "628483212.jpg#4r1e",
+        "jsd_improvement": 0.3018195750955468,
+        "kl_improvement": 1.004088037075387,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 628483212.jpg#4r1e]",
+        "hypothesis": "[Text not found for 628483212.jpg#4r1e]",
+        "human_distribution": [
+          0.33,
+          0.64,
+          0.03
+        ],
+        "human_entropy": 1.0916572553648003,
+        "baseline_logits": [
+          2.740234375,
+          0.236572265625,
+          -2.595703125
+        ],
+        "baseline_probs": [
+          0.920301616191864,
+          0.07526682317256927,
+          0.004431614652276039
+        ],
+        "topological_logits": [
+          -3.0047624111175537,
+          0.9786576628684998,
+          1.710484266281128
+        ],
+        "topological_probs": [
+          0.006011901423335075,
+          0.32284143567085266,
+          0.6711467504501343
+        ],
+        "fused_probs": [
+          0.4230465590953827,
+          0.46342894434928894,
+          0.11352448165416718
+        ],
+        "baseline_jsd": 0.4532392723329587,
+        "fused_jsd": 0.15141970334973973,
+        "baseline_kl": 1.088796594635354,
+        "fused_kl": 0.08470846980896543
+      },
+      {
+        "dataset": "snli",
+        "class": "neutral",
+        "rank": 2,
+        "uid": "3447155358.jpg#3r1n",
+        "jsd_improvement": 0.28553218353655574,
+        "kl_improvement": 0.664985591105367,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 3447155358.jpg#3r1n]",
+        "hypothesis": "[Text not found for 3447155358.jpg#3r1n]",
+        "human_distribution": [
+          0.4,
+          0.59,
+          0.01
+        ],
+        "human_entropy": 1.0443255526962936,
+        "baseline_logits": [
+          2.736328125,
+          0.6298828125,
+          -3.1484375
+        ],
+        "baseline_probs": [
+          0.8893227577209473,
+          0.10820362716913223,
+          0.0024736495688557625
+        ],
+        "topological_logits": [
+          -1.7929555177688599,
+          1.3328938484191895,
+          0.20569881796836853
+        ],
+        "topological_probs": [
+          0.03209412470459938,
+          0.7310795187950134,
+          0.2368263602256775
+        ],
+        "fused_probs": [
+          0.48740264773368835,
+          0.48085373640060425,
+          0.03174365684390068
+        ],
+        "baseline_jsd": 0.3745124779636231,
+        "fused_jsd": 0.08898029465274093,
+        "baseline_kl": 0.6950741453732632,
+        "fused_kl": 0.030088554412618373
+      },
+      {
+        "dataset": "snli",
+        "class": "neutral",
+        "rank": 3,
+        "uid": "4963720718.jpg#3r1e",
+        "jsd_improvement": 0.27178829725202414,
+        "kl_improvement": 0.8691712890955471,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 4963720718.jpg#3r1e]",
+        "hypothesis": "[Text not found for 4963720718.jpg#3r1e]",
+        "human_distribution": [
+          0.36,
+          0.48,
+          0.16
+        ],
+        "human_entropy": 1.4619011889093374,
+        "baseline_logits": [
+          2.443359375,
+          0.06103515625,
+          -2.18359375
+        ],
+        "baseline_probs": [
+          0.9073419570922852,
+          0.08378007262945175,
+          0.008877911604940891
+        ],
+        "topological_logits": [
+          -1.4972769021987915,
+          1.2548781633377075,
+          0.0076313018798828125
+        ],
+        "topological_probs": [
+          0.0472140833735466,
+          0.7401459217071533,
+          0.21263998746871948
+        ],
+        "fused_probs": [
+          0.5453521013259888,
+          0.3926423490047455,
+          0.06200549378991127
+        ],
+        "baseline_jsd": 0.4232469523298258,
+        "fused_jsd": 0.15145865505879375,
+        "baseline_kl": 0.9677512213498622,
+        "fused_kl": 0.09857993229149102
+      },
+      {
+        "dataset": "snli",
+        "class": "contradiction",
+        "rank": 1,
+        "uid": "2726887594.jpg#4r1c",
+        "jsd_improvement": 0.32531536267376027,
+        "kl_improvement": 0.5879358458475961,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 2726887594.jpg#4r1c]",
+        "hypothesis": "[Text not found for 2726887594.jpg#4r1c]",
+        "human_distribution": [
+          0.14,
+          0.41,
+          0.45
+        ],
+        "human_entropy": 1.4428962854448923,
+        "baseline_logits": [
+          1.1279296875,
+          -0.448974609375,
+          -0.10833740234375
+        ],
+        "baseline_probs": [
+          0.6679668426513672,
+          0.1380111128091812,
+          0.19402198493480682
+        ],
+        "topological_logits": [
+          -2.5748205184936523,
+          1.0573418140411377,
+          1.2347397804260254
+        ],
+        "topological_probs": [
+          0.01191539503633976,
+          0.45033586025238037,
+          0.5377488136291504
+        ],
+        "fused_probs": [
+          0.20636339485645294,
+          0.34253057837486267,
+          0.45110607147216797
+        ],
+        "baseline_jsd": 0.3939681060622964,
+        "fused_jsd": 0.06865274338817628,
+        "baseline_kl": 0.6062281100123499,
+        "fused_kl": 0.018292264046188746
+      },
+      {
+        "dataset": "snli",
+        "class": "contradiction",
+        "rank": 2,
+        "uid": "2249783869.jpg#0r1c",
+        "jsd_improvement": 0.2591262560277826,
+        "kl_improvement": 1.7284326466943511,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 2249783869.jpg#0r1c]",
+        "hypothesis": "[Text not found for 2249783869.jpg#0r1c]",
+        "human_distribution": [
+          0.0,
+          0.04,
+          0.96
+        ],
+        "human_entropy": 0.24229218908241482,
+        "baseline_logits": [
+          -2.21875,
+          2.521484375,
+          -0.0634765625
+        ],
+        "baseline_probs": [
+          0.008058584295213223,
+          0.922393798828125,
+          0.06954759359359741
+        ],
+        "topological_logits": [
+          -5.398340225219727,
+          0.8331923484802246,
+          4.013173580169678
+        ],
+        "topological_probs": [
+          7.850582187529653e-05,
+          0.03992292284965515,
+          0.959998607635498
+        ],
+        "fused_probs": [
+          0.002731670392677188,
+          0.5677419900894165,
+          0.42952632904052734
+        ],
+        "baseline_jsd": 0.6947483421546551,
+        "fused_jsd": 0.4356220864773957,
+        "baseline_kl": 2.3944013760195753,
+        "fused_kl": 0.6659687288320487
+      },
+      {
+        "dataset": "snli",
+        "class": "contradiction",
+        "rank": 3,
+        "uid": "3078844565.jpg#0r1c",
+        "jsd_improvement": 0.23310309250254954,
+        "kl_improvement": 0.854546546771858,
+        "best_alpha": 0.4,
+        "premise": "[Text not found for 3078844565.jpg#0r1c]",
+        "hypothesis": "[Text not found for 3078844565.jpg#0r1c]",
+        "human_distribution": [
+          0.18,
+          0.35,
+          0.47
+        ],
+        "human_entropy": 1.4873638732958807,
+        "baseline_logits": [
+          -1.248046875,
+          -0.72705078125,
+          2.802734375
+        ],
+        "baseline_probs": [
+          0.016631733626127243,
+          0.028002914041280746,
+          0.9553653001785278
+        ],
+        "topological_logits": [
+          0.8624683022499084,
+          0.3608548641204834,
+          -1.315502643585205
+        ],
+        "topological_probs": [
+          0.5817931890487671,
+          0.3523065149784088,
+          0.06590037047863007
+        ],
+        "fused_probs": [
+          0.1454787254333496,
+          0.16271206736564636,
+          0.6918092370033264
+        ],
+        "baseline_jsd": 0.40361685887618115,
+        "fused_jsd": 0.17051376638227556,
+        "baseline_kl": 0.979264795663035,
+        "fused_kl": 0.12471824899537337
+      }
+    ],
+    "mnli": [
+      {
+        "dataset": "mnli",
+        "class": "entailment",
+        "rank": 1,
+        "uid": "52171c",
+        "jsd_improvement": 0.4697067446649046,
+        "kl_improvement": 3.64882653112507,
+        "best_alpha": 0.7000000000000001,
+        "premise": "For such a governmentwide review, an entrance conference is generally held with applicable central agencies, such as the Office of Management and Budget (OMB) or the Office of Personnel Management.",
+        "hypothesis": "An entrance conference is held with specialized agencies.",
+        "human_distribution": [
+          0.84,
+          0.08,
+          0.08
+        ],
+        "human_entropy": 0.7943095546405661,
+        "baseline_logits": [
+          -1.2451171875,
+          -1.2392578125,
+          3.55078125
+        ],
+        "baseline_probs": [
+          0.00812883023172617,
+          0.008176599629223347,
+          0.9836945533752441
+        ],
+        "topological_logits": [
+          1.3922597169876099,
+          0.2096174955368042,
+          -1.6833559274673462
+        ],
+        "topological_probs": [
+          0.7393009662628174,
+          0.22657203674316406,
+          0.034127023071050644
+        ],
+        "fused_probs": [
+          0.5188446044921875,
+          0.2271277755498886,
+          0.2540276348590851
+        ],
+        "baseline_jsd": 0.7173854805105523,
+        "fused_jsd": 0.24767873591408893,
+        "baseline_kl": 3.8776242007380013,
+        "fused_kl": 0.22879766913093763
+      },
+      {
+        "dataset": "mnli",
+        "class": "entailment",
+        "rank": 2,
+        "uid": "89068n",
+        "jsd_improvement": 0.43866664401713035,
+        "kl_improvement": 1.1936234960649956,
+        "best_alpha": 0.7000000000000001,
+        "premise": "To see how The Bell Curve tries and fails to get around these inherent problems, see and .",
+        "hypothesis": "The Bell Curve tries to get around these problems and fails in many different ways.",
+        "human_distribution": [
+          0.68,
+          0.3,
+          0.02
+        ],
+        "human_entropy": 1.0123142790419384,
+        "baseline_logits": [
+          0.044708251953125,
+          2.568359375,
+          -2.501953125
+        ],
+        "baseline_probs": [
+          0.07378766685724258,
+          0.9204316735267639,
+          0.0057807317934930325
+        ],
+        "topological_logits": [
+          1.8817886114120483,
+          -0.05704088509082794,
+          -1.9299124479293823
+        ],
+        "topological_probs": [
+          0.857645571231842,
+          0.12339138984680176,
+          0.018963001668453217
+        ],
+        "fused_probs": [
+          0.6324787139892578,
+          0.34708207845687866,
+          0.020439259707927704
+        ],
+        "baseline_jsd": 0.47456410761407014,
+        "fused_jsd": 0.035897469929560895,
+        "baseline_kl": 1.1987188737118855,
+        "fused_kl": 0.005095287832334139
+      },
+      {
+        "dataset": "mnli",
+        "class": "entailment",
+        "rank": 3,
+        "uid": "37136n",
+        "jsd_improvement": 0.40583128583904127,
+        "kl_improvement": 1.4519711603818093,
+        "best_alpha": 0.7000000000000001,
+        "premise": "The Kal tangled both of Adrin's arms, keeping the blades far away.",
+        "hypothesis": "Adrin's arms were tangled, keeping his rusty blades away from Kal.",
+        "human_distribution": [
+          0.67,
+          0.27,
+          0.06
+        ],
+        "human_entropy": 1.1406590565406112,
+        "baseline_logits": [
+          -0.176025390625,
+          2.693359375,
+          -2.486328125
+        ],
+        "baseline_probs": [
+          0.05340339243412018,
+          0.9412972927093506,
+          0.005299283191561699
+        ],
+        "topological_logits": [
+          1.7290552854537964,
+          -0.009095072746276855,
+          -1.8154393434524536
+        ],
+        "topological_probs": [
+          0.8300624489784241,
+          0.14596262574195862,
+          0.02397487498819828
+        ],
+        "fused_probs": [
+          0.5739290118217468,
+          0.40206584334373474,
+          0.02400515228509903
+        ],
+        "baseline_jsd": 0.5170544474745947,
+        "fused_jsd": 0.11122316158265777,
+        "baseline_kl": 1.5031206082320374,
+        "fused_kl": 0.05114944771810568
+      },
+      {
+        "dataset": "mnli",
+        "class": "neutral",
+        "rank": 1,
+        "uid": "107430n",
+        "jsd_improvement": 0.42051523791927287,
+        "kl_improvement": 1.7804954789375598,
+        "best_alpha": 0.7000000000000001,
+        "premise": "you did you see that",
+        "hypothesis": "I saw that!",
+        "human_distribution": [
+          0.38,
+          0.54,
+          0.08
+        ],
+        "human_entropy": 1.3020044834978894,
+        "baseline_logits": [
+          -1.3388671875,
+          -0.19970703125,
+          2.33984375
+        ],
+        "baseline_probs": [
+          0.022873107343912125,
+          0.07145886868238449,
+          0.9056680202484131
+        ],
+        "topological_logits": [
+          1.449493646621704,
+          -0.0392482727766037,
+          -1.476151466369629
+        ],
+        "topological_probs": [
+          0.7816857099533081,
+          0.1763923615217209,
+          0.04192187264561653
+        ],
+        "fused_probs": [
+          0.5304089188575745,
+          0.2632955014705658,
+          0.20629557967185974
+        ],
+        "baseline_jsd": 0.6326095617495398,
+        "fused_jsd": 0.21209432382898566,
+        "baseline_kl": 1.965869315512548,
+        "fused_kl": 0.18537383633768723
+      },
+      {
+        "dataset": "mnli",
+        "class": "neutral",
+        "rank": 2,
+        "uid": "115593c",
+        "jsd_improvement": 0.39615997781982076,
+        "kl_improvement": 1.9332358745570093,
+        "best_alpha": 0.7000000000000001,
+        "premise": "In addition, Dublin Tourism has devised and signposted three self-guided walking tours of the city, which you can follow using the booklets provided.",
+        "hypothesis": "Dublin's self-guided tours are not easy to follow. ",
+        "human_distribution": [
+          0.02,
+          0.51,
+          0.47
+        ],
+        "human_entropy": 1.1202625050807724,
+        "baseline_logits": [
+          -1.765625,
+          3.69921875,
+          -1.833984375
+        ],
+        "baseline_probs": [
+          0.004198630806058645,
+          0.9918801188468933,
+          0.003921205643564463
+        ],
+        "topological_logits": [
+          -2.1055099964141846,
+          0.015354439616203308,
+          1.9089930057525635
+        ],
+        "topological_probs": [
+          0.015447809360921383,
+          0.1288091093301773,
+          0.8557430505752563
+        ],
+        "fused_probs": [
+          0.024991445243358612,
+          0.5682671070098877,
+          0.4067414402961731
+        ],
+        "baseline_jsd": 0.44163868972946085,
+        "fused_jsd": 0.04547871199237705,
+        "baseline_kl": 1.9415484661385811,
+        "fused_kl": 0.008312591588454904
+      },
+      {
+        "dataset": "mnli",
+        "class": "neutral",
+        "rank": 3,
+        "uid": "62177n",
+        "jsd_improvement": 0.38423495721283973,
+        "kl_improvement": 1.2790775997432535,
+        "best_alpha": 0.7000000000000001,
+        "premise": "There are no shares of a stock that might someday come back, just piles of options as worthless as those shares of Cook's American Business Alliance.",
+        "hypothesis": "No shares of a stock will come back because of  Cook's American Business Alliance.",
+        "human_distribution": [
+          0.28,
+          0.39,
+          0.33
+        ],
+        "human_entropy": 1.5718398868540293,
+        "baseline_logits": [
+          2.3359375,
+          0.05316162109375,
+          -1.912109375
+        ],
+        "baseline_probs": [
+          0.895822286605835,
+          0.091374471783638,
+          0.012803200632333755
+        ],
+        "topological_logits": [
+          -0.7023056745529175,
+          0.25886964797973633,
+          0.404589980840683
+        ],
+        "topological_probs": [
+          0.15060873329639435,
+          0.39380690455436707,
+          0.45558440685272217
+        ],
+        "fused_probs": [
+          0.3853797912597656,
+          0.38077905774116516,
+          0.2338411808013916
+        ],
+        "baseline_jsd": 0.47554479831644425,
+        "fused_jsd": 0.0913098411010712,
+        "baseline_kl": 1.312634838053713,
+        "fused_kl": 0.03355723827560485
+      },
+      {
+        "dataset": "mnli",
+        "class": "contradiction",
+        "rank": 1,
+        "uid": "126286e",
+        "jsd_improvement": 0.5545063557422536,
+        "kl_improvement": 2.3050653040941396,
+        "best_alpha": 0.7000000000000001,
+        "premise": "more than anything else in this day and age that's got to be a big factor in your decision's just the the cost of how much you're gonna pay",
+        "hypothesis": "In your decisions age is a big factor",
+        "human_distribution": [
+          0.11,
+          0.32,
+          0.57
+        ],
+        "human_entropy": 1.3385714036507192,
+        "baseline_logits": [
+          2.255859375,
+          0.294677734375,
+          -2.080078125
+        ],
+        "baseline_probs": [
+          0.866715133190155,
+          0.12193994969129562,
+          0.011344951577484608
+        ],
+        "topological_logits": [
+          -2.2093348503112793,
+          0.29013746976852417,
+          1.7172937393188477
+        ],
+        "topological_probs": [
+          0.01564658433198929,
+          0.19051389396190643,
+          0.7938394546508789
+        ],
+        "fused_probs": [
+          0.11837118119001389,
+          0.3780783414840698,
+          0.5035505294799805
+        ],
+        "baseline_jsd": 0.602621142835517,
+        "fused_jsd": 0.048114787069573756,
+        "baseline_kl": 2.3142804342726713,
+        "fused_kl": 0.00921512978037236
+      },
+      {
+        "dataset": "mnli",
+        "class": "contradiction",
+        "rank": 2,
+        "uid": "81579c",
+        "jsd_improvement": 0.47930457563365547,
+        "kl_improvement": 2.0085254564988966,
+        "best_alpha": 0.7000000000000001,
+        "premise": "All were prominent nationally known organizations.",
+        "hypothesis": "Some organizations were obscure.",
+        "human_distribution": [
+          0.0,
+          0.1,
+          0.9
+        ],
+        "human_entropy": 0.46899559358928117,
+        "baseline_logits": [
+          -1.94140625,
+          2.439453125,
+          -0.1585693359375
+        ],
+        "baseline_probs": [
+          0.011513656936585903,
+          0.9200180768966675,
+          0.06846829503774643
+        ],
+        "topological_logits": [
+          -2.891352653503418,
+          0.0008493214845657349,
+          2.624285936355591
+        ],
+        "topological_probs": [
+          0.0037371786311268806,
+          0.06739242374897003,
+          0.9288704991340637
+        ],
+        "fused_probs": [
+          0.009066630154848099,
+          0.2555452585220337,
+          0.7353881001472473
+        ],
+        "baseline_jsd": 0.6370789707718854,
+        "fused_jsd": 0.15777439735327495,
+        "baseline_kl": 2.0964992609638204,
+        "fused_kl": 0.0879738039477766
+      },
+      {
+        "dataset": "mnli",
+        "class": "contradiction",
+        "rank": 3,
+        "uid": "60212c",
+        "jsd_improvement": 0.3344953940845177,
+        "kl_improvement": 0.7839468213931736,
+        "best_alpha": 0.7000000000000001,
+        "premise": "Some Kwanzaa rituals, most notably the focus on candles, seem to have been borrowed from Hanukkah.",
+        "hypothesis": "They claimed to have started the tradition on their own.",
+        "human_distribution": [
+          0.02,
+          0.48,
+          0.5
+        ],
+        "human_entropy": 1.1211460945412075,
+        "baseline_logits": [
+          -3.080078125,
+          0.2919921875,
+          3.177734375
+        ],
+        "baseline_probs": [
+          0.001810890738852322,
+          0.05276716500520706,
+          0.9454219341278076
+        ],
+        "topological_logits": [
+          -1.3389390707015991,
+          1.0710160732269287,
+          0.1413959562778473
+        ],
+        "topological_probs": [
+          0.06050383672118187,
+          0.6736170649528503,
+          0.2658790946006775
+        ],
+        "fused_probs": [
+          0.02917036972939968,
+          0.4334355592727661,
+          0.537394106388092
+        ],
+        "baseline_jsd": 0.3713847932545528,
+        "fused_jsd": 0.03688939919654738,
+        "baseline_kl": 0.7893172094230545,
+        "fused_kl": 0.005370386941001046
+      }
+    ]
+  }
+}

@@ -42,7 +42,7 @@ class SurfaceDistanceMetricAnalyzer:
                  order_model_path: str,
                  results_dir: str = 'entailment_surfaces/results/surface_analysis',
                  device: str = 'cuda' if torch.cuda.is_available() else 'cpu',
-                 seed: int = 42): #main is 42, seeded_2 is 100, seeded_3 is 333
+                 seed: int = 42): #main is 42, seeded_2 is 101, seeded_3 is 333, seeded_4 is 444, seeded_5 is 555
         """
         Initialize analyzer with pre-processed data paths
         
@@ -80,7 +80,7 @@ class SurfaceDistanceMetricAnalyzer:
             'minkowski_4',     # L4 norm
             
             # Other metrics
-            'canberra',        
+            # 'canberra',        
             'braycurtis',      
             
         ]
@@ -88,11 +88,11 @@ class SurfaceDistanceMetricAnalyzer:
          # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
         self.embedding_spaces = [
             'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
-            # 'sbert_difference',      # Premise - Hypothesis (relationship vector)
-            'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
+            'sbert_difference',      # Premise - Hypothesis (relationship vector)
+            # 'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
             # 'order_difference',     # Order premise - hypothesis (order relationship)
             # 'order_violations',     # Order violation energies (inherently relational)
-            'hyperbolic_concat',    # Concatenated hyperbolic embeddings
+            # 'hyperbolic_concat',    # Concatenated hyperbolic embeddings
             # 'hyperbolic_distances', # Direct hyperbolic distances between P-H pairs (1D)
             # 'cone_features',        # Multiple cone-related features
             # 'cone_violations',
@@ -101,7 +101,7 @@ class SurfaceDistanceMetricAnalyzer:
             'lattice_containment', # Element-wise containment relationships (RENAMED TO SEMANTIC COHERENCE IN PAPER)
             # 'lattice_order_violations', # Element-wise order violations  
             # 'lattice_height',          # Element-wise height differences
-            # 'lattice_subsumption',     # Element-wise subsumption coverage
+            'lattice_subsumption',     # Element-wise subsumption coverage
             # 'lattice_bidirectional_order_violations',   # Both directions of violations
             # 'lattice_enhanced'         # All lattice features combined
         ]
@@ -844,13 +844,13 @@ class SurfaceDistanceMetricAnalyzer:
             all_results[space_name] = space_results
             
             # M intermediate results
-            results_file = self.results_dir / f"surface_analysis_{space_name}_{timestamp}_SYMMETRY7.json"
+            results_file = self.results_dir / f"surface_analysis_{space_name}_{timestamp}.json"
             with open(results_file, 'w') as f:
                 json.dump(space_results, f, indent=2, default=str)
             print(f"\nSaved {space_name} results to {results_file}")
         
         # Save complete results and generate comprehensive report
-        final_results_file = self.results_dir / f"comprehensive_surface_analysis_{timestamp}_SYMMETRY7.json"
+        final_results_file = self.results_dir / f"comprehensive_surface_analysis_{timestamp}.json"
         with open(final_results_file, 'w') as f:
             json.dump(all_results, f, indent=2, default=str)
         
@@ -868,7 +868,7 @@ class SurfaceDistanceMetricAnalyzer:
 
     def _generate_simple_report(self, results: Dict, timestamp: str):
         """Generate simple plain output report for analysis"""
-        report_file = self.results_dir / f"simple_analysis_report_{timestamp}_MNLI.txt"
+        report_file = self.results_dir / f"simple_analysis_report_{timestamp}.txt"
         
         with open(report_file, 'w') as f:
             f.write("SURFACE DISTANCE METRIC ANALYSIS - PLAIN RESULTS\n")
@@ -906,10 +906,10 @@ def main():
 
     # Initialize analyzer
     analyzer = SurfaceDistanceMetricAnalyzer(
-        bert_data_path="data/processed/snli_10k_subset_train_SBERT_STSB_LARGE.pt",
+        bert_data_path="data/processed/snli_full_train_STSB_BERT_LARGE.pt",
         order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
-        results_dir="entailment_surfaces/results",
-        seed=333
+        results_dir="entailment_surfaces/results/snli_STSB_BERT_LARGE_seed_42",
+        seed=42
     )
     
     # Run comprehensive analysis

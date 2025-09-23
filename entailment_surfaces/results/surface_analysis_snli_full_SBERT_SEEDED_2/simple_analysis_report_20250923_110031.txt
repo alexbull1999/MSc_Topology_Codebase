@@ -1,0 +1,867 @@
+SURFACE DISTANCE METRIC ANALYSIS - PLAIN RESULTS
+================================================================================
+
+EMBEDDING SPACE: sbert_concat
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 19.149780010400566
+    phd_neutral: 20.86985614048654
+    phd_contradiction: 27.966887334666477
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.2657029330730438
+    centroid_ent_to_contradiction: 0.5709059238433838
+    centroid_neutral_to_contradiction: 0.4338686168193817
+    min_ent_to_neutral: 2.490537643432617
+    min_ent_to_contradiction: 2.794743061065674
+    entailment_separation: 2.3914302058473127
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 17.812766629740064
+    phd_neutral: 19.722783233913542
+    phd_contradiction: 24.919242091845103
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 5.822638511657715
+    centroid_ent_to_contradiction: 12.392662048339844
+    centroid_neutral_to_contradiction: 9.40816593170166
+    min_ent_to_neutral: 65.64889457713423
+    min_ent_to_contradiction: 60.48354800759006
+    entailment_separation: 52.06808367810178
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 20.93118302536999
+    phd_neutral: 24.343874737906425
+    phd_contradiction: 29.93098629891763
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.03343772143125534
+    centroid_ent_to_contradiction: 0.08191277831792831
+    centroid_neutral_to_contradiction: 0.06231386540457606
+    min_ent_to_neutral: 0.26812510192394257
+    min_ent_to_contradiction: 0.2728501802776009
+    entailment_separation: 0.3297271682928606
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 9.780116186916283
+    phd_neutral: 10.42717384187334
+    phd_contradiction: 12.83118489953534
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.030628681182861328
+    centroid_ent_to_contradiction: 0.16100740432739258
+    centroid_neutral_to_contradiction: 0.10896492004394531
+    min_ent_to_neutral: 0.1736304759979248
+    min_ent_to_contradiction: 0.23048651218414307
+    entailment_separation: 0.5477880369432183
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 20.116188911918837
+    phd_neutral: 21.684060850961462
+    phd_contradiction: 30.29241174883543
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.10392337095316537
+    centroid_ent_to_contradiction: 0.22550787268374653
+    centroid_neutral_to_contradiction: 0.17166663186680312
+    min_ent_to_neutral: 0.88542168698859
+    min_ent_to_contradiction: 1.0500560937000651
+    entailment_separation: 0.9416728262797417
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 20.66660663956567
+    phd_neutral: 22.415145541616862
+    phd_contradiction: 31.902128767508273
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.06791455661932286
+    centroid_ent_to_contradiction: 0.14918764608165164
+    centroid_neutral_to_contradiction: 0.11381438279223045
+    min_ent_to_neutral: 0.5577671483976063
+    min_ent_to_contradiction: 0.6480061294501511
+    entailment_separation: 0.6205824394552877
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: 13.784349354853315
+    phd_neutral: 14.307387043590966
+    phd_contradiction: 16.886533596249553
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.09540166364778188
+    centroid_ent_to_contradiction: 0.21868599049228832
+    centroid_neutral_to_contradiction: 0.1740051852502473
+    min_ent_to_neutral: 0.29802220651915007
+    min_ent_to_contradiction: 0.2532488028970705
+    entailment_separation: 0.8978134730281968
+
+================================================================================
+
+EMBEDDING SPACE: sbert_difference
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 65.69828441812997
+    phd_neutral: 83.54306103245298
+    phd_contradiction: 18.361187182929125
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.26580139994621277
+    centroid_ent_to_contradiction: 0.570902407169342
+    centroid_neutral_to_contradiction: 0.4333881437778473
+    min_ent_to_neutral: 0.5652367472648621
+    min_ent_to_contradiction: 0.7540126442909241
+    entailment_separation: 0.7590195191673298
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 67.68055130457995
+    phd_neutral: 83.22355846924046
+    phd_contradiction: 18.532134004563574
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 5.768857479095459
+    centroid_ent_to_contradiction: 12.369526863098145
+    centroid_neutral_to_contradiction: 9.346246719360352
+    min_ent_to_neutral: 12.00733931787886
+    min_ent_to_contradiction: 15.507250107347886
+    entailment_separation: 16.45431471065679
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 33.54883923703704
+    phd_neutral: 31.56450292707918
+    phd_contradiction: 18.938162445513175
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.03354437852976844
+    centroid_ent_to_contradiction: 0.08187779597938061
+    centroid_neutral_to_contradiction: 0.062145269010216
+    min_ent_to_neutral: 0.08126077055931091
+    min_ent_to_contradiction: 0.11030422151088715
+    entailment_separation: 0.10470573057292507
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 14.905862562804726
+    phd_neutral: 14.987870868502956
+    phd_contradiction: 12.879630312764084
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.6604043841362
+    centroid_ent_to_contradiction: 0.7866392135620117
+    centroid_neutral_to_contradiction: 0.28810495138168335
+    min_ent_to_neutral: 0.40843719244003296
+    min_ent_to_contradiction: 0.4955134391784668
+    entailment_separation: 1.3126919304041984
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 62.97180472776974
+    phd_neutral: 78.80664855427376
+    phd_contradiction: 18.324496170191612
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.10398850069808406
+    centroid_ent_to_contradiction: 0.22549719936070028
+    centroid_neutral_to_contradiction: 0.1714892486741134
+    min_ent_to_neutral: 0.2254358201879422
+    min_ent_to_contradiction: 0.3128648408451266
+    entailment_separation: 0.29889439429381115
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 59.87395132805189
+    phd_neutral: 71.12119239739006
+    phd_contradiction: 18.439313048106346
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.06796660128466717
+    centroid_ent_to_contradiction: 0.14917612452080203
+    centroid_neutral_to_contradiction: 0.11369562614512019
+    min_ent_to_neutral: 0.14976013582517972
+    min_ent_to_contradiction: 0.21456973259947143
+    entailment_separation: 0.19698197370433188
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: nan
+    phd_neutral: 20.563951947829388
+    phd_contradiction: 18.45196761883678
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.7423399526362986
+    centroid_ent_to_contradiction: 0.9050727600631859
+    centroid_neutral_to_contradiction: 0.5391338191017693
+    min_ent_to_neutral: 0.5808371912608199
+    min_ent_to_contradiction: 0.5803932603876943
+    entailment_separation: 1.4944576496836919
+
+================================================================================
+
+EMBEDDING SPACE: order_concat
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 17.991854128897376
+    phd_neutral: 20.983006334588506
+    phd_contradiction: 20.935262236275587
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.274862676858902
+    centroid_ent_to_contradiction: 0.574268639087677
+    centroid_neutral_to_contradiction: 0.3698572814464569
+    min_ent_to_neutral: 0.8022511005401611
+    min_ent_to_contradiction: 0.9256585836410522
+    entailment_separation: 1.8841985232791318
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 17.08661983405334
+    phd_neutral: 19.76834701916276
+    phd_contradiction: 19.94822347111504
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 2.828239679336548
+    centroid_ent_to_contradiction: 5.303167819976807
+    centroid_neutral_to_contradiction: 3.3556230068206787
+    min_ent_to_neutral: 8.681201323866844
+    min_ent_to_contradiction: 8.216347392648458
+    entailment_separation: 18.043364688896926
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 15.971503871157894
+    phd_neutral: 18.62671380739
+    phd_contradiction: 19.20753463629935
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.04523691534996033
+    centroid_ent_to_contradiction: 0.11823563277721405
+    centroid_neutral_to_contradiction: 0.07971227169036865
+    min_ent_to_neutral: 0.1626722812652588
+    min_ent_to_contradiction: 0.20245850086212158
+    entailment_separation: 0.3627409895188423
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 8.3737677168591
+    phd_neutral: 10.242243254626878
+    phd_contradiction: 10.081653400052412
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.0029923319816589355
+    centroid_ent_to_contradiction: 0.015199780464172363
+    centroid_neutral_to_contradiction: 0.0071364641189575195
+    min_ent_to_neutral: 0.03441905975341797
+    min_ent_to_contradiction: 0.048205554485321045
+    entailment_separation: 0.0403677861857585
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 18.33201892522301
+    phd_neutral: 21.199837287620326
+    phd_contradiction: 21.350823175125004
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.13072172047220218
+    centroid_ent_to_contradiction: 0.2902800485383025
+    centroid_neutral_to_contradiction: 0.1907811388459228
+    min_ent_to_neutral: 0.3741545032090757
+    min_ent_to_contradiction: 0.4807308605554478
+    entailment_separation: 0.934191092202517
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 18.361025083687863
+    phd_neutral: 20.977316201632515
+    phd_contradiction: 21.397350471343504
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.09174107989228383
+    centroid_ent_to_contradiction: 0.2122680659847441
+    centroid_neutral_to_contradiction: 0.14151766580864691
+    min_ent_to_neutral: 0.2667050329615097
+    min_ent_to_contradiction: 0.35756986482721387
+    entailment_separation: 0.6745877498185255
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: 16.456153645431947
+    phd_neutral: 20.781323311262103
+    phd_contradiction: 20.12635915868927
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.032665018438649364
+    centroid_ent_to_contradiction: 0.06018997721788746
+    centroid_neutral_to_contradiction: 0.036912788238202446
+    min_ent_to_neutral: 0.09539444040734286
+    min_ent_to_contradiction: 0.09886628597161969
+    entailment_separation: 0.20604262545670132
+
+================================================================================
+
+EMBEDDING SPACE: order_difference
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 26.290365222216433
+    phd_neutral: 24.669852582770464
+    phd_contradiction: 14.23433226331309
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.2751520872116089
+    centroid_ent_to_contradiction: 0.5742010474205017
+    centroid_neutral_to_contradiction: 0.36982858180999756
+    min_ent_to_neutral: 0.16835951805114746
+    min_ent_to_contradiction: 0.2998841404914856
+    entailment_separation: 1.6665172820498126
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 26.24362246987032
+    phd_neutral: 24.608302040571143
+    phd_contradiction: 14.361303203446628
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 2.8226406574249268
+    centroid_ent_to_contradiction: 5.2987518310546875
+    centroid_neutral_to_contradiction: 3.3491039276123047
+    min_ent_to_neutral: 1.4406741987913847
+    min_ent_to_contradiction: 2.6254766434431076
+    entailment_separation: 15.934998511806434
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 21.49883919568092
+    phd_neutral: 20.691316287531343
+    phd_contradiction: 12.83488760699909
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.045274109579622746
+    centroid_ent_to_contradiction: 0.11813881993293762
+    centroid_neutral_to_contradiction: 0.07977581582963467
+    min_ent_to_neutral: 0.038708724081516266
+    min_ent_to_contradiction: 0.07402914017438889
+    entailment_separation: 0.32063279693554925
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 11.346103015595151
+    phd_neutral: 9.921767379256941
+    phd_contradiction: 9.020722337095537
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.5946671366691589
+    centroid_ent_to_contradiction: 0.9608507752418518
+    centroid_neutral_to_contradiction: 0.1743740439414978
+    min_ent_to_neutral: 0.2205420732498169
+    min_ent_to_contradiction: 0.18278831243515015
+    entailment_separation: 3.052084435834298
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 25.907188462252407
+    phd_neutral: 24.35125130445123
+    phd_contradiction: 14.12740786092579
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.13084860570316603
+    centroid_ent_to_contradiction: 0.29022340743003827
+    centroid_neutral_to_contradiction: 0.1907760453254967
+    min_ent_to_neutral: 0.08969296119188305
+    min_ent_to_contradiction: 0.15710932881853276
+    entailment_separation: 0.8261861389113914
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 25.158028506509293
+    phd_neutral: 23.764953324918082
+    phd_contradiction: 14.006963456270975
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.09182222848267207
+    centroid_ent_to_contradiction: 0.212211596993209
+    centroid_neutral_to_contradiction: 0.1415158066887931
+    min_ent_to_neutral: 0.06785706479460972
+    min_ent_to_contradiction: 0.1168452606281649
+    entailment_separation: 0.5965453046838228
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: nan
+    phd_neutral: 16.248811014609885
+    phd_contradiction: 14.694842728010205
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.7612602554358515
+    centroid_ent_to_contradiction: 1.0258995679667609
+    centroid_neutral_to_contradiction: 0.5532017321985818
+    min_ent_to_neutral: 0.3631568953641278
+    min_ent_to_contradiction: 0.3314079971024285
+    entailment_separation: 3.506589438532633
+
+================================================================================
+
+EMBEDDING SPACE: order_violations
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 1.1536947045253767
+    phd_neutral: 1.3874307049907606
+    phd_contradiction: 1.0658138004561934
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.35512933135032654
+    centroid_ent_to_contradiction: 1.1882483959197998
+    centroid_neutral_to_contradiction: 0.8331190347671509
+    min_ent_to_neutral: 3.5762786865234375e-07
+    min_ent_to_contradiction: 1.0728836059570312e-06
+    entailment_separation: 5.133917224903767
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 1.1536947045253767
+    phd_neutral: 1.3874307049907606
+    phd_contradiction: 1.0658138004561934
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.35512933135032654
+    centroid_ent_to_contradiction: 1.1882483959197998
+    centroid_neutral_to_contradiction: 0.8331190347671509
+    min_ent_to_neutral: 3.5762786865234375e-07
+    min_ent_to_contradiction: 1.0728836059570312e-06
+    entailment_separation: 5.133917224903767
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 1.1536947045253767
+    phd_neutral: 1.3874307049907606
+    phd_contradiction: 1.0658138004561934
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.35512933135032654
+    centroid_ent_to_contradiction: 1.1882483661174774
+    centroid_neutral_to_contradiction: 0.8331190347671509
+    min_ent_to_neutral: 3.5762786865234375e-07
+    min_ent_to_contradiction: 1.0728836059570312e-06
+    entailment_separation: 5.1339171257688285
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: nan
+    phd_neutral: nan
+    phd_contradiction: nan
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.0
+    centroid_ent_to_contradiction: 0.0
+    centroid_neutral_to_contradiction: 0.0
+    min_ent_to_neutral: 0.0
+    min_ent_to_contradiction: 0.0
+    entailment_separation: 0.0
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 1.1536947045253767
+    phd_neutral: 1.3874307049907606
+    phd_contradiction: 1.0658138004561934
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.35512933135032654
+    centroid_ent_to_contradiction: 1.1882483661174774
+    centroid_neutral_to_contradiction: 0.8331190347671509
+    min_ent_to_neutral: 3.5762786865234407e-07
+    min_ent_to_contradiction: 1.072883605957032e-06
+    entailment_separation: 5.1339171257688285
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 1.1536947045253767
+    phd_neutral: 1.3874307049907606
+    phd_contradiction: 1.0658138004561934
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.35512933135032654
+    centroid_ent_to_contradiction: 1.1882483661174774
+    centroid_neutral_to_contradiction: 0.8331190347671509
+    min_ent_to_neutral: 3.5762786865234375e-07
+    min_ent_to_contradiction: 1.0728836059570312e-06
+    entailment_separation: 5.1339171257688285
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: nan
+    phd_neutral: 1.2565944552918933
+    phd_contradiction: 1.34226628345652
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.43985602922116024
+    centroid_ent_to_contradiction: 0.7243229190103552
+    centroid_neutral_to_contradiction: 0.4174728098236894
+    min_ent_to_neutral: 1.4425499089210051e-06
+    min_ent_to_contradiction: 1.644009175763213e-06
+    entailment_separation: 3.8725441281102873
+
+================================================================================
+
+EMBEDDING SPACE: hyperbolic_concat
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 17.031570167274538
+    phd_neutral: 17.359767433334646
+    phd_contradiction: 17.86797180954112
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.01217550877481699
+    centroid_ent_to_contradiction: 0.0245625302195549
+    centroid_neutral_to_contradiction: 0.017579521983861923
+    min_ent_to_neutral: 0.036702629178762436
+    min_ent_to_contradiction: 0.03689483925700188
+    entailment_separation: 1.4526291085932364
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 16.47519618763992
+    phd_neutral: 16.696274739014132
+    phd_contradiction: 16.818875398473587
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.0539802648127079
+    centroid_ent_to_contradiction: 0.11641140282154083
+    centroid_neutral_to_contradiction: 0.07697416841983795
+    min_ent_to_neutral: 0.21876775211421773
+    min_ent_to_contradiction: 0.1648454240494175
+    entailment_separation: 6.737319221234756
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 15.147972322792757
+    phd_neutral: 15.816638868018265
+    phd_contradiction: 15.720317811972043
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.004631500691175461
+    centroid_ent_to_contradiction: 0.009353559464216232
+    centroid_neutral_to_contradiction: 0.008324618451297283
+    min_ent_to_neutral: 0.010827832738868892
+    min_ent_to_contradiction: 0.013482855632901192
+    entailment_separation: 0.5529719610309524
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 7.950255023546681
+    phd_neutral: 8.720282488732876
+    phd_contradiction: 9.177830016305842
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.002274453639984131
+    centroid_ent_to_contradiction: 0.012217998504638672
+    centroid_neutral_to_contradiction: 0.007018625736236572
+    min_ent_to_neutral: 0.02380537986755371
+    min_ent_to_contradiction: 0.029621005058288574
+    entailment_separation: 0.5730343376084569
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 17.252336840463514
+    phd_neutral: 17.253974276717113
+    phd_contradiction: 17.736540823396055
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.007941081824040665
+    centroid_ent_to_contradiction: 0.015316836530957672
+    centroid_neutral_to_contradiction: 0.011636402018353607
+    min_ent_to_neutral: 0.02158761042692852
+    min_ent_to_contradiction: 0.02404331242142719
+    entailment_separation: 0.9196225528785367
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 17.094631948611376
+    phd_neutral: 16.77808498230097
+    phd_contradiction: 17.517325695768484
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.006586307766444148
+    centroid_ent_to_contradiction: 0.012416079747308066
+    centroid_neutral_to_contradiction: 0.00989625259518071
+    min_ent_to_neutral: 0.0171131542851696
+    min_ent_to_contradiction: 0.02011619432124949
+    entailment_separation: 0.7513580471585282
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: 15.011892234824392
+    phd_neutral: 16.630455420874004
+    phd_contradiction: 16.931619035742166
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.029737807742759303
+    centroid_ent_to_contradiction: 0.06289920789976362
+    centroid_neutral_to_contradiction: 0.04043793044783555
+    min_ent_to_neutral: 0.10731726423196854
+    min_ent_to_contradiction: 0.08411171847056606
+    entailment_separation: 3.6628853672933084
+
+================================================================================
+
+EMBEDDING SPACE: cone_violations
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 1.1147917394820408
+    phd_neutral: 1.0982217556904403
+    phd_contradiction: 1.155165176393073
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.21732115745544434
+    centroid_ent_to_contradiction: 0.20845365524291992
+    centroid_neutral_to_contradiction: 0.008867502212524414
+    min_ent_to_neutral: 4.5299530029296875e-06
+    min_ent_to_contradiction: 5.424022674560547e-06
+    entailment_separation: 0.9495510037405444
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 1.1147917394820408
+    phd_neutral: 1.0982217556904403
+    phd_contradiction: 1.155165176393073
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.21732115745544434
+    centroid_ent_to_contradiction: 0.20845365524291992
+    centroid_neutral_to_contradiction: 0.008867502212524414
+    min_ent_to_neutral: 4.5299530029296875e-06
+    min_ent_to_contradiction: 5.424022674560547e-06
+    entailment_separation: 0.9495510037405444
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 1.1147917394820408
+    phd_neutral: 1.0982217556904403
+    phd_contradiction: 1.155165176393073
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.21732115745544434
+    centroid_ent_to_contradiction: 0.20845365524291992
+    centroid_neutral_to_contradiction: 0.008867502212524414
+    min_ent_to_neutral: 4.5299530029296875e-06
+    min_ent_to_contradiction: 5.424022674560547e-06
+    entailment_separation: 0.9495510037405444
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: nan
+    phd_neutral: nan
+    phd_contradiction: nan
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.0
+    centroid_ent_to_contradiction: 0.0
+    centroid_neutral_to_contradiction: 0.0
+    min_ent_to_neutral: 0.0
+    min_ent_to_contradiction: 0.0
+    entailment_separation: 0.0
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 1.1147917394820408
+    phd_neutral: 1.0982217556904403
+    phd_contradiction: 1.155165176393073
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.21732115745544436
+    centroid_ent_to_contradiction: 0.20845365524291992
+    centroid_neutral_to_contradiction: 0.008867502212524416
+    min_ent_to_neutral: 4.529953002929691e-06
+    min_ent_to_contradiction: 5.42402267456055e-06
+    entailment_separation: 0.9495510037405444
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 1.1147917394820408
+    phd_neutral: 1.0982217556904403
+    phd_contradiction: 1.155165176393073
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.21732115745544434
+    centroid_ent_to_contradiction: 0.20845365524291992
+    centroid_neutral_to_contradiction: 0.008867502212524414
+    min_ent_to_neutral: 4.5299530029296875e-06
+    min_ent_to_contradiction: 5.424022674560547e-06
+    entailment_separation: 0.9495510037405444
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: 1.0950432435915567
+    phd_neutral: 1.1775205107298263
+    phd_contradiction: 1.2709942955895512
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.09643327099188913
+    centroid_ent_to_contradiction: 0.09286384261458751
+    centroid_neutral_to_contradiction: 0.003601682030925291
+    min_ent_to_neutral: 1.9492981398155634e-06
+    min_ent_to_contradiction: 2.918257584719824e-06
+    entailment_separation: 0.4221650949502216
+
+================================================================================
+
+EMBEDDING SPACE: lattice_containment
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 30.42244788114812
+    phd_neutral: 45.40715915978648
+    phd_contradiction: 67.77746921514594
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.15651527047157288
+    centroid_ent_to_contradiction: 0.3959968090057373
+    centroid_neutral_to_contradiction: 0.24168306589126587
+    min_ent_to_neutral: 0.5422511696815491
+    min_ent_to_contradiction: 1.0169035196304321
+    entailment_separation: 5.568731563510435
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 29.61453962695831
+    phd_neutral: 43.55956160632981
+    phd_contradiction: 61.22600223744037
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 4.206101894378662
+    centroid_ent_to_contradiction: 10.609922409057617
+    centroid_neutral_to_contradiction: 6.403819561004639
+    min_ent_to_neutral: 10.97060935606541
+    min_ent_to_contradiction: 19.622677641809986
+    entailment_separation: 149.3296983883799
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 35.79808780069129
+    phd_neutral: 37.934638561767756
+    phd_contradiction: 49.46514377860666
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.010303176939487457
+    centroid_ent_to_contradiction: 0.029401126317679882
+    centroid_neutral_to_contradiction: 0.020264464430510998
+    min_ent_to_neutral: 0.08408319018781185
+    min_ent_to_contradiction: 0.1270100697875023
+    entailment_separation: 0.40017696439242806
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 20.08908973889176
+    phd_neutral: 26.299333318471593
+    phd_contradiction: 24.110802771832347
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.0007085800170898438
+    centroid_ent_to_contradiction: 0.010034918785095215
+    centroid_neutral_to_contradiction: 0.00828784704208374
+    min_ent_to_neutral: 0.07874727249145508
+    min_ent_to_contradiction: 0.3043034076690674
+    entailment_separation: 0.10828299163859532
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 31.533238798027543
+    phd_neutral: 47.47473881479395
+    phd_contradiction: 74.15979774092945
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.05320262918756497
+    centroid_ent_to_contradiction: 0.135070684509341
+    centroid_neutral_to_contradiction: 0.08337432372979639
+    min_ent_to_neutral: 0.22411207946613027
+    min_ent_to_contradiction: 0.39777282302789324
+    entailment_separation: 1.897593887073953
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 32.98857440693946
+    phd_neutral: 49.81502376763307
+    phd_contradiction: 79.03021664051698
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.031424221673881474
+    centroid_ent_to_contradiction: 0.08011851315188995
+    centroid_neutral_to_contradiction: 0.050030642635934285
+    min_ent_to_neutral: 0.15222040249324328
+    min_ent_to_contradiction: 0.2602325677474069
+    entailment_separation: 1.1242316162429833
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: 40.92644596219336
+    phd_neutral: 52.93106183917823
+    phd_contradiction: 32.19462110139866
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.12317153772742437
+    centroid_ent_to_contradiction: 0.3824152422629064
+    centroid_neutral_to_contradiction: 0.2720583823558789
+    min_ent_to_neutral: 0.19854453778585054
+    min_ent_to_contradiction: 0.4004654570774663
+    entailment_separation: 5.095774670644795
+
+================================================================================
+
+EMBEDDING SPACE: lattice_subsumption
+--------------------------------------------------
+
+Metric: euclidean
+  PH-Dim Analysis:
+    phd_entailment: 6.690355130458592
+    phd_neutral: -4.479513489041036
+    phd_contradiction: -7.002616502371111
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 121.00756072998047
+    centroid_ent_to_contradiction: 121.86544036865234
+    centroid_neutral_to_contradiction: 142.19912719726562
+    min_ent_to_neutral: 77.7494888305664
+    min_ent_to_contradiction: 83.43719482421875
+    entailment_separation: 0.00489895609374137
+
+Metric: manhattan
+  PH-Dim Analysis:
+    phd_entailment: 12.044438196058941
+    phd_neutral: -8.822416450755757
+    phd_contradiction: -20.802771757426445
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 1429.900390625
+    centroid_ent_to_contradiction: 1704.3316650390625
+    centroid_neutral_to_contradiction: 1685.3143310546875
+    min_ent_to_neutral: 972.2450262210332
+    min_ent_to_contradiction: 1108.7517159208655
+    entailment_separation: 0.0632201403978181
+
+Metric: chebyshev
+  PH-Dim Analysis:
+    phd_entailment: 5.934356248048081
+    phd_neutral: -4.209502592159557
+    phd_contradiction: -6.5637840042709135
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 60.81308054924011
+    centroid_ent_to_contradiction: 34.4289984703064
+    centroid_neutral_to_contradiction: 60.662471294403076
+    min_ent_to_neutral: 25.176746785640717
+    min_ent_to_contradiction: 29.515249371528625
+    entailment_separation: 0.0019211141678276522
+
+Metric: cosine
+  PH-Dim Analysis:
+    phd_entailment: 4.152004235360578
+    phd_neutral: 4.238046028938045
+    phd_contradiction: 4.170430231526951
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.3809470534324646
+    centroid_ent_to_contradiction: 0.3313330411911011
+    centroid_neutral_to_contradiction: 0.4022102952003479
+    min_ent_to_neutral: 0.0012254714965820312
+    min_ent_to_contradiction: 0.0009952783584594727
+    entailment_separation: 1.4367298523188707e-05
+
+Metric: minkowski_3
+  PH-Dim Analysis:
+    phd_entailment: 6.234084787103597
+    phd_neutral: -4.313596167764661
+    phd_contradiction: -6.7039629165269075
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 75.89351222772446
+    centroid_ent_to_contradiction: 64.75681766808356
+    centroid_neutral_to_contradiction: 83.17213353407388
+    min_ent_to_neutral: 44.96545621251585
+    min_ent_to_contradiction: 47.335601970984285
+    entailment_separation: 0.0028370374130221973
+
+Metric: minkowski_4
+  PH-Dim Analysis:
+    phd_entailment: 6.106346002705903
+    phd_neutral: -4.268323324357
+    phd_contradiction: -6.6333412008922785
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 66.75869525510207
+    centroid_ent_to_contradiction: 50.62209146450846
+    centroid_neutral_to_contradiction: 69.6631076782606
+    min_ent_to_neutral: 38.08476150871134
+    min_ent_to_contradiction: 39.276285595898266
+    entailment_separation: 0.002367670831203926
+
+Metric: braycurtis
+  PH-Dim Analysis:
+    phd_entailment: 28.816832121293515
+    phd_neutral: 27.94040591135537
+    phd_contradiction: 29.895616135420877
+  Cross-Class Surface Analysis:
+    centroid_ent_to_neutral: 0.2584650426053529
+    centroid_ent_to_contradiction: 0.2854061817802565
+    centroid_neutral_to_contradiction: 0.2577753824605059
+    min_ent_to_neutral: 0.2767778127027906
+    min_ent_to_contradiction: 0.4131177465022734
+    entailment_separation: 1.0970347617322953e-05
+
+================================================================================
+

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/surface_analysis_full_data_SBERT_SYMMETRY_7_%j.out
-#SBATCH --error=../logs/surface_analysis_full_data_SBERT_SYMMETRY_7_%j.err
+#SBATCH --output=../logs/surface_analysis_full_data_SNLI_STSB_BERT_LARGE_SEED1_%j.out
+#SBATCH --error=../logs/surface_analysis_full_data_SNLI_STSB_BERT_LARGE_SEED1_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -50,30 +50,9 @@ echo "Checking for required input data and models..."
 # Change to your project directory
 cd ~/MSc_Topology_Codebase
 
-# Check if processed BERT data exists
-if [ ! -f "data/processed/snli_full_standard_BERT.pt" ]; then
-    echo "ERROR: Required BERT data file not found: data/processed/snli_full_standard_BERT.pt"
-    echo "Please ensure text_processing.py has been run successfully first."
-    exit 1
-fi
-
-echo "Found BERT data: data/processed/snli_full_standard_BERT.pt"
-
-# Check if trained order model exists
-ORDER_MODEL=""
-if [ -f "models/enhanced_order_embeddings_snli_SBERT_full.pt" ]; then
-    ORDER_MODEL="models/enhanced_order_embeddings_snli_SBERT_full.pt"
-    echo "✓ Found order model: $ORDER_MODEL"
-else
-    echo "ERROR: No trained order embedding model found in models/"
-    echo "Please ensure order_embeddings_asymmetry.py has been run successfully first."
-    exit 1
-fi
-
 echo ""
 echo "Starting Surface Distance Metric Analysis..."
 echo "Analysis parameters:"
-echo "  - Random seed: 42"
 echo ""
 
 # Run surface distance analysis

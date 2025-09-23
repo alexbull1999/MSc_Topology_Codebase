@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=persistence_image_classification
+#SBATCH --job-name=chaosNLI_individual_analyser
 #SBATCH --partition=a16gpu
 #SBATCH --time=20:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/SAVE_CHAOSNLI_CNNL_%j.out
-#SBATCH --error=../logs/SAVE_CHAOSNLI_CNN_%j.err
+#SBATCH --output=../logs/CHAOSNLI_individual_analyser_%j.out
+#SBATCH --error=../logs/CHAOSNLI_individual_analyser_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -53,7 +53,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python MSc_Topology_Codebase/phd_method/src_phd/ALL_TRAIN_CHUNKS_chaosNLI_hybrid_SOTA_PersimCNN_image_classification_SNLI_MNLI_separate_eval.py 
+python MSc_Topology_Codebase/phd_method/src_phd/chaosNLI_improvement_analysis.py 
 
 
 # Capture exit code

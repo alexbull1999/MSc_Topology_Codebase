@@ -23,6 +23,7 @@ import argparse
 from pathlib import Path
 from collections import defaultdict
 import time
+from datetime import datetime
 
 class PersistenceImageCNN(nn.Module):
     """CNN for persistence images (30x30)"""
@@ -279,10 +280,14 @@ def load_training_validation_data():
     
     return train_persistence_images, train_labels, val_persistence_images, val_labels
 
-def train_persistence_cnn(device='cuda'):
+def train_persistence_cnn(device='cuda', save_path='MSc_Topology_Codebase/phd_method/chaosNLI_models/chaosnli_persistence_cnn.pt'):
     """Train persistence CNN on SNLI+MNLI train/val data (proper protocol)"""
     
     print("Training persistence CNN following ChaosNLI evaluation protocol...")
+
+    # Create save directory if needed
+    save_dir = Path(save_path).parent
+    save_dir.mkdir(parents=True, exist_ok=True)
     
     # Load proper training/validation splits
     train_images, train_labels, val_images, val_labels = load_training_validation_data()
@@ -316,6 +321,8 @@ def train_persistence_cnn(device='cuda'):
     
     best_val_acc = 0.0
     patience_counter = 0
+    best_model_state = None  # Store best model state
+
     
     print("Training persistence CNN...")
     for epoch in range(50):
@@ -369,6 +376,7 @@ def train_persistence_cnn(device='cuda'):
         # Early stopping
         if val_acc > best_val_acc:
             best_val_acc = val_acc
+            best_model_state = model.state_dict().copy()
             patience_counter = 0
         else:
             patience_counter += 1
@@ -376,8 +384,27 @@ def train_persistence_cnn(device='cuda'):
         if patience_counter >= 10:
             print(f"Early stopping at epoch {epoch}")
             break
+
+    if best_model_state is not None:
+        model.load_state_dict(best_model_state)
+        print("Loaded best model weights")
     
     print(f"Persistence CNN training completed. Best val accuracy: {best_val_acc:.3f}")
+
+    # Save the trained model
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    checkpoint = {
+        'model_state_dict': model.state_dict(),
+        'best_val_acc': best_val_acc,
+        'architecture': 'PersistenceImageCNN',
+        'input_size': '30x30',
+        'num_classes': 3,
+        'timestamp': timestamp,
+        'final_epoch': epoch
+    }
+    
+    torch.save(checkpoint, save_path)
+    print(f"Model saved to: {save_path}")
     
     return model
 

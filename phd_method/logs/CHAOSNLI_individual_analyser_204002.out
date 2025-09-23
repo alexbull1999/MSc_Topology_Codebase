@@ -1,0 +1,464 @@
+Job ID: 204002
+Node: parrot
+Time: Wed 17 Sep 22:31:27 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Wed Sep 17 22:31:30 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.133.07             Driver Version: 570.133.07     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:98:00.0 Off |                    0 |
+|  0%   34C    P8             15W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Starting Model training...
+
+Loading trained model from MSc_Topology_Codebase/phd_method/chaosNLI_models/chaosnli_persistence_cnn.pt
+Model loaded - Best val acc: 0.694
+Starting ChaosNLI improvement analysis with Arrow file text loading...
+================================================================================
+CHAOSNLI IMPROVEMENT ANALYSIS
+================================================================================
+Loading ChaosNLI datasets...
+Loading text from original Arrow files using datasets library...
+Loading SNLI from HuggingFace datasets...
+SNLI dataset loaded. Checking available fields...
+Available fields: ['premise', 'hypothesis', 'label']
+Loaded 9824 SNLI examples
+Sample SNLI UIDs: ['0.jpg#0r1e', '1.jpg#0r1e', '2.jpg#0r1e']
+Loaded MNLI Arrow file: 9815 rows
+Created MNLI text mappings for 9815 examples
+Matching 1514 snli UIDs with text data
+Available text UIDs: 9824
+Sample persistence UIDs: ['2407214681.jpg#0r1n' '4718146904.jpg#2r1n' '3980085662.jpg#0r1e']
+Sample text UIDs: ['0.jpg#0r1e', '1.jpg#0r1e', '2.jpg#0r1e']
+Matched 0/1514 (0.0%)
+Matching 1599 mnli UIDs with text data
+Available text UIDs: 9815
+Sample persistence UIDs: ['50830c' '20648n' '67610c']
+Sample text UIDs: ['63735n', '91383c', '755e']
+Matched 1599/1599 (100.0%)
+Loaded ChaosNLI-S: 1514 samples
+Loaded ChaosNLI-M: 1599 samples
+
+============================================================
+ANALYZING IMPROVEMENTS OVER: BERT-BASE
+============================================================
+
+Finding best examples for snli with bert-base
+Loading published predictions from ChaosNLI/data/model_predictions/model_predictions_for_snli_mnli.json
+Available baseline models: ['bert-base', 'xlnet-base', 'roberta-base', 'bert-large', 'xlnet-large', 'roberta-large', 'bart-large', 'albert-xxlarge', 'distilbert']
+Getting topological predictions for 1514 samples
+Best alpha for snli: 0.40
+Found 3 entailment examples
+Found 3 neutral examples
+Found 3 contradiction examples
+
+Finding best examples for mnli with bert-base
+Loading published predictions from ChaosNLI/data/model_predictions/model_predictions_for_snli_mnli.json
+Available baseline models: ['bert-base', 'xlnet-base', 'roberta-base', 'bert-large', 'xlnet-large', 'roberta-large', 'bart-large', 'albert-xxlarge', 'distilbert']
+Getting topological predictions for 1599 samples
+Best alpha for mnli: 0.70
+Found 3 entailment examples
+Found 3 neutral examples
+Found 3 contradiction examples
+
+============================================================
+ANALYZING IMPROVEMENTS OVER: ROBERTA-BASE
+============================================================
+
+Finding best examples for snli with roberta-base
+Loading published predictions from ChaosNLI/data/model_predictions/model_predictions_for_snli_mnli.json
+Available baseline models: ['bert-base', 'xlnet-base', 'roberta-base', 'bert-large', 'xlnet-large', 'roberta-large', 'bart-large', 'albert-xxlarge', 'distilbert']
+Getting topological predictions for 1514 samples
+Best alpha for snli: 0.40
+Found 3 entailment examples
+Found 3 neutral examples
+Found 3 contradiction examples
+
+Finding best examples for mnli with roberta-base
+Loading published predictions from ChaosNLI/data/model_predictions/model_predictions_for_snli_mnli.json
+Available baseline models: ['bert-base', 'xlnet-base', 'roberta-base', 'bert-large', 'xlnet-large', 'roberta-large', 'bart-large', 'albert-xxlarge', 'distilbert']
+Getting topological predictions for 1599 samples
+Best alpha for mnli: 0.70
+Found 3 entailment examples
+Found 3 neutral examples
+Found 3 contradiction examples
+
+====================================================================================================
+BEST IMPROVEMENT EXAMPLES SUMMARY
+====================================================================================================
+
+BERT-BASE IMPROVEMENTS:
+--------------------------------------------------
+
+SNLI:
+  Entailment #1:
+    JSD Improvement: 0.2386
+    KL Improvement: 0.6628
+    Alpha: 0.40
+    Premise: [Text not found for 6952893010.jpg#2r1e]...
+    Hypothesis: [Text not found for 6952893010.jpg#2r1e]...
+    JSD: 0.5014 → 0.2629
+    KL: 0.8902 → 0.2274
+
+  Entailment #2:
+    JSD Improvement: 0.2108
+    KL Improvement: 1.0889
+    Alpha: 0.40
+    Premise: [Text not found for 435054077.jpg#1r1e]...
+    Hypothesis: [Text not found for 435054077.jpg#1r1e]...
+    JSD: 0.6556 → 0.4448
+    KL: 1.7942 → 0.7053
+
+  Entailment #3:
+    JSD Improvement: 0.2084
+    KL Improvement: 1.2412
+    Alpha: 0.40
+    Premise: [Text not found for 1425529973.jpg#2r1c]...
+    Hypothesis: [Text not found for 1425529973.jpg#2r1c]...
+    JSD: 0.5051 → 0.2968
+    KL: 1.6440 → 0.4028
+
+  Neutral #1:
+    JSD Improvement: 0.3491
+    KL Improvement: 0.8082
+    Alpha: 0.40
+    Premise: [Text not found for 3064443326.jpg#2r1n]...
+    Hypothesis: [Text not found for 3064443326.jpg#2r1n]...
+    JSD: 0.4181 → 0.0690
+    KL: 0.8268 → 0.0186
+
+  Neutral #2:
+    JSD Improvement: 0.3145
+    KL Improvement: 0.9913
+    Alpha: 0.40
+    Premise: [Text not found for 2097489021.jpg#0r1e]...
+    Hypothesis: [Text not found for 2097489021.jpg#0r1e]...
+    JSD: 0.4477 → 0.1332
+    KL: 1.0643 → 0.0730
+
+  Neutral #3:
+    JSD Improvement: 0.2971
+    KL Improvement: 0.6027
+    Alpha: 0.40
+    Premise: [Text not found for 7382482712.jpg#0r1n]...
+    Hypothesis: [Text not found for 7382482712.jpg#0r1n]...
+    JSD: 0.3869 → 0.0898
+    KL: 0.6344 → 0.0318
+
+  Contradiction #1:
+    JSD Improvement: 0.2512
+    KL Improvement: 0.5387
+    Alpha: 0.40
+    Premise: [Text not found for 4734535884.jpg#0r1c]...
+    Hypothesis: [Text not found for 4734535884.jpg#0r1c]...
+    JSD: 0.3984 → 0.1473
+    KL: 0.6186 → 0.0799
+
+  Contradiction #2:
+    JSD Improvement: 0.2033
+    KL Improvement: 0.2110
+    Alpha: 0.40
+    Premise: [Text not found for 2879991421.jpg#3r1c]...
+    Hypothesis: [Text not found for 2879991421.jpg#3r1c]...
+    JSD: 0.2143 → 0.0110
+    KL: 0.2115 → 0.0005
+
+  Contradiction #3:
+    JSD Improvement: 0.1901
+    KL Improvement: 1.2002
+    Alpha: 0.40
+    Premise: [Text not found for 3078844565.jpg#0r1c]...
+    Hypothesis: [Text not found for 3078844565.jpg#0r1c]...
+    JSD: 0.4459 → 0.2558
+    KL: 1.4946 → 0.2944
+
+
+MNLI:
+  Entailment #1:
+    JSD Improvement: 0.4240
+    KL Improvement: 0.9911
+    Alpha: 0.70
+    Premise: Companies that were foreign had to accept Indian financial participation and man...
+    Hypothesis: Foreign companies had to take Indian money in order to operate their businesses....
+    JSD: 0.4900 → 0.0660
+    KL: 1.0076 → 0.0165
+
+  Entailment #2:
+    JSD Improvement: 0.3961
+    KL Improvement: 1.3209
+    Alpha: 0.70
+    Premise: The Kal tangled both of Adrin's arms, keeping the blades far away....
+    Hypothesis: Adrin's arms were tangled, keeping his rusty blades away from Kal....
+    JSD: 0.5032 → 0.1070
+    KL: 1.3707 → 0.0498
+
+  Entailment #3:
+    JSD Improvement: 0.3955
+    KL Improvement: 1.2296
+    Alpha: 0.70
+    Premise: After four years, Clinton has learned how to avoid looking unpresidential....
+    Hypothesis: After four torturous years, Clinton finally gets how to avoid unpresidential beh...
+    JSD: 0.4192 → 0.0237
+    KL: 1.2317 → 0.0021
+
+  Neutral #1:
+    JSD Improvement: 0.4140
+    KL Improvement: 1.6176
+    Alpha: 0.70
+    Premise: There are no shares of a stock that might someday come back, just piles of optio...
+    Hypothesis: No shares of a stock will come back because of  Cook's American Business Allianc...
+    JSD: 0.5274 → 0.1134
+    KL: 1.6679 → 0.0504
+
+  Neutral #2:
+    JSD Improvement: 0.4000
+    KL Improvement: 1.2020
+    Alpha: 0.70
+    Premise: but i don't know you know  maybe you could do that for a certain period of time ...
+    Hypothesis: I'm sure it wouldn't take very long to question the person....
+    JSD: 0.5203 → 0.1204
+    KL: 1.2606 → 0.0586
+
+  Neutral #3:
+    JSD Improvement: 0.3927
+    KL Improvement: 1.7039
+    Alpha: 0.70
+    Premise: California is high...
+    Hypothesis: California is hyped up!...
+    JSD: 0.5842 → 0.1915
+    KL: 1.8404 → 0.1365
+
+  Contradiction #1:
+    JSD Improvement: 0.5805
+    KL Improvement: 2.2772
+    Alpha: 0.70
+    Premise: more than anything else in this day and age that's got to be a big factor in you...
+    Hypothesis: In your decisions age is a big factor...
+    JSD: 0.6110 → 0.0304
+    KL: 2.2809 → 0.0037
+
+  Contradiction #2:
+    JSD Improvement: 0.4214
+    KL Improvement: 1.7432
+    Alpha: 0.70
+    Premise: Finish it, someone yelled....
+    Hypothesis: Keep going, someone yelled....
+    JSD: 0.4576 → 0.0362
+    KL: 1.7484 → 0.0052
+
+  Contradiction #3:
+    JSD Improvement: 0.3540
+    KL Improvement: 0.9322
+    Alpha: 0.70
+    Premise: He pulled his cloak tighter and wished for a moment that he had not shaved his h...
+    Hypothesis: The man pulled his super hero cape around himself to show off....
+    JSD: 0.4497 → 0.0957
+    KL: 0.9835 → 0.0513
+
+
+ROBERTA-BASE IMPROVEMENTS:
+--------------------------------------------------
+
+SNLI:
+  Entailment #1:
+    JSD Improvement: 0.2148
+    KL Improvement: 0.5652
+    Alpha: 0.40
+    Premise: [Text not found for 6952893010.jpg#2r1e]...
+    Hypothesis: [Text not found for 6952893010.jpg#2r1e]...
+    JSD: 0.4753 → 0.2605
+    KL: 0.7887 → 0.2235
+
+  Entailment #2:
+    JSD Improvement: 0.2099
+    KL Improvement: 0.3529
+    Alpha: 0.40
+    Premise: [Text not found for 98492339.jpg#3r1e]...
+    Hypothesis: [Text not found for 98492339.jpg#3r1e]...
+    JSD: 0.2938 → 0.0839
+    KL: 0.3809 → 0.0279
+
+  Entailment #3:
+    JSD Improvement: 0.2082
+    KL Improvement: 1.2645
+    Alpha: 0.40
+    Premise: [Text not found for 1425529973.jpg#2r1c]...
+    Hypothesis: [Text not found for 1425529973.jpg#2r1c]...
+    JSD: 0.5077 → 0.2995
+    KL: 1.6729 → 0.4084
+
+  Neutral #1:
+    JSD Improvement: 0.3018
+    KL Improvement: 1.0041
+    Alpha: 0.40
+    Premise: [Text not found for 628483212.jpg#4r1e]...
+    Hypothesis: [Text not found for 628483212.jpg#4r1e]...
+    JSD: 0.4532 → 0.1514
+    KL: 1.0888 → 0.0847
+
+  Neutral #2:
+    JSD Improvement: 0.2855
+    KL Improvement: 0.6650
+    Alpha: 0.40
+    Premise: [Text not found for 3447155358.jpg#3r1n]...
+    Hypothesis: [Text not found for 3447155358.jpg#3r1n]...
+    JSD: 0.3745 → 0.0890
+    KL: 0.6951 → 0.0301
+
+  Neutral #3:
+    JSD Improvement: 0.2718
+    KL Improvement: 0.8692
+    Alpha: 0.40
+    Premise: [Text not found for 4963720718.jpg#3r1e]...
+    Hypothesis: [Text not found for 4963720718.jpg#3r1e]...
+    JSD: 0.4232 → 0.1515
+    KL: 0.9678 → 0.0986
+
+  Contradiction #1:
+    JSD Improvement: 0.3253
+    KL Improvement: 0.5879
+    Alpha: 0.40
+    Premise: [Text not found for 2726887594.jpg#4r1c]...
+    Hypothesis: [Text not found for 2726887594.jpg#4r1c]...
+    JSD: 0.3940 → 0.0687
+    KL: 0.6062 → 0.0183
+
+  Contradiction #2:
+    JSD Improvement: 0.2591
+    KL Improvement: 1.7284
+    Alpha: 0.40
+    Premise: [Text not found for 2249783869.jpg#0r1c]...
+    Hypothesis: [Text not found for 2249783869.jpg#0r1c]...
+    JSD: 0.6947 → 0.4356
+    KL: 2.3944 → 0.6660
+
+  Contradiction #3:
+    JSD Improvement: 0.2331
+    KL Improvement: 0.8545
+    Alpha: 0.40
+    Premise: [Text not found for 3078844565.jpg#0r1c]...
+    Hypothesis: [Text not found for 3078844565.jpg#0r1c]...
+    JSD: 0.4036 → 0.1705
+    KL: 0.9793 → 0.1247
+
+
+MNLI:
+  Entailment #1:
+    JSD Improvement: 0.4697
+    KL Improvement: 3.6488
+    Alpha: 0.70
+    Premise: For such a governmentwide review, an entrance conference is generally held with ...
+    Hypothesis: An entrance conference is held with specialized agencies....
+    JSD: 0.7174 → 0.2477
+    KL: 3.8776 → 0.2288
+
+  Entailment #2:
+    JSD Improvement: 0.4387
+    KL Improvement: 1.1936
+    Alpha: 0.70
+    Premise: To see how The Bell Curve tries and fails to get around these inherent problems,...
+    Hypothesis: The Bell Curve tries to get around these problems and fails in many different wa...
+    JSD: 0.4746 → 0.0359
+    KL: 1.1987 → 0.0051
+
+  Entailment #3:
+    JSD Improvement: 0.4058
+    KL Improvement: 1.4520
+    Alpha: 0.70
+    Premise: The Kal tangled both of Adrin's arms, keeping the blades far away....
+    Hypothesis: Adrin's arms were tangled, keeping his rusty blades away from Kal....
+    JSD: 0.5171 → 0.1112
+    KL: 1.5031 → 0.0511
+
+  Neutral #1:
+    JSD Improvement: 0.4205
+    KL Improvement: 1.7805
+    Alpha: 0.70
+    Premise: you did you see that...
+    Hypothesis: I saw that!...
+    JSD: 0.6326 → 0.2121
+    KL: 1.9659 → 0.1854
+
+  Neutral #2:
+    JSD Improvement: 0.3962
+    KL Improvement: 1.9332
+    Alpha: 0.70
+    Premise: In addition, Dublin Tourism has devised and signposted three self-guided walking...
+    Hypothesis: Dublin's self-guided tours are not easy to follow. ...
+    JSD: 0.4416 → 0.0455
+    KL: 1.9415 → 0.0083
+
+  Neutral #3:
+    JSD Improvement: 0.3842
+    KL Improvement: 1.2791
+    Alpha: 0.70
+    Premise: There are no shares of a stock that might someday come back, just piles of optio...
+    Hypothesis: No shares of a stock will come back because of  Cook's American Business Allianc...
+    JSD: 0.4755 → 0.0913
+    KL: 1.3126 → 0.0336
+
+  Contradiction #1:
+    JSD Improvement: 0.5545
+    KL Improvement: 2.3051
+    Alpha: 0.70
+    Premise: more than anything else in this day and age that's got to be a big factor in you...
+    Hypothesis: In your decisions age is a big factor...
+    JSD: 0.6026 → 0.0481
+    KL: 2.3143 → 0.0092
+
+  Contradiction #2:
+    JSD Improvement: 0.4793
+    KL Improvement: 2.0085
+    Alpha: 0.70
+    Premise: All were prominent nationally known organizations....
+    Hypothesis: Some organizations were obscure....
+    JSD: 0.6371 → 0.1578
+    KL: 2.0965 → 0.0880
+
+  Contradiction #3:
+    JSD Improvement: 0.3345
+    KL Improvement: 0.7839
+    Alpha: 0.70
+    Premise: Some Kwanzaa rituals, most notably the focus on candles, seem to have been borro...
+    Hypothesis: They claimed to have started the tradition on their own....
+    JSD: 0.3714 → 0.0369
+    KL: 0.7893 → 0.0054
+
+Results saved to MSc_Topology_Codebase/phd_method/chaosNLI_individual_analysis/chaosnli_improvement_analysis.json
+
+Improvement analysis completed!
+Check the match rates in the output to see if text loading worked correctly.
+
+Analysis completed with exit code: 0
+Time: Wed 17 Sep 22:31:59 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+Clustering successful!
+
+
+Job finished.
