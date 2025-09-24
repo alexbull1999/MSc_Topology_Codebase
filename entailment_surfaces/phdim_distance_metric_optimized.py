@@ -88,7 +88,7 @@ class SurfaceDistanceMetricAnalyzer:
          # Embedding spaces for surface analysis (CORRECTED - only relational spaces)
         self.embedding_spaces = [
             'sbert_concat',          # Concatenated [premise||hypothesis] - joint representation
-            'sbert_difference',      # Premise - Hypothesis (relationship vector)
+            # 'sbert_difference',      # Premise - Hypothesis (relationship vector)
             # 'order_concat',         # Concatenated order embeddings [order_premise||order_hypothesis]
             # 'order_difference',     # Order premise - hypothesis (order relationship)
             # 'order_violations',     # Order violation energies (inherently relational)
@@ -101,7 +101,7 @@ class SurfaceDistanceMetricAnalyzer:
             'lattice_containment', # Element-wise containment relationships (RENAMED TO SEMANTIC COHERENCE IN PAPER)
             # 'lattice_order_violations', # Element-wise order violations  
             # 'lattice_height',          # Element-wise height differences
-            'lattice_subsumption',     # Element-wise subsumption coverage
+            # 'lattice_subsumption',     # Element-wise subsumption coverage
             # 'lattice_bidirectional_order_violations',   # Both directions of violations
             # 'lattice_enhanced'         # All lattice features combined
         ]
@@ -233,103 +233,103 @@ class SurfaceDistanceMetricAnalyzer:
             print(f"  {label}: {len(indices)} samples")
 
         # # STEP 1: Generate EUCLIDEAN order embeddings (before hyperbolic projection)
-        print("Computing EUCLIDEAN order embeddings...")
-        with torch.no_grad():
-            for label in data_by_class.keys():
-                premise_bert = data_by_class[label]['premise_bert']
-                hypothesis_bert = data_by_class[label]['hypothesis_bert']
+        # print("Computing EUCLIDEAN order embeddings...")
+        # with torch.no_grad():
+        #     for label in data_by_class.keys():
+        #         premise_bert = data_by_class[label]['premise_bert']
+        #         hypothesis_bert = data_by_class[label]['hypothesis_bert']
                 
-                # OPTIMIZATION: Batch compute on GPU
-                premise_order_euclidean = self.order_model(premise_bert)
-                hypothesis_order_euclidean = self.order_model(hypothesis_bert)
+        #         # OPTIMIZATION: Batch compute on GPU
+        #         premise_order_euclidean = self.order_model(premise_bert)
+        #         hypothesis_order_euclidean = self.order_model(hypothesis_bert)
                 
-                # OPTIMIZATION: Vectorized violation computation on GPU
-                euclidean_order_violations = self.order_model.order_violation_energy(
-                    premise_order_euclidean, hypothesis_order_euclidean
-                )
+        #         # OPTIMIZATION: Vectorized violation computation on GPU
+        #         euclidean_order_violations = self.order_model.order_violation_energy(
+        #             premise_order_euclidean, hypothesis_order_euclidean
+        #         )
                 
-                data_by_class[label].update({
-                    'premise_order_euclidean': premise_order_euclidean,
-                    'hypothesis_order_euclidean': hypothesis_order_euclidean,
-                    'euclidean_order_violations': euclidean_order_violations
-                })
+        #         data_by_class[label].update({
+        #             'premise_order_euclidean': premise_order_euclidean,
+        #             'hypothesis_order_euclidean': hypothesis_order_euclidean,
+        #             'euclidean_order_violations': euclidean_order_violations
+        #         })
 
-        # STEP 2: Generate HYPERBOLIC features (enhanced cone pipeline as single source of truth)
-        if self.cone_pipeline:
-            print("Computing ALL HYPERBOLIC features from enhanced cone pipeline...")
-            with torch.no_grad():
-                for label in data_by_class.keys():
-                    premise_bert = data_by_class[label]['premise_bert']
-                    hypothesis_bert = data_by_class[label]['hypothesis_bert']
+        # # STEP 2: Generate HYPERBOLIC features (enhanced cone pipeline as single source of truth)
+        # if self.cone_pipeline:
+        #     print("Computing ALL HYPERBOLIC features from enhanced cone pipeline...")
+        #     with torch.no_grad():
+        #         for label in data_by_class.keys():
+        #             premise_bert = data_by_class[label]['premise_bert']
+        #             hypothesis_bert = data_by_class[label]['hypothesis_bert']
                     
-                    try:
-                        # OPTIMIZATION: Process in batches for large datasets
-                        batch_size = min(1000, len(premise_bert))
+        #             try:
+        #                 # OPTIMIZATION: Process in batches for large datasets
+        #                 batch_size = min(1000, len(premise_bert))
                         
-                        if len(premise_bert) <= batch_size:
-                            # Small enough to process at once
-                            enhanced_results = self.cone_pipeline.compute_enhanced_cone_energies(
-                                premise_bert, hypothesis_bert
-                            )
-                        else:
-                            # Process in batches
-                            all_results = {}
-                            for i in range(0, len(premise_bert), batch_size):
-                                batch_premise = premise_bert[i:i+batch_size]
-                                batch_hypothesis = hypothesis_bert[i:i+batch_size]
+        #                 if len(premise_bert) <= batch_size:
+        #                     # Small enough to process at once
+        #                     enhanced_results = self.cone_pipeline.compute_enhanced_cone_energies(
+        #                         premise_bert, hypothesis_bert
+        #                     )
+        #                 else:
+        #                     # Process in batches
+        #                     all_results = {}
+        #                     for i in range(0, len(premise_bert), batch_size):
+        #                         batch_premise = premise_bert[i:i+batch_size]
+        #                         batch_hypothesis = hypothesis_bert[i:i+batch_size]
                                 
-                                batch_results = self.cone_pipeline.compute_enhanced_cone_energies(
-                                    batch_premise, batch_hypothesis
-                                )
+        #                         batch_results = self.cone_pipeline.compute_enhanced_cone_energies(
+        #                             batch_premise, batch_hypothesis
+        #                         )
                                 
-                                # Accumulate results
-                                for key, value in batch_results.items():
-                                    if key not in all_results:
-                                        all_results[key] = []
-                                    all_results[key].append(value)
+        #                         # Accumulate results
+        #                         for key, value in batch_results.items():
+        #                             if key not in all_results:
+        #                                 all_results[key] = []
+        #                             all_results[key].append(value)
                             
-                            # OPTIMIZATION: Concatenate on GPU
-                            enhanced_results = {}
-                            for key, value_list in all_results.items():
-                                enhanced_results[key] = torch.cat(value_list, dim=0)
+        #                     # OPTIMIZATION: Concatenate on GPU
+        #                     enhanced_results = {}
+        #                     for key, value_list in all_results.items():
+        #                         enhanced_results[key] = torch.cat(value_list, dim=0)
 
                         
-                        # Store ALL hyperbolic features from enhanced cone pipeline
-                        data_by_class[label].update({
-                            # HYPERBOLIC order embeddings (after hyperbolic projection)
-                            'premise_order_hyperbolic': enhanced_results['premise_hyperbolic'],
-                            'hypothesis_order_hyperbolic': enhanced_results['hypothesis_hyperbolic'],
+        #                 # Store ALL hyperbolic features from enhanced cone pipeline
+        #                 data_by_class[label].update({
+        #                     # HYPERBOLIC order embeddings (after hyperbolic projection)
+        #                     'premise_order_hyperbolic': enhanced_results['premise_hyperbolic'],
+        #                     'hypothesis_order_hyperbolic': enhanced_results['hypothesis_hyperbolic'],
                             
-                            # HYPERBOLIC order energies (computed in hyperbolic space)
-                            'hyperbolic_order_energies': enhanced_results['order_energies'],
-                            'forward_order_energies': enhanced_results.get('forward_energies', enhanced_results['order_energies']),
-                            'backward_order_energies': enhanced_results.get('backward_energies', torch.zeros_like(enhanced_results['order_energies'])),
-                            'asymmetric_order_energies': enhanced_results.get('asymmetric_energies', torch.zeros_like(enhanced_results['order_energies'])),
+        #                     # HYPERBOLIC order energies (computed in hyperbolic space)
+        #                     'hyperbolic_order_energies': enhanced_results['order_energies'],
+        #                     'forward_order_energies': enhanced_results.get('forward_energies', enhanced_results['order_energies']),
+        #                     'backward_order_energies': enhanced_results.get('backward_energies', torch.zeros_like(enhanced_results['order_energies'])),
+        #                     'asymmetric_order_energies': enhanced_results.get('asymmetric_energies', torch.zeros_like(enhanced_results['order_energies'])),
                             
-                            # Hyperbolic geometric features
-                            'hyperbolic_distances': enhanced_results['hyperbolic_distances'],
+        #                     # Hyperbolic geometric features
+        #                     'hyperbolic_distances': enhanced_results['hyperbolic_distances'],
                             
-                            # Cone energies (computed in hyperbolic space)
-                            'cone_energies': enhanced_results['cone_energies'],
-                            'forward_cone_energies': enhanced_results.get('forward_cone_energies', enhanced_results['cone_energies']),
-                            'backward_cone_energies': enhanced_results.get('backward_cone_energies', torch.zeros_like(enhanced_results['cone_energies'])),
-                            'cone_asymmetries': enhanced_results.get('cone_asymmetries', torch.zeros_like(enhanced_results['cone_energies'])),
+        #                     # Cone energies (computed in hyperbolic space)
+        #                     'cone_energies': enhanced_results['cone_energies'],
+        #                     'forward_cone_energies': enhanced_results.get('forward_cone_energies', enhanced_results['cone_energies']),
+        #                     'backward_cone_energies': enhanced_results.get('backward_cone_energies', torch.zeros_like(enhanced_results['cone_energies'])),
+        #                     'cone_asymmetries': enhanced_results.get('cone_asymmetries', torch.zeros_like(enhanced_results['cone_energies'])),
                             
-                            # Combined enhanced features (hyperbolic)
-                            'enhanced_cone_features': torch.cat([
-                                enhanced_results['cone_energies'].unsqueeze(1).to(self.device),
-                                enhanced_results.get('forward_cone_energies', enhanced_results['cone_energies']).unsqueeze(1).to(self.device),
-                                enhanced_results.get('backward_cone_energies', torch.zeros_like(enhanced_results['cone_energies'])).unsqueeze(1).to(self.device),
-                                enhanced_results['order_energies'].unsqueeze(1).to(self.device),
-                                enhanced_results.get('asymmetric_energies', torch.zeros_like(enhanced_results['order_energies'])).unsqueeze(1).to(self.device)
-                            ], dim=1)
-                        })
+        #                     # Combined enhanced features (hyperbolic)
+        #                     'enhanced_cone_features': torch.cat([
+        #                         enhanced_results['cone_energies'].unsqueeze(1).to(self.device),
+        #                         enhanced_results.get('forward_cone_energies', enhanced_results['cone_energies']).unsqueeze(1).to(self.device),
+        #                         enhanced_results.get('backward_cone_energies', torch.zeros_like(enhanced_results['cone_energies'])).unsqueeze(1).to(self.device),
+        #                         enhanced_results['order_energies'].unsqueeze(1).to(self.device),
+        #                         enhanced_results.get('asymmetric_energies', torch.zeros_like(enhanced_results['order_energies'])).unsqueeze(1).to(self.device)
+        #                     ], dim=1)
+        #                 })
                         
-                    except Exception as e:
-                        print(f"Error computing enhanced cone features for {label}: {e}")
-                        raise
-        else:
-            print("Enhanced cone pipeline not available - hyperbolic features will be skipped")
+        #             except Exception as e:
+        #                 print(f"Error computing enhanced cone features for {label}: {e}")
+        #                 raise
+        # else:
+        #     print("Enhanced cone pipeline not available - hyperbolic features will be skipped")
 
         
         # Extract all embedding spaces (CORRECTED - only relational embeddings)
@@ -906,10 +906,10 @@ def main():
 
     # Initialize analyzer
     analyzer = SurfaceDistanceMetricAnalyzer(
-        bert_data_path="data/processed/snli_full_train_STSB_BERT_LARGE.pt",
+        bert_data_path="/vol/bitbucket/ahb24/tda_entailment_new/snli_full_train_STSB_BERT_LARGE.pt",
         order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
-        results_dir="entailment_surfaces/results/snli_STSB_BERT_LARGE_seed_42",
-        seed=42
+        results_dir="entailment_surfaces/results/snli_STSB_BERT_LARGE_seed_555",
+        seed=555
     )
     
     # Run comprehensive analysis

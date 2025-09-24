@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=sbert_processing
-#SBATCH --partition=gpgpuC
+#SBATCH --partition=gpgpuB
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
@@ -54,7 +54,7 @@ echo ""
 echo "Starting sbert processing..."
 echo ""
 
-python entailment_surfaces/text_processing_sbert.py 
+python MSc_Topology_Codebase/entailment_surfaces/text_processing_sbert.py 
 
 
 # Capture exit code

@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/surface_analysis_full_data_SNLI_STSB_BERT_LARGE_SEED1_%j.out
-#SBATCH --error=../logs/surface_analysis_full_data_SNLI_STSB_BERT_LARGE_SEED1_%j.err
+#SBATCH --output=../logs/surface_analysis_full_data_SNLI_STSB_BERT_LARGE_SEED5_%j.out
+#SBATCH --error=../logs/surface_analysis_full_data_SNLI_STSB_BERT_LARGE_SEED5_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
