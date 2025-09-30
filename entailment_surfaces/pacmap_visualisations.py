@@ -292,6 +292,14 @@ class PaCMAPTopologyVisualizer:
         Create PaCMAP visualization of persistence images
         """
         print(f"Creating PaCMAP visualization for {space_name} + {metric_name}...")
+
+        if space_name == "sbert_concat":
+            space_name = "Simple Concatenation"
+        elif space_name == "lattice_containment":
+            space_name = "Semantic Coherence"
+        
+        if metric_name == "braycurtis":
+            metric_name = "Bray-Curtis"
         
         # Convert to numpy arrays
         X = np.array(persistence_images)
@@ -331,14 +339,8 @@ class PaCMAPTopologyVisualizer:
         ax.legend(fontsize=12)
         ax.grid(True, alpha=0.3)
         
-        # Add explanation text
-        explanation = (
-            f"Visualization of persistence images from {self.points_per_sample}-point samples.\n"
-            f"Each point represents topological signature of premise-hypothesis pairs.\n"
-            f"Green: Entailment (structured), Orange: Neutral (intermediate), Red: Contradiction (complex)"
-        )
         
-        plt.figtext(0.02, 0.02, explanation, fontsize=10, 
+        plt.figtext(0.02, 0.02, fontsize=10, 
                    bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.8))
         
         plt.tight_layout()
@@ -414,7 +416,7 @@ class PaCMAPTopologyVisualizer:
                     
                     if len(persistence_images) > 0:
                         # Create PaCMAP visualization
-                        save_path = f"{save_dir}/MNLI_pacmap_{space_name}_{metric_name}_{timestamp}.png"
+                        save_path = f"{save_dir}/SNLI_pacmap_{space_name}_{metric_name}_{timestamp}.png"
                         embedding_2d = self.visualize_with_pacmap(
                             persistence_images, labels, space_name, metric_name, save_path
                         )
@@ -470,7 +472,7 @@ def main():
     """
     
     # These paths need to be updated to your actual file locations
-    bert_data_path = "data/processed/mnli_full_SBERT_train.pt"
+    bert_data_path = "data/processed/snli_full_standard_SBERT.pt"
     order_model_path = "models/enhanced_order_embeddings_snli_SBERT_full.pt"
     
     visualizer = PaCMAPTopologyVisualizer(

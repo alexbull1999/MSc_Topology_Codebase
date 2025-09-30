@@ -1,0 +1,65 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 204845
+Node: dipper
+Time: Wed 24 Sep 18:50:15 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Wed Sep 24 18:50:17 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A30                     Off |   00000000:04:00.0 Off |                    0 |
+| N/A   31C    P0             29W /  165W |       0MiB /  24576MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A30
+GPU memory: 25.3 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting gpt processing...
+
+Loading gpt2-large on cuda...
+Gradient checkpointing enabled
+GPT-2 text processing pipeline ready
+Single pair test - Premise shape: torch.Size([1280]), Hypothesis shape: torch.Size([1280])
+Processing dataset: MSc_Topology_Codebase/data/raw/mnli/train/mnli_full_train.json...
+Dataset contains 392702 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([392702, 1280])
+Hypothesis embeddings shape: torch.Size([392702, 1280])
+Embedding dimension: 1280
+Premise embedding range: [-11.483, 14.392]
+Hypothesis embedding range: [-13.438, 13.161]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/mnli_full_train_GPT2_MEAN_POOLING.pt
+GPT-2 text processing pipeline test completed successfully
+
+Analysis completed with exit code: 0
+Time: Wed 24 Sep 19:14:27 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+
+
+Job finished.

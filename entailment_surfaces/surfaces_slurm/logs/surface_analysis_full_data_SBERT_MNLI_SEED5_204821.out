@@ -1,0 +1,280 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 204821
+Node: gpuvm13
+Time: Wed 24 Sep 14:20:25 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Wed Sep 24 14:20:27 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:07.0 Off |                    0 |
+| N/A   35C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: Tesla T4
+GPU memory: 15.6 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting Surface Distance Metric Analysis...
+Analysis parameters:
+
+Surface Distance Metric Analyzer initialized
+FOCUS: Testing distance metrics for premise-hypothesis pair relationships
+Device: cuda
+BERT data: data/processed/mnli_full_SBERT_train.pt
+Order model: models/enhanced_order_embeddings_snli_SBERT_full.pt
+Distance metrics: 7 total
+Relational embedding spaces: 2 total
+Each space represents premise-hypothesis pair relationships
+Loading pre-processed data...
+Loading BERT embeddings from data/processed/mnli_full_SBERT_train.pt
+BERT data loaded:
+  Premise embeddings: torch.Size([392702, 768])
+  Hypothesis embeddings: torch.Size([392702, 768])
+  Labels: 392702
+  Label distribution: {'entailment': 130899, 'neutral': 130900, 'contradiction': 130903}
+Loading order model from models/enhanced_order_embeddings_snli_SBERT_full.pt
+Order model loaded (validation loss: 3.202074103355408)
+Loaded enhanced order model (val_loss: 3.2021)
+Model asymmetry_weight: 1.9
+Pipeline initialized: 125D → 30D hyperbolic
+Running on: cuda
+Enhanced model with asymmetry_weight: 1.9
+Hyperbolic pipeline loaded successfully
+Enhanced Hyperbolic Entailment Cones using device: cuda
+Loaded enhanced order model (val_loss: 3.2021)
+Model asymmetry_weight: 1.9
+Pipeline initialized: 125D → 30D hyperbolic
+Running on: cuda
+Enhanced model with asymmetry_weight: 1.9
+Successfully loaded enhanced hyperbolic projection of order embeddings
+Enhanced cone pipeline loaded successfully
+================================================================================
+COMPREHENSIVE SURFACE DISTANCE METRIC ANALYSIS (GPU-OPTIMIZED)
+Testing all distance metrics across all embedding spaces
+Device: cuda
+GPU Memory: 2303.8 MB allocated
+================================================================================
+Extracting all embedding spaces...
+  entailment: 130899 samples
+  neutral: 130900 samples
+  contradiction: 130903 samples
+Extracting sbert_concat...
+  sbert_concat entailment: torch.Size([130899, 1536])
+  sbert_concat neutral: torch.Size([130900, 1536])
+  sbert_concat contradiction: torch.Size([130903, 1536])
+Extracting lattice_containment...
+  lattice_containment entailment: torch.Size([130899, 768])
+  lattice_containment neutral: torch.Size([130900, 768])
+  lattice_containment contradiction: torch.Size([130903, 768])
+
+============================================================
+TESTING SPACE: sbert_concat
+============================================================
+
+--- Testing euclidean metric ---
+  Computing PH-Dim for entailment in sbert_concat using euclidean
+    entailment PH-Dim: 33.8738
+  Computing PH-Dim for neutral in sbert_concat using euclidean
+    neutral PH-Dim: 40.6977
+  Computing PH-Dim for contradiction in sbert_concat using euclidean
+    contradiction PH-Dim: 36.8201
+  Computing cross-class surface analysis for sbert_concat using euclidean
+ PH-Dim scores: {'entailment': 33.87382506718045, 'neutral': 40.69772479576575, 'contradiction': 36.82014144541062}
+
+--- Testing manhattan metric ---
+  Computing PH-Dim for entailment in sbert_concat using manhattan
+    entailment PH-Dim: 34.6688
+  Computing PH-Dim for neutral in sbert_concat using manhattan
+    neutral PH-Dim: 39.8841
+  Computing PH-Dim for contradiction in sbert_concat using manhattan
+    contradiction PH-Dim: 36.2029
+  Computing cross-class surface analysis for sbert_concat using manhattan
+ PH-Dim scores: {'entailment': 34.66884844043196, 'neutral': 39.88406073909315, 'contradiction': 36.202915735978245}
+
+--- Testing chebyshev metric ---
+  Computing PH-Dim for entailment in sbert_concat using chebyshev
+    entailment PH-Dim: 32.0324
+  Computing PH-Dim for neutral in sbert_concat using chebyshev
+    neutral PH-Dim: 37.7015
+  Computing PH-Dim for contradiction in sbert_concat using chebyshev
+    contradiction PH-Dim: 30.2900
+  Computing cross-class surface analysis for sbert_concat using chebyshev
+ PH-Dim scores: {'entailment': 32.032369582429645, 'neutral': 37.70149177223936, 'contradiction': 30.290030469641817}
+
+--- Testing cosine metric ---
+  Computing PH-Dim for entailment in sbert_concat using cosine
+    entailment PH-Dim: 15.2446
+  Computing PH-Dim for neutral in sbert_concat using cosine
+    neutral PH-Dim: 16.2774
+  Computing PH-Dim for contradiction in sbert_concat using cosine
+    contradiction PH-Dim: 17.1968
+  Computing cross-class surface analysis for sbert_concat using cosine
+ PH-Dim scores: {'entailment': 15.244573440662354, 'neutral': 16.277362802757306, 'contradiction': 17.196794273644706}
+
+--- Testing minkowski_3 metric ---
+  Computing PH-Dim for entailment in sbert_concat using minkowski_3
+    entailment PH-Dim: 33.5971
+  Computing PH-Dim for neutral in sbert_concat using minkowski_3
+    neutral PH-Dim: 41.8167
+  Computing PH-Dim for contradiction in sbert_concat using minkowski_3
+    contradiction PH-Dim: 37.4222
+  Computing cross-class surface analysis for sbert_concat using minkowski_3
+ PH-Dim scores: {'entailment': 33.59709252156192, 'neutral': 41.816681731238006, 'contradiction': 37.422201043858834}
+
+--- Testing minkowski_4 metric ---
+  Computing PH-Dim for entailment in sbert_concat using minkowski_4
+    entailment PH-Dim: 33.4332
+  Computing PH-Dim for neutral in sbert_concat using minkowski_4
+    neutral PH-Dim: 42.8573
+  Computing PH-Dim for contradiction in sbert_concat using minkowski_4
+    contradiction PH-Dim: 37.5988
+  Computing cross-class surface analysis for sbert_concat using minkowski_4
+ PH-Dim scores: {'entailment': 33.4332355597271, 'neutral': 42.857344073389775, 'contradiction': 37.59883518711839}
+
+--- Testing braycurtis metric ---
+  Computing PH-Dim for entailment in sbert_concat using braycurtis
+    entailment PH-Dim: 20.5950
+  Computing PH-Dim for neutral in sbert_concat using braycurtis
+    neutral PH-Dim: 21.4963
+  Computing PH-Dim for contradiction in sbert_concat using braycurtis
+    contradiction PH-Dim: 22.7380
+  Computing cross-class surface analysis for sbert_concat using braycurtis
+ PH-Dim scores: {'entailment': 20.594975305041853, 'neutral': 21.496256265054196, 'contradiction': 22.738046319166447}
+
+Saved sbert_concat results to entailment_surfaces/results/mnli_successful_embeddings_seed_500/surface_analysis_sbert_concat_20250924_142055.json
+
+============================================================
+TESTING SPACE: lattice_containment
+============================================================
+
+--- Testing euclidean metric ---
+  Computing PH-Dim for entailment in lattice_containment using euclidean
+    entailment PH-Dim: 74.7103
+  Computing PH-Dim for neutral in lattice_containment using euclidean
+    neutral PH-Dim: 58.0015
+  Computing PH-Dim for contradiction in lattice_containment using euclidean
+    contradiction PH-Dim: 62.1072
+  Computing cross-class surface analysis for lattice_containment using euclidean
+ PH-Dim scores: {'entailment': 74.71028866669398, 'neutral': 58.00150808668439, 'contradiction': 62.107231655119136}
+
+--- Testing manhattan metric ---
+  Computing PH-Dim for entailment in lattice_containment using manhattan
+    entailment PH-Dim: 73.8599
+  Computing PH-Dim for neutral in lattice_containment using manhattan
+    neutral PH-Dim: 65.4853
+  Computing PH-Dim for contradiction in lattice_containment using manhattan
+    contradiction PH-Dim: 61.3983
+  Computing cross-class surface analysis for lattice_containment using manhattan
+ PH-Dim scores: {'entailment': 73.85985492041495, 'neutral': 65.48530790253973, 'contradiction': 61.398283656217586}
+
+--- Testing chebyshev metric ---
+  Computing PH-Dim for entailment in lattice_containment using chebyshev
+    entailment PH-Dim: 36.5329
+  Computing PH-Dim for neutral in lattice_containment using chebyshev
+    neutral PH-Dim: 41.8851
+  Computing PH-Dim for contradiction in lattice_containment using chebyshev
+    contradiction PH-Dim: 36.5618
+  Computing cross-class surface analysis for lattice_containment using chebyshev
+ PH-Dim scores: {'entailment': 36.53286410915638, 'neutral': 41.88514637145112, 'contradiction': 36.56183337524214}
+
+--- Testing cosine metric ---
+  Computing PH-Dim for entailment in lattice_containment using cosine
+    entailment PH-Dim: 32.8219
+  Computing PH-Dim for neutral in lattice_containment using cosine
+    neutral PH-Dim: 30.5569
+  Computing PH-Dim for contradiction in lattice_containment using cosine
+    contradiction PH-Dim: 42.9369
+  Computing cross-class surface analysis for lattice_containment using cosine
+ PH-Dim scores: {'entailment': 32.82194947992453, 'neutral': 30.556857848705715, 'contradiction': 42.93689771166145}
+
+--- Testing minkowski_3 metric ---
+  Computing PH-Dim for entailment in lattice_containment using minkowski_3
+    entailment PH-Dim: 70.7160
+  Computing PH-Dim for neutral in lattice_containment using minkowski_3
+    neutral PH-Dim: 55.4274
+  Computing PH-Dim for contradiction in lattice_containment using minkowski_3
+    contradiction PH-Dim: 61.6166
+  Computing cross-class surface analysis for lattice_containment using minkowski_3
+ PH-Dim scores: {'entailment': 70.71598192788677, 'neutral': 55.427364637649006, 'contradiction': 61.61662095171205}
+
+--- Testing minkowski_4 metric ---
+  Computing PH-Dim for entailment in lattice_containment using minkowski_4
+    entailment PH-Dim: 65.6970
+  Computing PH-Dim for neutral in lattice_containment using minkowski_4
+    neutral PH-Dim: 55.7608
+  Computing PH-Dim for contradiction in lattice_containment using minkowski_4
+    contradiction PH-Dim: 59.4092
+  Computing cross-class surface analysis for lattice_containment using minkowski_4
+ PH-Dim scores: {'entailment': 65.69699162974156, 'neutral': 55.76083076006351, 'contradiction': 59.40921450375386}
+
+--- Testing braycurtis metric ---
+  Computing PH-Dim for entailment in lattice_containment using braycurtis
+    entailment PH-Dim: 57.1404
+  Computing PH-Dim for neutral in lattice_containment using braycurtis
+    neutral PH-Dim: 41.4544
+  Computing PH-Dim for contradiction in lattice_containment using braycurtis
+    contradiction PH-Dim: 65.1540
+  Computing cross-class surface analysis for lattice_containment using braycurtis
+ PH-Dim scores: {'entailment': 57.14035518675957, 'neutral': 41.45442524313231, 'contradiction': 65.15401669712273}
+
+Saved lattice_containment results to entailment_surfaces/results/mnli_successful_embeddings_seed_500/surface_analysis_lattice_containment_20250924_142055.json
+Simple report saved to: entailment_surfaces/results/mnli_successful_embeddings_seed_500/simple_analysis_report_20250924_142055.txt
+
+================================================================================
+COMPREHENSIVE ANALYSIS COMPLETE
+Final GPU Memory: 2303.8 MB allocated
+Results saved to: entailment_surfaces/results/mnli_successful_embeddings_seed_500/comprehensive_surface_analysis_20250924_142055.json
+================================================================================
+
+Analysis completed with exit code: 0
+Time: Wed 24 Sep 14:25:39 BST 2025
+
+Results created in results/step_1_1_analysis/:
+No results directory found
+
+Disk usage:
+No results to measure
+
+=== ANALYSIS SUCCESSFUL ===
+Surface distance metric analysis completed successfully!
+
+Key outputs:
+  - JSON results: results/step_1_1_analysis/comprehensive_surface_analysis_*.json
+  - Plain report: results/step_1_1_analysis/simple_analysis_report_*.txt
+  - Individual space results: results/step_1_1_analysis/surface_analysis_*_*.json
+
+Next steps:
+  1. Review the simple_analysis_report_*.txt for plain results
+  2. Identify top-performing space+metric combinations
+  3. Consider re-running with --max_samples 167000 for full analysis
+
+To run full analysis on promising combinations:
+  python step_1_1_surface_analysis_corrected.py \
+    --bert_data 'data/processed/snli_full_standard_BERT.pt' \
+    --order_model '' \
+    --max_samples 167000
+
+Job finished.

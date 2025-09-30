@@ -763,7 +763,7 @@ class EfficientStatisticalValidation:
 def main():
     """Run efficient statistical validation"""
     
-    bert_data_path = "data/processed/snli_10k_subset_train_SBERT_STSB_LARGE.pt"
+    bert_data_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_full_train_STSB_BERT_LARGE.pt"
     order_model_path = "models/enhanced_order_embeddings_snli_SBERT_full.pt"
     
     validator = EfficientStatisticalValidation(

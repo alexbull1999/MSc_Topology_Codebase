@@ -1,0 +1,632 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 205260
+Node: clapper
+Time: Sun 28 Sep 03:02:07 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sun Sep 28 03:02:09 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A30                     Off |   00000000:04:00.0 Off |                    0 |
+| N/A   31C    P0             26W /  165W |       0MiB /  24576MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A30
+GPU memory: 25.3 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PH-Dim Clustering Validation Analysis...
+
+Efficient Statistical Validation initialized
+Testing 14 combinations
+Embedding spaces: ['llama_concat', 'lattice_containment']
+Distance metrics: ['euclidean', 'manhattan', 'chebyshev', 'cosine', 'minkowski_3', 'minkowski_4', 'braycurtis']
+Device: cpu
+Loading LLAMA data...
+LLAMA data loaded:
+  Premise embeddings: torch.Size([549367, 4096])
+  Hypothesis embeddings: torch.Size([549367, 4096])
+  Labels: 549367
+  entailment: 183416 samples available
+  neutral: 182764 samples available
+  contradiction: 183187 samples available
+============================================================
+EFFICIENT STATISTICAL VALIDATION
+============================================================
+Generating all sample indices...
+Generated sample indices for 10 runs
+
+============================================================
+TESTING COMBINATION 1/14: llama_concat + euclidean
+============================================================
+  Computing llama_concat embeddings...
+
+=== DIAGNOSING PERSISTENCE DIAGRAMS: llama_concat + euclidean ===
+
+entailment:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [68.860, 427.291]
+    Persistence range: [68.860, 427.291]
+    Mean persistence: 338.281
+  H1: 1229 features
+    Birth range: [285.706, 446.883]
+    Death range: [294.778, 448.427]
+    Persistence range: [0.002, 54.534]
+    Mean persistence: 11.371
+
+neutral:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [181.380, 431.377]
+    Persistence range: [181.380, 431.377]
+    Mean persistence: 365.690
+  H1: 1685 features
+    Birth range: [321.117, 446.325]
+    Death range: [342.872, 451.456]
+    Persistence range: [0.005, 49.529]
+    Mean persistence: 9.831
+
+contradiction:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [236.453, 445.906]
+    Persistence range: [236.453, 445.906]
+    Mean persistence: 377.739
+  H1: 1896 features
+    Birth range: [306.690, 451.200]
+    Death range: [310.533, 458.802]
+    Persistence range: [0.001, 50.825]
+    Mean persistence: 9.135
+
+Adaptive parameters calculated:
+  Birth range: (0, 508.9894165039062)
+  Persistence range: (0, 490.49647216796876)
+  Pixel size: 24.525
+  Sigma: 14.715
+Using consistent parameters for all runs: {'birth_range': (0, 508.9894165039062), 'pers_range': (0, 490.49647216796876), 'pixel_size': 24.52482360839844, 'sigma': 14.714894165039063}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 0.933
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 0.967
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 0.933
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 0.967
+
+  SUMMARY for llama_concat + euclidean:
+    10 samples: Acc=0.977±0.026
+    Silhouette: 0.582±0.029
+    Perfect clustering rate: 50.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.9527)
+    Perfect clustering: 5/10 runs
+  Combination completed in 2274.6s
+
+============================================================
+TESTING COMBINATION 2/14: llama_concat + manhattan
+============================================================
+  Computing llama_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 35996.859765625)
+  Persistence range: (0, 34594.578125)
+  Pixel size: 1729.729
+  Sigma: 1037.837
+Using consistent parameters for all runs: {'birth_range': (0, 35996.859765625), 'pers_range': (0, 34594.578125), 'pixel_size': 1729.72890625, 'sigma': 1037.83734375}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 0.967
+  Run 4/10...
+    Accuracy: 0.933
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 0.933
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for llama_concat + manhattan:
+    10 samples: Acc=0.980±0.027
+    Silhouette: 0.537±0.030
+    Perfect clustering rate: 60.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.8497)
+    Perfect clustering: 6/10 runs
+  Combination completed in 2141.5s
+
+============================================================
+TESTING COMBINATION 3/14: llama_concat + chebyshev
+============================================================
+  Computing llama_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 36.68671875)
+  Persistence range: (0, 38.17337646484375)
+  Pixel size: 1.909
+  Sigma: 1.145
+Using consistent parameters for all runs: {'birth_range': (0, 36.68671875), 'pers_range': (0, 38.17337646484375), 'pixel_size': 1.9086688232421873, 'sigma': 1.1452012939453124}
+  Run 1/10...
+    Accuracy: 0.567
+  Run 2/10...
+    Accuracy: 0.533
+  Run 3/10...
+    Accuracy: 0.700
+  Run 4/10...
+    Accuracy: 0.800
+  Run 5/10...
+    Accuracy: 0.633
+  Run 6/10...
+    Accuracy: 0.533
+  Run 7/10...
+    Accuracy: 0.800
+  Run 8/10...
+    Accuracy: 0.500
+  Run 9/10...
+    Accuracy: 0.733
+  Run 10/10...
+    Accuracy: 0.667
+
+  SUMMARY for llama_concat + chebyshev:
+    10 samples: Acc=0.647±0.106
+    Silhouette: 0.455±0.094
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=1.0000)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 2493.3s
+
+============================================================
+TESTING COMBINATION 4/14: llama_concat + cosine
+============================================================
+  Computing llama_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.7444592297077179)
+  Persistence range: (0, 0.6909227252006531)
+  Pixel size: 0.035
+  Sigma: 0.021
+Using consistent parameters for all runs: {'birth_range': (0, 0.7444592297077179), 'pers_range': (0, 0.6909227252006531), 'pixel_size': 0.03454613626003265, 'sigma': 0.020727681756019592}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 0.967
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 0.967
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 0.967
+  Run 9/10...
+    Accuracy: 0.933
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for llama_concat + cosine:
+    10 samples: Acc=0.977±0.021
+    Silhouette: 0.713±0.034
+    Perfect clustering rate: 40.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.9894)
+    Perfect clustering: 4/10 runs
+  Combination completed in 1895.1s
+
+============================================================
+TESTING COMBINATION 5/14: llama_concat + minkowski_3
+============================================================
+  Computing llama_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 135.32098922729492)
+  Persistence range: (0, 130.8628921508789)
+  Pixel size: 6.543
+  Sigma: 3.926
+Using consistent parameters for all runs: {'birth_range': (0, 135.32098922729492), 'pers_range': (0, 130.8628921508789), 'pixel_size': 6.543144607543946, 'sigma': 3.9258867645263673}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 0.900
+  Run 7/10...
+    Accuracy: 0.967
+  Run 8/10...
+    Accuracy: 0.967
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for llama_concat + minkowski_3:
+    10 samples: Acc=0.980±0.031
+    Silhouette: 0.620±0.035
+    Perfect clustering rate: 60.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.8497)
+    Perfect clustering: 6/10 runs
+  Combination completed in 23035.5s
+
+============================================================
+TESTING COMBINATION 6/14: llama_concat + minkowski_4
+============================================================
+  Computing llama_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 75.95923309326172)
+  Persistence range: (0, 74.26405639648438)
+  Pixel size: 3.713
+  Sigma: 2.228
+Using consistent parameters for all runs: {'birth_range': (0, 75.95923309326172), 'pers_range': (0, 74.26405639648438), 'pixel_size': 3.713202819824219, 'sigma': 2.2279216918945313}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 0.967
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 0.967
+  Run 8/10...
+    Accuracy: 0.900
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for llama_concat + minkowski_4:
+    10 samples: Acc=0.980±0.031
+    Silhouette: 0.614±0.025
+    Perfect clustering rate: 60.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.8497)
+    Perfect clustering: 6/10 runs
+  Combination completed in 23178.5s
+
+============================================================
+TESTING COMBINATION 7/14: llama_concat + braycurtis
+============================================================
+  Computing llama_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.7976778388023377)
+  Persistence range: (0, 0.7609410464763642)
+  Pixel size: 0.038
+  Sigma: 0.023
+Using consistent parameters for all runs: {'birth_range': (0, 0.7976778388023377), 'pers_range': (0, 0.7609410464763642), 'pixel_size': 0.038047052323818206, 'sigma': 0.022828231394290924}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 0.967
+  Run 4/10...
+    Accuracy: 0.933
+  Run 5/10...
+    Accuracy: 0.967
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 0.933
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for llama_concat + braycurtis:
+    10 samples: Acc=0.980±0.027
+    Silhouette: 0.698±0.036
+    Perfect clustering rate: 60.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.8497)
+    Perfect clustering: 6/10 runs
+  Combination completed in 1562.0s
+
+============================================================
+TESTING COMBINATION 8/14: lattice_containment + euclidean
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 147.55112915039064)
+  Persistence range: (0, 147.81656188964843)
+  Pixel size: 7.391
+  Sigma: 4.434
+Using consistent parameters for all runs: {'birth_range': (0, 147.55112915039064), 'pers_range': (0, 147.81656188964843), 'pixel_size': 7.390828094482421, 'sigma': 4.434496856689452}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + euclidean:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.753±0.031
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 1428.7s
+
+============================================================
+TESTING COMBINATION 9/14: lattice_containment + manhattan
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 7382.03984375)
+  Persistence range: (0, 7393.132373046875)
+  Pixel size: 369.657
+  Sigma: 221.794
+Using consistent parameters for all runs: {'birth_range': (0, 7382.03984375), 'pers_range': (0, 7393.132373046875), 'pixel_size': 369.65661865234375, 'sigma': 221.79397119140626}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + manhattan:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.729±0.022
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 1331.3s
+
+============================================================
+TESTING COMBINATION 10/14: lattice_containment + chebyshev
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 14.318131637573241)
+  Persistence range: (0, 14.93123950958252)
+  Pixel size: 0.747
+  Sigma: 0.448
+Using consistent parameters for all runs: {'birth_range': (0, 14.318131637573241), 'pers_range': (0, 14.93123950958252), 'pixel_size': 0.746561975479126, 'sigma': 0.44793718528747556}
+  Run 1/10...
+    Accuracy: 0.667
+  Run 2/10...
+    Accuracy: 0.567
+  Run 3/10...
+    Accuracy: 0.667
+  Run 4/10...
+    Accuracy: 0.800
+  Run 5/10...
+    Accuracy: 0.667
+  Run 6/10...
+    Accuracy: 0.567
+  Run 7/10...
+    Accuracy: 0.800
+  Run 8/10...
+    Accuracy: 0.767
+  Run 9/10...
+    Accuracy: 0.633
+  Run 10/10...
+    Accuracy: 0.633
+
+  SUMMARY for lattice_containment + chebyshev:
+    10 samples: Acc=0.677±0.082
+    Silhouette: 0.369±0.042
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=1.0000)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 2790.7s
+
+============================================================
+TESTING COMBINATION 11/14: lattice_containment + cosine
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.7599279403686523)
+  Persistence range: (0, 0.8357918620109558)
+  Pixel size: 0.042
+  Sigma: 0.025
+Using consistent parameters for all runs: {'birth_range': (0, 0.7599279403686523), 'pers_range': (0, 0.8357918620109558), 'pixel_size': 0.04178959310054779, 'sigma': 0.025073755860328676}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + cosine:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.847±0.017
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 925.0s
+
+============================================================
+TESTING COMBINATION 12/14: lattice_containment + minkowski_3
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 44.15235443115235)
+  Persistence range: (0, 44.46472663879395)
+  Pixel size: 2.223
+  Sigma: 1.334
+Using consistent parameters for all runs: {'birth_range': (0, 44.15235443115235), 'pers_range': (0, 44.46472663879395), 'pixel_size': 2.2232363319396975, 'sigma': 1.3339417991638185}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + minkowski_3:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.763±0.032
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 11878.6s
+
+============================================================
+TESTING COMBINATION 13/14: lattice_containment + minkowski_4
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 27.109534072875977)
+  Persistence range: (0, 26.30590476989746)
+  Pixel size: 1.315
+  Sigma: 0.789
+Using consistent parameters for all runs: {'birth_range': (0, 27.109534072875977), 'pers_range': (0, 26.30590476989746), 'pixel_size': 1.315295238494873, 'sigma': 0.7891771430969238}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...

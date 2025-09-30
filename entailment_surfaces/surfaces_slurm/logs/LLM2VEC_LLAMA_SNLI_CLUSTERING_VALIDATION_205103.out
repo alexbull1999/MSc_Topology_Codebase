@@ -1,0 +1,232 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 205103
+Node: clapper
+Time: Fri 26 Sep 15:19:16 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Fri Sep 26 15:19:18 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A30                     Off |   00000000:04:00.0 Off |                    0 |
+| N/A   30C    P0             26W /  165W |       0MiB /  24576MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A30
+GPU memory: 25.3 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PH-Dim Clustering Validation Analysis...
+
+Efficient Statistical Validation initialized
+Testing 3 combinations
+Embedding spaces: ['lattice_containment']
+Distance metrics: ['euclidean', 'cosine', 'braycurtis']
+Device: cpu
+Loading LLAMA data...
+LLAMA data loaded:
+  Premise embeddings: torch.Size([549367, 4096])
+  Hypothesis embeddings: torch.Size([549367, 4096])
+  Labels: 549367
+  entailment: 183416 samples available
+  neutral: 182764 samples available
+  contradiction: 183187 samples available
+============================================================
+EFFICIENT STATISTICAL VALIDATION
+============================================================
+Generating all sample indices...
+Generated sample indices for 10 runs
+
+============================================================
+TESTING COMBINATION 1/3: lattice_containment + euclidean
+============================================================
+  Computing lattice_containment embeddings...
+
+=== DIAGNOSING PERSISTENCE DIAGRAMS: lattice_containment + euclidean ===
+
+entailment:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [13.018, 35.520]
+    Persistence range: [13.018, 35.520]
+    Mean persistence: 29.159
+  H1: 780 features
+    Birth range: [27.101, 34.896]
+    Death range: [27.363, 34.924]
+    Persistence range: [0.000, 2.439]
+    Mean persistence: 0.459
+
+neutral:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [18.432, 35.532]
+    Persistence range: [18.432, 35.532]
+    Mean persistence: 29.833
+  H1: 654 features
+    Birth range: [27.117, 35.383]
+    Death range: [27.295, 35.435]
+    Persistence range: [0.000, 1.746]
+    Mean persistence: 0.363
+
+contradiction:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [19.860, 39.078]
+    Persistence range: [19.860, 39.078]
+    Mean persistence: 30.245
+  H1: 676 features
+    Birth range: [26.717, 34.625]
+    Death range: [27.927, 34.864]
+    Persistence range: [0.001, 1.928]
+    Mean persistence: 0.359
+
+Adaptive parameters calculated:
+  Birth range: (0, 38.92184906005859)
+  Persistence range: (0, 42.985497283935544)
+  Pixel size: 2.149
+  Sigma: 1.290
+Using consistent parameters for all runs: {'birth_range': (0, 38.92184906005859), 'pers_range': (0, 42.985497283935544), 'pixel_size': 2.1492748641967774, 'sigma': 1.2895649185180664}
+  Run 1/10...
+    Accuracy: 0.900
+  Run 2/10...
+    Accuracy: 0.900
+  Run 3/10...
+    Accuracy: 0.733
+  Run 4/10...
+    Accuracy: 0.633
+  Run 5/10...
+    Accuracy: 0.567
+  Run 6/10...
+    Accuracy: 0.800
+  Run 7/10...
+    Accuracy: 0.900
+  Run 8/10...
+    Accuracy: 0.633
+  Run 9/10...
+    Accuracy: 0.733
+  Run 10/10...
+    Accuracy: 0.700
+
+  SUMMARY for lattice_containment + euclidean:
+    10 samples: Acc=0.750±0.116
+    Silhouette: 0.446±0.048
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=0.9982)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 1135.6s
+
+============================================================
+TESTING COMBINATION 2/3: lattice_containment + cosine
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.8499812245368957)
+  Persistence range: (0, 0.8486374258995056)
+  Pixel size: 0.042
+  Sigma: 0.025
+Using consistent parameters for all runs: {'birth_range': (0, 0.8499812245368957), 'pers_range': (0, 0.8486374258995056), 'pixel_size': 0.04243187129497528, 'sigma': 0.025459122776985168}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + cosine:
+    10 samples: Acc=0.997±0.010
+    Silhouette: 0.765±0.034
+    Perfect clustering rate: 90.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.1493)
+    Perfect clustering: 9/10 runs
+  Combination completed in 927.6s
+
+============================================================
+TESTING COMBINATION 3/3: lattice_containment + braycurtis
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.8989133179187775)
+  Persistence range: (0, 0.8974010527133942)
+  Pixel size: 0.045
+  Sigma: 0.027
+Using consistent parameters for all runs: {'birth_range': (0, 0.8989133179187775), 'pers_range': (0, 0.8974010527133942), 'pixel_size': 0.04487005263566971, 'sigma': 0.026922031581401825}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 0.967
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 0.967
+
+  SUMMARY for lattice_containment + braycurtis:
+    10 samples: Acc=0.990±0.015
+    Silhouette: 0.747±0.020
+    Perfect clustering rate: 70.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.6496)
+    Perfect clustering: 7/10 runs
+  Combination completed in 689.5s
+
+Analysis completed with exit code: 1
+Time: Fri 26 Sep 16:05:37 BST 2025
+
+=== ANALYSIS FAILED ===
+Please check the error output above for debugging information.
+
+
+Job finished.

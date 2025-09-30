@@ -1,0 +1,209 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 205072
+Node: clapper
+Time: Fri 26 Sep 11:12:14 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Fri Sep 26 11:12:16 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A30                     Off |   00000000:04:00.0 Off |                    0 |
+| N/A   30C    P0             26W /  165W |       0MiB /  24576MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A30
+GPU memory: 25.3 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PH-Dim Clustering Validation Analysis...
+
+Efficient Statistical Validation initialized
+Testing 16 combinations
+Embedding spaces: ['llama_concat', 'lattice_containment']
+Distance metrics: ['euclidean', 'manhattan', 'chebyshev', 'cosine', 'minkowski_3', 'minkowski_4', 'canberra', 'braycurtis']
+Device: cpu
+Loading LLAMA data...
+LLAMA data loaded:
+  Premise embeddings: torch.Size([549367, 4096])
+  Hypothesis embeddings: torch.Size([549367, 4096])
+  Labels: 549367
+  entailment: 183416 samples available
+  neutral: 182764 samples available
+  contradiction: 183187 samples available
+============================================================
+EFFICIENT STATISTICAL VALIDATION
+============================================================
+Generating all sample indices...
+Generated sample indices for 10 runs
+
+============================================================
+TESTING COMBINATION 1/16: llama_concat + euclidean
+============================================================
+  Computing llama_concat embeddings...
+  Run 1/10...
+    Accuracy: 0.333
+  Run 2/10...
+    Accuracy: 0.333
+  Run 3/10...
+    Accuracy: 0.333
+  Run 4/10...
+    Accuracy: 0.333
+  Run 5/10...
+    Accuracy: 0.333
+  Run 6/10...
+    Accuracy: 0.333
+  Run 7/10...
+    Accuracy: 0.333
+  Run 8/10...
+    Accuracy: 0.333
+  Run 9/10...
+    Accuracy: 0.333
+  Run 10/10...
+    Accuracy: 0.333
+
+  SUMMARY for llama_concat + euclidean:
+    10 samples: Acc=0.333±0.000
+    Silhouette: 0.000±0.000
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: NO (p=1.0000) (zero_variance)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 1937.3s
+
+============================================================
+TESTING COMBINATION 2/16: llama_concat + manhattan
+============================================================
+  Computing llama_concat embeddings...
+  Run 1/10...
+    Accuracy: 0.333
+  Run 2/10...
+    Accuracy: 0.333
+  Run 3/10...
+    Accuracy: 0.333
+  Run 4/10...
+    Accuracy: 0.333
+  Run 5/10...
+    Accuracy: 0.333
+  Run 6/10...
+    Accuracy: 0.333
+  Run 7/10...
+    Accuracy: 0.333
+  Run 8/10...
+    Accuracy: 0.333
+  Run 9/10...
+    Accuracy: 0.333
+  Run 10/10...
+    Accuracy: 0.333
+
+  SUMMARY for llama_concat + manhattan:
+    10 samples: Acc=0.333±0.000
+    Silhouette: 0.000±0.000
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: NO (p=1.0000) (zero_variance)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 1939.1s
+
+============================================================
+TESTING COMBINATION 3/16: llama_concat + chebyshev
+============================================================
+  Computing llama_concat embeddings...
+  Run 1/10...
+    Accuracy: 0.533
+  Run 2/10...
+    Accuracy: 0.567
+  Run 3/10...
+    Accuracy: 0.633
+  Run 4/10...
+    Accuracy: 0.700
+  Run 5/10...
+    Accuracy: 0.667
+  Run 6/10...
+    Accuracy: 0.500
+  Run 7/10...
+    Accuracy: 0.700
+  Run 8/10...
+    Accuracy: 0.633
+  Run 9/10...
+    Accuracy: 0.633
+  Run 10/10...
+    Accuracy: 0.667
+
+  SUMMARY for llama_concat + chebyshev:
+    10 samples: Acc=0.623±0.065
+    Silhouette: 0.507±0.030
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=1.0000)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 2565.6s
+
+============================================================
+TESTING COMBINATION 4/16: llama_concat + cosine
+============================================================
+  Computing llama_concat embeddings...
+  Run 1/10...
+    Accuracy: 0.800
+  Run 2/10...
+    Accuracy: 0.567
+  Run 3/10...
+    Accuracy: 0.833
+  Run 4/10...
+    Accuracy: 0.667
+  Run 5/10...
+    Accuracy: 0.533
+  Run 6/10...
+    Accuracy: 0.800
+  Run 7/10...
+    Accuracy: 0.767
+  Run 8/10...
+    Accuracy: 0.733
+  Run 9/10...
+    Accuracy: 0.767
+  Run 10/10...
+    Accuracy: 0.667
+
+  SUMMARY for llama_concat + cosine:
+    10 samples: Acc=0.713±0.097
+    Silhouette: 0.609±0.085
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=0.9999)
+    Significantly > 70%: NO (p=1.0000)
+    Perfect clustering: 0/10 runs
+  Combination completed in 1863.7s
+
+============================================================
+TESTING COMBINATION 5/16: llama_concat + minkowski_3
+============================================================
+  Computing llama_concat embeddings...
+  Run 1/10...
+    Accuracy: 0.467
+  Run 2/10...
+    Accuracy: 0.367
+  Run 3/10...

@@ -3,10 +3,10 @@
 #SBATCH --partition=a16gpu
 #SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
-#SBATCH --output=../logs/SNLI_STSB_B_LARGE_FULL_CLUSTERING_VALIDATION_FINAL_SEEDFIXED_%j.out
-#SBATCH --error=../logs/SNLI_STSB_B_LARGE_FULL_CLUSTERING_VALIDATION_FINAL_SEEDFIXED_%j.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --output=../logs/ALL_MPNET_SNLI_CLUSTERING_VALIDATION_ADAPTIVE_%j.out
+#SBATCH --error=../logs/ALL_MPNET_SNLI_CLUSTERING_VALIDATION_ADAPTIVE_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -56,7 +56,7 @@ echo ""
 
 export PYTHONUNBUFFERED=1
 
-python entailment_surfaces/phdim_clustering_validation_v2.py 
+python entailment_surfaces/phdim_clustering_validation_v2_adaptive.py 
 
 
 # Capture exit code

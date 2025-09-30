@@ -1,0 +1,694 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 205287
+Node: parrot
+Time: Sun 28 Sep 16:10:13 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sun Sep 28 16:10:17 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:8E:00.0 Off |                    0 |
+|  0%   22C    P8             15W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PH-Dim Clustering Validation Analysis...
+
+Efficient Statistical Validation initialized
+Testing 14 combinations
+Embedding spaces: ['sbert_concat', 'lattice_containment']
+Distance metrics: ['euclidean', 'manhattan', 'chebyshev', 'cosine', 'minkowski_3', 'minkowski_4', 'braycurtis']
+Device: cpu
+Loading SBERT data...
+SBERT data loaded:
+  Premise embeddings: torch.Size([549367, 768])
+  Hypothesis embeddings: torch.Size([549367, 768])
+  Labels: 549367
+  entailment: 183416 samples available
+  neutral: 182764 samples available
+  contradiction: 183187 samples available
+============================================================
+EFFICIENT STATISTICAL VALIDATION
+============================================================
+Generating all sample indices...
+Generated sample indices for 10 runs
+
+============================================================
+TESTING COMBINATION 1/14: sbert_concat + euclidean
+============================================================
+  Computing sbert_concat embeddings...
+
+=== DIAGNOSING PERSISTENCE DIAGRAMS: sbert_concat + euclidean ===
+
+entailment:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [1.060, 5.090]
+    Persistence range: [1.060, 5.090]
+    Mean persistence: 3.846
+  H1: 1341 features
+    Birth range: [3.331, 5.138]
+    Death range: [3.455, 5.221]
+    Persistence range: [0.000, 0.778]
+    Mean persistence: 0.152
+
+neutral:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [1.914, 4.984]
+    Persistence range: [1.914, 4.984]
+    Mean persistence: 4.153
+  H1: 1904 features
+    Birth range: [3.752, 5.265]
+    Death range: [3.923, 5.276]
+    Persistence range: [0.000, 0.571]
+    Mean persistence: 0.122
+
+contradiction:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [2.647, 5.107]
+    Persistence range: [2.647, 5.107]
+    Mean persistence: 4.302
+  H1: 2228 features
+    Birth range: [3.887, 5.187]
+    Death range: [3.888, 5.249]
+    Persistence range: [0.000, 0.536]
+    Mean persistence: 0.113
+
+Adaptive parameters calculated:
+  Birth range: (0, 5.81030969619751)
+  Persistence range: (0, 5.720849466323853)
+  Pixel size: 0.286
+  Sigma: 0.172
+Using consistent parameters for all runs: {'birth_range': (0, 5.81030969619751), 'pers_range': (0, 5.720849466323853), 'pixel_size': 0.28604247331619265, 'sigma': 0.17162548398971558}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 0.967
+  Run 9/10...
+    Accuracy: 0.967
+  Run 10/10...
+    Accuracy: 0.967
+
+  SUMMARY for sbert_concat + euclidean:
+    10 samples: Acc=0.990±0.015
+    Silhouette: 0.741±0.031
+    Perfect clustering rate: 70.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.6496)
+    Perfect clustering: 7/10 runs
+  Combination completed in 1722.6s
+
+============================================================
+TESTING COMBINATION 2/14: sbert_concat + manhattan
+============================================================
+  Computing sbert_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 176.8843505859375)
+  Persistence range: (0, 172.5689239501953)
+  Pixel size: 8.628
+  Sigma: 5.177
+Using consistent parameters for all runs: {'birth_range': (0, 176.8843505859375), 'pers_range': (0, 172.5689239501953), 'pixel_size': 8.628446197509765, 'sigma': 5.177067718505859}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 0.967
+  Run 5/10...
+    Accuracy: 0.933
+  Run 6/10...
+    Accuracy: 0.967
+  Run 7/10...
+    Accuracy: 0.967
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 0.933
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for sbert_concat + manhattan:
+    10 samples: Acc=0.973±0.025
+    Silhouette: 0.597±0.033
+    Perfect clustering rate: 40.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.9894)
+    Perfect clustering: 4/10 runs
+  Combination completed in 1720.9s
+
+============================================================
+TESTING COMBINATION 3/14: sbert_concat + chebyshev
+============================================================
+  Computing sbert_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.5742592215538025)
+  Persistence range: (0, 0.5235167682170868)
+  Pixel size: 0.026
+  Sigma: 0.016
+Using consistent parameters for all runs: {'birth_range': (0, 0.5742592215538025), 'pers_range': (0, 0.5235167682170868), 'pixel_size': 0.02617583841085434, 'sigma': 0.015705503046512602}
+  Run 1/10...
+    Accuracy: 0.933
+  Run 2/10...
+    Accuracy: 0.933
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 0.967
+  Run 5/10...
+    Accuracy: 0.967
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 0.967
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 0.933
+
+  SUMMARY for sbert_concat + chebyshev:
+    10 samples: Acc=0.970±0.028
+    Silhouette: 0.616±0.047
+    Perfect clustering rate: 40.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.9894)
+    Perfect clustering: 4/10 runs
+  Combination completed in 4476.8s
+
+============================================================
+TESTING COMBINATION 4/14: sbert_concat + cosine
+============================================================
+  Computing sbert_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.9431564569473266)
+  Persistence range: (0, 0.878475683927536)
+  Pixel size: 0.044
+  Sigma: 0.026
+Using consistent parameters for all runs: {'birth_range': (0, 0.9431564569473266), 'pers_range': (0, 0.878475683927536), 'pixel_size': 0.043923784196376804, 'sigma': 0.026354270517826083}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 0.967
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for sbert_concat + cosine:
+    10 samples: Acc=0.997±0.010
+    Silhouette: 0.770±0.018
+    Perfect clustering rate: 90.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.1493)
+    Perfect clustering: 9/10 runs
+  Combination completed in 2539.3s
+
+============================================================
+TESTING COMBINATION 5/14: sbert_concat + minkowski_3
+============================================================
+  Computing sbert_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 2.044816565513611)
+  Persistence range: (0, 2.030374538898468)
+  Pixel size: 0.102
+  Sigma: 0.061
+Using consistent parameters for all runs: {'birth_range': (0, 2.044816565513611), 'pers_range': (0, 2.030374538898468), 'pixel_size': 0.10151872694492341, 'sigma': 0.06091123616695404}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 0.967
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 0.967
+
+  SUMMARY for sbert_concat + minkowski_3:
+    10 samples: Acc=0.993±0.013
+    Silhouette: 0.744±0.038
+    Perfect clustering rate: 80.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.3828)
+    Perfect clustering: 8/10 runs
+  Combination completed in 5470.6s
+
+============================================================
+TESTING COMBINATION 6/14: sbert_concat + minkowski_4
+============================================================
+  Computing sbert_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 1.2705412745475768)
+  Persistence range: (0, 1.250756847858429)
+  Pixel size: 0.063
+  Sigma: 0.038
+Using consistent parameters for all runs: {'birth_range': (0, 1.2705412745475768), 'pers_range': (0, 1.250756847858429), 'pixel_size': 0.06253784239292146, 'sigma': 0.037522705435752875}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 0.967
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for sbert_concat + minkowski_4:
+    10 samples: Acc=0.993±0.013
+    Silhouette: 0.763±0.031
+    Perfect clustering rate: 80.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.3828)
+    Perfect clustering: 8/10 runs
+  Combination completed in 5454.8s
+
+============================================================
+TESTING COMBINATION 7/14: sbert_concat + braycurtis
+============================================================
+  Computing sbert_concat embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.9554131984710693)
+  Persistence range: (0, 0.887367457151413)
+  Pixel size: 0.044
+  Sigma: 0.027
+Using consistent parameters for all runs: {'birth_range': (0, 0.9554131984710693), 'pers_range': (0, 0.887367457151413), 'pixel_size': 0.04436837285757065, 'sigma': 0.026621023714542388}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 0.967
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for sbert_concat + braycurtis:
+    10 samples: Acc=0.997±0.010
+    Silhouette: 0.775±0.013
+    Perfect clustering rate: 90.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.1493)
+    Perfect clustering: 9/10 runs
+  Combination completed in 2423.8s
+
+============================================================
+TESTING COMBINATION 8/14: lattice_containment + euclidean
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 1.592341911792755)
+  Persistence range: (0, 1.594752013683319)
+  Pixel size: 0.080
+  Sigma: 0.048
+Using consistent parameters for all runs: {'birth_range': (0, 1.592341911792755), 'pers_range': (0, 1.594752013683319), 'pixel_size': 0.07973760068416595, 'sigma': 0.04784256041049957}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + euclidean:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.824±0.025
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 713.8s
+
+============================================================
+TESTING COMBINATION 9/14: lattice_containment + manhattan
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 34.72169780731201)
+  Persistence range: (0, 34.828152084350585)
+  Pixel size: 1.741
+  Sigma: 1.045
+Using consistent parameters for all runs: {'birth_range': (0, 34.72169780731201), 'pers_range': (0, 34.828152084350585), 'pixel_size': 1.7414076042175293, 'sigma': 1.0448445625305176}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + manhattan:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.795±0.024
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 683.5s
+
+============================================================
+TESTING COMBINATION 10/14: lattice_containment + chebyshev
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.20944570899009704)
+  Persistence range: (0, 0.2034673124551773)
+  Pixel size: 0.010
+  Sigma: 0.006
+Using consistent parameters for all runs: {'birth_range': (0, 0.20944570899009704), 'pers_range': (0, 0.2034673124551773), 'pixel_size': 0.010173365622758865, 'sigma': 0.006104019373655319}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 0.967
+  Run 3/10...
+    Accuracy: 0.933
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 0.967
+  Run 6/10...
+    Accuracy: 0.833
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 0.967
+
+  SUMMARY for lattice_containment + chebyshev:
+    10 samples: Acc=0.963±0.048
+    Silhouette: 0.502±0.045
+    Perfect clustering rate: 40.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0017)
+    Significantly > 70%: NO (p=0.9894)
+    Perfect clustering: 4/10 runs
+  Combination completed in 7085.8s
+
+============================================================
+TESTING COMBINATION 11/14: lattice_containment + cosine
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 1.0473317444324493)
+  Persistence range: (0, 1.0001577734947205)
+  Pixel size: 0.050
+  Sigma: 0.030
+Using consistent parameters for all runs: {'birth_range': (0, 1.0473317444324493), 'pers_range': (0, 1.0001577734947205), 'pixel_size': 0.050007888674736024, 'sigma': 0.030004733204841615}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + cosine:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.901±0.013
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 498.4s
+
+============================================================
+TESTING COMBINATION 12/14: lattice_containment + minkowski_3
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.6241141438484192)
+  Persistence range: (0, 0.6230899214744567)
+  Pixel size: 0.031
+  Sigma: 0.019
+Using consistent parameters for all runs: {'birth_range': (0, 0.6241141438484192), 'pers_range': (0, 0.6230899214744567), 'pixel_size': 0.031154496073722837, 'sigma': 0.018692697644233702}
+  Run 1/10...
+    Accuracy: 0.967
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + minkowski_3:
+    10 samples: Acc=0.997±0.010
+    Silhouette: 0.818±0.023
+    Perfect clustering rate: 90.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.1493)
+    Perfect clustering: 9/10 runs
+  Combination completed in 2653.2s
+
+============================================================
+TESTING COMBINATION 13/14: lattice_containment + minkowski_4
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.40718706250190734)
+  Persistence range: (0, 0.4073809117078781)
+  Pixel size: 0.020
+  Sigma: 0.012
+Using consistent parameters for all runs: {'birth_range': (0, 0.40718706250190734), 'pers_range': (0, 0.4073809117078781), 'pixel_size': 0.020369045585393906, 'sigma': 0.012221427351236344}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 0.967
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + minkowski_4:
+    10 samples: Acc=0.997±0.010
+    Silhouette: 0.806±0.019
+    Perfect clustering rate: 90.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: YES (p=0.0000)
+    Significantly > 70%: NO (p=0.1493)
+    Perfect clustering: 9/10 runs
+  Combination completed in 2759.3s
+
+============================================================
+TESTING COMBINATION 14/14: lattice_containment + braycurtis
+============================================================
+  Computing lattice_containment embeddings...
+
+Adaptive parameters calculated:
+  Birth range: (0, 1.0440961062908172)
+  Persistence range: (0, 1.00294771194458)
+  Pixel size: 0.050
+  Sigma: 0.030
+Using consistent parameters for all runs: {'birth_range': (0, 1.0440961062908172), 'pers_range': (0, 1.00294771194458), 'pixel_size': 0.050147385597229, 'sigma': 0.030088431358337397}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + braycurtis:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.888±0.009
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 440.8s
+
+Analysis completed with exit code: 1
+Time: Mon 29 Sep 02:54:41 BST 2025
+
+=== ANALYSIS FAILED ===
+Please check the error output above for debugging information.
+
+
+Job finished.

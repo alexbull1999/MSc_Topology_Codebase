@@ -1,0 +1,21 @@
+Warning: random state is set to 42.
+/homes/ahb24/MSc_Topology_Codebase/src/hyperbolic_projection_asymmetry.py:138: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(model_path, map_location=self.device)
+/homes/ahb24/MSc_Topology_Codebase/src/hyperbolic_projection_asymmetry.py:138: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(model_path, map_location=self.device)
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/pacmap_visualisations.py", line 420, in run_visualization_pipeline
+    embedding_2d = self.visualize_with_pacmap(
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/pacmap_visualisations.py", line 343, in visualize_with_pacmap
+    plt.figtext(0.02, 0.02, fontsize=10,
+TypeError: figtext() missing 1 required positional argument: 's'
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/pacmap_visualisations.py", line 500, in <module>
+    main()
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/pacmap_visualisations.py", line 491, in main
+    results = visualizer.run_visualization_pipeline(
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/pacmap_visualisations.py", line 420, in run_visualization_pipeline
+    embedding_2d = self.visualize_with_pacmap(
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/pacmap_visualisations.py", line 343, in visualize_with_pacmap
+    plt.figtext(0.02, 0.02, fontsize=10,
+TypeError: figtext() missing 1 required positional argument: 's'
