@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=128G
-#SBATCH --output=../logs/LLM2VEC_LLAMA_SNLI_SURFACE_ANALYSIS_SEED5_%j.out
-#SBATCH --error=../logs/LLM2VEC_LLAMA_SNLI_SURFACE_ANALYSIS_SEED5_%j.err
+#SBATCH --output=../logs/LLM2VEC_MISTRAL_MNLI_SURFACE_ANALYSIS_SEED5_%j.out
+#SBATCH --error=../logs/LLM2VEC_MISTRAL_MNLI_SURFACE_ANALYSIS_SEED5_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

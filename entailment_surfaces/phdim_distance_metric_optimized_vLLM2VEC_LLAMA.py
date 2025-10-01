@@ -906,9 +906,9 @@ def main():
 
     # Initialize analyzer
     analyzer = SurfaceDistanceMetricAnalyzer(
-        llama_data_path="/vol/bitbucket/ahb24/tda_entailment_new/snli_full_train_LLM2Vec_LLAMA_UNSUP.pt",
+        llama_data_path="/vol/bitbucket/ahb24/tda_entailment_new/mnli_full_train_LLM2Vec_MISTRAL_SUP.pt",
         order_model_path="models/enhanced_order_embeddings_snli_SBERT_full.pt",
-        results_dir="entailment_surfaces/results/LLM2Vec_LLAMA_snli_full_seed_500",
+        results_dir="entailment_surfaces/results/LLM2Vec_MISTRAL_mnli_full_seed_500",
         seed=500
     )
     

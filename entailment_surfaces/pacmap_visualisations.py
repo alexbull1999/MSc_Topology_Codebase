@@ -340,8 +340,8 @@ class PaCMAPTopologyVisualizer:
         ax.grid(True, alpha=0.3)
         
         
-        plt.figtext(0.02, 0.02, fontsize=10, 
-                   bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.8))
+        # plt.figtext(0.02, 0.02, fontsize=10, 
+        #            bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.8))
         
         plt.tight_layout()
         

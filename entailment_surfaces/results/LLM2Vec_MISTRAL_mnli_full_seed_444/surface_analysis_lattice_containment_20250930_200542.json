@@ -1,0 +1,79 @@
+{
+  "euclidean": {
+    "phd_entailment": 53.63748471808809,
+    "phd_neutral": 64.94037984669382,
+    "phd_contradiction": 101.1542966562181,
+    "centroid_ent_to_neutral": 15.335457801818848,
+    "centroid_ent_to_contradiction": 23.19395637512207,
+    "centroid_neutral_to_contradiction": 9.07669448852539,
+    "min_ent_to_neutral": "72.491745",
+    "min_ent_to_contradiction": "89.62431",
+    "entailment_separation": 4.95740378477189
+  },
+  "manhattan": {
+    "phd_entailment": 54.616230395992986,
+    "phd_neutral": 67.4061542905384,
+    "phd_contradiction": 111.38063434429371,
+    "centroid_ent_to_neutral": 933.7288818359375,
+    "centroid_ent_to_contradiction": 1364.3758544921875,
+    "centroid_neutral_to_contradiction": 448.5653076171875,
+    "min_ent_to_neutral": 2988.1391072554543,
+    "min_ent_to_contradiction": 4307.370237036004,
+    "entailment_separation": 295.68664255719506
+  },
+  "chebyshev": {
+    "phd_entailment": 19.333427199457486,
+    "phd_neutral": 19.204540558363913,
+    "phd_contradiction": 21.255444344932588,
+    "centroid_ent_to_neutral": 1.0907387733459473,
+    "centroid_ent_to_contradiction": 3.2598018646240234,
+    "centroid_neutral_to_contradiction": 2.4073963165283203,
+    "min_ent_to_neutral": 6.864539623260498,
+    "min_ent_to_contradiction": 7.271931171417236,
+    "entailment_separation": 0.5597641979561655
+  },
+  "cosine": {
+    "phd_entailment": 36.00381853173837,
+    "phd_neutral": 31.45577100522539,
+    "phd_contradiction": 56.84429196103088,
+    "centroid_ent_to_neutral": 0.006216824054718018,
+    "centroid_ent_to_contradiction": 0.017555058002471924,
+    "centroid_neutral_to_contradiction": 0.004837632179260254,
+    "min_ent_to_neutral": "0.124421775",
+    "min_ent_to_contradiction": "0.21830338",
+    "entailment_separation": 0.0030586195144382275
+  },
+  "minkowski_3": {
+    "phd_entailment": 50.9328825789493,
+    "phd_neutral": 58.4460770010269,
+    "phd_contradiction": 88.79979203409485,
+    "centroid_ent_to_neutral": 4.105481388224392,
+    "centroid_ent_to_contradiction": 6.665698336220959,
+    "centroid_neutral_to_contradiction": 3.317663623500438,
+    "min_ent_to_neutral": 22.559806710134126,
+    "min_ent_to_contradiction": 27.876601223688944,
+    "entailment_separation": 1.3858785105635143
+  },
+  "minkowski_4": {
+    "phd_entailment": 43.45419642737213,
+    "phd_neutral": 48.794335671593046,
+    "phd_contradiction": 71.35573041187645,
+    "centroid_ent_to_neutral": 2.269774742430207,
+    "centroid_ent_to_contradiction": 4.198581408015436,
+    "centroid_neutral_to_contradiction": 2.6001060351559246,
+    "min_ent_to_neutral": 13.471599590015646,
+    "min_ent_to_contradiction": 16.726223231423983,
+    "entailment_separation": 0.83225384933734
+  },
+  "braycurtis": {
+    "phd_entailment": 85.8206400211383,
+    "phd_neutral": 63.265904135983504,
+    "phd_contradiction": 91.47385485586715,
+    "centroid_ent_to_neutral": 0.10832856867888119,
+    "centroid_ent_to_contradiction": 0.16660783043118468,
+    "centroid_neutral_to_contradiction": 0.06182481461285046,
+    "min_ent_to_neutral": 0.27068169622405375,
+    "min_ent_to_contradiction": 0.3800785958926407,
+    "entailment_separation": 0.03537481102776553
+  }
+}

@@ -1,0 +1,72 @@
+2025-09-30 17:59:57.200 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.63s
+2025-09-30 17:59:57.659 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.3321914869316687e-05.
+2025-09-30 17:59:58.303 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.63s
+2025-09-30 17:59:58.765 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 5.277675619762982e-06.
+2025-09-30 17:59:59.479 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.7s
+2025-09-30 17:59:59.953 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 2.5587316512857513e-05.
+2025-09-30 18:00:08.534 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 3.98s
+2025-09-30 18:00:08.911 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.5078854164255523e-05.
+2025-09-30 18:00:12.900 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 3.98s
+2025-09-30 18:00:13.281 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 5.665720282289944e-06.
+2025-09-30 18:00:17.330 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 4.04s
+2025-09-30 18:00:17.702 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 3.879680922133734e-05.
+2025-09-30 18:00:28.372 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.22s
+2025-09-30 18:00:28.775 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.4358845003565899e-05.
+2025-09-30 18:00:31.017 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.23s
+2025-09-30 18:00:31.399 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.2386297793431099e-05.
+2025-09-30 18:00:33.564 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.16s
+2025-09-30 18:00:33.940 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 2.972211109621866e-05.
+2025-09-30 18:00:41.983 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.06s
+2025-09-30 18:00:42.433 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 7.010483712536884e-05.
+2025-09-30 18:00:42.498 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.06s
+2025-09-30 18:00:42.954 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.6961982683156902e-05.
+2025-09-30 18:00:43.019 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.06s
+2025-09-30 18:00:43.480 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 9.694623794388045e-05.
+2025-09-30 18:01:57.090 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.4095449300479335e-05.
+2025-09-30 18:03:08.310 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 5.109491969574876e-06.
+2025-09-30 18:04:19.421 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 2.09007154760878e-05.
+2025-09-30 18:09:05.500 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.5185799694346533e-05.
+2025-09-30 18:10:16.656 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 5.905255882474611e-06.
+2025-09-30 18:11:27.826 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.966969957176152e-05.
+2025-09-30 18:15:05.008 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.32s
+2025-09-30 18:15:05.421 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 2.58377568086624e-05.
+2025-09-30 18:15:07.780 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.35s
+2025-09-30 18:15:08.174 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 6.865094704305425e-06.
+2025-09-30 18:15:10.526 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.35s
+2025-09-30 18:15:10.925 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 5.486087015902422e-05.
+2025-09-30 18:15:20.552 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.13s
+2025-09-30 18:15:20.968 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.5689975539863814e-05.
+2025-09-30 18:15:21.168 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.19s
+2025-09-30 18:15:21.627 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 3.2650738147198056e-06.
+2025-09-30 18:15:21.773 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.14s
+2025-09-30 18:15:22.224 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.1045644185418426e-05.
+2025-09-30 18:15:25.825 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.04s
+2025-09-30 18:15:26.191 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.3818487148255975e-05.
+2025-09-30 18:15:28.241 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.05s
+2025-09-30 18:15:28.625 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 3.3024323322864525e-06.
+2025-09-30 18:15:30.734 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 2.1s
+2025-09-30 18:15:31.101 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.3010354250024432e-05.
+2025-09-30 18:15:36.218 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.97s
+2025-09-30 18:15:36.602 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.1865461504193546e-05.
+2025-09-30 18:15:37.598 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.99s
+2025-09-30 18:15:37.987 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.2104533102537212e-05.
+2025-09-30 18:15:38.957 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.97s
+2025-09-30 18:15:39.347 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 2.3684802821288675e-05.
+2025-09-30 18:15:43.876 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.03s
+2025-09-30 18:15:44.329 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 0.00016690392233200524.
+2025-09-30 18:15:44.365 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.03s
+2025-09-30 18:15:44.837 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 2.9739347136002148e-05.
+2025-09-30 18:15:44.871 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 0.03s
+2025-09-30 18:15:45.319 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 4.652480475486465e-05.
+2025-09-30 18:16:22.336 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.7548772287779458e-05.
+2025-09-30 18:16:58.099 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 3.54295848686318e-06.
+2025-09-30 18:17:33.807 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.0697800886792106e-05.
+2025-09-30 18:19:57.243 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.7304167106825477e-05.
+2025-09-30 18:20:33.013 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 4.158896927016411e-06.
+2025-09-30 18:21:08.810 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.0387566536047491e-05.
+2025-09-30 18:22:57.418 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 1.22s
+2025-09-30 18:22:57.799 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 7.204912716455645e-05.
+2025-09-30 18:22:59.032 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 1.23s
+2025-09-30 18:22:59.420 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.6545847049224624e-05.
+2025-09-30 18:23:00.640 | DEBUG    | phd_method.src_phd.topology:fast_ripser:87 - Distance matrix computation time: 1.22s
+2025-09-30 18:23:01.028 | DEBUG    | phd_method.src_phd.topology:ph_dim_from_distance_matrix:67 - Ph Dimension Calculation has an approximate error of: 1.5354411552224224e-05.
