@@ -546,3 +546,85 @@ Using consistent parameters for all runs: {'birth_range': (0, 44.15235443115235)
     Perfect clustering: 10/10 runs
   Combination completed in 11878.6s
 
+
+
+
+============================================================
+TESTING COMBINATION 1/1: lattice_containment + braycurtis
+============================================================
+  Computing lattice_containment embeddings...
+
+=== DIAGNOSING PERSISTENCE DIAGRAMS: lattice_containment + braycurtis ===
+
+entailment:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [0.074, 0.661]
+    Persistence range: [0.074, 0.661]
+    Mean persistence: 0.475
+  H1: 134 features
+    Birth range: [0.385, 0.646]
+    Death range: [0.393, 0.651]
+    Persistence range: [0.000, 0.056]
+    Mean persistence: 0.008
+
+neutral:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [0.264, 0.717]
+    Persistence range: [0.264, 0.717]
+    Mean persistence: 0.537
+  H1: 116 features
+    Birth range: [0.407, 0.705]
+    Death range: [0.413, 0.711]
+    Persistence range: [0.000, 0.051]
+    Mean persistence: 0.009
+
+contradiction:
+  H0: 999 features
+    Birth range: [0.000, 0.000]
+    Death range: [0.341, 0.807]
+    Persistence range: [0.341, 0.807]
+    Mean persistence: 0.619
+  H1: 238 features
+    Birth range: [0.486, 0.777]
+    Death range: [0.491, 0.782]
+    Persistence range: [0.000, 0.044]
+    Mean persistence: 0.009
+
+Adaptive parameters calculated:
+  Birth range: (0, 0.8551954865455628)
+  Persistence range: (0, 0.891063904762268)
+  Pixel size: 0.045
+  Sigma: 0.027
+Using consistent parameters for all runs: {'birth_range': (0, 0.8551954865455628), 'pers_range': (0, 0.891063904762268), 'pixel_size': 0.0445531952381134, 'sigma': 0.02673191714286804}
+  Run 1/10...
+    Accuracy: 1.000
+  Run 2/10...
+    Accuracy: 1.000
+  Run 3/10...
+    Accuracy: 1.000
+  Run 4/10...
+    Accuracy: 1.000
+  Run 5/10...
+    Accuracy: 1.000
+  Run 6/10...
+    Accuracy: 1.000
+  Run 7/10...
+    Accuracy: 1.000
+  Run 8/10...
+    Accuracy: 1.000
+  Run 9/10...
+    Accuracy: 1.000
+  Run 10/10...
+    Accuracy: 1.000
+
+  SUMMARY for lattice_containment + braycurtis:
+    10 samples: Acc=1.000±0.000
+    Silhouette: 0.885±0.015
+    Perfect clustering rate: 100.0%
+    Significantly > random (33%): YES (p=0.0000) (zero_variance)
+    Significantly > 90%: YES (p=0.0000) (zero_variance)
+    Significantly > 70%: YES (p=0.0282)
+    Perfect clustering: 10/10 runs
+  Combination completed in 698.9s

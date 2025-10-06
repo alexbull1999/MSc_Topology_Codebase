@@ -198,7 +198,7 @@ class EfficientStatisticalValidation:
         self.device = torch.device('cpu')
         
         # 4 embedding spaces as requested
-        self.embedding_spaces = ['llama_concat', 'lattice_containment']
+        self.embedding_spaces = ['llama_concat', 'lattice_containment'] 
         
         # All distance metrics for all 4 spaces as requested
         self.distance_metrics = [

@@ -41,11 +41,11 @@ Starting PH-Dim Clustering Validation Analysis...
 
 Efficient Statistical Validation initialized
 Testing 14 combinations
-Embedding spaces: ['llama_concat', 'lattice_containment']
+Embedding spaces: ['mistral_concat', 'lattice_containment']
 Distance metrics: ['euclidean', 'manhattan', 'chebyshev', 'cosine', 'minkowski_3', 'minkowski_4', 'braycurtis']
 Device: cpu
-Loading LLAMA data...
-LLAMA data loaded:
+Loading Mistral data...
+Mistral data loaded:
   Premise embeddings: torch.Size([549367, 4096])
   Hypothesis embeddings: torch.Size([549367, 4096])
   Labels: 549367
@@ -59,11 +59,11 @@ Generating all sample indices...
 Generated sample indices for 10 runs
 
 ============================================================
-TESTING COMBINATION 1/14: llama_concat + euclidean
+TESTING COMBINATION 1/14: mistral_concat + euclidean
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
-=== DIAGNOSING PERSISTENCE DIAGRAMS: llama_concat + euclidean ===
+=== DIAGNOSING PERSISTENCE DIAGRAMS: mistral_concat + euclidean ===
 
 entailment:
   H0: 999 features
@@ -128,7 +128,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 508.9894165039062)
   Run 10/10...
     Accuracy: 0.967
 
-  SUMMARY for llama_concat + euclidean:
+  SUMMARY for mistral_concat + euclidean:
     10 samples: Acc=0.977±0.026
     Silhouette: 0.582±0.029
     Perfect clustering rate: 50.0%
@@ -139,9 +139,9 @@ Using consistent parameters for all runs: {'birth_range': (0, 508.9894165039062)
   Combination completed in 2274.6s
 
 ============================================================
-TESTING COMBINATION 2/14: llama_concat + manhattan
+TESTING COMBINATION 2/14: mistral_concat + manhattan
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
 Adaptive parameters calculated:
   Birth range: (0, 35996.859765625)
@@ -170,7 +170,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 35996.859765625), 
   Run 10/10...
     Accuracy: 1.000
 
-  SUMMARY for llama_concat + manhattan:
+  SUMMARY for mistral_concat + manhattan:
     10 samples: Acc=0.980±0.027
     Silhouette: 0.537±0.030
     Perfect clustering rate: 60.0%
@@ -181,9 +181,9 @@ Using consistent parameters for all runs: {'birth_range': (0, 35996.859765625), 
   Combination completed in 2141.5s
 
 ============================================================
-TESTING COMBINATION 3/14: llama_concat + chebyshev
+TESTING COMBINATION 3/14: mistral_concat + chebyshev
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
 Adaptive parameters calculated:
   Birth range: (0, 36.68671875)
@@ -212,7 +212,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 36.68671875), 'per
   Run 10/10...
     Accuracy: 0.667
 
-  SUMMARY for llama_concat + chebyshev:
+  SUMMARY for mistral_concat + chebyshev:
     10 samples: Acc=0.647±0.106
     Silhouette: 0.455±0.094
     Perfect clustering rate: 0.0%
@@ -223,9 +223,9 @@ Using consistent parameters for all runs: {'birth_range': (0, 36.68671875), 'per
   Combination completed in 2493.3s
 
 ============================================================
-TESTING COMBINATION 4/14: llama_concat + cosine
+TESTING COMBINATION 4/14: mistral_concat + cosine
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
 Adaptive parameters calculated:
   Birth range: (0, 0.7444592297077179)
@@ -254,7 +254,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 0.7444592297077179
   Run 10/10...
     Accuracy: 1.000
 
-  SUMMARY for llama_concat + cosine:
+  SUMMARY for mistral_concat + cosine:
     10 samples: Acc=0.977±0.021
     Silhouette: 0.713±0.034
     Perfect clustering rate: 40.0%
@@ -265,9 +265,9 @@ Using consistent parameters for all runs: {'birth_range': (0, 0.7444592297077179
   Combination completed in 1895.1s
 
 ============================================================
-TESTING COMBINATION 5/14: llama_concat + minkowski_3
+TESTING COMBINATION 5/14: mistral_concat + minkowski_3
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
 Adaptive parameters calculated:
   Birth range: (0, 135.32098922729492)
@@ -296,7 +296,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 135.32098922729492
   Run 10/10...
     Accuracy: 1.000
 
-  SUMMARY for llama_concat + minkowski_3:
+  SUMMARY for mistral_concat + minkowski_3:
     10 samples: Acc=0.980±0.031
     Silhouette: 0.620±0.035
     Perfect clustering rate: 60.0%
@@ -307,9 +307,9 @@ Using consistent parameters for all runs: {'birth_range': (0, 135.32098922729492
   Combination completed in 23035.5s
 
 ============================================================
-TESTING COMBINATION 6/14: llama_concat + minkowski_4
+TESTING COMBINATION 6/14: mistral_concat + minkowski_4
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
 Adaptive parameters calculated:
   Birth range: (0, 75.95923309326172)
@@ -338,7 +338,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 75.95923309326172)
   Run 10/10...
     Accuracy: 1.000
 
-  SUMMARY for llama_concat + minkowski_4:
+  SUMMARY for mistral_concat + minkowski_4:
     10 samples: Acc=0.980±0.031
     Silhouette: 0.614±0.025
     Perfect clustering rate: 60.0%
@@ -349,9 +349,9 @@ Using consistent parameters for all runs: {'birth_range': (0, 75.95923309326172)
   Combination completed in 23178.5s
 
 ============================================================
-TESTING COMBINATION 7/14: llama_concat + braycurtis
+TESTING COMBINATION 7/14: mistral_concat + braycurtis
 ============================================================
-  Computing llama_concat embeddings...
+  Computing mistral_concat embeddings...
 
 Adaptive parameters calculated:
   Birth range: (0, 0.7976778388023377)
@@ -380,7 +380,7 @@ Using consistent parameters for all runs: {'birth_range': (0, 0.7976778388023377
   Run 10/10...
     Accuracy: 1.000
 
-  SUMMARY for llama_concat + braycurtis:
+  SUMMARY for mistral_concat + braycurtis:
     10 samples: Acc=0.980±0.027
     Silhouette: 0.698±0.036
     Perfect clustering rate: 60.0%
