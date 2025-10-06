@@ -1,0 +1,179 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 205991
+Node: parrot
+Time: Mon  6 Oct 19:15:02 BST 2025
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Mon Oct  6 19:15:06 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:8D:00.0 Off |                    0 |
+|  0%   23C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PACMAP Analysis...
+
+Initializing SurfaceDistanceMetricAnalyzer...
+Surface Distance Metric Analyzer initialized
+FOCUS: Testing distance metrics for premise-hypothesis pair relationships
+Device: cuda
+BERT data: data/processed/snli_full_standard_SBERT.pt
+Order model: models/enhanced_order_embeddings_snli_SBERT_full.pt
+Distance metrics: 7 total
+Relational embedding spaces: 2 total
+Each space represents premise-hypothesis pair relationships
+Loading pre-processed data...
+Loading BERT embeddings from data/processed/snli_full_standard_SBERT.pt
+BERT data loaded:
+  Premise embeddings: torch.Size([549367, 768])
+  Hypothesis embeddings: torch.Size([549367, 768])
+  Labels: 549367
+  Label distribution: {'contradiction': 183187, 'entailment': 183416, 'neutral': 182764}
+Loading order model from models/enhanced_order_embeddings_snli_SBERT_full.pt
+Order model loaded (validation loss: 3.202074103355408)
+Loaded enhanced order model (val_loss: 3.2021)
+Model asymmetry_weight: 1.9
+Pipeline initialized: 125D → 30D hyperbolic
+Running on: cuda
+Enhanced model with asymmetry_weight: 1.9
+Hyperbolic pipeline loaded successfully
+Enhanced Hyperbolic Entailment Cones using device: cuda
+Loaded enhanced order model (val_loss: 3.2021)
+Model asymmetry_weight: 1.9
+Pipeline initialized: 125D → 30D hyperbolic
+Running on: cuda
+Enhanced model with asymmetry_weight: 1.9
+Successfully loaded enhanced hyperbolic projection of order embeddings
+Enhanced cone pipeline loaded successfully
+================================================================================
+PaCMAP TOPOLOGICAL VISUALIZATION PIPELINE
+================================================================================
+Samples per Class: 100
+Points per Sample: 1000
+================================================================================
+Step 1: Extracting embedding spaces...
+Extracting all embedding spaces...
+  entailment: 183416 samples
+  neutral: 182764 samples
+  contradiction: 183187 samples
+Computing EUCLIDEAN order embeddings...
+Computing ALL HYPERBOLIC features from enhanced cone pipeline...
+Extracting sbert_concat...
+  sbert_concat entailment: torch.Size([183416, 1536])
+  sbert_concat neutral: torch.Size([182764, 1536])
+  sbert_concat contradiction: torch.Size([183187, 1536])
+Extracting lattice_containment...
+  lattice_containment entailment: torch.Size([183416, 768])
+  lattice_containment neutral: torch.Size([182764, 768])
+  lattice_containment contradiction: torch.Size([183187, 768])
+  sbert_concat: Available
+  lattice_containment: Available
+
+Step 2: Generating fixed sample indices...
+Generating fixed sample indices...
+  entailment: 183416 total samples available
+    Generated 100 sample index sets
+  neutral: 182764 total samples available
+    Generated 100 sample index sets
+  contradiction: 183187 total samples available
+    Generated 100 sample index sets
+
+Step 3: Generating PaCMAP visualizations...
+
+============================================================
+PROCESSING: sbert_concat + cosine
+============================================================
+Generating persistence images for sbert_concat + cosine
+  Generated 1600 images for entailment
+  Generated 1600 images for neutral
+  Generated 1600 images for contradiction
+Creating PaCMAP visualization for sbert_concat + cosine...
+  Applying PaCMAP to 4800 images of dimension 400
+Visualization saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_sbert_concat_cosine_20251006_191537.png
+PDF saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_sbert_concat_cosine_20251006_191537.pdf
+SVG saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_sbert_concat_cosine_20251006_191537.svg
+SUCCESS: sbert_concat + cosine
+
+============================================================
+PROCESSING: sbert_concat + braycurtis
+============================================================
+Generating persistence images for sbert_concat + braycurtis
+  Generated 1600 images for entailment
+  Generated 1600 images for neutral
+  Generated 1600 images for contradiction
+Creating PaCMAP visualization for sbert_concat + braycurtis...
+  Applying PaCMAP to 4800 images of dimension 400
+Visualization saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_sbert_concat_braycurtis_20251006_191537.png
+PDF saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_sbert_concat_braycurtis_20251006_191537.pdf
+SVG saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_sbert_concat_braycurtis_20251006_191537.svg
+SUCCESS: sbert_concat + braycurtis
+
+============================================================
+PROCESSING: lattice_containment + cosine
+============================================================
+Generating persistence images for lattice_containment + cosine
+  Generated 1600 images for entailment
+  Generated 1600 images for neutral
+  Generated 1600 images for contradiction
+Creating PaCMAP visualization for lattice_containment + cosine...
+  Applying PaCMAP to 4800 images of dimension 400
+Visualization saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_lattice_containment_cosine_20251006_191537.png
+PDF saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_lattice_containment_cosine_20251006_191537.pdf
+SVG saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_lattice_containment_cosine_20251006_191537.svg
+SUCCESS: lattice_containment + cosine
+
+============================================================
+PROCESSING: lattice_containment + braycurtis
+============================================================
+Generating persistence images for lattice_containment + braycurtis
+  Generated 1600 images for entailment
+  Generated 1600 images for neutral
+  Generated 1600 images for contradiction
+Creating PaCMAP visualization for lattice_containment + braycurtis...
+  Applying PaCMAP to 4800 images of dimension 400
+Visualization saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_lattice_containment_braycurtis_20251006_191537.png
+PDF saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_lattice_containment_braycurtis_20251006_191537.pdf
+SVG saved to entailment_surfaces/pacmap_visualizations/SNLI_pacmap_lattice_containment_braycurtis_20251006_191537.svg
+SUCCESS: lattice_containment + braycurtis
+================================================================================
+PIPELINE COMPLETED
+================================================================================
+Generated 4 visualizations
+Results saved: entailment_surfaces/pacmap_visualizations/all_results_20251006_191537.json
+
+Generated 4 PaCMAP visualizations showing distinct topological signatures!
+
+Analysis completed with exit code: 0
+Time: Mon  6 Oct 21:04:39 BST 2025
+
+=== ANALYSIS SUCCESSFUL ===
+PACMAP successful!
+
+
+Job finished.

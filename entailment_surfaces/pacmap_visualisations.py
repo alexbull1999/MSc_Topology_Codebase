@@ -142,11 +142,11 @@ class PaCMAPTopologyVisualizer:
         
         self.class_names = ['entailment', 'neutral', 'contradiction']
         
-        # Updated color scheme with green for entailment
+        # Updated color scheme with specified RGB values
         self.class_colors = {
-            'entailment': '#27AE60',      # Green - organized/structured  
-            'neutral': '#F39C12',         # Orange - intermediate complexity
-            'contradiction': '#E74C3C'    # Red - highest complexity
+            'entailment': (136/255, 177/255, 113/255),      # Green
+            'neutral': (155/255, 90/255, 152/255),          # Purple
+            'contradiction': (103/255, 137/255, 157/255)    # Blue
         }
         
         # Initialize PaCMAP with settings for topology preservation
@@ -348,6 +348,16 @@ class PaCMAPTopologyVisualizer:
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
             print(f"Visualization saved to {save_path}")
+            
+            # Save PDF for paper (editable)
+            pdf_path = save_path.replace('.png', '.pdf')
+            plt.savefig(pdf_path, format='pdf', bbox_inches='tight')
+            print(f"PDF saved to {pdf_path}")
+            
+            # Optional: Also save SVG
+            svg_path = save_path.replace('.png', '.svg')
+            plt.savefig(svg_path, format='svg', bbox_inches='tight')
+            print(f"SVG saved to {svg_path}")
         
         plt.show()
         
