@@ -338,8 +338,8 @@ class PaCMAPTopologyVisualizer:
         
         ax.grid(True, alpha=0.3)
         # ax.tick_params(axis='both', which='major', labelsize=14)  # Increase tick label size
-        ax.set_xticks([])  # Remove x-axis tick labels
-        ax.set_yticks([])  # Remove y-axis tick labels
+        ax.tick_params(axis='both', which='both', labelbottom=False, labelleft=False)
+
 
         
         plt.tight_layout()

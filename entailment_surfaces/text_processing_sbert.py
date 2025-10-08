@@ -8,9 +8,9 @@ import numpy as np
 class TextToEmbedding:
     """Text to embedding pipeline using BERT. Converts premise-hypothesis pairs to contextualised embeddings"""
 
-#all-mpnet-base-v2 is original model
+#all-mpnet-base-v2 is original model, stsb-bert-large also used
 
-    def __init__(self, model_name="sentence-transformers/stsb-bert-large", device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model_name="sentence-transformers/all-mpnet-base-v2", device='cuda' if torch.cuda.is_available() else 'cpu'):
         """Initialize text processing pipeline"""
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model_name = model_name
@@ -206,7 +206,7 @@ def test_text_processing():
         processor.validate_embeddings(processed_data)
 
         # Save processed data
-        output_path = "/vol/bitbucket/ahb24/tda_entailment_new/snli_full_train_STSB_BERT_LARGE.pt"
+        output_path = "/data/processed/snli_full_standard_SBERT.pt"
         processor.save_processed_data(processed_data, output_path)
 
         print("Text processing pipeline test completed successfully")
