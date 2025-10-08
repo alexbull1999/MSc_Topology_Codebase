@@ -330,18 +330,17 @@ class PaCMAPTopologyVisualizer:
                     linewidth=0.5
                 )
         
-        ax.set_xlabel("PaCMAP Component 1", fontsize=14)
-        ax.set_ylabel("PaCMAP Component 2", fontsize=14)
+        # ax.set_xlabel("PaCMAP Component 1", fontsize=18)
+        # ax.set_ylabel("PaCMAP Component 2", fontsize=18)
         
-        title = f"PaCMAP: Topological Signatures\n{space_name.replace('_', ' ').title()} + {metric_name.title()} Distance"
-        ax.set_title(title, fontsize=16, pad=20)
+        # title = f"PaCMAP: Topological Signatures\n{space_name.replace('_', ' ').title()} + {metric_name.title()} Distance"
+        # ax.set_title(title, fontsize=20, pad=20)
         
-        ax.legend(fontsize=12)
         ax.grid(True, alpha=0.3)
-        
-        
-        # plt.figtext(0.02, 0.02, fontsize=10, 
-        #            bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.8))
+        # ax.tick_params(axis='both', which='major', labelsize=14)  # Increase tick label size
+        ax.set_xticks([])  # Remove x-axis tick labels
+        ax.set_yticks([])  # Remove y-axis tick labels
+
         
         plt.tight_layout()
         
