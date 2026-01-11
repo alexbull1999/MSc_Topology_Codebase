@@ -1,0 +1,42 @@
+Starting XNLI Clustering Validation for en...
+Job ID: 215232
+Node: gpuvm36
+Language: en
+Time: Sun 11 Jan 16:46:29 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sun Jan 11 16:46:33 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:00:10.0 Off |                    0 |
+|  0%   23C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data...
+
+Starting XNLI PH-Dim Clustering Validation for en...
+

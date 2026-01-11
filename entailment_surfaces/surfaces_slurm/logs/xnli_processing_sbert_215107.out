@@ -1,0 +1,66 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 215107
+Node: gpuvm35
+Time: Sat 10 Jan 20:48:49 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sat Jan 10 20:48:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:01:00.0 Off |                    0 |
+|  0%   20C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting sbert processing...
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_en_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.751, 0.812]
+Hypothesis embedding range: [-0.732, 0.903]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_en_combined_SBERT.pt
+
+Processing complete for en!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_en_combined_SBERT.pt
+
+Analysis completed with exit code: 0
+Time: Sat 10 Jan 20:50:45 GMT 2026
+
+=== ANALYSIS SUCCESSFUL ===
+
+
+Job finished.

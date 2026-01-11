@@ -1,0 +1,474 @@
+Starting XNLI SBERT Processing for All Languages...
+Job ID: 215109
+Node: gpuvm35
+Time: Sat 10 Jan 21:10:18 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sat Jan 10 21:10:22 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:01:00.0 Off |                    0 |
+|  0%   20C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+==========================================
+Processing All 15 XNLI Languages
+==========================================
+
+
+==========================================
+Processing language 1/15: en
+==========================================
+Start time: Sat 10 Jan 21:10:34 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_en_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.751, 0.812]
+Hypothesis embedding range: [-0.732, 0.903]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_en_combined_SBERT.pt
+
+Processing complete for en!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_en_combined_SBERT.pt
+
+✓ Successfully processed en
+End time: Sat 10 Jan 21:11:44 GMT 2026
+
+
+==========================================
+Processing language 2/15: ar
+==========================================
+Start time: Sat 10 Jan 21:11:44 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_ar_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.673, 0.762]
+Hypothesis embedding range: [-0.673, 0.713]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_ar_combined_SBERT.pt
+
+Processing complete for ar!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_ar_combined_SBERT.pt
+
+✓ Successfully processed ar
+End time: Sat 10 Jan 21:12:47 GMT 2026
+
+
+==========================================
+Processing language 3/15: bg
+==========================================
+Start time: Sat 10 Jan 21:12:47 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_bg_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.684, 0.771]
+Hypothesis embedding range: [-0.717, 0.778]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_bg_combined_SBERT.pt
+
+Processing complete for bg!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_bg_combined_SBERT.pt
+
+✓ Successfully processed bg
+End time: Sat 10 Jan 21:13:53 GMT 2026
+
+
+==========================================
+Processing language 4/15: de
+==========================================
+Start time: Sat 10 Jan 21:13:53 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_de_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.683, 0.761]
+Hypothesis embedding range: [-0.677, 0.740]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_de_combined_SBERT.pt
+
+Processing complete for de!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_de_combined_SBERT.pt
+
+✓ Successfully processed de
+End time: Sat 10 Jan 21:14:58 GMT 2026
+
+
+==========================================
+Processing language 5/15: el
+==========================================
+Start time: Sat 10 Jan 21:14:58 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_el_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.726, 0.785]
+Hypothesis embedding range: [-0.698, 0.764]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_el_combined_SBERT.pt
+
+Processing complete for el!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_el_combined_SBERT.pt
+
+✓ Successfully processed el
+End time: Sat 10 Jan 21:16:11 GMT 2026
+
+
+==========================================
+Processing language 6/15: es
+==========================================
+Start time: Sat 10 Jan 21:16:11 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_es_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.689, 0.767]
+Hypothesis embedding range: [-0.725, 0.767]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_es_combined_SBERT.pt
+
+Processing complete for es!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_es_combined_SBERT.pt
+
+✓ Successfully processed es
+End time: Sat 10 Jan 21:17:14 GMT 2026
+
+
+==========================================
+Processing language 7/15: fr
+==========================================
+Start time: Sat 10 Jan 21:17:14 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_fr_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.668, 0.798]
+Hypothesis embedding range: [-0.731, 0.791]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_fr_combined_SBERT.pt
+
+Processing complete for fr!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_fr_combined_SBERT.pt
+
+✓ Successfully processed fr
+End time: Sat 10 Jan 21:18:24 GMT 2026
+
+
+==========================================
+Processing language 8/15: hi
+==========================================
+Start time: Sat 10 Jan 21:18:24 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_hi_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.653, 0.721]
+Hypothesis embedding range: [-0.741, 0.816]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_hi_combined_SBERT.pt
+
+Processing complete for hi!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_hi_combined_SBERT.pt
+
+✓ Successfully processed hi
+End time: Sat 10 Jan 21:19:33 GMT 2026
+
+
+==========================================
+Processing language 9/15: ru
+==========================================
+Start time: Sat 10 Jan 21:19:33 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_ru_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.671, 0.754]
+Hypothesis embedding range: [-0.730, 0.758]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_ru_combined_SBERT.pt
+
+Processing complete for ru!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_ru_combined_SBERT.pt
+
+✓ Successfully processed ru
+End time: Sat 10 Jan 21:20:38 GMT 2026
+
+
+==========================================
+Processing language 10/15: sw
+==========================================
+Start time: Sat 10 Jan 21:20:38 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_sw_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.511, 0.735]
+Hypothesis embedding range: [-0.569, 0.732]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_sw_combined_SBERT.pt
+
+Processing complete for sw!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_sw_combined_SBERT.pt
+
+✓ Successfully processed sw
+End time: Sat 10 Jan 21:21:40 GMT 2026
+
+
+==========================================
+Processing language 11/15: th
+==========================================
+Start time: Sat 10 Jan 21:21:40 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_th_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.695, 0.700]
+Hypothesis embedding range: [-0.727, 0.895]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_th_combined_SBERT.pt
+
+Processing complete for th!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_th_combined_SBERT.pt
+
+✓ Successfully processed th
+End time: Sat 10 Jan 21:22:41 GMT 2026
+
+
+==========================================
+Processing language 12/15: tr
+==========================================
+Start time: Sat 10 Jan 21:22:41 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_tr_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.664, 0.792]
+Hypothesis embedding range: [-0.714, 0.726]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_tr_combined_SBERT.pt
+
+Processing complete for tr!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_tr_combined_SBERT.pt
+
+✓ Successfully processed tr
+End time: Sat 10 Jan 21:23:40 GMT 2026
+
+
+==========================================
+Processing language 13/15: ur
+==========================================
+Start time: Sat 10 Jan 21:23:40 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_ur_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.673, 0.729]
+Hypothesis embedding range: [-0.737, 0.731]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_ur_combined_SBERT.pt
+
+Processing complete for ur!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_ur_combined_SBERT.pt
+
+✓ Successfully processed ur
+End time: Sat 10 Jan 21:24:44 GMT 2026
+
+
+==========================================
+Processing language 14/15: vi
+==========================================
+Start time: Sat 10 Jan 21:24:44 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_vi_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.669, 0.726]
+Hypothesis embedding range: [-0.708, 0.762]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_vi_combined_SBERT.pt
+
+Processing complete for vi!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_vi_combined_SBERT.pt
+
+✓ Successfully processed vi
+End time: Sat 10 Jan 21:25:50 GMT 2026
+
+
+==========================================
+Processing language 15/15: zh
+==========================================
+Start time: Sat 10 Jan 21:25:50 GMT 2026
+
+Loading sentence-transformers/paraphrase-multilingual-mpnet-base-v2 on cuda...
+Gradient checkpointing enabled
+XNLI text processing pipeline ready
+Processing dataset: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_zh_combined.json...
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete
+Premise embeddings shape: torch.Size([7500, 768])
+Hypothesis embeddings shape: torch.Size([7500, 768])
+Embedding dimension: 768
+Premise embedding range: [-0.678, 0.756]
+Hypothesis embedding range: [-0.711, 0.765]
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_zh_combined_SBERT.pt
+
+Processing complete for zh!
+Output: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_zh_combined_SBERT.pt
+
+✓ Successfully processed zh
+End time: Sat 10 Jan 21:26:44 GMT 2026
+
+
+==========================================
+PROCESSING COMPLETE - SUMMARY
+==========================================
+Total languages: 15
+Successful: 15
+Failed: 0
+
+Processed languages:
+  ✓ en - 32M
+  ✓ ar - 33M
+  ✓ bg - 33M
+  ✓ de - 32M
+  ✓ el - 33M
+  ✓ es - 33M
+  ✓ fr - 33M
+  ✓ hi - 33M
+  ✓ ru - 33M
+  ✓ sw - 32M
+  ✓ th - 33M
+  ✓ tr - 32M
+  ✓ ur - 33M
+  ✓ vi - 33M
+  ✓ zh - 512
+
+Job finished: Sat 10 Jan 21:26:44 GMT 2026
+
+=== ALL LANGUAGES PROCESSED SUCCESSFULLY ===
