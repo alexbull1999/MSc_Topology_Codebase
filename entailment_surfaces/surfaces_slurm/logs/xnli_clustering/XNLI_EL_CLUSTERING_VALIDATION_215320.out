@@ -1,14 +1,14 @@
-Starting XNLI Clustering Validation for en...
-Job ID: 215232
-Node: gpuvm36
-Language: en
-Time: Sun 11 Jan 16:46:29 GMT 2026
+Starting XNLI Clustering Validation for el...
+Job ID: 215320
+Node: gpuvm35
+Language: el
+Time: Mon 12 Jan 12:00:53 GMT 2026
 Loading CUDA...
 Activating conda environment...
 Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
 Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
 Checking GPU availability...
-Sun Jan 11 16:46:33 2026       
+Mon Jan 12 12:01:01 2026       
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
 +-----------------------------------------+------------------------+----------------------+
@@ -16,8 +16,8 @@ Sun Jan 11 16:46:33 2026
 | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
 |                                         |                        |               MIG M. |
 |=========================================+========================+======================|
-|   0  NVIDIA A16                     Off |   00000000:00:10.0 Off |                    0 |
-|  0%   23C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|   0  NVIDIA A16                     Off |   00000000:01:00.0 Off |                    0 |
+|  0%   19C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
 |                                         |                        |                  N/A |
 +-----------------------------------------+------------------------+----------------------+
 
@@ -38,22 +38,22 @@ PyTorch setup verified!
 
 Checking for required input data...
 
-Starting XNLI PH-Dim Clustering Validation for en...
+Starting XNLI PH-Dim Clustering Validation for el...
 
-XNLI Statistical Validation initialized for language: en
+XNLI Statistical Validation initialized for language: el
 Testing 16 combinations
 Device: cuda
-Loading XNLI data for en...
+Loading XNLI data for el...
 XNLI data loaded:
   Premise embeddings: torch.Size([7500, 768])
   Hypothesis embeddings: torch.Size([7500, 768])
   Labels: 7500
-  Language: en
+  Language: el
   entailment: 2500 samples available
   neutral: 2500 samples available
   contradiction: 2500 samples available
 ============================================================
-XNLI STATISTICAL VALIDATION - EN
+XNLI STATISTICAL VALIDATION - EL
 ============================================================
 Generating all sample indices...
 Generated sample indices for 10 runs
@@ -63,33 +63,33 @@ COMBINATION 1/16: sbert_concat + euclidean
 ============================================================
   Computing sbert_concat embeddings...
   Run 1/10...
-    Accuracy: 0.700
-  Run 2/10...
-    Accuracy: 0.833
-  Run 3/10...
-    Accuracy: 0.767
-  Run 4/10...
-    Accuracy: 0.700
-  Run 5/10...
-    Accuracy: 0.667
-  Run 6/10...
-    Accuracy: 0.800
-  Run 7/10...
-    Accuracy: 0.667
-  Run 8/10...
     Accuracy: 0.733
+  Run 2/10...
+    Accuracy: 0.700
+  Run 3/10...
+    Accuracy: 0.733
+  Run 4/10...
+    Accuracy: 0.667
+  Run 5/10...
+    Accuracy: 0.733
+  Run 6/10...
+    Accuracy: 0.733
+  Run 7/10...
+    Accuracy: 0.700
+  Run 8/10...
+    Accuracy: 0.633
   Run 9/10...
     Accuracy: 0.667
   Run 10/10...
-    Accuracy: 0.667
+    Accuracy: 0.767
 
   SUMMARY for sbert_concat + euclidean:
-    10 samples: Acc=0.720±0.058
-    Silhouette: 0.576±0.049
+    10 samples: Acc=0.707±0.039
+    Silhouette: 0.534±0.053
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 1266.6s
+  Combination completed in 624.8s
 
 ============================================================
 COMBINATION 2/16: sbert_concat + manhattan
@@ -122,40 +122,40 @@ COMBINATION 2/16: sbert_concat + manhattan
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 1208.7s
+  Combination completed in 564.5s
 
 ============================================================
 COMBINATION 3/16: sbert_concat + chebyshev
 ============================================================
   Computing sbert_concat embeddings...
   Run 1/10...
-    Accuracy: 0.667
+    Accuracy: 0.700
   Run 2/10...
-    Accuracy: 0.567
+    Accuracy: 0.767
   Run 3/10...
     Accuracy: 0.533
   Run 4/10...
-    Accuracy: 0.700
-  Run 5/10...
-    Accuracy: 0.667
-  Run 6/10...
-    Accuracy: 0.667
-  Run 7/10...
-    Accuracy: 0.567
-  Run 8/10...
-    Accuracy: 0.700
-  Run 9/10...
     Accuracy: 0.600
+  Run 5/10...
+    Accuracy: 0.733
+  Run 6/10...
+    Accuracy: 0.633
+  Run 7/10...
+    Accuracy: 0.667
+  Run 8/10...
+    Accuracy: 0.800
+  Run 9/10...
+    Accuracy: 0.567
   Run 10/10...
-    Accuracy: 0.700
+    Accuracy: 0.733
 
   SUMMARY for sbert_concat + chebyshev:
-    10 samples: Acc=0.637±0.060
-    Silhouette: 0.419±0.044
+    10 samples: Acc=0.673±0.084
+    Silhouette: 0.413±0.058
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 4115.5s
+  Combination completed in 1212.7s
 
 ============================================================
 COMBINATION 4/16: sbert_concat + cosine
@@ -166,95 +166,95 @@ COMBINATION 4/16: sbert_concat + cosine
   Run 2/10...
     Accuracy: 0.833
   Run 3/10...
-    Accuracy: 0.800
-  Run 4/10...
     Accuracy: 0.867
-  Run 5/10...
-    Accuracy: 0.800
-  Run 6/10...
-    Accuracy: 0.667
-  Run 7/10...
-    Accuracy: 0.733
-  Run 8/10...
-    Accuracy: 0.733
-  Run 9/10...
-    Accuracy: 0.767
-  Run 10/10...
+  Run 4/10...
     Accuracy: 0.833
+  Run 5/10...
+    Accuracy: 0.733
+  Run 6/10...
+    Accuracy: 0.500
+  Run 7/10...
+    Accuracy: 0.567
+  Run 8/10...
+    Accuracy: 0.833
+  Run 9/10...
+    Accuracy: 0.567
+  Run 10/10...
+    Accuracy: 0.900
 
   SUMMARY for sbert_concat + cosine:
-    10 samples: Acc=0.793±0.066
-    Silhouette: 0.458±0.048
+    10 samples: Acc=0.753±0.145
+    Silhouette: 0.493±0.038
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
-    Significantly > 90%: NO (p=0.9995)
-  Combination completed in 1542.8s
+    Significantly > 90%: NO (p=0.9930)
+  Combination completed in 1186.5s
 
 ============================================================
 COMBINATION 5/16: sbert_concat + minkowski_3
 ============================================================
   Computing sbert_concat embeddings...
   Run 1/10...
-    Accuracy: 0.633
+    Accuracy: 0.733
   Run 2/10...
-    Accuracy: 0.800
-  Run 3/10...
     Accuracy: 0.667
+  Run 3/10...
+    Accuracy: 0.700
   Run 4/10...
-    Accuracy: 0.733
+    Accuracy: 0.700
   Run 5/10...
-    Accuracy: 0.733
+    Accuracy: 0.567
   Run 6/10...
-    Accuracy: 0.733
+    Accuracy: 0.600
   Run 7/10...
     Accuracy: 0.767
   Run 8/10...
     Accuracy: 0.700
   Run 9/10...
-    Accuracy: 0.567
+    Accuracy: 0.733
   Run 10/10...
-    Accuracy: 0.800
+    Accuracy: 0.667
 
   SUMMARY for sbert_concat + minkowski_3:
-    10 samples: Acc=0.713±0.070
-    Silhouette: 0.556±0.042
+    10 samples: Acc=0.683±0.058
+    Silhouette: 0.559±0.040
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 5197.2s
+  Combination completed in 4380.6s
 
 ============================================================
 COMBINATION 6/16: sbert_concat + minkowski_4
 ============================================================
   Computing sbert_concat embeddings...
   Run 1/10...
-    Accuracy: 0.633
+    Accuracy: 0.667
   Run 2/10...
-    Accuracy: 0.733
+    Accuracy: 0.833
   Run 3/10...
-    Accuracy: 0.633
-  Run 4/10...
-    Accuracy: 0.767
-  Run 5/10...
-    Accuracy: 0.800
-  Run 6/10...
-    Accuracy: 0.733
-  Run 7/10...
-    Accuracy: 0.767
-  Run 8/10...
     Accuracy: 0.700
+  Run 4/10...
+    Accuracy: 0.800
+  Run 5/10...
+    Accuracy: 0.900
+  Run 6/10...
+    Accuracy: 0.667
+  Run 7/10...
+    Accuracy: 0.733
+  Run 8/10...
+    Accuracy: 0.667
   Run 9/10...
     Accuracy: 0.767
   Run 10/10...
-    Accuracy: 0.767
+    Accuracy: 0.900
 
   SUMMARY for sbert_concat + minkowski_4:
-    10 samples: Acc=0.730±0.055
-    Silhouette: 0.519±0.044
+    10 samples: Acc=0.763±0.087
+    Silhouette: 0.556±0.033
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
-    Significantly > 90%: NO (p=1.0000)
-  Combination completed in 5249.4s
+    Significantly > 90%: NO (p=0.9994)
+  Combination completed in 4406.4s
 
 ============================================================
 COMBINATION 7/16: sbert_concat + canberra
@@ -287,139 +287,139 @@ COMBINATION 7/16: sbert_concat + canberra
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 1891.1s
+  Combination completed in 1385.0s
 
 ============================================================
 COMBINATION 8/16: sbert_concat + braycurtis
 ============================================================
   Computing sbert_concat embeddings...
   Run 1/10...
-    Accuracy: 0.833
+    Accuracy: 0.900
   Run 2/10...
-    Accuracy: 0.833
+    Accuracy: 0.767
   Run 3/10...
-    Accuracy: 0.600
+    Accuracy: 0.633
   Run 4/10...
-    Accuracy: 0.833
+    Accuracy: 0.800
   Run 5/10...
-    Accuracy: 0.800
-  Run 6/10...
-    Accuracy: 0.833
-  Run 7/10...
     Accuracy: 0.733
+  Run 6/10...
+    Accuracy: 0.933
+  Run 7/10...
+    Accuracy: 0.600
   Run 8/10...
-    Accuracy: 0.800
+    Accuracy: 0.767
   Run 9/10...
-    Accuracy: 0.833
+    Accuracy: 0.800
   Run 10/10...
-    Accuracy: 0.867
+    Accuracy: 0.800
 
   SUMMARY for sbert_concat + braycurtis:
-    10 samples: Acc=0.797±0.074
-    Silhouette: 0.474±0.028
+    10 samples: Acc=0.773±0.098
+    Silhouette: 0.477±0.023
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
-    Significantly > 90%: NO (p=0.9989)
-  Combination completed in 1634.1s
+    Significantly > 90%: NO (p=0.9982)
+  Combination completed in 1220.1s
 
 ============================================================
 COMBINATION 9/16: lattice_containment + euclidean
 ============================================================
   Computing lattice_containment embeddings...
   Run 1/10...
-    Accuracy: 0.967
-  Run 2/10...
     Accuracy: 0.533
+  Run 2/10...
+    Accuracy: 0.767
   Run 3/10...
-    Accuracy: 0.900
+    Accuracy: 0.700
   Run 4/10...
-    Accuracy: 0.600
+    Accuracy: 0.533
   Run 5/10...
-    Accuracy: 0.567
+    Accuracy: 0.700
   Run 6/10...
-    Accuracy: 0.967
-  Run 7/10...
-    Accuracy: 0.633
-  Run 8/10...
-    Accuracy: 0.967
-  Run 9/10...
-    Accuracy: 0.900
-  Run 10/10...
     Accuracy: 0.833
+  Run 7/10...
+    Accuracy: 0.867
+  Run 8/10...
+    Accuracy: 0.700
+  Run 9/10...
+    Accuracy: 0.700
+  Run 10/10...
+    Accuracy: 0.700
 
   SUMMARY for lattice_containment + euclidean:
-    10 samples: Acc=0.787±0.172
-    Silhouette: 0.699±0.067
+    10 samples: Acc=0.703±0.103
+    Silhouette: 0.615±0.025
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
-    Significantly > 90%: NO (p=0.9602)
-  Combination completed in 625.8s
+    Significantly > 90%: NO (p=0.9999)
+  Combination completed in 413.9s
 
 ============================================================
 COMBINATION 10/16: lattice_containment + manhattan
 ============================================================
   Computing lattice_containment embeddings...
   Run 1/10...
-    Accuracy: 0.433
+    Accuracy: 0.367
   Run 2/10...
-    Accuracy: 0.633
-  Run 3/10...
     Accuracy: 0.433
+  Run 3/10...
+    Accuracy: 0.400
   Run 4/10...
-    Accuracy: 0.567
+    Accuracy: 0.433
   Run 5/10...
     Accuracy: 0.400
   Run 6/10...
-    Accuracy: 0.400
-  Run 7/10...
-    Accuracy: 0.433
-  Run 8/10...
-    Accuracy: 0.500
-  Run 9/10...
     Accuracy: 0.367
+  Run 7/10...
+    Accuracy: 0.400
+  Run 8/10...
+    Accuracy: 0.400
+  Run 9/10...
+    Accuracy: 0.400
   Run 10/10...
-    Accuracy: 0.500
+    Accuracy: 0.400
 
   SUMMARY for lattice_containment + manhattan:
-    10 samples: Acc=0.467±0.079
-    Silhouette: 0.646±0.396
+    10 samples: Acc=0.400±0.021
+    Silhouette: -0.044±0.369
     Perfect clustering rate: 0.0%
-    Significantly > random (33%): YES (p=0.0003)
+    Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 570.7s
+  Combination completed in 366.6s
 
 ============================================================
 COMBINATION 11/16: lattice_containment + chebyshev
 ============================================================
   Computing lattice_containment embeddings...
   Run 1/10...
-    Accuracy: 0.667
+    Accuracy: 0.600
   Run 2/10...
     Accuracy: 0.733
   Run 3/10...
-    Accuracy: 0.633
+    Accuracy: 0.767
   Run 4/10...
-    Accuracy: 0.533
+    Accuracy: 0.567
   Run 5/10...
-    Accuracy: 0.533
+    Accuracy: 0.667
   Run 6/10...
-    Accuracy: 0.633
+    Accuracy: 0.667
   Run 7/10...
-    Accuracy: 0.867
+    Accuracy: 0.533
   Run 8/10...
     Accuracy: 0.533
   Run 9/10...
-    Accuracy: 0.533
+    Accuracy: 0.633
   Run 10/10...
     Accuracy: 0.567
 
   SUMMARY for lattice_containment + chebyshev:
-    10 samples: Acc=0.623±0.104
-    Silhouette: 0.480±0.035
+    10 samples: Acc=0.627±0.077
+    Silhouette: 0.452±0.049
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 5741.1s
+  Combination completed in 1374.7s
 
 ============================================================
 COMBINATION 12/16: lattice_containment + cosine
@@ -448,77 +448,77 @@ COMBINATION 12/16: lattice_containment + cosine
 
   SUMMARY for lattice_containment + cosine:
     10 samples: Acc=1.000±0.000
-    Silhouette: 0.906±0.009
+    Silhouette: 0.886±0.017
     Perfect clustering rate: 100.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: YES (p=0.0000)
-  Combination completed in 456.9s
+  Combination completed in 457.5s
 
 ============================================================
 COMBINATION 13/16: lattice_containment + minkowski_3
 ============================================================
   Computing lattice_containment embeddings...
   Run 1/10...
-    Accuracy: 0.800
-  Run 2/10...
-    Accuracy: 0.767
-  Run 3/10...
     Accuracy: 0.600
+  Run 2/10...
+    Accuracy: 0.700
+  Run 3/10...
+    Accuracy: 0.700
   Run 4/10...
-    Accuracy: 0.833
+    Accuracy: 0.567
   Run 5/10...
-    Accuracy: 0.900
+    Accuracy: 0.633
   Run 6/10...
-    Accuracy: 1.000
+    Accuracy: 0.700
   Run 7/10...
-    Accuracy: 0.833
+    Accuracy: 0.600
   Run 8/10...
-    Accuracy: 0.833
+    Accuracy: 0.667
   Run 9/10...
-    Accuracy: 0.867
+    Accuracy: 0.533
   Run 10/10...
-    Accuracy: 0.867
+    Accuracy: 0.533
 
   SUMMARY for lattice_containment + minkowski_3:
-    10 samples: Acc=0.830±0.097
-    Silhouette: 0.643±0.055
-    Perfect clustering rate: 10.0%
+    10 samples: Acc=0.623±0.063
+    Silhouette: 0.595±0.038
+    Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
-    Significantly > 90%: NO (p=0.9706)
-  Combination completed in 2630.8s
+    Significantly > 90%: NO (p=1.0000)
+  Combination completed in 2292.4s
 
 ============================================================
 COMBINATION 14/16: lattice_containment + minkowski_4
 ============================================================
   Computing lattice_containment embeddings...
   Run 1/10...
-    Accuracy: 0.867
+    Accuracy: 0.700
   Run 2/10...
-    Accuracy: 0.767
+    Accuracy: 0.533
   Run 3/10...
-    Accuracy: 0.833
+    Accuracy: 0.700
   Run 4/10...
-    Accuracy: 0.767
+    Accuracy: 0.633
   Run 5/10...
     Accuracy: 0.800
   Run 6/10...
-    Accuracy: 0.767
-  Run 7/10...
-    Accuracy: 0.767
-  Run 8/10...
     Accuracy: 0.800
+  Run 7/10...
+    Accuracy: 0.667
+  Run 8/10...
+    Accuracy: 0.667
   Run 9/10...
-    Accuracy: 0.900
+    Accuracy: 0.667
   Run 10/10...
-    Accuracy: 0.833
+    Accuracy: 0.700
 
   SUMMARY for lattice_containment + minkowski_4:
-    10 samples: Acc=0.810±0.045
-    Silhouette: 0.577±0.040
+    10 samples: Acc=0.687±0.073
+    Silhouette: 0.613±0.040
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
-    Significantly > 90%: NO (p=0.9999)
-  Combination completed in 2769.5s
+    Significantly > 90%: NO (p=1.0000)
+  Combination completed in 2331.6s
 
 ============================================================
 COMBINATION 15/16: lattice_containment + canberra
@@ -551,7 +551,7 @@ COMBINATION 15/16: lattice_containment + canberra
     Perfect clustering rate: 0.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: NO (p=1.0000)
-  Combination completed in 508.2s
+  Combination completed in 490.8s
 
 ============================================================
 COMBINATION 16/16: lattice_containment + braycurtis
@@ -580,14 +580,14 @@ COMBINATION 16/16: lattice_containment + braycurtis
 
   SUMMARY for lattice_containment + braycurtis:
     10 samples: Acc=1.000±0.000
-    Silhouette: 0.906±0.006
+    Silhouette: 0.892±0.015
     Perfect clustering rate: 100.0%
     Significantly > random (33%): YES (p=0.0000)
     Significantly > 90%: YES (p=0.0000)
-  Combination completed in 384.6s
+  Combination completed in 380.7s
 
 Analysis completed with exit code: 1
-Time: Mon 12 Jan 02:44:38 GMT 2026
+Time: Mon 12 Jan 18:26:43 GMT 2026
 
 === ANALYSIS FAILED ===
 Please check the error output above for debugging information.

@@ -1,19 +1,19 @@
 #!/bin/bash
-#SBATCH --job-name=xnli_clustering_bg
+#SBATCH --job-name=xnli_clustering_zh
 #SBATCH --partition=a16
 #SBATCH --time=24:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/xnli_clustering/XNLI_BG_CLUSTERING_VALIDATION_%j.out
-#SBATCH --error=../logs/xnli_clustering/XNLI_BG_CLUSTERING_VALIDATION_%j.err
+#SBATCH --output=../logs/xnli_clustering/XNLI_ZH_CLUSTERING_VALIDATION_%j.out
+#SBATCH --error=../logs/xnli_clustering/XNLI_ZH_CLUSTERING_VALIDATION_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
 # ============================================
 # CONFIGURE LANGUAGE HERE
 # ============================================
-LANGUAGE="bg"  # ← Change this for each language
+LANGUAGE="zh"  # ← Change this for each language
 # ============================================
 
 echo "Starting XNLI Clustering Validation for ${LANGUAGE}..."
