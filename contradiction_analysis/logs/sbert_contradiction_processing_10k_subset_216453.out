@@ -1,0 +1,101 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 216453
+Node: parrot
+Time: Sun 18 Jan 19:14:27 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sun Jan 18 19:14:35 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:8E:00.0 Off |                    0 |
+|  0%   21C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting sbert processing...
+
+================================================================================
+STEP 1: LOADING AND FILTERING SNLI DATA
+================================================================================
+
+Loading SNLI train data from: data/raw/snli/train/snli_10k_subset_balanced.json
+Total samples loaded: 9990
+
+Filtering to contradiction examples only...
+Contradiction samples: 3330
+
+================================================================================
+STEP 2: ENCODING WITH SBERT
+================================================================================
+Loading SBERT model: sentence-transformers/all-mpnet-base-v2
+Device: cuda
+Encoding 3330 premises...
+  Processed 320/3330 premises
+  Processed 640/3330 premises
+  Processed 960/3330 premises
+  Processed 1280/3330 premises
+  Processed 1600/3330 premises
+  Processed 1920/3330 premises
+  Processed 2240/3330 premises
+  Processed 2560/3330 premises
+  Processed 2880/3330 premises
+  Processed 3200/3330 premises
+Encoding 3330 hypotheses...
+  Processed 320/3330 hypotheses
+  Processed 640/3330 hypotheses
+  Processed 960/3330 hypotheses
+  Processed 1280/3330 hypotheses
+  Processed 1600/3330 hypotheses
+  Processed 1920/3330 hypotheses
+  Processed 2240/3330 hypotheses
+  Processed 2560/3330 hypotheses
+  Processed 2880/3330 hypotheses
+  Processed 3200/3330 hypotheses
+
+Premise embedding shape: (3330, 768)
+Hypothesis embedding shape: (3330, 768)
+Concatenated embedding shape: (3330, 1536)
+
+================================================================================
+SAVING ENCODED DATA
+================================================================================
+
+Data saved to: /vol/bitbucket/ahb24/tda_entailment_new/contradictions_only/contradiction_embeddings_SBERT_snli_10k_subset_balanced.pt
+Total contradiction samples: 3330
+Embedding dimension: 1536
+
+You can now use this file for clustering experiments.
+================================================================================
+
+Analysis completed with exit code: 0
+Time: Sun 18 Jan 19:16:12 GMT 2026
+
+=== ANALYSIS SUCCESSFUL ===
+
+
+Job finished.

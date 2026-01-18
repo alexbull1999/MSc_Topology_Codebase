@@ -1,0 +1,295 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 216458
+Node: gpuvm35
+Time: Sun 18 Jan 19:26:58 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sun Jan 18 19:27:06 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:02:00.0 Off |                    0 |
+|  0%   27C    P8             15W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting sbert processing...
+
+================================================================================
+CONTRADICTION CLUSTERING ANALYSIS
+================================================================================
+Loading embeddings from: /vol/bitbucket/ahb24/tda_entailment_new/contradictions_only/contradiction_embeddings_SBERT_snli_10k_subset_balanced.pt
+Loaded 3330 contradiction samples
+Embedding dimension: 768
+
+================================================================================
+CREATING EMBEDDING SPACES
+================================================================================
+Concatenation space shape: (3330, 1536)
+Semantic Coherence space shape: (3330, 768)
+
+================================================================================
+RUNNING CLUSTERING EXPERIMENTS
+================================================================================
+
+CONCATENATION EMBEDDING SPACE
+--------------------------------------------------------------------------------
+
+k=2
+
+Running clustering with k=2...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0242
+    Cluster Sizes: {0: 3130, 1: 200}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k2_pacmap.png
+  gmm:
+    Silhouette Score: 0.0340
+    Cluster Sizes: {0: 1326, 1: 2004}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k2_pacmap.png
+  hierarchical:
+    Silhouette Score: 0.0185
+    Cluster Sizes: {0: 2812, 1: 518}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k2_pacmap.png
+
+k=3
+
+Running clustering with k=3...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0282
+    Cluster Sizes: {0: 198, 1: 1815, 2: 1317}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k3_pacmap.png
+  gmm:
+    Silhouette Score: 0.0335
+    Cluster Sizes: {0: 1341, 1: 1138, 2: 851}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k3_pacmap.png
+  hierarchical:
+    Silhouette Score: 0.0142
+    Cluster Sizes: {0: 518, 1: 1874, 2: 938}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k3_pacmap.png
+
+k=4
+
+Running clustering with k=4...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0264
+    Cluster Sizes: {0: 1155, 1: 1365, 2: 612, 3: 198}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k4_pacmap.png
+  gmm:
+    Silhouette Score: 0.0363
+    Cluster Sizes: {0: 1270, 1: 1223, 2: 222, 3: 615}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k4_pacmap.png
+  hierarchical:
+    Silhouette Score: 0.0163
+    Cluster Sizes: {0: 1874, 1: 316, 2: 938, 3: 202}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k4_pacmap.png
+
+k=5
+
+Running clustering with k=5...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0239
+    Cluster Sizes: {0: 1341, 1: 111, 2: 1150, 3: 198, 4: 530}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k5_pacmap.png
+  gmm:
+    Silhouette Score: 0.0369
+    Cluster Sizes: {0: 1049, 1: 1005, 2: 554, 3: 504, 4: 218}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k5_pacmap.png
+  hierarchical:
+    Silhouette Score: 0.0171
+    Cluster Sizes: {0: 1510, 1: 364, 2: 938, 3: 202, 4: 316}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k5_pacmap.png
+
+k=10
+
+Running clustering with k=10...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0221
+    Cluster Sizes: {0: 384, 1: 795, 2: 557, 3: 113, 4: 71, 5: 112, 6: 106, 7: 26, 8: 179, 9: 987}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k10_pacmap.png
+  gmm:
+    Silhouette Score: 0.0296
+    Cluster Sizes: {0: 354, 1: 363, 2: 265, 3: 198, 4: 418, 5: 203, 6: 520, 7: 208, 8: 596, 9: 205}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k10_pacmap.png
+  hierarchical:
+    Silhouette Score: 0.0130
+    Cluster Sizes: {0: 1294, 1: 622, 2: 216, 3: 202, 4: 109, 5: 257, 6: 107, 7: 207, 8: 127, 9: 189}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k10_pacmap.png
+
+SEMANTIC_COHERENCE EMBEDDING SPACE
+--------------------------------------------------------------------------------
+
+k=2
+
+Running clustering with k=2...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0029
+    Cluster Sizes: {0: 3167, 1: 163}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k2_pacmap.png
+  gmm:
+    Silhouette Score: 0.0354
+    Cluster Sizes: {0: 1936, 1: 1394}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k2_pacmap.png
+  hierarchical:
+    Silhouette Score: 0.0021
+    Cluster Sizes: {0: 2273, 1: 1057}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k2_pacmap.png
+
+k=3
+
+Running clustering with k=3...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0019
+    Cluster Sizes: {0: 3056, 1: 164, 2: 110}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k3_pacmap.png
+  gmm:
+    Silhouette Score: -0.0010
+    Cluster Sizes: {0: 1389, 1: 853, 2: 1088}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k3_pacmap.png
+  hierarchical:
+    Silhouette Score: -0.0032
+    Cluster Sizes: {0: 1535, 1: 1057, 2: 738}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k3_pacmap.png
+
+k=4
+
+Running clustering with k=4...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0025
+    Cluster Sizes: {0: 3020, 1: 164, 2: 110, 3: 36}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k4_pacmap.png
+  gmm:
+    Silhouette Score: -0.0041
+    Cluster Sizes: {0: 838, 1: 643, 2: 970, 3: 879}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k4_pacmap.png
+  hierarchical:
+    Silhouette Score: -0.0060
+    Cluster Sizes: {0: 1404, 1: 1057, 2: 738, 3: 131}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k4_pacmap.png
+
+k=5
+
+Running clustering with k=5...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: -0.0008
+    Cluster Sizes: {0: 3025, 1: 112, 2: 110, 3: 47, 4: 36}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k5_pacmap.png
+  gmm:
+    Silhouette Score: 0.0015
+    Cluster Sizes: {0: 931, 1: 527, 2: 350, 3: 450, 4: 1072}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k5_pacmap.png
+  hierarchical:
+    Silhouette Score: -0.0051
+    Cluster Sizes: {0: 1137, 1: 267, 2: 738, 3: 131, 4: 1057}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k5_pacmap.png
+
+k=10
+
+Running clustering with k=10...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Silhouette Score: 0.0055
+    Cluster Sizes: {0: 115, 1: 1408, 2: 115, 3: 47, 4: 11, 5: 109, 6: 103, 7: 1281, 8: 80, 9: 61}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k10_pacmap.png
+  gmm:
+    Silhouette Score: -0.0068
+    Cluster Sizes: {0: 324, 1: 221, 2: 514, 3: 744, 4: 17, 5: 159, 6: 316, 7: 331, 8: 598, 9: 106}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k10_pacmap.png
+  hierarchical:
+    Silhouette Score: -0.0090
+    Cluster Sizes: {0: 681, 1: 201, 2: 738, 3: 131, 4: 824, 5: 164, 6: 78, 7: 103, 8: 177, 9: 233}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k10_pacmap.png
+
+================================================================================
+SAVING RESULTS
+================================================================================
+
+Analysis completed with exit code: 1
+Time: Sun 18 Jan 19:30:13 GMT 2026
+
+=== ANALYSIS FAILED ===
+
+
+Job finished.
