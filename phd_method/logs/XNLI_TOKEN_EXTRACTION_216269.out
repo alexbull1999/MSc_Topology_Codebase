@@ -1,0 +1,1598 @@
+Starting XNLI SBERT Token Extraction...
+Job ID: 216269
+Node: gpuvm35
+Time: Sat 17 Jan 17:28:30 GMT 2026
+Python: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+CUDA available: True
+Sat Jan 17 17:29:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:01:00.0 Off |                    0 |
+|  0%   21C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading multilingual SBERT model: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+Device: cuda
+Hidden size: 768
+Multilingual SBERT token extractor ready
+
+============================================================
+LANGUAGE 1/15: EN
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for en...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_en_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_en_validation_sbert_tokens.pkl
+
+Processing Statistics for en validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 27.4, Min: 7, Max: 64
+Hypothesis token counts - Mean: 14.5, Min: 6, Max: 33
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for en...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_en_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_en_test_sbert_tokens.pkl
+
+Processing Statistics for en test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 27.7, Min: 7, Max: 68
+Hypothesis token counts - Mean: 14.5, Min: 4, Max: 46
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ EN token extraction complete!
+
+============================================================
+LANGUAGE 2/15: AR
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for ar...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_ar_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_ar_validation_sbert_tokens.pkl
+
+Processing Statistics for ar validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 28.9, Min: 6, Max: 75
+Hypothesis token counts - Mean: 15.5, Min: 6, Max: 47
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for ar...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_ar_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_ar_test_sbert_tokens.pkl
+
+Processing Statistics for ar test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 29.4, Min: 6, Max: 80
+Hypothesis token counts - Mean: 15.6, Min: 5, Max: 52
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ AR token extraction complete!
+
+============================================================
+LANGUAGE 3/15: BG
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for bg...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_bg_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_bg_validation_sbert_tokens.pkl
+
+Processing Statistics for bg validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 30.3, Min: 7, Max: 80
+Hypothesis token counts - Mean: 16.2, Min: 5, Max: 52
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for bg...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_bg_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_bg_test_sbert_tokens.pkl
+
+Processing Statistics for bg test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 30.8, Min: 6, Max: 80
+Hypothesis token counts - Mean: 16.2, Min: 5, Max: 53
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ BG token extraction complete!
+
+============================================================
+LANGUAGE 4/15: DE
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for de...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_de_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_de_validation_sbert_tokens.pkl
+
+Processing Statistics for de validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 30.0, Min: 7, Max: 72
+Hypothesis token counts - Mean: 15.9, Min: 5, Max: 44
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for de...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_de_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_de_test_sbert_tokens.pkl
+
+Processing Statistics for de test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 30.4, Min: 3, Max: 73
+Hypothesis token counts - Mean: 15.8, Min: 4, Max: 53
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ DE token extraction complete!
+
+============================================================
+LANGUAGE 5/15: EL
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for el...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_el_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_el_validation_sbert_tokens.pkl
+
+Processing Statistics for el validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 35.0, Min: 5, Max: 86
+Hypothesis token counts - Mean: 18.5, Min: 5, Max: 51
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for el...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_el_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_el_test_sbert_tokens.pkl
+
+Processing Statistics for el test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 35.5, Min: 5, Max: 87
+Hypothesis token counts - Mean: 18.6, Min: 5, Max: 64
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ EL token extraction complete!
+
+============================================================
+LANGUAGE 6/15: ES
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for es...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_es_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_es_validation_sbert_tokens.pkl
+
+Processing Statistics for es validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 29.2, Min: 7, Max: 63
+Hypothesis token counts - Mean: 15.4, Min: 5, Max: 41
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for es...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_es_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_es_test_sbert_tokens.pkl
+
+Processing Statistics for es test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 29.5, Min: 5, Max: 79
+Hypothesis token counts - Mean: 15.5, Min: 4, Max: 52
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ ES token extraction complete!
+
+============================================================
+LANGUAGE 7/15: FR
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for fr...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_fr_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_fr_validation_sbert_tokens.pkl
+
+Processing Statistics for fr validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 33.1, Min: 8, Max: 85
+Hypothesis token counts - Mean: 18.0, Min: 5, Max: 62
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for fr...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_fr_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_fr_test_sbert_tokens.pkl
+
+Processing Statistics for fr test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 33.6, Min: 6, Max: 81
+Hypothesis token counts - Mean: 18.0, Min: 5, Max: 60
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ FR token extraction complete!
+
+============================================================
+LANGUAGE 8/15: HI
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for hi...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_hi_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_hi_validation_sbert_tokens.pkl
+
+Processing Statistics for hi validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 32.3, Min: 6, Max: 88
+Hypothesis token counts - Mean: 17.0, Min: 6, Max: 45
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for hi...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_hi_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_hi_test_sbert_tokens.pkl
+
+Processing Statistics for hi test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 32.7, Min: 7, Max: 97
+Hypothesis token counts - Mean: 17.0, Min: 3, Max: 61
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ HI token extraction complete!
+
+============================================================
+LANGUAGE 9/15: RU
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for ru...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_ru_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_ru_validation_sbert_tokens.pkl
+
+Processing Statistics for ru validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 30.1, Min: 6, Max: 76
+Hypothesis token counts - Mean: 15.9, Min: 5, Max: 39
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for ru...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_ru_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_ru_test_sbert_tokens.pkl
+
+Processing Statistics for ru test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 30.4, Min: 5, Max: 94
+Hypothesis token counts - Mean: 15.9, Min: 5, Max: 58
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ RU token extraction complete!
+
+============================================================
+LANGUAGE 10/15: SW
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for sw...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_sw_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_sw_validation_sbert_tokens.pkl
+
+Processing Statistics for sw validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 28.7, Min: 5, Max: 74
+Hypothesis token counts - Mean: 15.4, Min: 5, Max: 41
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for sw...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_sw_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_sw_test_sbert_tokens.pkl
+
+Processing Statistics for sw test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 29.3, Min: 6, Max: 70
+Hypothesis token counts - Mean: 15.5, Min: 3, Max: 55
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ SW token extraction complete!
+
+============================================================
+LANGUAGE 11/15: TH
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for th...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_th_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_th_validation_sbert_tokens.pkl
+
+Processing Statistics for th validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 27.6, Min: 5, Max: 77
+Hypothesis token counts - Mean: 13.9, Min: 3, Max: 42
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for th...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_th_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_th_test_sbert_tokens.pkl
+
+Processing Statistics for th test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 27.7, Min: 6, Max: 76
+Hypothesis token counts - Mean: 13.9, Min: 4, Max: 51
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ TH token extraction complete!
+
+============================================================
+LANGUAGE 12/15: TR
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for tr...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_tr_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_tr_validation_sbert_tokens.pkl
+
+Processing Statistics for tr validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 26.7, Min: 6, Max: 69
+Hypothesis token counts - Mean: 14.5, Min: 6, Max: 36
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for tr...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_tr_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_tr_test_sbert_tokens.pkl
+
+Processing Statistics for tr test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 27.3, Min: 6, Max: 66
+Hypothesis token counts - Mean: 14.6, Min: 4, Max: 51
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ TR token extraction complete!
+
+============================================================
+LANGUAGE 13/15: UR
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for ur...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_ur_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_ur_validation_sbert_tokens.pkl
+
+Processing Statistics for ur validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 31.2, Min: 6, Max: 96
+Hypothesis token counts - Mean: 16.9, Min: 5, Max: 52
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for ur...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_ur_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_ur_test_sbert_tokens.pkl
+
+Processing Statistics for ur test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 31.5, Min: 6, Max: 82
+Hypothesis token counts - Mean: 16.8, Min: 5, Max: 62
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ UR token extraction complete!
+
+============================================================
+LANGUAGE 14/15: VI
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for vi...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_vi_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_vi_validation_sbert_tokens.pkl
+
+Processing Statistics for vi validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 31.5, Min: 8, Max: 84
+Hypothesis token counts - Mean: 16.4, Min: 6, Max: 45
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for vi...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_vi_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_vi_test_sbert_tokens.pkl
+
+Processing Statistics for vi test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 31.7, Min: 5, Max: 78
+Hypothesis token counts - Mean: 16.4, Min: 5, Max: 50
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ VI token extraction complete!
+
+============================================================
+LANGUAGE 15/15: ZH
+============================================================
+
+--- Processing VALIDATION split ---
+Processing XNLI validation split for zh...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_zh_validation.json
+Total samples to process: 2490
+Processed 100/2490 samples
+Processed 200/2490 samples
+Processed 300/2490 samples
+Processed 400/2490 samples
+Processed 500/2490 samples
+Processed 600/2490 samples
+Processed 700/2490 samples
+Processed 800/2490 samples
+Processed 900/2490 samples
+Processed 1000/2490 samples
+Processed 1100/2490 samples
+Processed 1200/2490 samples
+Processed 1300/2490 samples
+Processed 1400/2490 samples
+Processed 1500/2490 samples
+Processed 1600/2490 samples
+Processed 1700/2490 samples
+Processed 1800/2490 samples
+Processed 1900/2490 samples
+Processed 2000/2490 samples
+Processed 2100/2490 samples
+Processed 2200/2490 samples
+Processed 2300/2490 samples
+Processed 2400/2490 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_zh_validation_sbert_tokens.pkl
+
+Processing Statistics for zh validation:
+Successfully processed: 2490 samples
+Premise token counts - Mean: 23.6, Min: 6, Max: 66
+Hypothesis token counts - Mean: 13.0, Min: 5, Max: 34
+Label distribution: {'neutral': 830, 'contradiction': 830, 'entailment': 830}
+
+--- Processing TEST split ---
+Processing XNLI test split for zh...
+Data path: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw_splits/xnli_zh_test.json
+Total samples to process: 5010
+Processed 100/5010 samples
+Processed 200/5010 samples
+Processed 300/5010 samples
+Processed 400/5010 samples
+Processed 500/5010 samples
+Processed 600/5010 samples
+Processed 700/5010 samples
+Processed 800/5010 samples
+Processed 900/5010 samples
+Processed 1000/5010 samples
+Processed 1100/5010 samples
+Processed 1200/5010 samples
+Processed 1300/5010 samples
+Processed 1400/5010 samples
+Processed 1500/5010 samples
+Processed 1600/5010 samples
+Processed 1700/5010 samples
+Processed 1800/5010 samples
+Processed 1900/5010 samples
+Processed 2000/5010 samples
+Processed 2100/5010 samples
+Processed 2200/5010 samples
+Processed 2300/5010 samples
+Processed 2400/5010 samples
+Processed 2500/5010 samples
+Processed 2600/5010 samples
+Processed 2700/5010 samples
+Processed 2800/5010 samples
+Processed 2900/5010 samples
+Processed 3000/5010 samples
+Processed 3100/5010 samples
+Processed 3200/5010 samples
+Processed 3300/5010 samples
+Processed 3400/5010 samples
+Processed 3500/5010 samples
+Processed 3600/5010 samples
+Processed 3700/5010 samples
+Processed 3800/5010 samples
+Processed 3900/5010 samples
+Processed 4000/5010 samples
+Processed 4100/5010 samples
+Processed 4200/5010 samples
+Processed 4300/5010 samples
+Processed 4400/5010 samples
+Processed 4500/5010 samples
+Processed 4600/5010 samples
+Processed 4700/5010 samples
+Processed 4800/5010 samples
+Processed 4900/5010 samples
+Processed 5000/5010 samples
+Saving processed data to: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/sample_level_tokens/xnli_zh_test_sbert_tokens.pkl
+
+Processing Statistics for zh test:
+Successfully processed: 5010 samples
+Premise token counts - Mean: 23.9, Min: 6, Max: 69
+Hypothesis token counts - Mean: 13.0, Min: 5, Max: 46
+Label distribution: {'contradiction': 1670, 'entailment': 1670, 'neutral': 1670}
+
+✓ ZH token extraction complete!
+
+============================================================
+TOKEN EXTRACTION COMPLETE
+============================================================
+Successful: 15/15
+Failed: 0/15
+Time: Sat 17 Jan 18:20:54 GMT 2026
+=== TOKEN EXTRACTION SUCCESSFUL ===

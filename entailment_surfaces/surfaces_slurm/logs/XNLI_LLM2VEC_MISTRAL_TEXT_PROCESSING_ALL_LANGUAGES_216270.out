@@ -1,0 +1,458 @@
+Starting XNLI LLM2Vec processing for all languages...
+Job ID: 216270
+Node: linnet
+Time: Sat 17 Jan 17:30:09 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sat Jan 17 17:30:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100 80GB PCIe          On  |   00000000:02:00.0 Off |                    0 |
+| N/A   29C    P0             43W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A100 80GB PCIe
+GPU memory: 85.1 GB
+
+==========================================
+Processing all XNLI languages with LLM2Vec-Mistral
+==========================================
+
+Processing all 15 languages
+
+============================================================
+PROCESSING LANGUAGE 1/15: EN
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: en
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_en_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for en
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-69.250, 70.438]
+  Hypothesis range: [-82.938, 67.062]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_en_combined_LLM2Vec_Mistral.pt
+  File size: 235.8 MB
+
+✓ EN processing complete!
+
+============================================================
+PROCESSING LANGUAGE 2/15: AR
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: ar
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_ar_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for ar
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-49.938, 68.312]
+  Hypothesis range: [-55.812, 75.125]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_ar_combined_LLM2Vec_Mistral.pt
+  File size: 236.4 MB
+
+✓ AR processing complete!
+
+============================================================
+PROCESSING LANGUAGE 3/15: BG
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: bg
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_bg_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for bg
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-91.875, 85.812]
+  Hypothesis range: [-100.500, 105.250]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_bg_combined_LLM2Vec_Mistral.pt
+  File size: 236.8 MB
+
+✓ BG processing complete!
+
+============================================================
+PROCESSING LANGUAGE 4/15: DE
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: de
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_de_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for de
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-69.125, 69.625]
+  Hypothesis range: [-64.312, 67.688]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_de_combined_LLM2Vec_Mistral.pt
+  File size: 236.0 MB
+
+✓ DE processing complete!
+
+============================================================
+PROCESSING LANGUAGE 5/15: EL
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: el
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_el_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for el
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-59.969, 62.938]
+  Hypothesis range: [-63.031, 71.750]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_el_combined_LLM2Vec_Mistral.pt
+  File size: 237.0 MB
+
+✓ EL processing complete!
+
+============================================================
+PROCESSING LANGUAGE 6/15: ES
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: es
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_es_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for es
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-63.906, 69.688]
+  Hypothesis range: [-66.438, 59.500]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_es_combined_LLM2Vec_Mistral.pt
+  File size: 235.9 MB
+
+✓ ES processing complete!
+
+============================================================
+PROCESSING LANGUAGE 7/15: FR
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: fr
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_fr_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for fr
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-59.031, 64.750]
+  Hypothesis range: [-63.750, 60.625]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_fr_combined_LLM2Vec_Mistral.pt
+  File size: 236.0 MB
+
+✓ FR processing complete!
+
+============================================================
+PROCESSING LANGUAGE 8/15: HI
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: hi
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_hi_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for hi
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-50.594, 78.688]
+  Hypothesis range: [-55.906, 93.500]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_hi_combined_LLM2Vec_Mistral.pt
+  File size: 237.5 MB
+
+✓ HI processing complete!
+
+============================================================
+PROCESSING LANGUAGE 9/15: RU
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: ru
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_ru_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for ru
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-98.250, 88.750]
+  Hypothesis range: [-98.875, 103.500]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_ru_combined_LLM2Vec_Mistral.pt
+  File size: 236.8 MB
+
+✓ RU processing complete!
+
+============================================================
+PROCESSING LANGUAGE 10/15: SW
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: sw
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_sw_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for sw
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-53.406, 52.688]
+  Hypothesis range: [-57.844, 57.562]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_sw_combined_LLM2Vec_Mistral.pt
+  File size: 235.8 MB
+
+✓ SW processing complete!
+
+============================================================
+PROCESSING LANGUAGE 11/15: TH
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: th
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_th_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for th
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-51.062, 67.250]
+  Hypothesis range: [-61.312, 78.062]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_th_combined_LLM2Vec_Mistral.pt
+  File size: 237.6 MB
+
+✓ TH processing complete!
+
+============================================================
+PROCESSING LANGUAGE 12/15: TR
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: tr
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_tr_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for tr
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-55.469, 49.156]
+  Hypothesis range: [-60.000, 57.031]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_tr_combined_LLM2Vec_Mistral.pt
+  File size: 235.9 MB
+
+✓ TR processing complete!
+
+============================================================
+PROCESSING LANGUAGE 13/15: UR
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: ur
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_ur_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for ur
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-51.281, 78.375]
+  Hypothesis range: [-54.062, 74.625]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_ur_combined_LLM2Vec_Mistral.pt
+  File size: 236.6 MB
+
+✓ UR processing complete!
+
+============================================================
+PROCESSING LANGUAGE 14/15: VI
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: vi
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_vi_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for vi
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-53.125, 61.375]
+  Hypothesis range: [-56.250, 57.812]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_vi_combined_LLM2Vec_Mistral.pt
+  File size: 236.2 MB
+
+✓ VI processing complete!
+
+============================================================
+PROCESSING LANGUAGE 15/15: ZH
+============================================================
+Loading LLM2Vec-Mistral-7B model on cuda (memory-efficient mode)...
+LLM2Vec-Mistral loaded successfully (8-bit quantization)
+Model: LLM2Vec-Mistral-7B-Supervised
+Processing XNLI dataset for language: zh
+Reading from: /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/raw/xnli_zh_combined.json
+Dataset contains 7500 premise-hypothesis pairs
+Generating premise embeddings...
+Generating hypothesis embeddings...
+Dataset processing complete for zh
+  Embedding dimension: 4096
+  Label distribution: {'neutral': 2500, 'contradiction': 2500, 'entailment': 2500}
+
+Validation:
+  Premise embeddings shape: torch.Size([7500, 4096])
+  Hypothesis embeddings shape: torch.Size([7500, 4096])
+  Embedding dimension: 4096
+  Premise range: [-58.406, 124.938]
+  Hypothesis range: [-67.875, 120.062]
+  ✓ No NaN values detected
+Saved processed data to /vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_zh_combined_LLM2Vec_Mistral.pt
+  File size: 235.7 MB
+
+✓ ZH processing complete!
+
+============================================================
+PROCESSING COMPLETE
+============================================================
+Successful: 15/15
+Failed: 0/15
+
+✓ All languages processed successfully!
+
+Job finished at: Sat 17 Jan 20:06:05 GMT 2026
+
+=== ALL LANGUAGES PROCESSED SUCCESSFULLY ===
