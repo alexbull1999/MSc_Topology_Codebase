@@ -1,0 +1,295 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 217135
+Node: kingfisher
+Time: Sat 24 Jan 18:20:56 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Sat Jan 24 18:20:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:1A:00.0 Off |                    0 |
+| N/A   34C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: Tesla T4
+GPU memory: 15.6 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting sbert processing...
+
+================================================================================
+CONTRADICTION CLUSTERING ANALYSIS
+================================================================================
+Loading embeddings from: /vol/bitbucket/ahb24/tda_entailment_new/contradictions_only/contradiction_embeddings_SBERT_snli_10k_subset_balanced.pt
+Loaded 3330 contradiction samples
+Embedding dimension: 768
+
+================================================================================
+EXTRACTING RAW DATA
+================================================================================
+
+Saving raw contradiction data...
+  Text data saved to: contradiction_analysis/clustering_results_with_data_extracts/contradiction_texts.csv
+  Embeddings saved to: contradiction_analysis/clustering_results_with_data_extracts/contradiction_embeddings.npz
+  Sample (100 examples) saved to: contradiction_analysis/clustering_results_with_data_extracts/contradiction_sample_100.csv
+
+================================================================================
+CREATING EMBEDDING SPACES
+================================================================================
+Concatenation space shape: (3330, 1536)
+Semantic Coherence space shape: (3330, 768)
+
+================================================================================
+RUNNING CLUSTERING EXPERIMENTS
+================================================================================
+
+CONCATENATION EMBEDDING SPACE
+--------------------------------------------------------------------------------
+
+k=2
+
+Running clustering with k=2...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 3130, 1: 200}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k2_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 1326, 1: 2004}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k2_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 2812, 1: 518}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k2_pacmap.png
+
+k=3
+
+Running clustering with k=3...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 198, 1: 1815, 2: 1317}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k3_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 1341, 1: 1138, 2: 851}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k3_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 518, 1: 1874, 2: 938}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k3_pacmap.png
+
+k=4
+
+Running clustering with k=4...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 1155, 1: 1365, 2: 612, 3: 198}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k4_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 1270, 1: 1223, 2: 222, 3: 615}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k4_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 1874, 1: 316, 2: 938, 3: 202}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k4_pacmap.png
+
+k=5
+
+Running clustering with k=5...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 1341, 1: 111, 2: 1150, 3: 198, 4: 530}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k5_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 1049, 1: 1005, 2: 554, 3: 504, 4: 218}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k5_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 1510, 1: 364, 2: 938, 3: 202, 4: 316}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k5_pacmap.png
+
+k=10
+
+Running clustering with k=10...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 384, 1: 795, 2: 557, 3: 113, 4: 71, 5: 112, 6: 106, 7: 26, 8: 179, 9: 987}
+    Creating PaCMAP visualization...
+    Saved: concatenation_spectral_k10_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 354, 1: 363, 2: 265, 3: 198, 4: 418, 5: 203, 6: 520, 7: 208, 8: 596, 9: 205}
+    Creating PaCMAP visualization...
+    Saved: concatenation_gmm_k10_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 1294, 1: 622, 2: 216, 3: 202, 4: 109, 5: 257, 6: 107, 7: 207, 8: 127, 9: 189}
+    Creating PaCMAP visualization...
+    Saved: concatenation_hierarchical_k10_pacmap.png
+
+SEMANTIC_COHERENCE EMBEDDING SPACE
+--------------------------------------------------------------------------------
+
+k=2
+
+Running clustering with k=2...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 3167, 1: 163}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k2_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 1936, 1: 1394}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k2_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 2273, 1: 1057}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k2_pacmap.png
+
+k=3
+
+Running clustering with k=3...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 3056, 1: 164, 2: 110}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k3_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 1389, 1: 853, 2: 1088}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k3_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 1535, 1: 1057, 2: 738}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k3_pacmap.png
+
+k=4
+
+Running clustering with k=4...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 3020, 1: 164, 2: 110, 3: 36}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k4_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 838, 1: 643, 2: 970, 3: 879}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k4_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 1404, 1: 1057, 2: 738, 3: 131}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k4_pacmap.png
+
+k=5
+
+Running clustering with k=5...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 3025, 1: 112, 2: 110, 3: 47, 4: 36}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k5_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 931, 1: 527, 2: 350, 3: 450, 4: 1072}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k5_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 1137, 1: 267, 2: 738, 3: 131, 4: 1057}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k5_pacmap.png
+
+k=10
+
+Running clustering with k=10...
+  - Spectral Clustering...
+  - Gaussian Mixture Model...
+  - Hierarchical Clustering...
+  spectral:
+    Cluster Sizes: {0: 115, 1: 1408, 2: 115, 3: 47, 4: 11, 5: 109, 6: 103, 7: 1281, 8: 80, 9: 61}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_spectral_k10_pacmap.png
+  gmm:
+    Cluster Sizes: {0: 324, 1: 221, 2: 514, 3: 744, 4: 17, 5: 159, 6: 316, 7: 331, 8: 598, 9: 106}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_gmm_k10_pacmap.png
+  hierarchical:
+    Cluster Sizes: {0: 681, 1: 201, 2: 738, 3: 131, 4: 824, 5: 164, 6: 78, 7: 103, 8: 177, 9: 233}
+    Creating PaCMAP visualization...
+    Saved: semantic_coherence_hierarchical_k10_pacmap.png
+
+Saving cluster assignments...
+  Cluster assignments saved to: contradiction_analysis/clustering_results_with_data_extracts/cluster_assignments.csv
+
+================================================================================
+CREATING SUMMARY REPORT
+================================================================================
+Summary report saved to: contradiction_analysis/clustering_results_with_data_extracts/analysis_summary.json
+
+================================================================================
+ANALYSIS COMPLETE
+================================================================================
+
+Total contradiction samples analyzed: 3330
+
+Output files generated:
+  1. contradiction_texts.csv - All contradiction text pairs
+  2. contradiction_embeddings.npz - All embeddings
+  3. contradiction_sample_100.csv - Sample for quick review
+  4. cluster_assignments.csv - Cluster labels for all algorithms
+  5. 30 PaCMAP visualizations
+  6. analysis_summary.json - Metadata about the analysis
+
+All files saved to: contradiction_analysis/clustering_results_with_data_extracts
+================================================================================
+
+Analysis completed with exit code: 0
+Time: Sat 24 Jan 18:23:47 GMT 2026
+
+=== ANALYSIS SUCCESSFUL ===
+
+
+Job finished.

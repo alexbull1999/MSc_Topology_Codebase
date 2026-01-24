@@ -1,13 +1,14 @@
-Starting Surface Distance Metric Analysis job...
-Job ID: 216457
-Node: parrot
-Time: Sun 18 Jan 19:22:56 GMT 2026
+Starting XNLI Clustering Validation for ar...
+Job ID: 216468
+Node: gpuvm36
+Language: ar
+Time: Sun 18 Jan 20:04:14 GMT 2026
 Loading CUDA...
 Activating conda environment...
 Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
 Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
 Checking GPU availability...
-Sun Jan 18 19:23:01 2026       
+Sun Jan 18 20:04:22 2026       
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
 +-----------------------------------------+------------------------+----------------------+
@@ -15,8 +16,8 @@ Sun Jan 18 19:23:01 2026
 | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
 |                                         |                        |               MIG M. |
 |=========================================+========================+======================|
-|   0  NVIDIA A16                     Off |   00000000:8E:00.0 Off |                    0 |
-|  0%   20C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
+|   0  NVIDIA A16                     Off |   00000000:00:10.0 Off |                    0 |
+|  0%   22C    P8             14W /   62W |       0MiB /  15356MiB |      0%      Default |
 |                                         |                        |                  N/A |
 +-----------------------------------------+------------------------+----------------------+
 
@@ -35,7 +36,38 @@ CUDA device: NVIDIA A16
 GPU memory: 15.7 GB
 PyTorch setup verified!
 
-Checking for required input data and models...
+Checking for required input data...
 
-Starting sbert processing...
+Starting XNLI PH-Dim Clustering Validation for ar...
 
+XNLI Statistical Validation initialized for language: ar
+Testing 16 combinations
+Device: cuda
+Loading XNLI data for ar...
+XNLI data loaded:
+  Premise embeddings: torch.Size([7500, 4096])
+  Hypothesis embeddings: torch.Size([7500, 4096])
+  Labels: 7500
+  Language: ar
+  entailment: 2500 samples available
+  neutral: 2500 samples available
+  contradiction: 2500 samples available
+============================================================
+XNLI STATISTICAL VALIDATION - AR
+============================================================
+Generating all sample indices...
+Generated sample indices for 10 runs
+
+============================================================
+COMBINATION 1/16: sbert_concat + euclidean
+============================================================
+  Computing sbert_concat embeddings...
+
+Analysis completed with exit code: 1
+Time: Sun 18 Jan 20:05:47 GMT 2026
+
+=== ANALYSIS FAILED ===
+Please check the error output above for debugging information.
+
+
+Job finished.

@@ -1,0 +1,21 @@
+{
+  "total_samples": 3330,
+  "embedding_dimension": 768,
+  "k_values_tested": [
+    2,
+    3,
+    4,
+    5,
+    10
+  ],
+  "embedding_spaces": [
+    "concatenation",
+    "semantic_coherence"
+  ],
+  "clustering_algorithms": [
+    "spectral",
+    "gmm",
+    "hierarchical"
+  ],
+  "output_directory": "contradiction_analysis/clustering_results_with_data_extracts"
+}

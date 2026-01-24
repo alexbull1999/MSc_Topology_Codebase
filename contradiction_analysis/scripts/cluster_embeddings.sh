@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=contradiction_clustering
-#SBATCH --partition=a16
+#SBATCH --partition=t4
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=6
 #SBATCH --mem=64G
-#SBATCH --output=../logs/contradiction_clustering_SNLI_SBERT_10k_subset_%j.out
-#SBATCH --error=../logs/contradiction_clustering_SNLI_SBERT_10k_subset_%j.err
+#SBATCH --output=../logs/contradiction_clustering_SNLI_SBERT_10k_subset_data_extracts_%j.out
+#SBATCH --error=../logs/contradiction_clustering_SNLI_SBERT_10k_subset_data_extracts_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 
@@ -54,7 +54,7 @@ echo ""
 echo "Starting sbert processing..."
 echo ""
 
-python contradiction_analysis/cluster_contradiction_embeddings.py 
+python contradiction_analysis/cluster_contradiction_embeddings_with_data_extracts.py 
 
 
 # Capture exit code
