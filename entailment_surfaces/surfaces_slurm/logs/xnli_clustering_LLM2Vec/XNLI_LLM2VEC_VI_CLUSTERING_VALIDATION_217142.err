@@ -1,0 +1,11 @@
+/var/spool/slurm/d/job217142/slurm_script: line 27: /vol/cuda/12.0.0/setup.sh: No such file or directory
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/xnli_phdim_clustering_validation_v2.py", line 648, in <module>
+    main()
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/xnli_phdim_clustering_validation_v2.py", line 642, in main
+    results = validator.run_statistical_validation()
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/xnli_phdim_clustering_validation_v2.py", line 533, in run_statistical_validation
+    space_embeddings = self.compute_embeddings_for_combination(all_sample_indices, space_name)
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/xnli_phdim_clustering_validation_v2.py", line 271, in compute_embeddings_for_combination
+    class_embeddings = torch.cat([premise_samples, hypothesis_samples], dim=2)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 3.05 GiB. GPU 0 has a total capacity of 14.56 GiB of which 1.69 GiB is free. Including non-PyTorch memory, this process has 12.87 GiB memory in use. Of the allocated memory 12.75 GiB is allocated by PyTorch, and 10.94 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

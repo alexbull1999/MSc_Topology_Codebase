@@ -1,0 +1,82 @@
+PH-DIMENSION ANALYSIS REPORT (H0 & H1) - XNLI EN
+Seed: 444
+================================================================================
+
+EMBEDDING SPACE: sbert_concat
+--------------------------------------------------
+
+Metric: braycurtis
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 27.20350197253971
+    phd_h0_neutral: 32.03739683870739
+    phd_h0_contradiction: 32.3979051578417
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -2.212774171278728
+    phd_h1_neutral: -2.052652432013942
+    phd_h1_contradiction: -2.3949892616306125
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 132
+    h0_features_neutral: 199
+    h1_features_neutral: 145
+    h0_features_contradiction: 199
+    h1_features_contradiction: 163
+
+Metric: cosine
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 17.030250685948122
+    phd_h0_neutral: 20.396022597397756
+    phd_h0_contradiction: 20.8796982932964
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -2.629358605633449
+    phd_h1_neutral: -2.4554755271095434
+    phd_h1_contradiction: -2.733220669668266
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 156
+    h0_features_neutral: 199
+    h1_features_neutral: 169
+    h0_features_contradiction: 199
+    h1_features_contradiction: 167
+
+================================================================================
+
+EMBEDDING SPACE: lattice_containment
+--------------------------------------------------
+
+Metric: braycurtis
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 56.73112051180723
+    phd_h0_neutral: 84.08909693096794
+    phd_h0_contradiction: 74.61117575176272
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -1.1644219366068955
+    phd_h1_neutral: -0.7098026829526489
+    phd_h1_contradiction: -1.019665208524775
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 5
+    h0_features_neutral: 199
+    h1_features_neutral: 1
+    h0_features_contradiction: 199
+    h1_features_contradiction: 5
+
+Metric: cosine
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 27.321637432129698
+    phd_h0_neutral: 34.307830548932344
+    phd_h0_contradiction: 38.71760441465176
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -1.8671342491949865
+    phd_h1_neutral: -1.5700313368193233
+    phd_h1_contradiction: -1.6854397875021152
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 17
+    h0_features_neutral: 199
+    h1_features_neutral: 11
+    h0_features_contradiction: 199
+    h1_features_contradiction: 17
+
+================================================================================
+

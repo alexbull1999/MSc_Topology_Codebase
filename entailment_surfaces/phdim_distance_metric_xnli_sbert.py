@@ -484,7 +484,7 @@ def main():
     if seed not in recommended_seeds:
         print(f"WARNING: Seed {seed} not in recommended seeds: {recommended_seeds}")
     
-    xnli_data_path = f"/vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/xnli_{language}_combined_SBERT.pt"
+    xnli_data_path = f"/vol/bitbucket/ahb24/tda_entailment_new/xnli_data/processed/llm2vec_mistral/xnli_{language}_combined_LLM2Vec_Mistral.pt"
     
     if not Path(xnli_data_path).exists():
         print(f"ERROR: Data file not found: {xnli_data_path}")

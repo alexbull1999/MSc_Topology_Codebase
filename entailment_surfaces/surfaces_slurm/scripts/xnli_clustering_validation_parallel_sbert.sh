@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --output=../logs/xnli_clustering_LLM2Vec/XNLI_LLM2VEC_VI_CLUSTERING_VALIDATION_%j.out
-#SBATCH --error=../logs/xnli_clustering_LLM2Vec/XNLI_LLM2VEC_VI_CLUSTERING_VALIDATION_%j.err
+#SBATCH --output=../logs/xnli_clustering/XNLI_VI_CLUSTERING_VALIDATION_%j.out
+#SBATCH --error=../logs/xnli_clustering/XNLI_VI_CLUSTERING_VALIDATION_%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ahb24
 

@@ -1,0 +1,82 @@
+PH-DIMENSION ANALYSIS REPORT (H0 & H1) - XNLI EN
+Seed: 333
+================================================================================
+
+EMBEDDING SPACE: sbert_concat
+--------------------------------------------------
+
+Metric: braycurtis
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 28.430439378897017
+    phd_h0_neutral: 33.27084724148333
+    phd_h0_contradiction: 31.0072597729326
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -2.9945833206461208
+    phd_h1_neutral: -2.285581345517353
+    phd_h1_contradiction: -2.8778013758002072
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 139
+    h0_features_neutral: 199
+    h1_features_neutral: 148
+    h0_features_contradiction: 199
+    h1_features_contradiction: 182
+
+Metric: cosine
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 17.90266680415211
+    phd_h0_neutral: 20.682676861419214
+    phd_h0_contradiction: 19.765895314732816
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -3.8851132105868924
+    phd_h1_neutral: -2.7635960057041116
+    phd_h1_contradiction: -3.3099620708564004
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 159
+    h0_features_neutral: 199
+    h1_features_neutral: 155
+    h0_features_contradiction: 199
+    h1_features_contradiction: 158
+
+================================================================================
+
+EMBEDDING SPACE: lattice_containment
+--------------------------------------------------
+
+Metric: braycurtis
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 75.31620759402688
+    phd_h0_neutral: 67.43816138439183
+    phd_h0_contradiction: 65.23286149964231
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -0.5890125906285635
+    phd_h1_neutral: -0.803608187784401
+    phd_h1_contradiction: -0.37431277186621303
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 1
+    h0_features_neutral: 199
+    h1_features_neutral: 1
+    h0_features_contradiction: 199
+    h1_features_contradiction: 1
+
+Metric: cosine
+  H0 PH-Dim Analysis:
+    phd_h0_entailment: 31.38881010970561
+    phd_h0_neutral: 30.40871660825231
+    phd_h0_contradiction: 35.03855697119382
+  H1 PH-Dim Analysis:
+    phd_h1_entailment: -1.027097705923123
+    phd_h1_neutral: -1.1774041333071443
+    phd_h1_contradiction: -1.2979772834426728
+  Feature Counts:
+    h0_features_entailment: 199
+    h1_features_entailment: 9
+    h0_features_neutral: 199
+    h1_features_neutral: 14
+    h0_features_contradiction: 199
+    h1_features_contradiction: 12
+
+================================================================================
+

@@ -1,0 +1,67 @@
+{
+  "language": "en",
+  "seed": 42,
+  "timestamp": "20260124_201918",
+  "results": {
+    "sbert_concat": {
+      "braycurtis": {
+        "phd_h0_entailment": 33.44710534290122,
+        "phd_h1_entailment": -2.476858941290014,
+        "h0_features_entailment": 199,
+        "h1_features_entailment": 144,
+        "phd_h0_neutral": 40.56626498121944,
+        "phd_h1_neutral": -1.8479755605010426,
+        "h0_features_neutral": 199,
+        "h1_features_neutral": 153,
+        "phd_h0_contradiction": 37.803359282118656,
+        "phd_h1_contradiction": -2.5322438781875305,
+        "h0_features_contradiction": 199,
+        "h1_features_contradiction": 158
+      },
+      "cosine": {
+        "phd_h0_entailment": 20.952627409469855,
+        "phd_h1_entailment": -3.104969591052607,
+        "h0_features_entailment": 199,
+        "h1_features_entailment": 175,
+        "phd_h0_neutral": 25.933211238038812,
+        "phd_h1_neutral": -2.007827517489941,
+        "h0_features_neutral": 199,
+        "h1_features_neutral": 151,
+        "phd_h0_contradiction": 24.470722599583635,
+        "phd_h1_contradiction": -2.6051039078035565,
+        "h0_features_contradiction": 199,
+        "h1_features_contradiction": 161
+      }
+    },
+    "lattice_containment": {
+      "braycurtis": {
+        "phd_h0_entailment": 68.99451265303955,
+        "phd_h1_entailment": -1.1530726939858427,
+        "h0_features_entailment": 199,
+        "h1_features_entailment": 5,
+        "phd_h0_neutral": 98.50231401218277,
+        "phd_h1_neutral": -1.308485533248791,
+        "h0_features_neutral": 199,
+        "h1_features_neutral": 5,
+        "phd_h0_contradiction": 80.40172551046541,
+        "phd_h1_contradiction": -1.5296404699745791,
+        "h0_features_contradiction": 199,
+        "h1_features_contradiction": 15
+      },
+      "cosine": {
+        "phd_h0_entailment": 33.97289066734182,
+        "phd_h1_entailment": -1.7442877870268707,
+        "h0_features_entailment": 199,
+        "h1_features_entailment": 25,
+        "phd_h0_neutral": 46.197045635219936,
+        "phd_h1_neutral": -2.440557203954002,
+        "h0_features_neutral": 199,
+        "h1_features_neutral": 24,
+        "phd_h0_contradiction": 42.6964812764118,
+        "phd_h1_contradiction": -2.6128606026276766,
+        "h0_features_contradiction": 199,
+        "h1_features_contradiction": 38
+      }
+    }
+  }
+}
