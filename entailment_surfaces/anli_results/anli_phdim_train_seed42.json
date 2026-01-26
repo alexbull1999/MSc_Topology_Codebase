@@ -1,0 +1,143 @@
+[
+  {
+    "round": "R1",
+    "split": "train",
+    "seed": 42,
+    "n_samples": 16946,
+    "label_counts": {
+      "entailment": 5371,
+      "neutral": 7052,
+      "contradiction": 4523
+    },
+    "phdim_results": {
+      "sbert_concat": {
+        "euclidean": {
+          "entailment": 10.06077442551077,
+          "neutral": 10.232003242814866,
+          "contradiction": 11.014463106586257
+        },
+        "cosine": {
+          "entailment": 5.701649739749714,
+          "neutral": 5.7472834163757245,
+          "contradiction": 6.0342444368732915
+        },
+        "braycurtis": {
+          "entailment": 6.46361353374367,
+          "neutral": 6.289683572331811,
+          "contradiction": 6.793024306968101
+        }
+      },
+      "lattice_containment": {
+        "euclidean": {
+          "entailment": 15.910206868011048,
+          "neutral": 17.904312232830694,
+          "contradiction": 19.43387392497477
+        },
+        "cosine": {
+          "entailment": 9.055015405936464,
+          "neutral": 10.927164202307575,
+          "contradiction": 10.898277452934048
+        },
+        "braycurtis": {
+          "entailment": 12.351805267318015,
+          "neutral": 14.485832940349214,
+          "contradiction": 14.801805319509414
+        }
+      }
+    }
+  },
+  {
+    "round": "R2",
+    "split": "train",
+    "seed": 42,
+    "n_samples": 45460,
+    "label_counts": {
+      "entailment": 14448,
+      "contradiction": 10053,
+      "neutral": 20959
+    },
+    "phdim_results": {
+      "sbert_concat": {
+        "euclidean": {
+          "entailment": 12.627675089746104,
+          "neutral": 13.900415673971036,
+          "contradiction": 11.052392343084746
+        },
+        "cosine": {
+          "entailment": 6.9610128712114845,
+          "neutral": 7.483711604640955,
+          "contradiction": 6.396732080871523
+        },
+        "braycurtis": {
+          "entailment": 7.809869727555583,
+          "neutral": 8.102936619212697,
+          "contradiction": 7.147575383303134
+        }
+      },
+      "lattice_containment": {
+        "euclidean": {
+          "entailment": 21.48840687829692,
+          "neutral": 26.651569503214063,
+          "contradiction": 17.834494767324315
+        },
+        "cosine": {
+          "entailment": 11.183263037694593,
+          "neutral": 14.196864906118867,
+          "contradiction": 11.814513762457375
+        },
+        "braycurtis": {
+          "entailment": 15.936353093920529,
+          "neutral": 17.58832699638483,
+          "contradiction": 16.09344348925598
+        }
+      }
+    }
+  },
+  {
+    "round": "R3",
+    "split": "train",
+    "seed": 42,
+    "n_samples": 100459,
+    "label_counts": {
+      "entailment": 32292,
+      "neutral": 40778,
+      "contradiction": 27389
+    },
+    "phdim_results": {
+      "sbert_concat": {
+        "euclidean": {
+          "entailment": 19.807401989616892,
+          "neutral": 20.79384390152421,
+          "contradiction": 17.70115757395667
+        },
+        "cosine": {
+          "entailment": 10.49327229570166,
+          "neutral": 11.335852873630675,
+          "contradiction": 9.831079584221234
+        },
+        "braycurtis": {
+          "entailment": 11.93856208736777,
+          "neutral": 12.63777468754524,
+          "contradiction": 11.097541001153532
+        }
+      },
+      "lattice_containment": {
+        "euclidean": {
+          "entailment": 40.36855991990868,
+          "neutral": 40.74993878697127,
+          "contradiction": 29.86518728415655
+        },
+        "cosine": {
+          "entailment": 20.639188548332847,
+          "neutral": 21.38470685435278,
+          "contradiction": 18.221127031691186
+        },
+        "braycurtis": {
+          "entailment": 27.49875125766758,
+          "neutral": 28.45770014053024,
+          "contradiction": 25.16526676232989
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,241 @@
+Starting Surface Distance Metric Analysis job...
+Job ID: 217322
+Node: parrot
+Time: Mon 26 Jan 16:39:54 GMT 2026
+Loading CUDA...
+Activating conda environment...
+Activated conda environment: /vol/bitbucket/ahb24/tda_entailment_new
+Python location: /vol/bitbucket/ahb24/tda_entailment_new/bin/python
+Checking GPU availability...
+Mon Jan 26 16:40:05 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.65.06              Driver Version: 580.65.06      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:8D:00.0 Off |                    0 |
+|  0%   23C    P8             12W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+Testing PyTorch and CUDA...
+PyTorch version: 2.4.1
+CUDA available: True
+CUDA device: NVIDIA A16
+GPU memory: 15.7 GB
+PyTorch setup verified!
+
+Checking for required input data and models...
+
+Starting PH-Dim Clustering Validation Analysis...
+
+Running with seed: 42
+Number of samples per metric: 10
+============================================================
+
+============================================================
+Processing ANLI R1 train
+============================================================
+Total samples: 16946
+contradiction: 4523
+entailment: 5371
+neutral: 7052
+
+Embedding Space: sbert_concat
+
+  Metric: cosine
+    Run 1: Acc=0.400, Sil=0.384, Perfect=False
+    Run 2: Acc=0.400, Sil=0.385, Perfect=False
+    Run 3: Acc=0.500, Sil=0.377, Perfect=False
+    Run 4: Acc=0.467, Sil=0.389, Perfect=False
+    Run 5: Acc=0.600, Sil=0.300, Perfect=False
+    Run 6: Acc=0.567, Sil=0.391, Perfect=False
+    Run 7: Acc=0.500, Sil=0.350, Perfect=False
+    Run 8: Acc=0.533, Sil=0.358, Perfect=False
+    Run 9: Acc=0.533, Sil=0.324, Perfect=False
+    Run 10: Acc=0.600, Sil=0.403, Perfect=False
+
+  Summary for cosine:
+    Accuracy: 0.510 ± 0.068
+    Silhouette: 0.366 ± 0.031
+    Perfect clustering rate: 0.0%
+
+  Metric: braycurtis
+    Run 1: Acc=0.400, Sil=0.378, Perfect=False
+    Run 2: Acc=0.433, Sil=0.315, Perfect=False
+    Run 3: Acc=0.467, Sil=0.335, Perfect=False
+    Run 4: Acc=0.433, Sil=0.416, Perfect=False
+    Run 5: Acc=0.600, Sil=0.307, Perfect=False
+    Run 6: Acc=0.533, Sil=0.451, Perfect=False
+    Run 7: Acc=0.533, Sil=0.377, Perfect=False
+    Run 8: Acc=0.633, Sil=0.338, Perfect=False
+    Run 9: Acc=0.467, Sil=0.394, Perfect=False
+    Run 10: Acc=0.567, Sil=0.351, Perfect=False
+
+  Summary for braycurtis:
+    Accuracy: 0.507 ± 0.074
+    Silhouette: 0.366 ± 0.043
+    Perfect clustering rate: 0.0%
+
+Embedding Space: lattice_containment
+
+  Metric: cosine
+    Run 1: Acc=0.633, Sil=0.469, Perfect=False
+    Run 2: Acc=0.667, Sil=0.492, Perfect=False
+    Run 3: Acc=0.633, Sil=0.535, Perfect=False
+    Run 4: Acc=0.700, Sil=0.537, Perfect=False
+    Run 5: Acc=0.700, Sil=0.451, Perfect=False
+    Run 6: Acc=0.667, Sil=0.539, Perfect=False
+    Run 7: Acc=0.567, Sil=0.496, Perfect=False
+    Run 8: Acc=0.567, Sil=0.492, Perfect=False
+    Run 9: Acc=0.667, Sil=0.505, Perfect=False
+    Run 10: Acc=0.667, Sil=0.460, Perfect=False
+
+  Summary for cosine:
+    Accuracy: 0.647 ± 0.045
+    Silhouette: 0.498 ± 0.030
+    Perfect clustering rate: 0.0%
+
+  Metric: braycurtis
+    Run 1: Acc=0.567, Sil=0.490, Perfect=False
+    Run 2: Acc=0.700, Sil=0.539, Perfect=False
+    Run 3: Acc=0.567, Sil=0.544, Perfect=False
+    Run 4: Acc=0.633, Sil=0.564, Perfect=False
+    Run 5: Acc=0.700, Sil=0.593, Perfect=False
+    Run 6: Acc=0.700, Sil=0.512, Perfect=False
+    Run 7: Acc=0.567, Sil=0.539, Perfect=False
+    Run 8: Acc=0.567, Sil=0.519, Perfect=False
+    Run 9: Acc=0.700, Sil=0.514, Perfect=False
+    Run 10: Acc=0.633, Sil=0.448, Perfect=False
+
+  Summary for braycurtis:
+    Accuracy: 0.633 ± 0.060
+    Silhouette: 0.526 ± 0.038
+    Perfect clustering rate: 0.0%
+
+============================================================
+Processing ANLI R2 train
+============================================================
+Total samples: 45460
+contradiction: 10053
+entailment: 14448
+neutral: 20959
+
+Embedding Space: sbert_concat
+
+  Metric: cosine
+    Run 1: Acc=0.600, Sil=0.507, Perfect=False
+    Run 2: Acc=0.667, Sil=0.412, Perfect=False
+    Run 3: Acc=0.467, Sil=0.423, Perfect=False
+    Run 4: Acc=0.767, Sil=0.420, Perfect=False
+    Run 5: Acc=0.533, Sil=0.388, Perfect=False
+    Run 6: Acc=0.600, Sil=0.456, Perfect=False
+    Run 7: Acc=0.700, Sil=0.396, Perfect=False
+    Run 8: Acc=0.800, Sil=0.420, Perfect=False
+    Run 9: Acc=0.500, Sil=0.548, Perfect=False
+    Run 10: Acc=0.567, Sil=0.468, Perfect=False
+
+  Summary for cosine:
+    Accuracy: 0.620 ± 0.106
+    Silhouette: 0.444 ± 0.049
+    Perfect clustering rate: 0.0%
+
+  Metric: braycurtis
+    Run 1: Acc=0.600, Sil=0.484, Perfect=False
+    Run 2: Acc=0.600, Sil=0.457, Perfect=False
+    Run 3: Acc=0.433, Sil=0.408, Perfect=False
+    Run 4: Acc=0.767, Sil=0.384, Perfect=False
+    Run 5: Acc=0.500, Sil=0.420, Perfect=False
+    Run 6: Acc=0.567, Sil=0.461, Perfect=False
+    Run 7: Acc=0.667, Sil=0.545, Perfect=False
+    Run 8: Acc=0.767, Sil=0.402, Perfect=False
+    Run 9: Acc=0.533, Sil=0.511, Perfect=False
+    Run 10: Acc=0.533, Sil=0.414, Perfect=False
+
+  Summary for braycurtis:
+    Accuracy: 0.597 ± 0.104
+    Silhouette: 0.449 ± 0.050
+    Perfect clustering rate: 0.0%
+
+Embedding Space: lattice_containment
+
+  Metric: cosine
+    Run 1: Acc=0.667, Sil=0.487, Perfect=False
+    Run 2: Acc=0.800, Sil=0.476, Perfect=False
+    Run 3: Acc=0.700, Sil=0.538, Perfect=False
+    Run 4: Acc=0.700, Sil=0.505, Perfect=False
+    Run 5: Acc=0.767, Sil=0.474, Perfect=False
+    Run 6: Acc=0.667, Sil=0.525, Perfect=False
+    Run 7: Acc=0.800, Sil=0.604, Perfect=False
+    Run 8: Acc=0.733, Sil=0.582, Perfect=False
+    Run 9: Acc=0.767, Sil=0.607, Perfect=False
+    Run 10: Acc=0.767, Sil=0.416, Perfect=False
+
+  Summary for cosine:
+    Accuracy: 0.737 ± 0.048
+    Silhouette: 0.521 ± 0.059
+    Perfect clustering rate: 0.0%
+
+  Metric: braycurtis
+    Run 1: Acc=0.700, Sil=0.495, Perfect=False
+    Run 2: Acc=0.767, Sil=0.486, Perfect=False
+    Run 3: Acc=0.700, Sil=0.529, Perfect=False
+    Run 4: Acc=0.667, Sil=0.505, Perfect=False
+    Run 5: Acc=0.567, Sil=0.577, Perfect=False
+    Run 6: Acc=0.667, Sil=0.501, Perfect=False
+    Run 7: Acc=0.767, Sil=0.636, Perfect=False
+    Run 8: Acc=0.733, Sil=0.565, Perfect=False
+    Run 9: Acc=0.700, Sil=0.554, Perfect=False
+    Run 10: Acc=0.733, Sil=0.533, Perfect=False
+
+  Summary for braycurtis:
+    Accuracy: 0.700 ± 0.056
+    Silhouette: 0.538 ± 0.044
+    Perfect clustering rate: 0.0%
+
+============================================================
+Processing ANLI R3 train
+============================================================
+Total samples: 100459
+contradiction: 27389
+entailment: 32292
+neutral: 40778
+
+Embedding Space: sbert_concat
+
+  Metric: cosine
+    Run 1: Acc=0.500, Sil=0.468, Perfect=False
+    Run 2: Acc=0.533, Sil=0.461, Perfect=False
+    Run 3: Acc=0.633, Sil=0.430, Perfect=False
+    Run 4: Acc=0.533, Sil=0.414, Perfect=False
+    Run 5: Acc=0.533, Sil=0.396, Perfect=False
+    Run 6: Acc=0.533, Sil=0.471, Perfect=False
+    Run 7: Acc=0.633, Sil=0.438, Perfect=False
+    Run 8: Acc=0.600, Sil=0.379, Perfect=False
+    Run 9: Acc=0.667, Sil=0.370, Perfect=False
+    Run 10: Acc=0.467, Sil=0.429, Perfect=False
+
+  Summary for cosine:
+    Accuracy: 0.563 ± 0.062
+    Silhouette: 0.425 ± 0.034
+    Perfect clustering rate: 0.0%
+
+  Metric: braycurtis
+    Run 1: Acc=0.600, Sil=0.374, Perfect=False
+    Run 2: Acc=0.533, Sil=0.412, Perfect=False
+    Run 3: Acc=0.633, Sil=0.371, Perfect=False
+    Run 4: Acc=0.467, Sil=0.482, Perfect=False
+    Run 5: Acc=0.500, Sil=0.407, Perfect=False
+    Run 6: Acc=0.567, Sil=0.479, Perfect=False
+    Run 7: Acc=0.533, Sil=0.407, Perfect=False
+    Run 8: Acc=0.600, Sil=0.470, Perfect=False

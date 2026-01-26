@@ -81,3 +81,60 @@ COMBINATION 1/16: sbert_concat + euclidean
   Run 9/10...
     Accuracy: 0.633
   Run 10/10...
+    Accuracy: 0.733
+
+  SUMMARY for sbert_concat + euclidean:
+    10 samples: Acc=0.690±0.052
+    Silhouette: 0.538±0.023
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=1.0000)
+  Combination completed in 797.9s
+
+============================================================
+COMBINATION 2/16: sbert_concat + manhattan
+============================================================
+  Computing sbert_concat embeddings...
+  Run 1/10...
+    Accuracy: 0.333
+  Run 2/10...
+    Accuracy: 0.333
+  Run 3/10...
+    Accuracy: 0.333
+  Run 4/10...
+    Accuracy: 0.333
+  Run 5/10...
+    Accuracy: 0.333
+  Run 6/10...
+    Accuracy: 0.333
+  Run 7/10...
+    Accuracy: 0.333
+  Run 8/10...
+    Accuracy: 0.333
+  Run 9/10...
+    Accuracy: 0.333
+  Run 10/10...
+    Accuracy: 0.333
+
+  SUMMARY for sbert_concat + manhattan:
+    10 samples: Acc=0.333±0.000
+    Silhouette: 0.000±0.000
+    Perfect clustering rate: 0.0%
+    Significantly > random (33%): YES (p=0.0000)
+    Significantly > 90%: NO (p=1.0000)
+  Combination completed in 709.4s
+
+============================================================
+COMBINATION 3/16: sbert_concat + chebyshev
+============================================================
+  Computing sbert_concat embeddings...
+  Run 1/10...
+
+Analysis completed with exit code: 137
+Time: Sat 24 Jan 21:15:52 GMT 2026
+
+=== ANALYSIS FAILED ===
+Please check the error output above for debugging information.
+
+
+Job finished.

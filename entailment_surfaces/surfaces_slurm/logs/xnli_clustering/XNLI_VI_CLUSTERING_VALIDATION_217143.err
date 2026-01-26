@@ -1,1 +1,3 @@
 /var/spool/slurm/d/job217143/slurm_script: line 27: /vol/cuda/12.0.0/setup.sh: No such file or directory
+/var/spool/slurm/d/job217143/slurm_script: line 66: 2208428 Killed                  python entailment_surfaces/xnli_phdim_clustering_validation_v2.py --language ${LANGUAGE}
+[2026-01-24T21:15:52.692] error: Detected 1 oom_kill event in StepId=217143.batch. Some of the step tasks have been OOM Killed.

@@ -1,0 +1,27 @@
+[
+  {
+    "round": "R1",
+    "split": "train",
+    "seed": 42,
+    "n_samples_per_metric": 10,
+    "total_samples": 16946,
+    "label_counts": {
+      "entailment": 5371,
+      "neutral": 7052,
+      "contradiction": 4523
+    },
+    "results": {
+      "sbert_concat": {
+        "euclidean": {
+          "n_samples": 10,
+          "accuracy_mean": 0.5033333333333333,
+          "accuracy_std": 0.06403124237432847,
+          "silhouette_mean": 0.35481116067177626,
+          "silhouette_std": 0.026567645056320324,
+          "perfect_clustering_rate": 0.0,
+          "sample_results": [
+            {
+              "accuracy": 0.4666666666666667,
+              "silhouette": 0.33530524008084617,
+              "ari": 0.0522183677195545,
+              "perfect_clustering": 
