@@ -388,8 +388,5 @@ Embedding Space: lattice_containment
 Analysis completed with exit code: 1
 Time: Mon 26 Jan 17:26:10 GMT 2026
 
-=== ANALYSIS FAILED ===
-Please check the error output above for debugging information.
-
 
 Job finished.

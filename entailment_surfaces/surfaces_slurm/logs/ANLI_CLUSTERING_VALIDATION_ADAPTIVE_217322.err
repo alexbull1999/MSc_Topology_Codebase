@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/homes/ahb24/MSc_Topology_Codebase/entailment_surfaces/anli_clustering_validation_adaptive.py", line 413, in <module>
+    json.dump(all_results, f, indent=2)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 429, in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 325, in _iterencode_list
+    yield from chunks
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  [Previous line repeated 1 more time]
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 325, in _iterencode_list
+    yield from chunks
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/vol/bitbucket/ahb24/tda_entailment_new/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type bool_ is not JSON serializable

@@ -239,3 +239,55 @@ Embedding Space: sbert_concat
     Run 6: Acc=0.567, Sil=0.479, Perfect=False
     Run 7: Acc=0.533, Sil=0.407, Perfect=False
     Run 8: Acc=0.600, Sil=0.470, Perfect=False
+    Run 9: Acc=0.467, Sil=0.419, Perfect=False
+    Run 10: Acc=0.467, Sil=0.432, Perfect=False
+
+  Summary for braycurtis:
+    Accuracy: 0.537 ± 0.059
+    Silhouette: 0.425 ± 0.038
+    Perfect clustering rate: 0.0%
+
+Embedding Space: lattice_containment
+
+  Metric: cosine
+    Run 1: Acc=0.767, Sil=0.507, Perfect=False
+    Run 2: Acc=0.900, Sil=0.516, Perfect=False
+    Run 3: Acc=0.733, Sil=0.541, Perfect=False
+    Run 4: Acc=0.933, Sil=0.619, Perfect=False
+    Run 5: Acc=0.733, Sil=0.613, Perfect=False
+    Run 6: Acc=1.000, Sil=0.543, Perfect=True
+    Run 7: Acc=0.833, Sil=0.458, Perfect=False
+    Run 8: Acc=0.767, Sil=0.591, Perfect=False
+    Run 9: Acc=0.900, Sil=0.557, Perfect=False
+    Run 10: Acc=0.733, Sil=0.527, Perfect=False
+
+  Summary for cosine:
+    Accuracy: 0.830 ± 0.092
+    Silhouette: 0.547 ± 0.047
+    Perfect clustering rate: 10.0%
+
+  Metric: braycurtis
+    Run 1: Acc=0.700, Sil=0.484, Perfect=False
+    Run 2: Acc=0.900, Sil=0.479, Perfect=False
+    Run 3: Acc=0.767, Sil=0.517, Perfect=False
+    Run 4: Acc=0.933, Sil=0.562, Perfect=False
+    Run 5: Acc=0.733, Sil=0.613, Perfect=False
+    Run 6: Acc=0.900, Sil=0.532, Perfect=False
+    Run 7: Acc=0.767, Sil=0.464, Perfect=False
+    Run 8: Acc=0.767, Sil=0.568, Perfect=False
+    Run 9: Acc=0.833, Sil=0.546, Perfect=False
+    Run 10: Acc=0.767, Sil=0.492, Perfect=False
+
+  Summary for braycurtis:
+    Accuracy: 0.807 ± 0.076
+    Silhouette: 0.525 ± 0.045
+    Perfect clustering rate: 0.0%
+
+Analysis completed with exit code: 1
+Time: Mon 26 Jan 20:17:08 GMT 2026
+
+=== ANALYSIS FAILED ===
+Please check the error output above for debugging information.
+
+
+Job finished.

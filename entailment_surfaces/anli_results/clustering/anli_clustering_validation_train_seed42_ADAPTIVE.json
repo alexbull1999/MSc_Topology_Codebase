@@ -1,0 +1,27 @@
+[
+  {
+    "round": "R1",
+    "split": "train",
+    "seed": 42,
+    "n_samples_per_metric": 10,
+    "total_samples": 16946,
+    "label_counts": {
+      "entailment": 5371,
+      "neutral": 7052,
+      "contradiction": 4523
+    },
+    "results": {
+      "sbert_concat": {
+        "cosine": {
+          "n_samples": 10,
+          "accuracy_mean": 0.51,
+          "accuracy_std": 0.06839428176227728,
+          "silhouette_mean": 0.3660263636363555,
+          "silhouette_std": 0.031353726478617554,
+          "perfect_clustering_rate": 0.0,
+          "sample_results": [
+            {
+              "accuracy": 0.4,
+              "silhouette": 0.3835781151887557,
+              "ari": -0.020205664802453546,
+              "perfect_clustering": 
